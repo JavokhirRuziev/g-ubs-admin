@@ -1,0 +1,179 @@
+import React, {useState} from 'react';
+
+import {Table, Board} from "components";
+import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
+import EntityContainer from 'modules/entity/containers';
+import Create from "./components/Create";
+import Update from "./components/Update";
+import Actions from "modules/entity/actions";
+
+import {useTranslation} from "react-i18next";
+import {useSelector, useDispatch} from "react-redux";
+
+import config from "config";
+import {Link} from "react-router-dom";
+
+const List = () => {
+  const langCode = useSelector(state => state.system.currentLangCode);
+
+  const [tabLang, setTabLang] = useState(langCode);
+  const [createModal, showCreateModal] = useState(false);
+  const [updateModal, showUpdateModal] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const {t} = useTranslation();
+  const dispatch = useDispatch();
+
+  const openEditModal = value => {
+    setSelected(value);
+    showUpdateModal(true);
+  };
+
+  const onDeleteHandler = menuId => {
+    Modal.confirm({
+      title: t("Вы действительно хотите удалить?"),
+      okText: t("да"),
+      okType: "danger",
+      cancelText: t("нет"),
+      confirmLoading: true,
+      onOk: () => deleteAction(menuId),
+    });
+  };
+
+  const deleteAction = menuId => {
+    dispatch(Actions.Form.request({
+      method: 'delete',
+      entity: "menu",
+      name: `menu-${tabLang}`,
+      id: menuId,
+      url: `/menu/${menuId}`,
+      deleteData: true,
+      primaryKey: 'menu_id',
+      cb: {
+        success: () => {
+          notification["success"]({
+            message: t("Успешно удалена"),
+            duration: 2
+          });
+        },
+        error: () => {
+          notification["error"]({
+            message: t("Что-то пошло не так"),
+            duration: 2
+          });
+        },
+        finally: () => {}
+      }
+    }))
+  };
+
+  const TabPane = Tabs.TabPane;
+  return (
+    <>
+      <Modal
+        visible={createModal}
+        onOk={() => showCreateModal(true)}
+        onCancel={() => showCreateModal(false)}
+        footer={null}
+        centered
+        width={430}
+        destroyOnClose
+      >
+        <Create {...{showCreateModal, langCode: tabLang}}/>
+      </Modal>
+      <Modal
+        visible={updateModal}
+        onOk={() => showUpdateModal(true)}
+        onCancel={() => showUpdateModal(false)}
+        footer={null}
+        centered
+        width={430}
+        destroyOnClose
+      >
+        <Update {...{selected, showUpdateModal, langCode: tabLang}}/>
+      </Modal>
+
+      <div className="d-flex justify-content-between align-items-center mb-20">
+        <div className="title-md">{t("Список меню")}</div>
+        <Button
+          type="primary"
+          size="large"
+          className="fs-14 fw-300 ml-10"
+          htmlType="button"
+          onClick={() => showCreateModal(true)}
+        >{t('Добавить')}</Button>
+      </div>
+
+      <Board className="border-none">
+        <div>
+          <Tabs
+            activeKey={tabLang}
+            onChange={value => setTabLang(value)}
+            className="tabs--board-head"
+          >
+            {config.API_LANGUAGES.map(item => (
+              <TabPane key={item.code} tab={t(item.title)} />
+            ))}
+          </Tabs>
+        </div>
+        <EntityContainer.All
+          entity="menu"
+          name={`menu-${tabLang}`}
+          url="/menu"
+          primaryKey="menu_id"
+          params={{
+            sort: '-menu_id',
+            limit: 10,
+            extra: {_l: tabLang},
+            page
+          }}
+        >
+          {({items, isFetched, meta}) => {
+            return (
+              <Spin spinning={!isFetched}>
+                <div className="default-table pad-15">
+                  <Table
+                    hasEdit={true}
+                    hasDelete={true}
+                    rowKey="menu_id"
+                    onEdit={value => openEditModal(value)}
+                    onDelete={value => onDeleteHandler(value.menu_id)}
+                    columns={[
+                      {
+                        title: t("ID"),
+                        dataIndex: "menu_id",
+                        className: 'w-50',
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Название"),
+                        dataIndex: "title",
+                        render: (value, row) => <div className="divider-wrapper">
+                          <Link to={`/menu/${row.alias}?lang=${tabLang}`}>{value}</Link>
+                        </div>
+                      }
+                    ]}
+                    dataSource={items}
+                  />
+                </div>
+                {meta && meta.perPage && (
+                  <div className="pad-15 d-flex justify-content-end">
+                    <Pagination
+                      current={meta.currentPage}
+                      pageSize={meta.perPage}
+                      total={meta.totalCount}
+                      onChange={setPage}
+                    />
+                  </div>
+                )}
+              </Spin>
+            );
+          }}
+        </EntityContainer.All>
+      </Board>
+    </>
+  );
+};
+
+export default List;

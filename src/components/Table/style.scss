@@ -1,0 +1,136 @@
+.default-table {
+  .ant-table-thead {
+    tr {
+      box-shadow: 2px 3px 7px 0 rgba(0, 0, 0, 0.07);
+      background-color: #ffffff;
+    }
+
+    th {
+      padding: 9px 15px;
+      font-size: 13px;
+    }
+
+    .ant-table-column-sorter {
+      display: none;
+    }
+  }
+
+  .ant-table-body {
+    max-width: 100%;
+    overflow: hidden;
+    overflow-x: auto;
+    padding: 5px;
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0 8px;
+
+      tr {
+        background: #fff !important;
+        overflow: hidden;
+        border-radius: 10px !important;
+        box-shadow: 2px 3px 7px 0 rgba(0, 0, 0, 0.07);
+      }
+    }
+  }
+
+  .ant-table-empty{
+    .ant-table-body{
+      padding: 0!important;
+    }
+  }
+
+  .ant-table-tbody > tr > td {
+    padding: 9px 15px;
+    position: relative;
+    a{
+      color: #787993;
+      &:hover{
+        color: #1890ff;
+      }
+    }
+
+    &:last-child {
+      .divider-wrapper:after {
+        display: none;
+      }
+    }
+
+    .divider-wrapper {
+      &::after {
+        width: 1px;
+        height: calc(100% - 26px);
+        position: absolute;
+        right: 0;
+        top: 13px;
+        background-color: rgba(151, 151, 151, 0.33);
+        content: "";
+      }
+    }
+  }
+
+  .ant-table-body .ant-table-tbody > tr > td:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .ant-table-body .ant-table-tbody > tr > td:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .ant-table-thead > tr:first-child > th:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .ant-table-thead > tr:first-child > th:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .ant-table-thead {
+    .text-cen {
+      .ant-table-header-column, .ant-table-column-title {
+        width: 100%;
+      }
+
+      * {
+        text-align: center;
+      }
+    }
+  }
+
+  .action-btn {
+    cursor: pointer;
+
+    svg {
+      fill: #6d6d6d;
+    }
+
+    &.confirm-btn {
+      &:hover {
+        svg {
+          fill: #4caf50;
+        }
+      }
+    }
+
+    &.edit-btn {
+      &:hover {
+        svg {
+          fill: #2196f3;
+        }
+      }
+    }
+
+    &.delete-btn {
+      &:hover {
+        svg {
+          fill: #f44336;
+        }
+      }
+    }
+  }
+}
+

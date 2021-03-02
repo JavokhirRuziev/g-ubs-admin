@@ -1,0 +1,23 @@
+.ant-table-wrapper {
+  overflow-x: auto;
+}
+
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
+}

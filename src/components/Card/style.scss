@@ -1,0 +1,110 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+
+  &__img-wrap {
+    width: 100%;
+    padding-bottom: 65%;
+    background-color: #eeeeee;
+    position: relative;
+
+    img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__body {
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-top: none;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    text-decoration: none;
+    color: #000;
+    max-height: 92px;
+    overflow: hidden;
+  }
+
+  &__text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #212529;
+    max-height: 74px;
+    overflow: hidden;
+    p{
+      margin: 0;
+    }
+    img{
+      display: none;
+    }
+  }
+}
+
+.setting-card {
+  position: relative;
+  &__wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 2px 4px 8px 0 rgba(0, 0, 0, 0.05);
+    padding: 30px 30px 100px 30px;
+    transition: .2s ease;
+    cursor: pointer;
+    &:hover{
+      box-shadow: 2px 4px 18px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #414d6a;
+    margin-bottom: 6px;
+  }
+
+  &__count {
+    font-size: 14px;
+    color: #414d6a;
+  }
+
+  &__icon {
+    margin-top: 20px;
+    width: 98px;
+    height: 98px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      max-width: 50px;
+      max-height: 50px;
+    }
+  }
+
+  &__btn {
+    position: absolute!important;
+    left: 30px!important;
+    bottom: 30px!important;
+    font-size: 14px!important;
+    padding-right: 30px!important;
+    padding-left: 30px!important;
+    width: calc(100% - 60px) !important;
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="5" viewBox="0 0 25 5">
+  <g id="dots-lg" transform="translate(25) rotate(90)" opacity="0.3">
+    <circle id="Ellipse_116" data-name="Ellipse 116" cx="2.5" cy="2.5" r="2.5"/>
+    <circle id="Ellipse_117" data-name="Ellipse 117" cx="2.5" cy="2.5" r="2.5" transform="translate(0 10)"/>
+    <path id="Path_320" data-name="Path 320" d="M2.5,0A2.5,2.5,0,1,0,5,2.5,2.5,2.5,0,0,0,2.5,0Z" transform="translate(0 20)"/>
+  </g>
+</svg>
