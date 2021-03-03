@@ -15,10 +15,18 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
         {id: 'category-products', title: "Продукты", link: '/categories/products'},
       ]
     },
+    {
+      id: 'gallery',
+      title: t('Галерея'),
+      icon: 'menu-i-category',
+      submenu: [
+        {id: 'gallery-photo', title: "Фото", link: '/gallery/photo'},
+        {id: 'gallery-video', title: "Видео", link: '/gallery/video'},
+      ]
+    },
     {id: 'posts', title: t('Посты'), link: '/posts', icon: 'menu-i-edit'},
     {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
     {id: 'documents', title: t('Документы'), link: '/documents', icon: 'menu-i-file'},
-    {id: 'gallery', title: t('Галерея'), link: '/gallery', icon: 'menu-i-dashboard'},
     {id: 'feedback', title: t('Обратная связь'), link: '/feedback',  icon: 'menu-i-list'},
     {
       id: 'settings',

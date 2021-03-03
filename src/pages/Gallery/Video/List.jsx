@@ -68,13 +68,13 @@ const List = ({history, location}) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список галерей")}</div>
+        <div className="title-md">Фотогалерея</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/gallery/create`)}
+          onClick={() => history.push(`/gallery/photo/create`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -83,14 +83,14 @@ const List = ({history, location}) => {
 
         <EntityContainer.All
           entity="gallery"
-          name={`gallery`}
-          url="/gallery"
+          name={`galleryPhoto`}
+          url="/galleries"
           primaryKey="id"
           params={{
             sort: '-id',
             limit: 10,
+            filter: {type: 1},
             extra: {title: params.title,},
-            include: "files",
             page
           }}
         >
@@ -102,7 +102,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/gallery/update/${value.id}`)}
+                    onEdit={value => history.push(`/gallery/photo/update/${value.id}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {

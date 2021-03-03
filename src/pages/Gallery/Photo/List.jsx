@@ -1,31 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
-import Create from "./components/Create";
-import Update from "./components/Update";
 import Actions from "modules/entity/actions";
-import {CopyToClipboard} from "components/SmallComponents";
 
 import {useTranslation} from "react-i18next";
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-const List = () => {
-  const langCode = useSelector(state => state.system.currentLangCode);
+import get from "lodash/get";
+import qs from "query-string";
+import Filter from "./components/Filter";
 
-  const [createModal, showCreateModal] = useState(false);
-  const [updateModal, showUpdateModal] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [page, setPage] = useState(1);
-
+const List = ({history, location}) => {
+  const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+  const lang = useSelector(state => state.system.currentLangCode);
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const openEditModal = value => {
-    setSelected(value);
-    showUpdateModal(true);
-  };
+  const {page} = params;
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -37,15 +30,15 @@ const List = () => {
       onOk: () => deleteAction(menuId),
     });
   };
-
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "category",
-      name: `categoryPost`,
+      entity: "gallery",
+      name: `gallery`,
       id: id,
-      url: `/categories/${id}`,
+      url: `/gallery/${id}`,
       deleteData: true,
+      primaryKey: 'id',
       cb: {
         success: () => {
           notification["success"]({
@@ -64,53 +57,41 @@ const List = () => {
     }))
   };
 
+  const onChange = page => {
+    const search = { ...params, page };
+
+    history.push({
+      search: qs.stringify(search)
+    });
+  };
+
   return (
     <>
-      <Modal
-        visible={createModal}
-        onOk={() => showCreateModal(true)}
-        onCancel={() => showCreateModal(false)}
-        footer={null}
-        centered
-        width={430}
-        destroyOnClose
-      >
-        <Create {...{showCreateModal}}/>
-      </Modal>
-      <Modal
-        visible={updateModal}
-        onOk={() => showUpdateModal(true)}
-        onCancel={() => showUpdateModal(false)}
-        footer={null}
-        centered
-        width={430}
-        destroyOnClose
-      >
-        <Update {...{selected, showUpdateModal}}/>
-      </Modal>
-
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Категория новостей")}</div>
+        <div className="title-md">Фотогалерея</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => showCreateModal(true)}
-        >Добавить</Button>
+          onClick={() => history.push(`/gallery/photo/create`)}
+        >{t('Добавить')}</Button>
       </div>
 
-      <Board className="border-none">
+      <Board>
+        <Filter/>
+
         <EntityContainer.All
-          entity="category"
-          name="categoryPost"
-          url="/categories"
+          entity="gallery"
+          name={`galleryPhoto`}
+          url="/galleries"
+          primaryKey="id"
           params={{
             sort: '-id',
             limit: 10,
-            page,
-            include: "files",
-            filter: {type: 2}
+            filter: {type: 1},
+            extra: {title: params.title,},
+            page
           }}
         >
           {({items, isFetched, meta}) => {
@@ -121,7 +102,7 @@ const List = () => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => openEditModal(value)}
+                    onEdit={value => history.push(`/gallery/photo/update/${value.id}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -131,16 +112,27 @@ const List = () => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Название"),
-                        dataIndex: `name_${langCode}`,
+                        title: t("Фото"),
+                        dataIndex: "gallery",
+                        className: 'w-82 text-cen',
+                        render: value => <div className="divider-wrapper">
+                          <Avatar isRectangle isProduct image={get(value, '[0].thumbnails.small.src')}/>
+                        </div>
+                      },
+                      {
+                        title: t("Загаловок"),
+                        dataIndex: `title_${lang}`,
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Ссылька"),
-                        dataIndex: "slug",
-                        render: value => <div className="divider-wrapper">
-                          <CopyToClipboard str={`/posts/categories/${value}`}/>
-                        </div>
+                        title: t("Статус"),
+                        dataIndex: "status",
+                        className: 'text-cen w-82',
+                        render: value => {
+                          return <div className="divider-wrapper">
+                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                          </div>
+                        }
                       }
                     ]}
                     dataSource={items}
@@ -148,11 +140,11 @@ const List = () => {
                 </div>
                 {meta && meta.perPage && (
                   <div className="pad-15 d-flex justify-content-end">
-                        <Pagination
+                    <Pagination
                       current={meta.currentPage}
                       pageSize={meta.perPage}
                       total={meta.totalCount}
-                      onChange={newPage => setPage(newPage)}
+                      onChange={onChange}
                     />
                   </div>
                 )}

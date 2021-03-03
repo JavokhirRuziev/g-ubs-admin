@@ -10,10 +10,13 @@ import App from "./App";
 // const Home = lazy(() => import("./pages/Home"));
 const CategoriesPosts = lazy(() => import("./pages/Categories/Posts/List"));
 const CategoriesProducts = lazy(() => import("./pages/Categories/Products/List"));
+const GalleryPhoto = lazy(() => import("./pages/Gallery/Photo/List"));
+const GalleryPhotoCreate = lazy(() => import("./pages/Gallery/Photo/Create"));
+const GalleryPhotoUpdate = lazy(() => import("./pages/Gallery/Photo/Update"));
+const GalleryVideo = lazy(() => import("./pages/Gallery/Video/List"));
+const GalleryVideoCreate = lazy(() => import("./pages/Gallery/Video/Create"));
+const GalleryVideoUpdate = lazy(() => import("./pages/Gallery/Video/Update"));
 
-const Gallery = lazy(() => import("./pages/Gallery/List"));
-const GalleryCreate = lazy(() => import("./pages/Gallery/Create"));
-const GalleryUpdate = lazy(() => import("./pages/Gallery/Update"));
 const Posts = lazy(() => import("./pages/Posts/List"));
 const PostsCreate = lazy(() => import("./pages/Posts/Create"));
 const PostsUpdate = lazy(() => import("./pages/Posts/Update"));
@@ -46,11 +49,15 @@ const Profile = lazy(() => import("./pages/Profile"));
 const routes = [
 	{ path: "/categories/posts", exact: true, component: CategoriesPosts },
 	{ path: "/categories/products", exact: true, component: CategoriesProducts },
+	{ path: "/gallery/photo", exact: true, component: GalleryPhoto },
+	{ path: "/gallery/photo/create", exact: true, component: GalleryPhotoCreate },
+	{ path: "/gallery/photo/update/:id", exact: true, component: GalleryPhotoUpdate },
+	{ path: "/gallery/video", exact: true, component: GalleryVideo },
+	{ path: "/gallery/video/create", exact: true, component: GalleryVideoCreate },
+	{ path: "/gallery/video/update/:id", exact: true, component: GalleryVideoUpdate },
+
 	{ path: "/", exact: true, component: Posts },
 	{ path: "/logout", exact: true, component: Logout },
-	{ path: "/gallery", exact: true, component: Gallery },
-	{ path: "/gallery/create", exact: true, component: GalleryCreate },
-	{ path: "/gallery/update/:id", exact: true, component: GalleryUpdate },
 	{ path: "/menu", exact: true, component: Menu },
 	{ path: "/menu/:alias", exact: true, component: MenuView },
 	{ path: "/posts", exact: true, component: Posts },
