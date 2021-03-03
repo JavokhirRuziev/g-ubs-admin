@@ -1,14 +1,12 @@
 import React from 'react';
 
-import {Table, Board, Avatar} from "components";
+import {Table, Board} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
 
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-
-import get from "lodash/get";
 import qs from "query-string";
 import Filter from "./components/Filter";
 
@@ -34,9 +32,9 @@ const List = ({history, location}) => {
     dispatch(Actions.Form.request({
       method: 'delete',
       entity: "gallery",
-      name: `gallery`,
+      name: `galleryVideo`,
       id: id,
-      url: `/gallery/${id}`,
+      url: `/galleries/${id}`,
       deleteData: true,
       primaryKey: 'id',
       cb: {
@@ -68,13 +66,13 @@ const List = ({history, location}) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">Фотогалерея</div>
+        <div className="title-md">Видеогалерея</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/gallery/photo/create`)}
+          onClick={() => history.push(`/gallery/video/create`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -83,13 +81,13 @@ const List = ({history, location}) => {
 
         <EntityContainer.All
           entity="gallery"
-          name={`galleryPhoto`}
+          name={`galleryVideo`}
           url="/galleries"
           primaryKey="id"
           params={{
             sort: '-id',
             limit: 10,
-            filter: {type: 1},
+            filter: {type: 2},
             extra: {title: params.title,},
             page
           }}
@@ -102,7 +100,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/gallery/photo/update/${value.id}`)}
+                    onEdit={value => history.push(`/gallery/video/update/${value.id}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -110,14 +108,6 @@ const List = ({history, location}) => {
                         dataIndex: "id",
                         className: 'w-50',
                         render: value => <div className="divider-wrapper">{value}</div>
-                      },
-                      {
-                        title: t("Фото"),
-                        dataIndex: "files",
-                        className: 'w-82 text-cen',
-                        render: value => <div className="divider-wrapper">
-                          <Avatar isRectangle isProduct image={get(value, '[0].thumbnails.small.src')}/>
-                        </div>
                       },
                       {
                         title: t("Загаловок"),

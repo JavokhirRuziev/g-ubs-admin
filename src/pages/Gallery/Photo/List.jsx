@@ -34,9 +34,9 @@ const List = ({history, location}) => {
     dispatch(Actions.Form.request({
       method: 'delete',
       entity: "gallery",
-      name: `gallery`,
+      name: `galleryPhoto`,
       id: id,
-      url: `/gallery/${id}`,
+      url: `/galleries/${id}`,
       deleteData: true,
       primaryKey: 'id',
       cb: {

@@ -19,19 +19,19 @@ const Create = ({location, history}) => {
     <EntityForm.Main
       method="post"
       entity="gallery"
-      name={`galleryPhoto-${lang}`}
-      url="/gallery"
+      name={`galleryVideo-${lang}`}
+      url="/galleries"
       prependData
       primaryKey="id"
       normalizeData={data => data}
       onSuccess={(data, resetForm) => {
         resetForm();
         if(saveType === 'list'){
-          history.push(`/gallery/photo`)
+          history.push(`/gallery/video`)
         }else if(saveType === 'update'){
-          history.push(`/gallery/photo/update/${get(data, 'id')}`)
+          history.push(`/gallery/video/update/${get(data, 'id')}`)
         }else if(saveType === 'create'){
-          history.push(`/gallery/photo/create`)
+          history.push(`/gallery/video/create`)
         }
       }}
       fields={[
@@ -48,9 +48,7 @@ const Create = ({location, history}) => {
           required: true
         },
         {
-          name: "files",
-          value: [],
-          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
+          name: "link",
         },
         {
           name: "status",
@@ -59,7 +57,7 @@ const Create = ({location, history}) => {
         },
         {
           name: 'type',
-          value: 1
+          value: 2
         }
       ]}
       params={{
@@ -69,7 +67,7 @@ const Create = ({location, history}) => {
       {({isSubmitting, values, setFieldValue}) => {
         return (
           <Spin spinning={isSubmitting}>
-            <div className="title-md mb-20 mt-14">{t('Создать фотогалерея')}</div>
+            <div className="title-md mb-20 mt-14">{t('Создать видеогалерея')}</div>
 
             <Form {...{values, setFieldValue, setSaveType}}/>
 

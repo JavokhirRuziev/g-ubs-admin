@@ -42,7 +42,7 @@ const List = () => {
         dispatch(Actions.Form.request({
             method: 'delete',
             entity: "category",
-            name: `categoryDocument`,
+            name: `categoryProduct`,
             id: id,
             url: `/categories/${id}`,
             deleteData: true,
@@ -143,6 +143,17 @@ const List = () => {
                                                     <CopyToClipboard str={`/products/categories/${value}`}/>
                                                 </div>
                                             },
+                                            {
+                                                title: t("Статус"),
+                                                dataIndex: "status",
+                                                className: 'text-cen w-82',
+                                                render: value => {
+                                                    return <div className="divider-wrapper">
+                                                        <div className="color-view-ellipse m-0-auto"
+                                                             style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                                                    </div>
+                                                }
+                                            }
                                         ]}
                                         dataSource={items}
                                     />

@@ -47,13 +47,12 @@ const Form = ({isUpdate, setFieldValue, values, setSaveType}) => {
         <Panel>
 
           <Field
-            component={Fields.UploadImageManager}
-            isMulti={true}
-            limit={20}
-            name="files"
-            label={t("Фото")}
-            size="large"
-            className={"mb-14"}
+              component={Fields.AntTextarea}
+              name="link"
+              type="text"
+              rows={5}
+              label={t("Youtube iframe")}
+              placeholder={t("Поставьте iframe код")}
           />
 
           <div className="d-flex align-items-center mb-24">

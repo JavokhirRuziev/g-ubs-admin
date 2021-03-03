@@ -17,32 +17,32 @@ const Update = ({history, match}) => {
     return (
         <EntityContainer.One
             entity="gallery"
-            name={`galleryPhoto-${id}`}
-            url={`/gallery/${id}`}
+            name={`galleryVideo-${id}`}
+            url={`/galleries/${id}`}
             primaryKey="id"
             id={id}
         >
             {({item, isFetched}) => {
                 return (
                     <Spin spinning={!isFetched}>
-                        <div className="title-md mb-20 mt-14">{t('Изменить фотогалерея')}</div>
+                        <div className="title-md mb-20 mt-14">{t('Изменить видеогалерея')}</div>
 
                         <EntityForm.Main
                             method={'put'}
                             entity="gallery"
-                            name={`galleryPhoto`}
-                            url={`/gallery/${get(item, 'id')}`}
+                            name={`galleryVideo`}
+                            url={`/galleries/${get(item, 'id')}`}
                             updateData={true}
                             primaryKey="id"
                             normalizeData={data => data}
                             onSuccess={(data, resetForm) => {
                                 resetForm();
                                 if (saveType === 'list') {
-                                    history.push(`/gallery/photo`)
+                                    history.push(`/gallery/video`)
                                 } else if (saveType === 'update') {
-                                    history.push(`/gallery/photo/update/${get(data, 'id')}`)
+                                    history.push(`/gallery/video/update/${get(data, 'id')}`)
                                 } else if (saveType === 'create') {
-                                    history.push(`/gallery/photo/create`)
+                                    history.push(`/gallery/video/create`)
                                 }
                             }}
                             fields={[
@@ -62,18 +62,17 @@ const Update = ({history, match}) => {
                                     value: get(item, 'title_en')
                                 },
                                 {
-                                    name: "files",
-                                    value: get(item, 'files') ? get(item, 'files', []) : [],
-                                    onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
-                                },
-                                {
                                     name: "status",
                                     value: get(item, 'status') === 1,
                                     onSubmitValue: value => value ? 1 : 0
                                 },
                                 {
                                     name: 'type',
-                                    value: 1
+                                    value: 2
+                                },
+                                {
+                                    name: 'link',
+                                    value: get(item, 'link')
                                 }
                             ]}
                         >
