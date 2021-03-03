@@ -6,13 +6,13 @@ import authActions from "../actions/auth";
 
 export function* LoginRequest(action){
 
-  const { values: { username, password }, cb } = action.payload;
+  const { values: { name, password }, cb } = action.payload;
 
   try {
 
-    const { data } = yield call(api.request.post, queryBuilder("/user/sign-in", {include: 'token'}), { username, password });
+    const { data } = yield call(api.request.post, queryBuilder("/user/sign-in", {include: 'token'}), { name, password });
 
-    yield call(storage.set, "token", data.token);
+    yield call(storage.set, "token", data.success.token);
 
     yield put(authActions.Login.success(data));
 
@@ -35,7 +35,7 @@ export function* GetMeRequest(){
 
   try {
 
-    const { data } = yield call(api.request.get, queryBuilder("/user/get-me", { include: ["profile", "token"]} ));
+    const { data } = yield call(api.request.get, queryBuilder("/user/get-me"));
 
     yield put(authActions.GetMe.success({
       data

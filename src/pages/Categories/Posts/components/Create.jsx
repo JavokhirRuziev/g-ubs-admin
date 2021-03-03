@@ -21,26 +21,36 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {name: "name_ru", required: true},
-        {name: "name_en", required: true},
-        {name: "name_uz", required: true},
+        {
+          name: "name_ru",
+          required: true
+        },
+        {
+          name: "name_en",
+          required: true
+        },
+        {
+          name: "name_uz",
+          required: true
+        },
         {
           name: "status",
           value: true,
           onSubmitValue: value => value ? 1 : 0
         },
         {
-          name: "top",
-          value: false,
-          onSubmitValue: value => value ? 1 : 0
+          name: "type",
+          value: 2
         },
-        {name: "type", value: "post"},
+        {
+          name: "sort",
+        },
         {
           name: "parent_id",
           onSubmitValue: value => get(value, "id")
         },
         {
-          name: "icon",
+          name: "file",
           value: [],
           onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
         },

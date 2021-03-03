@@ -185,12 +185,42 @@ export function* FormDefault(action){
 	}
 }
 
+export function* Append(action) {
+	const { entity, name, params, appendIds, prependIds, primaryKey, relations, data } = action.payload;
+	try {
+		const normalized = normalize(data, [EntitySchema(entity, primaryKey, relations)]);
+		yield put(Actions.entities.Load.success(normalized.entities));
+
+		yield put(
+			Actions.entity.Append.success({
+				entity,
+				name,
+				appendIds,
+				prependIds,
+				params,
+				ids: normalized.result,
+				meta: data._meta
+			})
+		);
+	} catch (error) {
+		yield put(
+			Actions.entity.LoadAll.failure({
+				entity,
+				name,
+				error
+			})
+		);
+	}
+}
+
+
 export default function* root(){
 	yield all([
 		takeEvery(Actions.entity.LoadAll.REQUEST, LoadAll),
 		takeEvery(Actions.entity.LoadOne.REQUEST, LoadOne),
 		takeEvery(Actions.entity.LoadDefault.REQUEST, LoadDefault),
 		takeLatest(Actions.entity.Form.REQUEST, Form),
-		takeLatest(Actions.entity.FormDefault.REQUEST, FormDefault)
+		takeLatest(Actions.entity.FormDefault.REQUEST, FormDefault),
+		takeEvery(Actions.entity.Append.REQUEST, Append)
 	]);
 }

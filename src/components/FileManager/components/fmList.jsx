@@ -37,7 +37,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
     <EntityContainer.All
       entity="files"
       name={`allFiles-${filterType}`}
-      url="/filemanager/index"
+      url="/filemanager"
       dataKey="data"
       primaryKey="id"
       appendData={true}

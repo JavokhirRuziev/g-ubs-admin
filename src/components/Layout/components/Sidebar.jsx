@@ -6,6 +6,15 @@ import {useTranslation} from "react-i18next";
 const Sidebar = ({isCollapsed, setCollapse}) => {
   const {t} = useTranslation();
   const menu = [
+    {
+      id: 'category',
+      title: t('Категория'),
+      icon: 'menu-i-category',
+      submenu: [
+        {id: 'category-posts', title: "Посты", link: '/categories/posts'},
+        {id: 'category-products', title: "Продукты", link: '/categories/products'},
+      ]
+    },
     {id: 'posts', title: t('Посты'), link: '/posts', icon: 'menu-i-edit'},
     {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
     {id: 'documents', title: t('Документы'), link: '/documents', icon: 'menu-i-file'},
@@ -21,16 +30,6 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
         {id: 'settings-others', title: t('Основные'), link: '/settings'},
         {id: 'settings-translation', title: t('Переводы'), link: '/translation'},
         {id: 'users', title: t('Пользователи'), link: '/users'}
-      ]
-    },
-    {
-      id: 'category',
-      title: t('Категория'),
-      icon: 'menu-i-category',
-      submenu: [
-        {id: 'category-posts', title: t('Посты'), link: '/categories/posts'},
-        {id: 'category-documents', title: t('Документы'), link: '/categories/documents'},
-        {id: 'category-useful', title: t('Ссылки'), link: '/categories/useful-links'}
       ]
     },
     {

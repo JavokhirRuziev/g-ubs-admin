@@ -11,7 +11,7 @@ const Create = ({showCreateModal}) => {
     <EntityForm.Main
       method="post"
       entity="category"
-      name="categoryDocument"
+      name="categoryProduct"
       url="/categories"
       appendData
       primaryKey="id"
@@ -21,21 +21,33 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {name: "name_uz"},
-        {name: "name_ru"},
-        {name: "name_en"},
+        {
+          name: "name_uz"
+        },
+        {
+          name: "name_ru"
+        },
+        {
+          name: "name_en"
+        },
         {
           name: "status",
           value: true,
           onSubmitValue: value => value ? 1 : 0
         },
-        {name: "type", value: "document"},
+        {
+          name: "type",
+          value: 1
+        },
+        {
+          name: "sort"
+        },
         {
           name: "parent_id",
           onSubmitValue: value => get(value, "id")
         },
         {
-          name: "icon",
+          name: "file",
           value: [],
           onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
         },

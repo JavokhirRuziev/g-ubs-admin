@@ -6,13 +6,13 @@ import { connect } from "react-redux";
 
 import Fields from "components/Fields";
 import Actions from "store/actions";
-import { Button, Spin } from "antd";
-import {withTranslation} from "react-i18next";
+import {Button, notification, Spin} from "antd";
+import get from "lodash/get";
 
 import "./style.scss";
 import bgImage from "./icons/login-bg.svg";
 
-const Login = ({ isSubmitting, t }) => {
+const Login = ({ isSubmitting }) => {
 	return (
 		<div className="login-page">
 			<div className="container">
@@ -20,8 +20,8 @@ const Login = ({ isSubmitting, t }) => {
 					<div className="login-box">
 						<div className="login-box__header">
 							<div>
-								<div className="login-box__title">{t("Добро пожаловать")}</div>
-								<div className="login-box__subtitle">{t("Панель управления сайтом MBP")}</div>
+								<div className="login-box__title">Добро пожаловать</div>
+								<div className="login-box__subtitle">Панель управления сайтом MBP</div>
 							</div>
 						</div>
 						<div className="login-box__form">
@@ -29,17 +29,17 @@ const Login = ({ isSubmitting, t }) => {
 								<Form autoComplete="false">
 									<Field
 										component={Fields.TextInputLogin}
-										name="username"
+										name="name"
 										type="text"
-										title={t("Введите логин")}
+										title="Введите логин"
 									/>
 									<Field
 										component={Fields.PasswordInputLogin}
 										name="password"
 										type="password"
-										title={t("Введите пароль")}
+										title="Введите пароль"
 									/>
-									<Button type="primary" htmlType="submit" block>{t('Войти')}</Button>
+									<Button type="primary" htmlType="submit" block>Войти</Button>
 								</Form>
 							</Spin>
 						</div>
@@ -54,12 +54,12 @@ const Login = ({ isSubmitting, t }) => {
 const enhacedLogin = withFormik({
 	validationSchema: () => (
 		Yup.object().shape({
-			username: Yup.string().required("Required"),
+			name: Yup.string().required("Required"),
 			password: Yup.string().required("Required")
 		})
 	),
 	mapPropsToValues: () => ({
-		username: "",
+		name: "",
 		password: ""
 	}),
 	handleSubmit: (values, { props, setFieldError, setSubmitting }) => {
@@ -71,6 +71,11 @@ const enhacedLogin = withFormik({
 				error: (errors) => {
 					if (errors instanceof Array) {
 						errors.map(({ field, message }) => setFieldError(field, message));
+					} else if(get(errors, 'errorMessage')){
+						notification["error"]({
+							message: get(errors, 'errorMessage', 'Что-то пошло не так'),
+							duration: 2
+						});
 					} else if (errors instanceof Object) {
 						Object.keys(errors).map(field => {
 							const error = errors[field][0];
@@ -93,4 +98,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators(
 	dispatch
 );
 
-export default connect(null, mapDispatchToProps)(withTranslation("main")(enhacedLogin));
+export default connect(null, mapDispatchToProps)(enhacedLogin);

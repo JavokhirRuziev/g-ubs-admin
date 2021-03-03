@@ -110,7 +110,7 @@ const List = () => {
             limit: 10,
             page,
             include: "files",
-            filter: {type: "post"}
+            filter: {type: 2}
           }}
         >
           {({items, isFetched, meta}) => {

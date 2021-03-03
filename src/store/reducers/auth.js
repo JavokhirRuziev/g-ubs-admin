@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
         ...state,
         isFetched: true,
         isAuthenticated: true,
-        token: action.payload.token
+        token: action.payload.success.token
       };
 
     case authActions.GetMe.SUCCESS:

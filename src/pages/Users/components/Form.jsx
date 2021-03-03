@@ -12,7 +12,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
       <div className="title-md fs-16 mb-20">{isUpdate ? t('Изменение пользователья') : t('Добавление пользователя')}</div>
       <Field
         component={Fields.AntInput}
-        name="username"
+        name="user"
         type="text"
         placeholder={t("Введите логин")}
         size="large"

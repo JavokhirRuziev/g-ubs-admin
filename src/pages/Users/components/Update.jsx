@@ -21,9 +21,9 @@ const Update = ({selected, showUpdateModal}) => {
       }}
       fields={[
         {
-          name: "username",
+          name: "user",
           required: true,
-          value: get(selected, 'username')
+          value: get(selected, 'user')
         },
         {
           name: "password",

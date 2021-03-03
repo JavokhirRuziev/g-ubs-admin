@@ -130,7 +130,7 @@ const List = () => {
                       },
                       {
                         title: t("Логин"),
-                        dataIndex: "username",
+                        dataIndex: "user",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {

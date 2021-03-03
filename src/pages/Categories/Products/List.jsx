@@ -8,11 +8,10 @@ import Update from "./components/Update";
 import Actions from "modules/entity/actions";
 
 import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import orderBy from "lodash/orderBy";
+import {useSelector, useDispatch} from "react-redux";
 
 const List = () => {
-  const lang = useSelector(state => state.system.currentLangCode);
+  const langCode = useSelector(state => state.system.currentLangCode);
 
   const [createModal, showCreateModal] = useState(false);
   const [updateModal, showUpdateModal] = useState(false);
@@ -42,9 +41,9 @@ const List = () => {
     dispatch(Actions.Form.request({
       method: 'delete',
       entity: "category",
-      name: `categoryUseful`,
+      name: `categoryDocument`,
       id: id,
-      url: `/useful-links-category/${id}`,
+      url: `/categories/${id}`,
       deleteData: true,
       cb: {
         success: () => {
@@ -62,19 +61,6 @@ const List = () => {
         finally: () => {}
       }
     }))
-  };
-
-  const type = (type) => {
-    switch (type) {
-      case 1:
-        return t("По умалчанию");
-      case 2:
-        return t("Актуальный");
-      case 3:
-        return t("Топ");
-      default:
-        return "";
-    }
   };
 
   return (
@@ -103,29 +89,30 @@ const List = () => {
       </Modal>
 
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Категория полезные ссыльки")}</div>
+        <div className="title-md">{t("Категория продуктов")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
           onClick={() => showCreateModal(true)}
-        >{t('Добавить')}</Button>
+        >Добавить</Button>
       </div>
 
-      <Board>
+      <Board className="border-none">
         <EntityContainer.All
           entity="category"
-          name={`categoryUseful`}
-          url="/useful-links-category"
+          name="categoryProduct"
+          url="/categories"
           params={{
-            sort: 'type',
+            sort: '-id',
             limit: 10,
-            page
+            page,
+            include: "files",
+            filter: {type: 1}
           }}
         >
           {({items, isFetched, meta}) => {
-           const orderedItems =  orderBy(items, ['type', 'sort'], ['asc', 'asc']);
             return (
               <Spin spinning={!isFetched}>
                 <div className="default-table pad-15">
@@ -144,21 +131,11 @@ const List = () => {
                       },
                       {
                         title: t("Название"),
-                        dataIndex: `name_${lang}`,
-                        render: value => <div className="divider-wrapper">{value}</div>
-                      },
-                      {
-                        title: t("Типь"),
-                        dataIndex: "type",
-                        render: value => <div className="divider-wrapper">{type(value)}</div>
-                      },
-                      {
-                        title: t("Сортировка"),
-                        dataIndex: "sort",
+                        dataIndex: `name_${langCode}`,
                         render: value => <div className="divider-wrapper">{value}</div>
                       }
                     ]}
-                    dataSource={orderedItems}
+                    dataSource={items}
                   />
                 </div>
                 {meta && meta.perPage && (

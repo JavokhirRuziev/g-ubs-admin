@@ -182,6 +182,26 @@ export default (state = initialState, action) => {
 			};
 		}
 
+		case Actions.Append.SUCCESS:{
+			const { entity, name, ids } = action.payload;
+
+			const prevIds = get(state, `${entity}.${name}.ids`, []);
+			const nextIds = [...ids, ...prevIds];
+
+			return {
+				...state,
+				[entity]: {
+					...get(state, entity, {}),
+					[name]: {
+						...get(state, `${entity}.${name}`, {}),
+						ids: uniq(nextIds),
+						isFetched: true
+					}
+				}
+			};
+		}
+
+
 		default:
 			return state;
 	}

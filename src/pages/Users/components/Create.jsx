@@ -19,7 +19,7 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {name: "username", required: true},
+        {name: "user", required: true},
         {name: "password", required: true},
         {
           name: "status",

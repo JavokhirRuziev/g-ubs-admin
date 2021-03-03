@@ -42,13 +42,12 @@ const Update = ({selected, showUpdateModal}) => {
           onSubmitValue: value => value ? 1 : 0
         },
         {
-          name: "top",
-          value: get(selected, 'top') === 1,
-          onSubmitValue: value => value ? 1 : 0
+          name: "type",
+          value: 2
         },
         {
-          name: "type",
-          value: "post"
+          name: "sort",
+          value: get(selected, 'sort')
         },
         {
           name: "parent_id",
@@ -56,7 +55,7 @@ const Update = ({selected, showUpdateModal}) => {
           onSubmitValue: value => get(value, "id")
         },
         {
-          name: "icon",
+          name: "file",
           value: get(selected, 'files') ? [get(selected, 'files', '')] : [],
           onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : undefined
         },

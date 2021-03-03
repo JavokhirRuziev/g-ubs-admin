@@ -8,6 +8,9 @@ import {Spinner} from "components";
 import App from "./App";
 
 // const Home = lazy(() => import("./pages/Home"));
+const CategoriesPosts = lazy(() => import("./pages/Categories/Posts/List"));
+const CategoriesProducts = lazy(() => import("./pages/Categories/Products/List"));
+
 const Gallery = lazy(() => import("./pages/Gallery/List"));
 const GalleryCreate = lazy(() => import("./pages/Gallery/Create"));
 const GalleryUpdate = lazy(() => import("./pages/Gallery/Update"));
@@ -25,9 +28,6 @@ const DocumentsCreate = lazy(() => import("./pages/Documents/Create"));
 const DocumentsUpdate = lazy(() => import("./pages/Documents/Update"));
 const Menu = lazy(() => import("./pages/Menu/List"));
 const MenuView = lazy(() => import("./pages/Menu/View"));
-const CategoriesUsefulLinks = lazy(() => import("./pages/Categories/UsefulLinks/List"));
-const CategoriesPosts = lazy(() => import("./pages/Categories/Posts/List"));
-const CategoriesDocuments = lazy(() => import("./pages/Categories/Documents/List"));
 const Tags = lazy(() => import("./pages/Tags/List"));
 const Map = lazy(() => import("./pages/Map"));
 const Feedback = lazy(() => import("./pages/Feedback/List"));
@@ -44,6 +44,8 @@ const CreateFaq = lazy(() => import("./pages/Faq/Create"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 const routes = [
+	{ path: "/categories/posts", exact: true, component: CategoriesPosts },
+	{ path: "/categories/products", exact: true, component: CategoriesProducts },
 	{ path: "/", exact: true, component: Posts },
 	{ path: "/logout", exact: true, component: Logout },
 	{ path: "/gallery", exact: true, component: Gallery },
@@ -63,9 +65,6 @@ const routes = [
 	{ path: "/documents", exact: true, component: Documents },
 	{ path: "/documents/create", exact: true, component: DocumentsCreate },
 	{ path: "/documents/update/:id", exact: true, component: DocumentsUpdate },
-	{ path: "/categories/useful-links", exact: true, component: CategoriesUsefulLinks },
-	{ path: "/categories/posts", exact: true, component: CategoriesPosts },
-	{ path: "/categories/documents", exact: true, component: CategoriesDocuments },
 	{ path: "/tags", exact: true, component: Tags },
 	{ path: "/feedback", exact: true, component: Feedback },
 	{ path: "/feedback/update/:id", exact: true, component: FeedbackUpdate },
