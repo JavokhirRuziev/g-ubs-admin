@@ -25,7 +25,7 @@ class Filter extends Component {
           <GridElements.Row gutter={10} wrap>
             <GridElements.Column gutter={10} xs={110} calc>
               <GridElements.Row gutter={10}>
-                <GridElements.Column xs={3} gutter={10}>
+                <GridElements.Column xs={4} gutter={10}>
                   <Field
                     component={Fields.AntInput}
                     name="title"
@@ -36,7 +36,7 @@ class Filter extends Component {
                     className={"mb-0"}
                   />
                 </GridElements.Column>
-                <GridElements.Column xs={3} gutter={10}>
+                <GridElements.Column xs={4} gutter={10}>
                   <Field
                     component={Fields.AntDatePicker}
                     name="begin_publish_time"
@@ -49,7 +49,7 @@ class Filter extends Component {
                     }}
                   />
                 </GridElements.Column>
-                <GridElements.Column xs={3} gutter={10}>
+                <GridElements.Column xs={4} gutter={10}>
                   <Field
                     component={Fields.AsyncSelect}
                     name="category"
@@ -60,25 +60,6 @@ class Filter extends Component {
                     className={"mb-0"}
                     optionLabel={`name_${lang}`}
                     filterParams={{type: 'post'}}
-                  />
-                </GridElements.Column>
-                <GridElements.Column xs={3} gutter={10}>
-                  <Field
-                    component={Fields.AntSelect}
-                    name="type"
-                    optionLabel="label"
-                    optionValue="value"
-                    placeholder={t("Поиск по типь")}
-                    size={'large'}
-                    allowClear
-                    selectOptions={[
-                      {name: t("Обычный новость"), value: 0},
-                      {name: t("Фото новость"), value: 1},
-                      {name: t("Видео новость"), value: 2},
-                      {name: t("Слидер новость"), value: 3}
-                    ]}
-                    className={"mb-0"}
-                    style={{marginBottom: 0}}
                   />
                 </GridElements.Column>
               </GridElements.Row>
@@ -120,7 +101,6 @@ Filter = withFormik({
     return ({
       title: params.title || '',
       category: category,
-      type: params.type ? Number(params.type) : undefined,
       begin_publish_time: params.begin_publish_time ? moment.unix(params.begin_publish_time) : '',
     })
 

@@ -50,11 +50,6 @@ const Update = ({selected, showUpdateModal}) => {
           value: get(selected, 'sort')
         },
         {
-          name: "parent_id",
-          value: get(selected, 'parent', null),
-          onSubmitValue: value => get(value, "id")
-        },
-        {
           name: "file",
           value: get(selected, 'files') ? [get(selected, 'files', '')] : [],
           onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : undefined

@@ -1,51 +1,3 @@
-const postTypeList = [
-  {value: 0, text: 'Обычный новость'},
-  {value: 1, text: 'Фото новость'},
-  {value: 2, text: 'Видео новость'},
-  {value: 3, text: 'Слидер'},
-];
-
-const postType = (type) => {
-  switch (type) {
-    case 0:
-      return "Обычный новость";
-    case 1:
-      return "Фото новость";
-    case 2:
-      return "Видео новость";
-    case 3:
-      return "Слидер";
-    default:
-      return "Обычный новость"
-  }
-};
-
-const ambassadorsType = (type) => {
-  switch (type) {
-    case 1:
-      return "Посол";
-    case 2:
-      return "Руководство";
-    case 3:
-      return "Журналист";
-    default:
-      return ""
-  }
-};
-
-const embassiesType = (type) => {
-  switch (type) {
-    case 1:
-      return "Посольство";
-    case 2:
-      return "Консульство";
-    case 3:
-      return "Консульский округ";
-    default:
-      return ""
-  }
-};
-
 const feedbackLabel = (type) => {
   switch (type) {
     case 1:
@@ -71,11 +23,27 @@ const formatBytes = (bytes, decimals = 2) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
+const formatDate = (date, format) => {
+  let dt= new Date(date);
+  let month = ("00" + (dt.getMonth() + 1)).slice(-2);
+  let day = ("00" + dt.getDate()).slice(-2);
+  let year = dt.getFullYear();
+  let hours = ("00" + dt.getHours()).slice(-2);
+  let minutes = ("00" + dt.getMinutes()).slice(-2);
+  let seconds = ("00" + dt.getSeconds()).slice(-2);
+
+  switch (format) {
+    case "DD-MM-YYYY":
+      return day+'-'+month+'-'+year;
+    case "DD.MM.YYYY / HH:mm:ss":
+      return  day+'.'+month+'.'+year+' / '+hours+':'+minutes+':'+seconds;
+    default:
+      return day+'.'+month+'.'+year
+  }
+};
+
 export default {
-  postTypeList,
-  postType,
-  ambassadorsType,
-  embassiesType,
   formatBytes,
-  feedbackLabel
+  feedbackLabel,
+  formatDate
 }

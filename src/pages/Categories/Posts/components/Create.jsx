@@ -4,8 +4,6 @@ import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
 import Form from './Form';
 
-import get from "lodash/get";
-
 const Create = ({showCreateModal}) => {
   return (
     <EntityForm.Main
@@ -44,10 +42,6 @@ const Create = ({showCreateModal}) => {
         },
         {
           name: "sort",
-        },
-        {
-          name: "parent_id",
-          onSubmitValue: value => get(value, "id")
         },
         {
           name: "file",

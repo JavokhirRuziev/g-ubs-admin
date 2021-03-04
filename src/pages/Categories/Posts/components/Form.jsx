@@ -3,10 +3,8 @@ import React from 'react';
 import {Fields} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
-import {useSelector} from "react-redux";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
-    const lang = useSelector(state => state.system.currentLangCode);
     return (
         <div>
             <div className="title-md fs-16 mb-20">{isUpdate ? "Изменить категорию" : "Добавить категорию"}</div>
@@ -38,20 +36,6 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 placeholder="Сортировка"
                 size="large"
             />
-            <Field
-                component={Fields.AsyncSelect}
-                name="parent_id"
-                placeholder={"Виберите категория"}
-                label={"Подкатегория для"}
-                isClearable
-                loadOptionsUrl="/categories"
-                className="mb-20"
-                optionLabel={`name_${lang}`}
-                filterParams={{
-                    type: "post"
-                }}
-            />
-
             <div className="row mb-20">
                 <div className="col-md-6">
                     <Field

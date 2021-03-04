@@ -8,29 +8,14 @@ import get from "lodash/get";
 import {time, helpers} from "services";
 import FMUpload from "./fmUpload";
 import {useDebounce} from "use-debounce";
-import {Button, notification} from "antd";
 
-const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
+const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activeFolder}) => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [searchQuery] = useDebounce(query, 600);
 
-  const copyToClipboard = str => {
-    var input = document.createElement('input');
-    input.value = str;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    document.body.removeChild(input);
-
-    notification["success"]({
-      message: "Упешно скопирован",
-      duration: 2
-    });
-  };
-
   useEffect(() => {
-   setPage(1)
+    setPage(1);
   }, [filterType]);
 
   return (
@@ -46,11 +31,18 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
         sort: "-id",
         page,
         extra: {title: searchQuery},
-        filter: {ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx', 'xsl', 'txt', 'doc', 'pdf']}
+        filter: {
+          ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx', 'xsl', 'txt', 'doc', 'pdf'],
+          folder_id: activeFolder ? activeFolder.id : ''
+        }
       }}>
       {({items, isFetched, meta}) => {
         return (
           <div className="fm-list__wrapper">
+
+            {activeFolder && (
+              <div className="ml-5 mr-5 fs-16 fw-700 mb-20">{activeFolder.title}</div>
+            )}
 
             <div className="fm-search">
               <Search text='Поиск действия' onSearch={setQuery} value={query} {...{ setPage }} />
@@ -58,7 +50,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
 
             {filterType === "images" ? (
               <div className="fm-list">
-                <FMUpload {...{setLoading, isLoading, filterType}}/>
+                <FMUpload {...{setLoading, isLoading, filterType, activeFolder}}/>
                 {items.map(file => (
                   <div className={`image-file ${get(selected, 'id') === file.id ? 'selected' : ''}`} key={file.id}
                        onClick={() => setSelected(file)}>
@@ -73,7 +65,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
               </div>
             ) : (
               <div className="fm-list__doc">
-                <FMUpload {...{setLoading, isLoading, filterType}}/>
+                <FMUpload {...{setLoading, isLoading, filterType, activeFolder}}/>
                 {items.slice(0, 6).map(file => (
                   <div className={`doc-file ${get(selected, 'id') === file.id ? 'selected' : ''}`} key={file.id}
                        onClick={() => setSelected(file)}>
@@ -89,17 +81,6 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading}) => {
                           <div className="w-50p pl-10 d-flex">
                             {/*<div className="fw-500">Дата:</div>*/}
                             <div className="">{time.to(get(file, 'created_at'))}</div>
-                          </div>
-                          <div className="copy-to-clipboard">
-                            <Button
-                              type="primary"
-                              size="small"
-                              icon="copy"
-                              style={{
-                                marginLeft: "10px"
-                              }}
-                              onClick={() => copyToClipboard(file.link)}
-                            />
                           </div>
                         </div>
                       </div>

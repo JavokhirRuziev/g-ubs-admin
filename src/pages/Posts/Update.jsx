@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Modal, Spin, Tabs} from 'antd';
+import {Spin, Tabs} from 'antd';
 import {Panel} from 'components';
 import EntityForm from 'modules/entity/forms';
 import EntityContainer from 'modules/entity/containers';
@@ -11,7 +11,6 @@ import qs from "query-string";
 import get from "lodash/get";
 import config from "config";
 import moment from "moment";
-import CreateTag from "./components/CreateTag";
 
 const Update = ({location, history, match}) => {
   const TabPane = Tabs.TabPane;
@@ -23,8 +22,6 @@ const Update = ({location, history, match}) => {
 
   const [tabLang, setTabLang] = useState(lang);
   const [saveType, setSaveType] = useState('list');
-  const [tagField, setTagField] = useState(false);
-  const [createModal, showCreateModal] = useState(false);
 
   const changeTab = (langCode, translations) => {
     const hasLangItem = translations.filter(({ lang }) => lang === langCode);
@@ -34,15 +31,6 @@ const Update = ({location, history, match}) => {
   };
 
   const isOwn = lang === tabLang;
-  const openHandler = () => {
-    showCreateModal(true);
-    setTagField(false)
-  };
-
-  const closeHandler = () => {
-    showCreateModal(false);
-    setTagField(true)
-  };
 
   return (
     <EntityContainer.One
@@ -52,24 +40,12 @@ const Update = ({location, history, match}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "category, translations, files, download_files, countries, documents, country, content, tags, embassies",
+        include: "category,files",
       }}
     >
       {({item, isFetched}) => {
         return (
           <Spin spinning={!isFetched}>
-
-            <Modal
-              visible={createModal}
-              onOk={() => openHandler()}
-              onCancel={() => closeHandler()}
-              footer={null}
-              centered
-              width={430}
-              destroyOnClose
-            >
-              <CreateTag {...{closeHandler}}/>
-            </Modal>
 
             <div className="title-md mb-20 mt-14">{t('Изменить новость')}</div>
             <Panel className="pad-0 mb-30">
@@ -115,60 +91,22 @@ const Update = ({location, history, match}) => {
                   value: isOwn ? get(item, 'title') : ''
                 },
                 {
-                  name: "description",
-                  max: 500,
-                  value: isOwn ? get(item, 'description') : ''
-                },
-                {
                   name: "content",
                   value: isOwn ? get(item, 'content') : ''
                 },
                 {
-                  name: "top",
-                  value: get(item, 'top')
-                },
-                {
-                  name: "show_photo",
-                  value: get(item, 'show_photo')
-                },
-                {
-                  name: "countries",
-                  value: get(item, 'countries', []),
-                  onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []) : []
-                },
-                {
-                  name: "type",
-                  value: get(item, 'type'),
-                  isAbsolute: true
-                },
-                {
                   name: "category_id",
-                  value: get(item, 'category', []).reduce((prev, curr) => [...prev, curr.id], []),
+                  value: get(item, 'category'),
+                  onSubmitValue: value => value ? value.id : null
                 },
                 {
-                  name: "begin_publish_time",
-                  onSubmitValue: value => (!!value ? moment(value).unix() : ""),
-                  value: moment.unix(get(item, 'begin_publish_time', null)),
-                  required: true
+                  name: "publish_time",
+                  value: moment(get(item, 'publish_time')),
                 },
                 {
-                  name: "files",
-                  value: get(item, 'files') ?  get(item, 'files', []) : [],
+                  name: "file",
+                  value: get(item, 'files') ?  [get(item, 'files')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-                },
-                {
-                  name: 'download_files',
-                  value: Array.isArray(get(item,'download_files')) ? get(item,'download_files',[]) : [],
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-                },
-                {
-                  name: "embassies",
-                  value: isOwn ? get(item, 'embassies', []) : [],
-                  onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []) : []
-                },
-                {
-                  name: "photo_text",
-                  value: get(item, 'photo_text')
                 },
                 {
                   name: "status",
@@ -176,22 +114,21 @@ const Update = ({location, history, match}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
-                  name: "tag_id",
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []),
-                  value: get(item, 'tags', [])
-                },
-                {
-                  name: "doc_id",
-                  value: get(item, 'documents', []),
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
+                  name: "top",
+                  value: get(item, 'top') === 1,
+                  onSubmitValue: value => value ? 1 : 0
                 },
                 {
                   name: "lang_hash",
                   value: get(item, 'lang_hash')
+                },
+                {
+                  name: "type",
+                  value: 1
                 }
               ]}
               params={{
-                include: ['translations', 'category', 'files'],
+                include: ['category', 'files'],
                 extra: {_l: tabLang}
               }}
             >
@@ -199,7 +136,7 @@ const Update = ({location, history, match}) => {
                 return (
                   <Spin spinning={isSubmitting}>
 
-                    <Form {...{values, lang:tabLang, setFieldValue, isUpdate: true, isFetched, setSaveType, openHandler, tagField}}/>
+                    <Form {...{values, lang:tabLang, setFieldValue, isUpdate: true, isFetched, setSaveType}}/>
 
                   </Spin>
                 );

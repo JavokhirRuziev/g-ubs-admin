@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import {ReactComponent as PlusIcon} from "assets/images/icons/plus.svg";
 import {useHistory} from "react-router";
 
-const Form = ({isUpdate, setFieldValue, values, setSaveType}) => {
+const Form = ({setFieldValue, values, setSaveType}) => {
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -98,7 +98,6 @@ const Form = ({isUpdate, setFieldValue, values, setSaveType}) => {
               htmlType="submit"
               onClick={() => setSaveType('create')}
             ><PlusIcon/> {t("Сохранить и добавить")}</Button>
-
           </div>
 
         </Panel>

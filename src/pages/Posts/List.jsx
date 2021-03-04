@@ -8,9 +8,8 @@ import Filter from "./components/Filter";
 
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-
+import {helpers} from "services";
 import config from "config";
-import {helpers, time} from "services";
 import get from "lodash/get";
 import qs from "query-string";
 
@@ -107,14 +106,13 @@ const List = ({history, location}) => {
           url="/post"
           primaryKey="id"
           params={{
-            sort: '-begin_publish_time',
+            sort: '-publish_time',
             limit: 10,
             extra: {_l: tabLang, title: params.title, category_id: params.category ? Number(params.category.split('/')[0]) : ''},
-            include: "category, translations, files",
-            fields: ["id", "title", "type", "status", "begin_publish_time"],
+            include: "category,files",
+            fields: ["id", "title", "status", "publish_time"],
             filter: {
-              begin_publish_time: params.begin_publish_time,
-              type: params.type,
+              publish_time: params.begin_publish_time,
             },
             page
           }}
@@ -141,7 +139,7 @@ const List = ({history, location}) => {
                         dataIndex: "files",
                         className: 'w-82 text-cen',
                         render: value => <div className="divider-wrapper">
-                          <Avatar isRectangle isProduct image={get(value, '[0].thumbnails.small.src')}/>
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
                         </div>
                       },
                       {
@@ -151,23 +149,16 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Дата"),
-                        dataIndex: "begin_publish_time",
+                        dataIndex: "publish_time",
                         render: value => {
-                          return <div className="divider-wrapper">{time.to(value)}</div>
+                          return <div className="divider-wrapper">{helpers.formatDate(value)}</div>
                         }
                       },
                       {
                         title: t("Категория"),
                         dataIndex: "category",
                         render: value => {
-                          return <div className="divider-wrapper">{get(value, `[0].name_${tabLang}`)}</div>
-                        }
-                      },
-                      {
-                        title: t("Тип"),
-                        dataIndex: "type",
-                        render: value => {
-                          return <div className="divider-wrapper">{helpers.postType(value)}</div>
+                          return <div className="divider-wrapper">{get(value, `name_${tabLang}`)}</div>
                         }
                       },
                       {

@@ -11,18 +11,17 @@
     .fm-list__wrapper{
       height: 550px;
       overflow-y: auto;
+      border-right: 1px solid rgba(0,0,0,.1);
+      border-left: 1px solid rgba(0,0,0,.1);
+      padding: 0 15px;
+      flex: 1;
       .fm-search{
-        margin-bottom: 30px;
-        padding-right: 25px;
-        padding-left: 5px;
+        margin: 0 5px 20px 5px;
       }
     }
 
     .fm-list {
-      width: 570px;
       overflow-y: auto;
-      border-right: 1px solid #e8e8e8;
-      padding-right: 20px;
       display: flex;
       flex-wrap: wrap;
 
@@ -79,10 +78,72 @@
         }
       }
     }
-
+    .fm-folders{
+      width: 230px;
+      min-width: 230px;
+      height: 550px;
+      padding-right: 20px;
+      .folder-items{
+        height: calc(100% - 62px);
+      }
+      .folder-item{
+        padding-left: 35px;
+        position: relative;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        span{
+          transition: .2s ease;
+          &:hover{
+            text-decoration: underline;
+            color: #2196f3;
+          }
+        }
+        .action-buttons{
+          display: flex;
+          align-items: center;
+          margin-top: 2px;
+          .action-btn{
+            margin-left: 10px;
+            fill: #6d6d6d;
+            transition: .2s ease;
+            &.edit-btn{
+              &:hover{
+                fill: #2196f3;
+              }
+            }
+            &.delete-btn{
+              &:hover{
+                fill: #f4516c;
+              }
+            }
+          }
+        }
+        &:not(:last-child){
+          margin-bottom: 10px;
+        }
+        &:after{
+          background: url("./icons/folder.svg") no-repeat center left;
+          background-size: 20px;
+          content: "";
+          width: 20px;
+          height: 16px;
+          position: absolute;
+          left: 0;
+          top: 2px;
+        }
+      }
+    }
     .fm-settings {
       padding-left: 20px;
-      flex: 1;
+      width: 230px;
+      min-width: 230px;
+
+      .ant-radio-wrapper{
+        display: block;
+      }
 
       .label {
         color: rgba(0, 0, 0, 0.85);
@@ -100,7 +161,6 @@
 }
 .fm-list__doc{
   width: 611px;
-  border-right: 1px solid #e8e8e8;
   padding-right: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -206,17 +266,5 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
-}
-
-.fm-loading {
-  margin-right: 8px;
-
-  &__indicator {
-    width: 0;
-    height: 2px;
-    left: 0;
-    background-color: #3e7cfa;
-    transition: .1s ease-in-out;
   }
 }
