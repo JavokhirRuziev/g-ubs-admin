@@ -21,23 +21,33 @@ const Create = () => {
     <>
       <EntityForm.Main
         method="post"
-        entity="post"
-        name={`posts-${lang}`}
-        url="/post"
+        entity="product"
+        name={`products-${lang}`}
+        url="/products"
         prependData
         primaryKey="id"
         normalizeData={data => data}
         onSuccess={(data, resetForm) => {
           resetForm();
-          history.push(`/posts/update/${get(data, 'id')}?lang=${lang}`)
+          history.push(`/products/update/${get(data, 'id')}?lang=${lang}`)
         }}
         fields={[
           {
-            name: "title",
+            name: "color",
+            value: '#000000',
+            disabled:true
+          },
+          {
+            name: 'palette',
+            value: [],
+            onSubmitValue: value => value.length > 0 ? value.reduce((prev,curr) => [...prev, {color: curr.color, files: curr.files.reduce((prev, curr) => [...prev,curr.id], [])}], []) : [],
+          },
+          {
+            name: "name",
             required: true
           },
           {
-            name: "content",
+            name: "body",
             value: ""
           },
           {
@@ -45,10 +55,7 @@ const Create = () => {
             onSubmitValue: value => value ? value.id : null
           },
           {
-            name: "publish_time",
-          },
-          {
-            name: "file",
+            name: "documents",
             value: [],
             onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
           },
@@ -59,22 +66,40 @@ const Create = () => {
           },
           {
             name: "top",
-            value: false
+            value: false,
+            onSubmitValue: value => value ? 1 : 0
           },
           {
-            name: "type",
-            value: 1
+            name: "price",
+          },
+          {
+            name: "threeD",
+            value: [],
+            onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+          },
+          {
+            name: "paletteUpload",
+            value: [],
+            disabled: true
+          },
+          {
+            name: "file",
+            value: [],
+            required: true,
+            onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
           }
+
         ]}
         params={{
-          include: "category, files",
-          extra: {_l: lang}
+          include: "category",
+          extra: {append: 'palette0,documents0',_l: lang}
         }}
       >
         {({isSubmitting, values, setFieldValue}) => {
+          console.log(values)
           return (
             <Spin spinning={isSubmitting}>
-              <div className="title-md mb-20 mt-14">{t('Создать новость')}</div>
+              <div className="title-md mb-20 mt-14">{t('Создать продукт')}</div>
               <Form {...{values, lang, setFieldValue, isFetched: true, isUpdate: false}}/>
             </Spin>
           );

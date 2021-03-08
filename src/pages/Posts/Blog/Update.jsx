@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import qs from "query-string";
 import get from "lodash/get";
 import config from "config";
+import moment from "moment";
 
 const Update = ({location, history, match}) => {
   const TabPane = Tabs.TabPane;
@@ -20,30 +21,33 @@ const Update = ({location, history, match}) => {
   const {id} = match.params;
 
   const [tabLang, setTabLang] = useState(lang);
+  const [saveType, setSaveType] = useState('list');
 
   const changeTab = (langCode, translations) => {
     const hasLangItem = translations.filter(({ lang }) => lang === langCode);
     if (hasLangItem.length > 0) {
-      history.push(`/settings/update/${hasLangItem[0].id}?lang=${hasLangItem[0].lang}`)
+      history.push(`/blogs/update/${hasLangItem[0].id}?lang=${hasLangItem[0].lang}`)
     }
   };
 
   const isOwn = lang === tabLang;
+
   return (
     <EntityContainer.One
-      entity="setting"
-      name={`settings-${id}`}
-      url={`/settings/${id}`}
+      entity="post"
+      name={`blogs-${id}`}
+      url={`/post/${id}`}
       primaryKey="id"
       id={id}
       params={{
-        include: "files",
+        include: "category,files",
       }}
     >
       {({item, isFetched}) => {
         return (
           <Spin spinning={!isFetched}>
-            <div className="title-md mb-20 mt-14">{t('Изменить настройку')}</div>
+
+            <div className="title-md mb-20 mt-14">{t('Изменить блог')}</div>
             <Panel className="pad-0 mb-30">
               <Tabs
                 activeKey={tabLang}
@@ -63,41 +67,45 @@ const Update = ({location, history, match}) => {
 
             <EntityForm.Main
               method={isOwn ? 'put' : 'post'}
-              entity="setting"
-              name={`settings-${tabLang}`}
-              url={isOwn ? `/settings/${get(item, 'id')}` : '/settings'}
+              entity="post"
+              name={`blogs-${tabLang}`}
+              url={isOwn ? `/post/${get(item, 'id')}` : '/post'}
               updateData={isOwn}
               prependData={!isOwn}
               primaryKey="id"
               normalizeData={data => data}
               onSuccess={(data, resetForm) => {
                 resetForm();
-                history.push(`/settings?lang=${tabLang}`)
+                if(saveType === 'list'){
+                  history.push(`/blogs?lang=${tabLang}`)
+                }else if(saveType === 'update'){
+                  history.push(`/blogs/update/${get(data, 'id')}?lang=${tabLang}`)
+                }else if(saveType === 'create'){
+                  history.push(`/blogs/create?lang=${tabLang}`)
+                }
               }}
               fields={[
                 {
-                  name: "name",
+                  name: "title",
                   required: true,
-                  value: isOwn ? get(item, 'name') : ''
+                  value: isOwn ? get(item, 'title') : ''
                 },
                 {
-                  name: "value",
-                  value: isOwn ? get(item, 'value') : ''
+                  name: "content",
+                  value: isOwn ? get(item, 'content') : ''
                 },
                 {
-                  name: "link",
-                  value: get(item, 'link')
+                  name: "category_id",
+                  value: get(item, 'category'),
+                  onSubmitValue: value => value ? value.id : null
                 },
                 {
-                  name: "slug",
-                  value: get(item, 'slug')
+                  name: "publish_time",
+                  value: moment(get(item, 'publish_time')),
+                  onSubmitValue: value => (!!value ? moment(value).unix() : ""),
                 },
                 {
-                  name: "alias",
-                  value: get(item, 'alias')
-                },
-                {
-                  name: "photo",
+                  name: "file",
                   value: get(item, 'files') ?  [get(item, 'files')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
@@ -107,12 +115,21 @@ const Update = ({location, history, match}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
+                  name: "top",
+                  value: get(item, 'top') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "lang_hash",
                   value: get(item, 'lang_hash')
+                },
+                {
+                  name: "type",
+                  value: 2
                 }
               ]}
               params={{
-                include: ['translations', 'files'],
+                include: ['category', 'files'],
                 extra: {_l: tabLang}
               }}
             >
@@ -120,7 +137,7 @@ const Update = ({location, history, match}) => {
                 return (
                   <Spin spinning={isSubmitting}>
 
-                    <Form {...{values, lang, setFieldValue, isUpdate: true}}/>
+                    <Form {...{values, lang:tabLang, setFieldValue, isUpdate: true, isFetched, setSaveType}}/>
 
                   </Spin>
                 );

@@ -1,34 +1,26 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
-import Create from "./components/Create";
-import Update from "./components/Update";
 import Actions from "modules/entity/actions";
+import Filter from "./components/Filter";
 
 import {useTranslation} from "react-i18next";
-import {useSelector, useDispatch} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
+import {helpers} from "services";
 import config from "config";
-import {Link} from "react-router-dom";
+import get from "lodash/get";
+import qs from "query-string";
 
-const List = () => {
+const List = ({history, location}) => {
   const langCode = useSelector(state => state.system.currentLangCode);
-
-  const [tabLang, setTabLang] = useState(langCode);
-  const [createModal, showCreateModal] = useState(false);
-  const [updateModal, showUpdateModal] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [page, setPage] = useState(1);
-
+  const params = qs.parse(location.search, {ignoreQueryPrefix: true});
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const openEditModal = value => {
-    setSelected(value);
-    showUpdateModal(true);
-  };
+  const {lang, page} = params;
+  const [tabLang, setTabLang] = useState(lang || langCode);
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -40,16 +32,18 @@ const List = () => {
       onOk: () => deleteAction(menuId),
     });
   };
-
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "menu",
-      name: `menu-${tabLang}`,
+      entity: "post",
+      name: `posts-${tabLang}`,
       id: id,
-      url: `/menu/${id}`,
+      url: `/post/${id}`,
       deleteData: true,
       primaryKey: 'id',
+      params: {
+       extra: { _l: tabLang }
+      },
       cb: {
         success: () => {
           notification["success"]({
@@ -68,40 +62,26 @@ const List = () => {
     }))
   };
 
+  const onChange = page => {
+    const search = { ...params, page };
+
+    history.push({
+      search: qs.stringify(search)
+    });
+  };
+
   const TabPane = Tabs.TabPane;
+
   return (
     <>
-      <Modal
-        visible={createModal}
-        onOk={() => showCreateModal(true)}
-        onCancel={() => showCreateModal(false)}
-        footer={null}
-        centered
-        width={430}
-        destroyOnClose
-      >
-        <Create {...{showCreateModal, langCode: tabLang}}/>
-      </Modal>
-      <Modal
-        visible={updateModal}
-        onOk={() => showUpdateModal(true)}
-        onCancel={() => showUpdateModal(false)}
-        footer={null}
-        centered
-        width={430}
-        destroyOnClose
-      >
-        <Update {...{selected, showUpdateModal, langCode: tabLang}}/>
-      </Modal>
-
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список меню")}</div>
+        <div className="title-md">{t("Список новостей")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => showCreateModal(true)}
+          onClick={() => history.push(`/posts/create?lang=${tabLang}`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -117,15 +97,24 @@ const List = () => {
             ))}
           </Tabs>
         </div>
+
+        <Filter lang={tabLang}/>
+
         <EntityContainer.All
-          entity="menu"
-          name={`menu-${tabLang}`}
-          url="/menu"
+          entity="post"
+          name={`posts-${tabLang}`}
+          url="/post"
           primaryKey="id"
           params={{
-            sort: '-id',
+            sort: '-publish_time',
             limit: 10,
-            extra: {_l: tabLang},
+            extra: {_l: tabLang, title: params.title, category_id: params.category ? Number(params.category.split('/')[0]) : ''},
+            include: "category,files",
+            fields: ["id", "title", "status", "publish_time"],
+            filter: {
+              type: 1,
+              publish_time: params.begin_publish_time,
+            },
             page
           }}
         >
@@ -137,7 +126,7 @@ const List = () => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => openEditModal(value)}
+                    onEdit={value => history.push(`/posts/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -147,11 +136,41 @@ const List = () => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Название"),
-                        dataIndex: "title",
-                        render: (value, row) => <div className="divider-wrapper">
-                          <Link to={`/menu/${row.alias}?lang=${tabLang}`}>{value}</Link>
+                        title: t("Фото"),
+                        dataIndex: "files",
+                        className: 'w-82 text-cen',
+                        render: value => <div className="divider-wrapper">
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
                         </div>
+                      },
+                      {
+                        title: t("Загаловок"),
+                        dataIndex: "title",
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Дата"),
+                        dataIndex: "publish_time",
+                        render: value => {
+                          return <div className="divider-wrapper">{helpers.formatDate(value)}</div>
+                        }
+                      },
+                      {
+                        title: t("Категория"),
+                        dataIndex: "category",
+                        render: value => {
+                          return <div className="divider-wrapper">{get(value, `name_${tabLang}`)}</div>
+                        }
+                      },
+                      {
+                        title: t("Статус"),
+                        dataIndex: "status",
+                        className: 'text-cen w-82',
+                        render: value => {
+                          return <div className="divider-wrapper">
+                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                          </div>
+                        }
                       }
                     ]}
                     dataSource={items}
@@ -163,7 +182,7 @@ const List = () => {
                       current={meta.currentPage}
                       pageSize={meta.perPage}
                       total={meta.totalCount}
-                      onChange={setPage}
+                      onChange={onChange}
                     />
                   </div>
                 )}

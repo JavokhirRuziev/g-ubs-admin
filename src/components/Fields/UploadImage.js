@@ -6,7 +6,7 @@ import get from "lodash/get";
 
 const UploadImage = (props) => {
   const token = storage.get("token");
-  const { setProgress } = props;
+  const { setProgress, errorCb } = props;
 
   const config = {
     onUploadProgress: function(progressEvent) {
@@ -32,7 +32,9 @@ const UploadImage = (props) => {
       .then(res => {
         options.onSuccess(res.data, options.file);
       })
-      .catch(err => { });
+      .catch(err => {
+        errorCb(err)
+      });
   };
 
   const onPreview = file => {

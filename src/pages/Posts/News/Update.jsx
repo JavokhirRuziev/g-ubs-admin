@@ -102,6 +102,7 @@ const Update = ({location, history, match}) => {
                 {
                   name: "publish_time",
                   value: moment(get(item, 'publish_time')),
+                  onSubmitValue: value => (!!value ? moment(value).unix() : ""),
                 },
                 {
                   name: "file",

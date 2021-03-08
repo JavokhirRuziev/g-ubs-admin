@@ -1,23 +1,25 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
+import Filter from "./components/Filter";
 
 import {useTranslation} from "react-i18next";
-import {useSelector, useDispatch} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
 import config from "config";
+import get from "lodash/get";
+import qs from "query-string";
 
-const List = ({history}) => {
+const List = ({history, location}) => {
   const langCode = useSelector(state => state.system.currentLangCode);
-
-  const [tabLang, setTabLang] = useState(langCode);
-  const [page, setPage] = useState(1);
-
+  const params = qs.parse(location.search, {ignoreQueryPrefix: true});
   const {t} = useTranslation();
   const dispatch = useDispatch();
+
+  const {lang, page} = params;
+  const [tabLang, setTabLang] = useState(lang || langCode);
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -32,10 +34,10 @@ const List = ({history}) => {
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "document",
-      name: `documents-${tabLang}`,
+      entity: "product",
+      name: `products-${tabLang}`,
       id: id,
-      url: `/documents/${id}`,
+      url: `/products/${id}`,
       deleteData: true,
       primaryKey: 'id',
       params: {
@@ -59,17 +61,26 @@ const List = ({history}) => {
     }))
   };
 
+  const onChange = page => {
+    const search = { ...params, page };
+
+    history.push({
+      search: qs.stringify(search)
+    });
+  };
+
   const TabPane = Tabs.TabPane;
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список документов")}</div>
+        <div className="title-md">{t("Список товаров")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/documents/create?lang=${tabLang}`)}
+          onClick={() => history.push(`/products/create?lang=${tabLang}`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -85,17 +96,19 @@ const List = ({history}) => {
             ))}
           </Tabs>
         </div>
+
+        <Filter lang={tabLang}/>
+
         <EntityContainer.All
-          entity="document"
-          name={`documents-${tabLang}`}
-          url="/documents"
+          entity="product"
+          name={`products-${tabLang}`}
+          url="/products"
           primaryKey="id"
           params={{
             sort: '-id',
             limit: 10,
-            extra: {_l: tabLang, root: 1},
-            include: "translations",
-            fields: ["id", "name",  "status"],
+            include: 'category',
+            extra: {_l: tabLang, name: params.name, category_id: params.category ? Number(params.category.split('/')[0]) : ''},
             page
           }}
         >
@@ -107,19 +120,39 @@ const List = ({history}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/documents/update/${value.id}?lang=${tabLang}`)}
+                    onEdit={value => history.push(`/products/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
                         title: t("ID"),
                         dataIndex: "id",
-                        className: 'w-82',
-                        render: value => <div className="divider-wrapper d-inline">{value}</div>
+                        className: 'w-50',
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Фото"),
+                        dataIndex: "file",
+                        className: 'w-82 text-cen',
+                        render: value => <div className="divider-wrapper">
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
+                        </div>
                       },
                       {
                         title: t("Загаловок"),
                         dataIndex: "name",
                         render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Цена"),
+                        dataIndex: "price",
+                        render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                      },
+                      {
+                        title: t("Категория"),
+                        dataIndex: "category",
+                        render: value => {
+                          return <div className="divider-wrapper">{value ? get(value, `name_${tabLang}`) : '-'}</div>
+                        }
                       },
                       {
                         title: t("Статус"),
@@ -141,7 +174,7 @@ const List = ({history}) => {
                       current={meta.currentPage}
                       pageSize={meta.perPage}
                       total={meta.totalCount}
-                      onChange={setPage}
+                      onChange={onChange}
                     />
                   </div>
                 )}

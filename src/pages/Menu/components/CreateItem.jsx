@@ -14,6 +14,8 @@ const Create = ({ visible, menu, parent, onCancel, name, lang }) => {
 	const dispatch = useDispatch();
 	const menuEntities = useSelector(state => get(state, ["entities", "menu"], {}));
 
+	console.log(parent)
+	console.log(menu)
 	return (
 		<Modal
 			visible={visible}
@@ -45,20 +47,12 @@ const Create = ({ visible, menu, parent, onCancel, name, lang }) => {
 						},
 						{
 							name: "menu_id",
-							value: isEmpty(parent) ? get(menu, "menu_id") : undefined
+							value: isEmpty(parent) ? get(menu, "id") : undefined
 						},
 						{
 							name: "menu_item_parent_id",
 							value: !isEmpty(parent) ? parent.menu_item_id : undefined
-						},
-						{
-							name: "icon",
-							value: [],
-							onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-						},
-						{name: "main_sub_menu", value: true, onSubmitValue: value => value ? 1 : 0},
-						{name: "secondary_sub_menu", value: false, onSubmitValue: value => value ? 1 : 0},
-						{name: "top_sub_menu", value: false, onSubmitValue: value => value ? 1 : 0}
+						}
 					]}
 					appendData
 					params={{

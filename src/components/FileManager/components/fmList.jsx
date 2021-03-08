@@ -5,7 +5,7 @@ import {Search} from "components/SmallComponents";
 import EntityContainer from "modules/entity/containers";
 
 import get from "lodash/get";
-import {time, helpers} from "services";
+import {helpers} from "services";
 import FMUpload from "./fmUpload";
 import {useDebounce} from "use-debounce";
 
@@ -54,11 +54,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activ
                 {items.map(file => (
                   <div className={`image-file ${get(selected, 'id') === file.id ? 'selected' : ''}`} key={file.id}
                        onClick={() => setSelected(file)}>
-                    {file.ext === 'svg' ? (
-                      <img src={get(file, 'link')} alt="" className="image-file__item"/>
-                    ) : (
                       <img src={get(file, 'thumbnails.small.src')} alt="" className="image-file__item"/>
-                    )}
                     <div className="image-file__title">{get(file, 'title')}</div>
                   </div>
                 ))}
@@ -80,7 +76,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activ
                           </div>
                           <div className="w-50p pl-10 d-flex">
                             {/*<div className="fw-500">Дата:</div>*/}
-                            <div className="">{time.to(get(file, 'created_at'))}</div>
+                              <div className="">{helpers.formatDate(get(file, 'created_at'))}</div>
                           </div>
                         </div>
                       </div>

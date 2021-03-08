@@ -45,26 +45,6 @@ const UpdateItem = ({ item, onCancel, visible, name, lang }) => {
 							name: "sort",
 							required: false,
 							value: get(item, "sort")
-						},
-						{
-							name: "icon",
-							value: get(item, 'files') ?  [get(item, 'files', [])] : [],
-							onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-						},
-						{
-							name: "top_sub_menu",
-							value: get(item, 'top_sub_menu'),
-							onSubmitValue: value => value ? 1 : 0
-						},
-						{
-							name: "main_sub_menu",
-							value: get(item, 'main_sub_menu'),
-							onSubmitValue: value => value ? 1 : 0
-						},
-						{
-							name: "secondary_sub_menu",
-							value: get(item, 'secondary_sub_menu'),
-							onSubmitValue: value => value ? 1 : 0
 						}
 					]}
 					params={{extra:{_l:lang}}}

@@ -65,7 +65,7 @@ const View = ({location, history, match}) => {
     <EntityContainer.One
       entity="menu"
       name="menu"
-      primaryKey="menu_id"
+      primaryKey="id"
       url={`/menu/${alias}`}
       params={{
         extra: {

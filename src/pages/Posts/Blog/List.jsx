@@ -36,7 +36,7 @@ const List = ({history, location}) => {
     dispatch(Actions.Form.request({
       method: 'delete',
       entity: "post",
-      name: `posts-${tabLang}`,
+      name: `blogs-${tabLang}`,
       id: id,
       url: `/post/${id}`,
       deleteData: true,
@@ -75,13 +75,13 @@ const List = ({history, location}) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список новостей")}</div>
+        <div className="title-md">{t("Список блогов")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/posts/create?lang=${tabLang}`)}
+          onClick={() => history.push(`/blogs/create?lang=${tabLang}`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -102,7 +102,7 @@ const List = ({history, location}) => {
 
         <EntityContainer.All
           entity="post"
-          name={`posts-${tabLang}`}
+          name={`blogs-${tabLang}`}
           url="/post"
           primaryKey="id"
           params={{
@@ -112,6 +112,7 @@ const List = ({history, location}) => {
             include: "category,files",
             fields: ["id", "title", "status", "publish_time"],
             filter: {
+              type: 2,
               publish_time: params.begin_publish_time,
             },
             page
@@ -125,7 +126,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/posts/update/${value.id}?lang=${tabLang}`)}
+                    onEdit={value => history.push(`/blogs/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {

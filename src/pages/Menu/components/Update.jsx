@@ -11,10 +11,10 @@ const Update = ({selected, showUpdateModal, langCode}) => {
       method="put"
       entity="menu"
       name={`menu-${langCode}`}
-      url={`/menu/${get(selected, 'menu_id')}`}
-      primaryKey="menu_id"
+      url={`/menu/${get(selected, 'id')}`}
+      primaryKey="id"
       normalizeData={data => data}
-      id={selected.menu_id}
+      id={selected.id}
       onSuccess={(data, resetForm) => {
         resetForm();
         showUpdateModal(false)

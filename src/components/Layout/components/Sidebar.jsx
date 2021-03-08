@@ -1,124 +1,128 @@
 import React, {useState} from 'react';
-import logoImage from "assets/images/base/oks-logo.svg";
 import {Link, useLocation} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
 const Sidebar = ({isCollapsed, setCollapse}) => {
-  const {t} = useTranslation();
-  const menu = [
-    {
-      id: 'category',
-      title: t('Категория'),
-      icon: 'menu-i-category',
-      submenu: [
-        {id: 'category-posts', title: "Посты", link: '/categories/posts'},
-        {id: 'category-products', title: "Продукты", link: '/categories/products'},
-      ]
-    },
-    {
-      id: 'gallery',
-      title: t('Галерея'),
-      icon: 'menu-i-category',
-      submenu: [
-        {id: 'gallery-photo', title: "Фото", link: '/gallery/photo'},
-        {id: 'gallery-video', title: "Видео", link: '/gallery/video'},
-      ]
-    },
-    {id: 'posts', title: t('Посты'), link: '/posts', icon: 'menu-i-edit'},
-    {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
-    {id: 'documents', title: t('Документы'), link: '/documents', icon: 'menu-i-file'},
-    {id: 'feedback', title: t('Обратная связь'), link: '/feedback',  icon: 'menu-i-list'},
-    {
-      id: 'settings',
-      title: t('Настройки'),
-      icon: 'menu-i-setting',
-      submenu: [
-        {id: 'settings-menu', title: t('Меню'), link: '/menu'},
-        {id: 'settings-map', title: t('Карта'), link: '/map'},
-        {id: 'settings-others', title: t('Основные'), link: '/settings'},
-        {id: 'settings-translation', title: t('Переводы'), link: '/translation'},
-        {id: 'users', title: t('Пользователи'), link: '/users'}
-      ]
-    },
-    {
-      id: 17,
-      title: t('Справочники'),
-      icon: 'menu-i-category',
-      submenu: [
-        {id: 'handbook-tag', title: t('Теги'), link: '/tags'},
-        {id: 'handbook-theme', title: t('Темы обратной связи'), link: '/themes'},
-        {id: 'faq', title: t('Вопросы и ответы'), link: '/faq'},
-      ]
-    }
-  ];
+    const {t} = useTranslation();
+    const menu = [
+        {
+            id: 'product',
+            title: t('Продукты'),
+            link: '/products',
+            icon: 'menu-i-page'
+        },
+        {
+            id: 'posts',
+            title: t('Посты'),
+            icon: 'menu-i-category',
+            submenu: [
+                {id: 'post-news', title: "Новости", link: '/posts'},
+                {id: 'post-blog', title: "Блоги", link: '/blogs'},
+            ]
+        },
+        {
+            id: 'gallery',
+            title: t('Галерея'),
+            icon: 'menu-i-category',
+            submenu: [
+                {id: 'gallery-photo', title: "Фото", link: '/gallery/photo'},
+                {id: 'gallery-video', title: "Видео", link: '/gallery/video'},
+            ]
+        },
+        {
+            id: 'category',
+            title: t('Категория'),
+            icon: 'menu-i-category',
+            submenu: [
+                {id: 'category-posts', title: "Посты", link: '/categories/posts'},
+                {id: 'category-products', title: "Продукты", link: '/categories/products'},
+            ]
+        },
+        {
+            id: 'settings',
+            title: t('Настройки'),
+            icon: 'menu-i-setting',
+            submenu: [
+                {id: 'settings-menu', title: t('Меню'), link: '/menu'},
+                {id: 'settings-others', title: t('Основные'), link: '/settings'},
+                {id: 'settings-translation', title: t('Переводы'), link: '/translation'},
+            ]
+        },
+        {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
+        {id: 'feedback', title: t('Обратная связь'), link: '/feedback', icon: 'menu-i-list'}
+    ];
 
-  const [toggledSubmenu, setToggleSubmenu] = useState(null);
+    const [toggledSubmenu, setToggleSubmenu] = useState(null);
 
-  const toggle = () => {
-    if (isCollapsed) {
-      setCollapse(false);
-    } else setCollapse(true)
-  };
+    const toggle = () => {
+        if (isCollapsed) {
+            setCollapse(false);
+        } else setCollapse(true)
+    };
 
-  const location = useLocation();
-  const currentPath = location.pathname.split('/')[1];
-  const fullPath = location.pathname;
+    const location = useLocation();
+    const currentPath = location.pathname.split('/')[1];
+    const fullPath = location.pathname;
 
-  const toggleSubmenu = id => {
-    if(id === toggledSubmenu){
-      setToggleSubmenu(null);
-    }else{
-      setToggleSubmenu(id);
-    }
-  };
+    const toggleSubmenu = id => {
+        if (id === toggledSubmenu) {
+            setToggleSubmenu(null);
+        } else {
+            setToggleSubmenu(id);
+        }
+    };
 
-  return (
-    <div className="m-sidebar">
-      <div className="m-sidebar-wrapper">
-        <div className="m-sidebar-head">
-          <a href="http://oks.uz/" target="_blank" rel="noopener noreferrer" className="m-sidebar-logo">
-            <img src={logoImage} alt="OKS"/>
-            <span>TECHNOLOGIES</span>
-          </a>
-          <div className="menu-collapse-btn" onClick={toggle}/>
+    return (
+        <div className="m-sidebar">
+            <div className="m-sidebar-wrapper">
+                <div className="m-sidebar-head">
+                    <a href="/" target="_blank" rel="noopener noreferrer" className="m-sidebar-logo">
+                        <span>MS admin</span>
+                    </a>
+                    <div className="menu-collapse-btn" onClick={toggle}/>
+                </div>
+
+                <ul className="m-menu">
+                    {menu.map((m, i) => {
+                        if (m.submenu) {
+                            return (
+                                <li key={i}
+                                    className={`has-submenu ${m.id === toggledSubmenu ? 'submenu-visible' : ''}`}>
+                                    <div
+                                        className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`}
+                                        onClick={() => toggleSubmenu(m.id)}>
+                                        <div>
+                                            <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
+                                            <span>{m.title}</span>
+                                            <span className="toggle-submenu"/>
+                                        </div>
+                                    </div>
+                                    <div className="submenu">
+                                        {m.submenu.map((sm, i) => (
+                                            <Link key={i} to={sm.link}
+                                                  className={fullPath === sm.link ? 'active' : ''}>{sm.title}</Link>
+                                        ))}
+                                    </div>
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li key={i}>
+                                    <Link to={m.link}
+                                          className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`}>
+                                        <div>
+                                            <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
+                                            <span>{m.title}</span>
+                                        </div>
+                                    </Link>
+                                </li>
+                            )
+                        }
+                    })}
+                </ul>
+            </div>
         </div>
-
-        <ul className="m-menu">
-          {menu.map((m, i) => {
-            if(m.submenu){
-              return (
-                <li key={i} className={`has-submenu ${m.id === toggledSubmenu ? 'submenu-visible' : ''}`}>
-                  <div className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`} onClick={() => toggleSubmenu(m.id)}>
-                    <div>
-                      <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
-                      <span>{m.title}</span>
-                      <span className="toggle-submenu"/>
-                    </div>
-                  </div>
-                  <div className="submenu">
-                    {m.submenu.map((sm, i) => (
-                      <Link key={i} to={sm.link} className={fullPath === sm.link ? 'active' : ''}>{sm.title}</Link>
-                    ))}
-                  </div>
-                </li>
-              )
-            }else{
-              return (
-                <li key={i}>
-                  <Link to={m.link} className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`}>
-                    <div>
-                      <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
-                      <span>{m.title}</span>
-                    </div>
-                  </Link>
-                </li>
-              )
-            }
-          })}
-        </ul>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Sidebar;

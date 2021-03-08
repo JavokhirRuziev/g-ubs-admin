@@ -56,7 +56,7 @@ const Create = ({location, history}) => {
         }
       ]}
       params={{
-        include: "translations, files",
+        include: "files",
         extra: {_l: lang}
       }}
     >

@@ -59,7 +59,7 @@ class Filter extends Component {
                     style={{marginBottom: 0}}
                     className={"mb-0"}
                     optionLabel={`name_${lang}`}
-                    filterParams={{type: 'post'}}
+                    filterParams={{type: 2}}
                   />
                 </GridElements.Column>
               </GridElements.Row>

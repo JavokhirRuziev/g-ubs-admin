@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 import get from "lodash/get";
-import {Icon} from "antd";
+import {Icon, notification} from "antd";
 import {Fields} from "components";
 import config from "config";
 import Actions from "modules/entity/actions";
@@ -47,7 +47,18 @@ const FmUpload = ({isLoading, setLoading, filterType, activeFolder}) => {
           multiple
           acceptAll
           setProgress={setProgress}
-          errorCb={() => setLoading(false)}
+          errorCb={(err) => {
+              setLoading(false);
+              notification["error"]({
+                  message: get(err, 'message', 'Что-то пошло не так'),
+                  duration: 2
+              });
+              setTimeout(() => {
+                  setVisible(false);
+                  setProgress("");
+                  setVisible(true);
+              }, 1000);
+          }}
           disabled={isLoading}
           onChange={({ file }) => {
             setLoading(true);

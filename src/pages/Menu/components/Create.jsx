@@ -12,7 +12,7 @@ const Create = ({showCreateModal, langCode}) => {
       name={`menu-${langCode}`}
       url="/menu"
       prependData
-      primaryKey="menu_id"
+      primaryKey="id"
       normalizeData={data => data}
       onSuccess={(data, resetForm) => {
         resetForm();
