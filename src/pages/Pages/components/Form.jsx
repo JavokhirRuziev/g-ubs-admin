@@ -19,7 +19,7 @@ const Form = ({lang, setFieldValue, values, setSaveType}) => {
         <Panel>
           <Field
             component={Fields.AntInput}
-            name="name"
+            name="title"
             type="text"
             placeholder={t("Введите загаловок")}
             label={t("Заголовок")}

@@ -109,7 +109,6 @@ const List = ({history, location}) => {
             sort: '-id',
             limit: 10,
             extra: {_l: tabLang, name: params.title,},
-            include: "documents, translations, files",
             page
           }}
         >
@@ -140,7 +139,7 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Загаловок"),
-                        dataIndex: "name",
+                        dataIndex: "title",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {

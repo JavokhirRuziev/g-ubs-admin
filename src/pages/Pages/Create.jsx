@@ -36,7 +36,7 @@ const Create = ({location, history}) => {
       }}
       fields={[
         {
-          name: "name",
+          name: "title",
           required: true
         },
         {
