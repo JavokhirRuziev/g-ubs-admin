@@ -41,26 +41,20 @@ const Create = ({location, history}) => {
         },
         {
           name: "slug",
-          required: true
         },
         {
           name: "content",
           value: ""
         },
         {
-          name: "files",
+          name: "file",
           value: [],
           onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
         },
         {
-          name: "embassy_id",
+          name: "documents",
           value: [],
-          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
-        },
-        {
-          name: "doc_id",
-          value: [],
-          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
+          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
         },
         {
           name: "status",
@@ -69,8 +63,7 @@ const Create = ({location, history}) => {
         }
       ]}
       params={{
-        include: "translations, files",
-        extra: {_l: lang}
+        extra: {append: 'documents0',_l: lang}
       }}
     >
       {({isSubmitting, values, setFieldValue}) => {

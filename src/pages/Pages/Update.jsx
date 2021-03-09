@@ -38,7 +38,7 @@ const Update = ({location, history, match}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "translations, files, documents, embassies",
+        extra: {append: 'documents0'},
       }}
     >
       {({item, isFetched}) => {
@@ -83,9 +83,9 @@ const Update = ({location, history, match}) => {
               }}
               fields={[
                 {
-                  name: "name",
+                  name: "title",
                   required: true,
-                  value: isOwn ? get(item, 'name') : ''
+                  value: isOwn ? get(item, 'title') : ''
                 },
                 {
                   name: "slug",
@@ -97,8 +97,8 @@ const Update = ({location, history, match}) => {
                   value: isOwn ? get(item, 'content') : ''
                 },
                 {
-                  name: "files",
-                  value: get(item, 'files') ?  get(item, 'files', []) : [],
+                  name: "file",
+                  value: get(item, 'file') ?  [get(item, 'file')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
                 {
@@ -107,14 +107,9 @@ const Update = ({location, history, match}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
-                  name: "embassy_id",
-                  value: get(item, 'embassies', []),
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
-                },
-                {
-                  name: "doc_id",
-                  value: get(item, 'documents', []),
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
+                  name: "documents",
+                  value: get(item, 'documents0', []),
+                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
                 {
                   name: "lang_hash",

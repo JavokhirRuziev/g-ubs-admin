@@ -108,7 +108,10 @@ const List = ({history, location}) => {
             sort: '-id',
             limit: 10,
             include: 'category',
-            extra: {_l: tabLang, name: params.name, category_id: params.category ? Number(params.category.split('/')[0]) : ''},
+            filter: {
+              category_id: params.category ? Number(params.category.split('/')[0]) : ''
+            },
+            extra: {_l: tabLang, name: params.name},
             page
           }}
         >

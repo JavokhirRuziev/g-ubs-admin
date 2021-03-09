@@ -5,14 +5,13 @@ import {Button, Tooltip} from "antd";
 
 import qs from 'qs';
 import { Field, withFormik } from "formik";
-import moment from "moment";
 import {withRouter} from "react-router";
 import {withTranslation} from "react-i18next";
 
 class Filter extends Component {
 
   render() {
-    const { handleSubmit, setFieldValue, t, history, lang } = this.props;
+    const { handleSubmit, t, history, lang } = this.props;
     const clearForm = () => {
       history.push({
         search: qs.stringify({}, {encode: false})
@@ -25,7 +24,7 @@ class Filter extends Component {
           <GridElements.Row gutter={10} wrap>
             <GridElements.Column gutter={10} xs={110} calc>
               <GridElements.Row gutter={10}>
-                <GridElements.Column xs={4} gutter={10}>
+                <GridElements.Column xs={6} gutter={10}>
                   <Field
                     component={Fields.AntInput}
                     name="title"
@@ -34,19 +33,6 @@ class Filter extends Component {
                     size="large"
                     style={{marginBottom: 0}}
                     className={"mb-0"}
-                  />
-                </GridElements.Column>
-                <GridElements.Column xs={4} gutter={10}>
-                  <Field
-                    component={Fields.AntDatePicker}
-                    name="begin_publish_time"
-                    size="large"
-                    placeholder={t("Поиск по дата")}
-                    style={{width: '100%', marginBottom: 0}}
-                    className={"mb-0"}
-                    onChange={(date) => {
-                      setFieldValue('begin_publish_time', date)
-                    }}
                   />
                 </GridElements.Column>
                 <GridElements.Column xs={4} gutter={10}>
@@ -101,7 +87,6 @@ Filter = withFormik({
     return ({
       title: params.title || '',
       category: category,
-      begin_publish_time: params.begin_publish_time ? moment.unix(params.begin_publish_time) : '',
     })
 
   },
@@ -109,7 +94,6 @@ Filter = withFormik({
 
     values = {
       ...values,
-      begin_publish_time: values.begin_publish_time ? moment(values.begin_publish_time).unix() : "",
       category: values.category ? (values.category.id + '/' + values.category[`name_${lang}`]) : "",
     };
 

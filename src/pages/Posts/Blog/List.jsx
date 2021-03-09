@@ -108,12 +108,12 @@ const List = ({history, location}) => {
           params={{
             sort: '-publish_time',
             limit: 10,
-            extra: {_l: tabLang, title: params.title, category_id: params.category ? Number(params.category.split('/')[0]) : ''},
+            extra: {_l: tabLang, title: params.title},
             include: "category,files",
             fields: ["id", "title", "status", "publish_time"],
             filter: {
+              category_id: params.category ? Number(params.category.split('/')[0]) : '',
               type: 2,
-              publish_time: params.begin_publish_time,
             },
             page
           }}

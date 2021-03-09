@@ -47,6 +47,7 @@ const Create = () => {
           },
           {
             name: "publish_time",
+            value: moment(),
             onSubmitValue: value => (!!value ? moment(value).unix() : ""),
           },
           {
@@ -61,7 +62,8 @@ const Create = () => {
           },
           {
             name: "top",
-            value: false
+            value: 0,
+            onSubmitValue: value => value ? 1 : 0
           },
           {
             name: "type",

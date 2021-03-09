@@ -1,16 +1,12 @@
 import React from "react";
 
 import { Spin, Modal } from "antd";
-import EntitiesActions from "store/actions/entities";
 import EntityForm from 'modules/entity/forms';
 import Form from "./FormItem";
 
 import get from "lodash/get";
-import { useSelector, useDispatch } from "react-redux";
 
-const UpdateItem = ({ item, onCancel, visible, name, lang }) => {
-	const dispatch = useDispatch();
-	const entities = useSelector(state => get(state, ["entities", "menuItem"], {}));
+const UpdateItem = ({ item, visible, menuId, onCancel, lang }) => {
 
 	return (
 		<Modal
@@ -25,11 +21,11 @@ const UpdateItem = ({ item, onCancel, visible, name, lang }) => {
 				<EntityForm.Main
 					method="put"
 					id={get(item, "menu_item_id")}
-					entity="menuItem"
-					name={name}
-					url={`/menu-item/${get(item, "menu_item_id")}`}
+					entity="menuItems"
+					name={`menuItems-${menuId}`}
+					url={`/menu-item/${menuId}`}
 					normalizeData={data => data}
-					primaryKey="menu_item_id"
+					primaryKey="id"
 					fields={[
 						{
 							name: "title",
@@ -40,31 +36,11 @@ const UpdateItem = ({ item, onCancel, visible, name, lang }) => {
 							name: "url",
 							required: true,
 							value: get(item, "url")
-						},
-						{
-							name: "sort",
-							required: false,
-							value: get(item, "sort")
 						}
 					]}
+					appendData={true}
 					params={{extra:{_l:lang}}}
-					onSuccess={data => {
-						const parentEntity = entities[get(item, "menu_item_parent_id")];
-						if(parentEntity){
-							dispatch(
-								EntitiesActions.Update.success({
-									entity: "menuItem",
-									entityId: get(item, "menu_item_parent_id"),
-									data: {
-										...parentEntity,
-										menuItems: [
-											...get(parentEntity, "menuItems", []).filter(i => i.menu_item_id !== data.menu_item_id),
-											data
-										]
-									}
-								})
-							);
-						}
+					onSuccess={() => {
 						onCancel();
 					}}>
 					{({ isSubmitting, values, setFieldValue }) => {

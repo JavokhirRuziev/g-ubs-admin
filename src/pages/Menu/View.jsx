@@ -1,161 +1,201 @@
 import React, {useState} from "react";
 
-import {Tabs, Button, Spin} from "antd";
+import {Button, Dropdown, Icon, Menu, Modal, notification, Spin} from "antd";
 import {Board} from "components";
 import {NavigationHelper} from 'components/SmallComponents';
-import config from 'config';
 import EntityContainer from "modules/entity/containers";
-import EntitySchema from "modules/entity/schema";
+import EntityActions from "modules/entity/actions";
 
 import CreateModal from "./components/CreateItem";
 import UpdateModal from "./components/UpdateItem";
-import NestedList from "./components/NestedList";
 
-import {useSelector} from "react-redux";
-import qs from "query-string";
 import get from "lodash/get";
 import {useTranslation} from "react-i18next";
+import qs from "query-string";
+import {ReactComponent as DotsIcon} from "../../assets/images/base/dots.svg";
+import Nestable from "react-nestable";
+import {useDispatch} from "react-redux";
 
-const TabPane = Tabs.TabPane;
+const View = ({location, match}) => {
 
-const View = ({location, history, match}) => {
+    const [selected, setSelected] = useState({});
+    const [modalVisible, setModalVisible] = useState({});
+    const dispatch = useDispatch();
 
-  const system = useSelector(state => state.system);
-  const [selected, setSelected] = useState({});
-  const [isLoading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState({});
+    const {id} = match.params;
+    const query = qs.parse(location.search);
+    const {alias} = query;
+    const {t} = useTranslation();
 
-  const {alias} = match.params;
-
-  const query = qs.parse(location.search);
-  const {lang} = query;
-  const langCode = useSelector(state => state.system.currentLangCode);
-  const [tabLang, setTabLang] = useState(lang ? lang : langCode);
-
-  const {t} = useTranslation();
-
-  const openModal = name => {
-    setModalVisible({
-      ...modalVisible,
-      [name]: true
-    });
-  };
-
-  const closeModal = name => {
-    setModalVisible({
-      ...modalVisible,
-      [name]: false
-    });
-  };
-
-  const setActiveTab = activeTab => {
-    setTabLang(activeTab);
-    let query = qs.parse(location.search);
-    query = {
-      ...query,
-      lang: activeTab
+    const openModal = name => {
+        setModalVisible({
+            ...modalVisible,
+            [name]: true
+        });
     };
-    const search = qs.stringify(query);
-    history.push({
-      search
-    });
-  };
 
-  return (
-    <EntityContainer.One
-      entity="menu"
-      name="menu"
-      primaryKey="id"
-      url={`/menu/${alias}`}
-      params={{
-        extra: {
-          _l: lang || system.language
-        },
-        include: "menuItems.files"
-      }}
-      relations={{
-        menuItems: [EntitySchema("menuItem", "menu_item_id")]
-      }}
-    >
-      {({item, isFetched}) => {
-        return (
-          <>
+    const closeModal = name => {
+        setModalVisible({
+            ...modalVisible,
+            [name]: false
+        });
+    };
+
+    const updateMenuItems = (items) => {
+        dispatch(EntityActions.FormDefault.request({
+            method: 'put',
+            url: `/menu-item/sort`,
+            values: {
+                nestable: items
+            },
+            cb: {
+                success: () => {
+                },
+                error: () => {
+                },
+                finally: () => {
+                }
+            }
+        }))
+    }
+
+    const onDeleteHandler = menuId => {
+        Modal.confirm({
+            title: t("Вы действительно хотите удалить?"),
+            okText: t("да"),
+            okType: "danger",
+            cancelText: t("нет"),
+            confirmLoading: true,
+            onOk: () => deleteAction(menuId),
+        });
+    };
+
+    const deleteAction = menu => {
+        dispatch(EntityActions.Form.request({
+            method: 'delete',
+            entity: "menuItems",
+            name: `menuItems-${id}`,
+            id: menu.id,
+            url: `/menu-item/${menu.id}`,
+            deleteData: true,
+            cb: {
+                success: () => {
+                    notification["success"]({
+                        message: t("Успешно удалена"),
+                        duration: 2
+                    });
+                },
+                error: () => {
+                    notification["error"]({
+                        message: t("Что-то пошло не так"),
+                        duration: 2
+                    });
+                },
+                finally: () => {}
+            }
+        }))
+    };
+
+    return (
+        <>
             <div className="d-flex justify-content-between align-items-center mb-20">
-              <div className="title-md">{get(item, 'title')} </div>
-              <Button
-                type="primary"
-                size="large"
-                className="fs-14 fw-300 ml-10"
-                htmlType="button"
-                onClick={() => openModal("create")}
-              >{t("Добавить")}</Button>
+                <div className="title-md">{alias} </div>
+                <Button
+                    type="primary"
+                    size="large"
+                    className="fs-14 fw-300 ml-10"
+                    htmlType="button"
+                    onClick={() => openModal("create")}
+                >{t("Добавить")}</Button>
             </div>
 
             <CreateModal
-              menu={item}
-              name={alias}
-              parent={selected}
-              visible={!!modalVisible["create"]}
-              onCancel={() => closeModal("create")}
-              lang={tabLang}
+                menuId={id}
+                name={alias}
+                visible={!!modalVisible["create"]}
+                onCancel={() => closeModal("create")}
             />
             <UpdateModal
-              menu={item}
-              item={selected}
-              name={alias}
-              visible={!!modalVisible["update"]}
-              onCancel={() => closeModal("update")}
-              lang={tabLang}
+                menuId={id}
+                item={selected}
+                name={alias}
+                visible={!!modalVisible["update"]}
+                onCancel={() => closeModal("update")}
             />
 
-            <Board className="border-none">
-              <div>
-                <Tabs
-                  activeKey={tabLang}
-                  onChange={value => setActiveTab(value)}
-                  className="tabs--board-head"
-                >
-                  {config.API_LANGUAGES.map(item => (
-                    <TabPane key={item.code} tab={t(item.title)}/>
-                  ))}
-                </Tabs>
-              </div>
-              <Spin spinning={!isFetched || isLoading}>
-                {get(item, 'menuItems', []).length > 0 ? (
-                  <div className="pad-20">
-                    <NestedList
-                      menu={item}
-                      items={get(item, "menuItems", [])}
-                      maxDepth={50}
-                      entity="menuItem"
-                      name={alias}
-                      setLoading={setLoading}
-                      onCreate={selected => {
-                        setSelected(selected);
-                        openModal("create");
-                      }}
-                      onUpdate={selected => {
-                        setSelected(selected);
-                        openModal("update");
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="pad-20">
-                    <NavigationHelper
-                      text={t("Этого алиасе нет меню")}
-                      className="mt-15 mb-15"
-                    />
-                  </div>
-                )}
-              </Spin>
 
+            <Board className="border-none">
+                <EntityContainer.All
+                    entity="menuItems"
+                    name={`menuItems-${id}`}
+                    url="/menu-item"
+                    primaryKey={"id"}
+                    params={{
+                        limit: 50,
+                        sort: 'sort',
+                        filter: {menu_id: id}
+                    }}
+                >
+                    {({items, isFetched, meta}) => {
+                        return (
+                            <Spin spinning={!isFetched}>
+                                {items.length > 0 ? (
+                                    <div className="pad-20">
+                                        <Nestable
+                                            maxDepth={3}
+                                            items={items}
+                                            childrenProp="menuItems"
+                                            collapsed={false}
+                                            renderItem={({item, collapseIcon}) => (
+                                                <div className={`mx-subdivision--item`}>
+                                                    <div className="mx-title">
+                                                        {collapseIcon} {get(item, "title")}
+                                                    </div>
+                                                    <Dropdown
+                                                        trigger={["click"]}
+                                                        onUpdate={selected => {
+                                                            setSelected(selected);
+                                                            openModal("update");
+                                                        }}
+                                                        overlay={
+                                                            <Menu style={{marginTop: 10}}>
+                                                                <Menu.Item onClick={() => {
+                                                                    setSelected(item);
+                                                                    openModal("update");
+                                                                }}>
+                                                                    <Icon type="edit"/>
+                                                                    <span>{t('Редактировать')}</span>
+                                                                </Menu.Item>
+                                                                <Menu.Item onClick={() => onDeleteHandler(item)}>
+                                                                  <Icon type="delete" />
+                                                                  <span>{t('Удалить')}</span>
+                                                                </Menu.Item>
+                                                            </Menu>
+                                                        }>
+                                                        <Icon component={DotsIcon}/>
+                                                    </Dropdown>
+                                                </div>
+                                            )}
+                                            onChange={(items) => {
+                                                updateMenuItems(items)
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="pad-20">
+                                        <NavigationHelper
+                                            text={t("Этого алиасе нет меню")}
+                                            className="mt-15 mb-15"
+                                        />
+                                    </div>
+                                )}
+                            </Spin>
+                        );
+                    }}
+                </EntityContainer.All>
             </Board>
-          </>
-        );
-      }}
-    </EntityContainer.One>
-  );
+        </>
+    );
 };
 
 export default View;

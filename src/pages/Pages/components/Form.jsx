@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import {ReactComponent as PlusIcon} from "assets/images/icons/plus.svg";
 import {useHistory} from "react-router";
 
-const Form = ({isUpdate, lang, setFieldValue, values, setSaveType}) => {
+const Form = ({lang, setFieldValue, values, setSaveType}) => {
 
   const history = useHistory();
   const {t} = useTranslation();
@@ -39,48 +39,24 @@ const Form = ({isUpdate, lang, setFieldValue, values, setSaveType}) => {
             placeholder={t("Полный текст новости")}
             label={t("Полный текст новости")}
           />
+          <Field
+              component={Fields.UploadImageManager}
+              name="documents"
+              isDocument={true}
+              label={t("Файл для загрузки")}
+              size="large"
+              className={"mb-10"}
+              isMulti
+              limit={100}
+              columns={6}
+          />
         </Panel>
       </GridElements.Column>
       <GridElements.Column xs={4} gutter={10}>
         <Panel>
-
-          <Field
-            component={Fields.AsyncSelect}
-            name="doc_id"
-            placeholder={t("Виберите документ")}
-            label={t("Документы")}
-            isClearable
-            loadOptionsUrl="/documents"
-            className="mb-24"
-            optionLabel="name"
-            isMulti
-            loadOptionsParams={() => {
-              return {
-                extra: {_l: lang}
-              }
-            }}
-          />
-
-          {/*<Field*/}
-          {/*  component={Fields.AsyncSelect}*/}
-          {/*  name="embassy_id"*/}
-          {/*  placeholder={"Виберите посольство"}*/}
-          {/*  label={"Посольство "}*/}
-          {/*  isClearable*/}
-          {/*  loadOptionsUrl="/embassy"*/}
-          {/*  className="mb-24"*/}
-          {/*  optionLabel="name"*/}
-          {/*  isMulti*/}
-          {/*  loadOptionsParams={() => {*/}
-          {/*    return {*/}
-          {/*      extra: {_l: lang}*/}
-          {/*    }*/}
-          {/*  }}*/}
-          {/*/>*/}
-
           <Field
             component={Fields.UploadImageManager}
-            name="files"
+            name="file"
             label={t("Фото")}
             size="large"
             className={"mb-14"}

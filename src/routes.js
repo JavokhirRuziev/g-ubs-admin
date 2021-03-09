@@ -67,11 +67,12 @@ const routes = [
 	{ path: "/products", exact: true, component: Products },
 	{ path: "/products/create", exact: true, component: ProductsCreate },
 	{ path: "/products/update/:id", exact: true, component: ProductsUpdate },
+	{ path: "/menu", exact: true, component: Menu },
+	{ path: "/menu/:id", exact: true, component: MenuView },
 
 	{ path: "/", exact: true, component: Posts },
 	{ path: "/logout", exact: true, component: Logout },
-	{ path: "/menu", exact: true, component: Menu },
-	{ path: "/menu/:alias", exact: true, component: MenuView },
+
 	{ path: "/pages", exact: true, component: Pages },
 	{ path: "/pages/create", exact: true, component: PagesCreate },
 	{ path: "/pages/update/:id", exact: true, component: PagesUpdate },

@@ -16,13 +16,13 @@ const Header = () => {
     const menu = (
       <Menu>
           <Menu.Item>
-              <Link to={`/posts/create?lang=${currentLangCode}`}>
-                  {t('Посты')}
+              <Link to={`/products/create?lang=${currentLangCode}`}>
+                  {t('Продукты')}
               </Link>
           </Menu.Item>
           <Menu.Item>
-              <Link to={`/pages/create?lang=${currentLangCode}`}>
-                  {t('Страницы')}
+              <Link to={`/posts/create?lang=${currentLangCode}`}>
+                  {t('Посты')}
               </Link>
           </Menu.Item>
       </Menu>

@@ -26,14 +26,6 @@ const FormItem = ({isUpdate}) => {
         placeholder={t("Введите ссылку")}
         size="large"
       />
-      <Field
-        component={Fields.AntInput}
-        name="sort"
-        type="number"
-        label={t("Порядок")}
-        placeholder={t("Введите порядок")}
-        size="large"
-      />
       <Button
         type="primary"
         size="large"

@@ -150,7 +150,7 @@ const List = () => {
                         title: t("Название"),
                         dataIndex: "title",
                         render: (value, row) => <div className="divider-wrapper">
-                          <Link to={`/menu/${row.alias}?lang=${tabLang}`}>{value}</Link>
+                          <Link to={`/menu/${row.id}?lang=${tabLang}&alias=${row.title}`}>{value}</Link>
                         </div>
                       }
                     ]}

@@ -127,7 +127,6 @@ const Update = ({location, history, match}) => {
                 {
                   name: "price",
                   value: get(item, 'price'),
-                  onSubmitValue: value => value ? 1 : 0
                 },
                 {
                   name: "threeD",

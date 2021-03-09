@@ -56,7 +56,7 @@ export class All extends Component {
 		}
 	}
 
-	Load = (entity, name, url, { page = 1, limit = 20, sort = "-id", fields = [], include = [], filter = {}, extra = {} } = {}, dataKey, metaKey, appendData, prependData, primaryKey, relations, infiniteScroll, onSuccess, onError) => {
+	Load = (entity, name, url, { page = 1, limit = 20, sort = "", fields = [], include = [], filter = {}, extra = {} } = {}, dataKey, metaKey, appendData, prependData, primaryKey, relations, infiniteScroll, onSuccess, onError) => {
 
 		const { LoadAll } = this.props;
 
