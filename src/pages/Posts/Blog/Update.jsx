@@ -92,7 +92,7 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "content",
-                  value: isOwn ? get(item, 'content') : ''
+                  value: isOwn ? get(item, 'content', "") ? get(item, 'content', "") : '' : ''
                 },
                 {
                   name: "category_id",

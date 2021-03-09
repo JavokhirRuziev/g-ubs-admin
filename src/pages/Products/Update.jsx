@@ -102,7 +102,7 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "body",
-                  value: isOwn ? get(item, 'body', '') : ''
+                  value: isOwn ? get(item, 'body', "") ? get(item, 'body', "") : '' : ''
                 },
                 {
                   name: "category_id",
