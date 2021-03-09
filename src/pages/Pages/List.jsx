@@ -131,10 +131,10 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Фото"),
-                        dataIndex: "files",
+                        dataIndex: "file",
                         className: 'w-82 text-cen',
                         render: value => <div className="divider-wrapper">
-                          <Avatar isRectangle isProduct image={get(value, '[0].thumbnails.small.src')}/>
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
                         </div>
                       },
                       {
