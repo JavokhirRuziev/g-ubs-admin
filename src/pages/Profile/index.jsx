@@ -33,7 +33,8 @@ const Index = ({history}) => {
 									required: true
 								},
 								{
-									name: "repeat_password"
+									name: "password_confirmation",
+									required: true
 								}
 							]}
 						>
@@ -62,7 +63,7 @@ const Index = ({history}) => {
 										/>
 										<Field
 											component={Fields.AntInput}
-											name="repeat_password"
+											name="password_confirmation"
 											type="password"
 											placeholder={t("Повторите новый пароль")}
 											label={t("Повторите новый пароль")}
