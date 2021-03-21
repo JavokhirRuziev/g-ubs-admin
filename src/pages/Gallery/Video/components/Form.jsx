@@ -47,6 +47,14 @@ const Form = ({isUpdate, setFieldValue, values, setSaveType}) => {
         <Panel>
 
           <Field
+              component={Fields.UploadImageManager}
+              name="files"
+              label={t("Постер")}
+              size="large"
+              className={"mb-14"}
+          />
+
+          <Field
               component={Fields.AntTextarea}
               name="link"
               type="text"

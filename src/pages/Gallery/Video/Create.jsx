@@ -58,7 +58,13 @@ const Create = ({location, history}) => {
         {
           name: 'type',
           value: 2
-        }
+        },
+        {
+          name: "files",
+          value: [],
+          required: true,
+          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+        },
       ]}
       params={{
         extra: {_l: lang}

@@ -71,6 +71,12 @@ const Update = ({history, match}) => {
                                     value: 2
                                 },
                                 {
+                                    name: "files",
+                                    required: true,
+                                    value: get(item, 'gallery') ? get(item, 'gallery', []) : [],
+                                    onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+                                },
+                                {
                                     name: 'link',
                                     value: get(item, 'link')
                                 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import qs from "query-string";
 import Filter from "./components/Filter";
+import get from "lodash/get";
 
 const List = ({history, location}) => {
   const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -108,6 +109,14 @@ const List = ({history, location}) => {
                         dataIndex: "id",
                         className: 'w-50',
                         render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Фото"),
+                        dataIndex: "gallery",
+                        className: 'w-82 text-cen',
+                        render: value => <div className="divider-wrapper">
+                          <Avatar isRectangle isProduct image={get(value, '[0].thumbnails.small.src')}/>
+                        </div>
                       },
                       {
                         title: t("Загаловок"),
