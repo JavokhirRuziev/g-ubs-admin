@@ -53,7 +53,7 @@ const Update = ({selected, showUpdateModal}) => {
         },
         {
           name: "file",
-          value: get(selected, 'files') ? [get(selected, 'files', '')] : [],
+          value: get(selected, 'file') ? [get(selected, 'file', '')] : [],
           onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : undefined
         }
       ]}

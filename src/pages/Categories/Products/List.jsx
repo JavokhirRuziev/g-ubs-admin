@@ -110,7 +110,7 @@ const List = () => {
                         sort: '-id',
                         limit: 10,
                         page,
-                        include: "files",
+                        include: "file",
                         filter: {type: 1}
                     }}
                 >

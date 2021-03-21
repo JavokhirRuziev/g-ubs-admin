@@ -40,7 +40,7 @@ const Update = ({location, history, match}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "category,files",
+        include: "category,file",
       }}
     >
       {({item, isFetched}) => {
@@ -106,7 +106,7 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "file",
-                  value: get(item, 'files') ?  [get(item, 'files')] : [],
+                  value: get(item, 'file') ?  [get(item, 'file')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
                 {
@@ -129,7 +129,7 @@ const Update = ({location, history, match}) => {
                 }
               ]}
               params={{
-                include: ['category', 'files'],
+                include: ['category', 'file'],
                 extra: {_l: tabLang}
               }}
             >

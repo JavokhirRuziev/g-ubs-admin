@@ -71,7 +71,7 @@ const Create = () => {
           }
         ]}
         params={{
-          include: "category, files",
+          include: "category,file",
           extra: {_l: lang}
         }}
       >

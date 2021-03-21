@@ -109,7 +109,7 @@ const List = ({history, location}) => {
             sort: '-publish_time',
             limit: 10,
             extra: {_l: tabLang, title: params.title},
-            include: "category,files",
+            include: "category,file",
             fields: ["id", "title", "status", "publish_time"],
             filter: {
               category_id: params.category ? Number(params.category.split('/')[0]) : '',
@@ -137,7 +137,7 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Фото"),
-                        dataIndex: "files",
+                        dataIndex: "file",
                         className: 'w-82 text-cen',
                         render: value => <div className="divider-wrapper">
                           <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
