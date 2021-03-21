@@ -37,6 +37,7 @@ const AdSupport = lazy(() => import("./pages/AdSupport/List"));
 const AdSupportCreate = lazy(() => import("./pages/AdSupport/Create"));
 const AdSupportUpdate = lazy(() => import("./pages/AdSupport/Update"));
 const Banners = lazy(() => import("./pages/Banner/List"));
+const Partners = lazy(() => import("./pages/Partners/List"));
 
 const Locations = lazy(() => import("./pages/Locations"));
 const LocationsCreate = lazy(() => import("./pages/Locations/Create"));
@@ -91,6 +92,7 @@ const routes = [
 	{ path: "/ad-support/create", exact: true, component: AdSupportCreate },
 	{ path: "/ad-support/update/:id", exact: true, component: AdSupportUpdate },
 	{ path: "/banners", exact: true, component: Banners },
+	{ path: "/partners", exact: true, component: Partners },
 
 	{path: "/locations", exact: true, component: Locations},
 	{path: "/locations/create", exact: true, component: LocationsCreate},
