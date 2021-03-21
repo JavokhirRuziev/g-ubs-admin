@@ -5,31 +5,26 @@ import EntityForm from 'modules/entity/forms';
 import Form from './components/Form';
 
 import {useTranslation} from "react-i18next";
-import qs from "query-string";
 import get from "lodash/get";
-import {useHistory, useLocation} from "react-router";
+import {useHistory} from "react-router";
 
 const Create = () => {
   const {t} = useTranslation();
-  const location = useLocation();
   const history = useHistory();
-
-  const query = qs.parse(location.search);
-  const {lang} = query;
 
   return (
     <>
       <EntityForm.Main
         method="post"
         entity="product"
-        name={`products-${lang}`}
+        name={`products`}
         url="/products"
         prependData
         primaryKey="id"
         normalizeData={data => data}
         onSuccess={(data, resetForm) => {
           resetForm();
-          history.push(`/products/update/${get(data, 'id')}?lang=${lang}`)
+          history.push(`/products/update/${get(data, 'id')}`)
         }}
         fields={[
           {
@@ -43,11 +38,25 @@ const Create = () => {
             onSubmitValue: value => value.length > 0 ? value.reduce((prev,curr) => [...prev, {color: curr.color, files: curr.files.reduce((prev, curr) => [...prev,curr.id], [])}], []) : [],
           },
           {
-            name: "name",
+            name: "name_uz",
             required: true
           },
           {
-            name: "body",
+            name: "name_ru",
+          },
+          {
+            name: "name_en",
+          },
+          {
+            name: "body_uz",
+            value: ""
+          },
+          {
+            name: "body_ru",
+            value: ""
+          },
+          {
+            name: "body_en",
             value: ""
           },
           {
@@ -92,15 +101,14 @@ const Create = () => {
         ]}
         params={{
           include: "category",
-          extra: {append: 'palette0,documents0',_l: lang}
+          extra: {append: 'palette0,documents0',}
         }}
       >
         {({isSubmitting, values, setFieldValue}) => {
-          console.log(values)
           return (
             <Spin spinning={isSubmitting}>
               <div className="title-md mb-20 mt-14">{t('Создать продукт')}</div>
-              <Form {...{values, lang, setFieldValue, isFetched: true, isUpdate: false}}/>
+              <Form {...{values, lang: "ru", setFieldValue, isFetched: true, isUpdate: false}}/>
             </Spin>
           );
         }}

@@ -1,25 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import {Table, Board, Avatar} from "components";
-import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
+import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
 import Filter from "./components/Filter";
 
 import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import config from "config";
+import {useDispatch} from "react-redux";
 import get from "lodash/get";
 import qs from "query-string";
 
 const List = ({history, location}) => {
-  const langCode = useSelector(state => state.system.currentLangCode);
   const params = qs.parse(location.search, {ignoreQueryPrefix: true});
   const {t} = useTranslation();
   const dispatch = useDispatch();
-
-  const {lang, page} = params;
-  const [tabLang, setTabLang] = useState(lang || langCode);
+  const {page} = params;
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -35,14 +31,11 @@ const List = ({history, location}) => {
     dispatch(Actions.Form.request({
       method: 'delete',
       entity: "product",
-      name: `products-${tabLang}`,
+      name: `products`,
       id: id,
       url: `/products/${id}`,
       deleteData: true,
       primaryKey: 'id',
-      params: {
-       extra: { _l: tabLang }
-      },
       cb: {
         success: () => {
           notification["success"]({
@@ -69,8 +62,6 @@ const List = ({history, location}) => {
     });
   };
 
-  const TabPane = Tabs.TabPane;
-
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
@@ -80,28 +71,16 @@ const List = ({history, location}) => {
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/products/create?lang=${tabLang}`)}
+          onClick={() => history.push(`/products/create`)}
         >{t('Добавить')}</Button>
       </div>
 
       <Board className="border-none">
-        <div>
-          <Tabs
-            activeKey={tabLang}
-            onChange={value => setTabLang(value)}
-            className="tabs--board-head"
-          >
-            {config.API_LANGUAGES.map(item => (
-              <TabPane key={item.code} tab={t(item.title)} />
-            ))}
-          </Tabs>
-        </div>
-
-        <Filter lang={tabLang}/>
+        <Filter lang={"ru"}/>
 
         <EntityContainer.All
           entity="product"
-          name={`products-${tabLang}`}
+          name={`products`}
           url="/products"
           primaryKey="id"
           params={{
@@ -111,7 +90,7 @@ const List = ({history, location}) => {
             filter: {
               category_id: params.category ? Number(params.category.split('/')[0]) : ''
             },
-            extra: {_l: tabLang, name: params.name},
+            extra: {name: params.name},
             page
           }}
         >
@@ -123,7 +102,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/products/update/${value.id}?lang=${tabLang}`)}
+                    onEdit={value => history.push(`/products/update/${value.id}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -154,7 +133,7 @@ const List = ({history, location}) => {
                         title: t("Категория"),
                         dataIndex: "category",
                         render: value => {
-                          return <div className="divider-wrapper">{value ? get(value, `name_${tabLang}`) : '-'}</div>
+                          return <div className="divider-wrapper">{value ? get(value, `name_ru`) : '-'}</div>
                         }
                       },
                       {

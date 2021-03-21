@@ -1,8 +1,8 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 
 import {Fields, GridElements, Panel, Ckeditor} from "components";
 import {Field} from "formik";
-import {Button, Switch} from "antd";
+import {Button, Switch, Tabs} from "antd";
 
 import {useTranslation} from "react-i18next";
 import {ReactComponent as PlusIcon} from "assets/images/icons/plus.svg";
@@ -10,29 +10,73 @@ import {useHistory} from "react-router";
 import { ChromePicker } from "react-color";
 import styled from "styled-components";
 
+const { TabPane } = Tabs;
+
 const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched }) => {
 
     const history = useHistory();
     const {t} = useTranslation();
+    const [activeLangKey, setLangKey] = useState("ru")
+
+    function callback(key) {
+        setLangKey(key)
+    }
 
     return (
         <GridElements.Row gutter={10} className={"mb-30"}>
             <GridElements.Column xs={8} gutter={10}>
                 <Panel>
-                    <Field
-                        component={Fields.AntInput}
-                        name="name"
-                        type="text"
-                        placeholder={t("Введите загаловок")}
-                        label={t("Заголовок")}
-                        size="large"
-                    />
-                    <Field
-                        component={Ckeditor}
-                        name="body"
-                        placeholder={t("Полный текст новости")}
-                        label={t("Полный текст новости")}
-                    />
+                    <Tabs defaultActiveKey={activeLangKey} onChange={callback}>
+                        <TabPane tab="Контент - ru" key="ru">
+                            <Field
+                                component={Fields.AntInput}
+                                name={`name_${activeLangKey}`}
+                                type="text"
+                                placeholder={t("Введите загаловок")}
+                                label={t("Заголовок")}
+                                size="large"
+                            />
+                            <Field
+                                component={Ckeditor}
+                                name={`body_${activeLangKey}`}
+                                placeholder={t("Полный текст новости")}
+                                label={t("Полный текст новости")}
+                            />
+                        </TabPane>
+                        <TabPane tab="Контент - uz" key="uz">
+                            <Field
+                                component={Fields.AntInput}
+                                name={`name_${activeLangKey}`}
+                                type="text"
+                                placeholder={t("Введите загаловок")}
+                                label={t("Заголовок")}
+                                size="large"
+                            />
+                            <Field
+                                component={Ckeditor}
+                                name={`body_${activeLangKey}`}
+                                placeholder={t("Полный текст новости")}
+                                label={t("Полный текст новости")}
+                            />
+                        </TabPane>
+                        <TabPane tab="Контент - en" key="en">
+                            <Field
+                                component={Fields.AntInput}
+                                name={`name_${activeLangKey}`}
+                                type="text"
+                                placeholder={t("Введите загаловок")}
+                                label={t("Заголовок")}
+                                size="large"
+                            />
+                            <Field
+                                component={Ckeditor}
+                                name={`body_${activeLangKey}`}
+                                placeholder={t("Полный текст новости")}
+                                label={t("Полный текст новости")}
+                            />
+                        </TabPane>
+                    </Tabs>
+
 
                     <Field
                         component={Fields.UploadImageManager}
