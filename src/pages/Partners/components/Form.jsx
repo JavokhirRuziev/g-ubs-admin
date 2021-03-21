@@ -31,9 +31,9 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             />
             <Field
                 component={Fields.AntInput}
-                name="sort"
+                name="link"
                 type="text"
-                placeholder="Сортировка"
+                placeholder="Реферальная ссылка"
                 size="large"
             />
             <div className="row mb-20">
@@ -45,15 +45,6 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         size="large"
                     />
                 </div>
-                <div className="col-md-6">
-                    <div className="ant-label">{"Активный статус"}</div>
-                    <Switch
-                        onChange={value => {
-                            setFieldValue('status', value)
-                        }}
-                        checked={values.status}
-                    />
-                </div>
             </div>
 
             <Button
@@ -61,7 +52,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 size="large"
                 className="fs-14 fw-300"
                 htmlType="submit"
-            >{isUpdate ? "Сохранить категорию" : "Добавить"}</Button>
+            >{isUpdate ? "Сохранить партнера" : "Добавить"}</Button>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
@@ -10,6 +10,7 @@ import {CopyToClipboard} from "components/SmallComponents";
 
 import {useTranslation} from "react-i18next";
 import {useSelector, useDispatch} from "react-redux";
+import get from "lodash/get";
 
 const List = () => {
     const langCode = useSelector(state => state.system.currentLangCode);
@@ -41,10 +42,10 @@ const List = () => {
     const deleteAction = id => {
         dispatch(Actions.Form.request({
             method: 'delete',
-            entity: "category",
-            name: `categoryPost`,
+            entity: "partner",
+            name: `partners`,
             id: id,
-            url: `/categories/${id}`,
+            url: `/partners/${id}`,
             deleteData: true,
             cb: {
                 success: () => {
@@ -91,7 +92,7 @@ const List = () => {
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
-                <div className="title-md">{t("Категория новостей")}</div>
+                <div className="title-md">{t("Партнеры")}</div>
                 <Button
                     type="primary"
                     size="large"
@@ -103,15 +104,13 @@ const List = () => {
 
             <Board className="border-none">
                 <EntityContainer.All
-                    entity="category"
-                    name="categoryPost"
-                    url="/categories"
+                    entity="partner"
+                    name="partners"
+                    url="/partners"
                     params={{
                         sort: '-id',
                         limit: 50,
                         page,
-                        include: "file",
-                        filter: {type: 2}
                     }}
                 >
                     {({items, isFetched, meta}) => {
@@ -132,28 +131,25 @@ const List = () => {
                                                 render: value => <div className="divider-wrapper">{value}</div>
                                             },
                                             {
+                                                title: t("Фото"),
+                                                dataIndex: "file",
+                                                className: 'w-82 text-cen',
+                                                render: value => <div className="divider-wrapper">
+                                                    <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
+                                                </div>
+                                            },
+                                            {
                                                 title: t("Название"),
                                                 dataIndex: `name_${langCode}`,
                                                 render: value => <div className="divider-wrapper">{value}</div>
                                             },
                                             {
                                                 title: t("Ссылька"),
-                                                dataIndex: "slug",
+                                                dataIndex: "link",
                                                 render: value => <div className="divider-wrapper">
-                                                    <CopyToClipboard str={`/posts/categories/${value}`}/>
+                                                    <CopyToClipboard str={value}/>
                                                 </div>
                                             },
-                                            {
-                                                title: t("Статус"),
-                                                dataIndex: "status",
-                                                className: 'text-cen w-82',
-                                                render: value => {
-                                                    return <div className="divider-wrapper">
-                                                        <div className="color-view-ellipse m-0-auto"
-                                                             style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
-                                                    </div>
-                                                }
-                                            }
                                         ]}
                                         dataSource={items}
                                     />
