@@ -58,6 +58,8 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="files"
                 label={"Фото"}
                 size="large"
+                isMulti={true}
+                limit={20}
             />
 
             <div className="mb-10 mt-10">
@@ -66,6 +68,9 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                     name="sources"
                     label={"Файлы"}
                     size="large"
+                    isMulti={true}
+                    limit={10}
+                    isDocument={true}
                 />
             </div>
 
