@@ -89,6 +89,26 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         limit={100}
                         columns={6}
                     />
+
+                    <Field
+                        component={Fields.AsyncSelect}
+                        name="posts"
+                        placeholder={t("Выберите блогов")}
+                        label={"Блоги"}
+                        isClearable={true}
+                        isSearchable={true}
+                        isMulti={true}
+                        loadOptionsUrl="/post"
+                        style={{marginBottom: 0}}
+                        className={"mb-0"}
+                        optionLabel={`title`}
+                        filterParams={{type: 2}}
+                        loadOptionsParams={(search) => {
+                            return{
+                                extra: {title: search}
+                            }
+                        }}
+                    />
                 </Panel>
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>
@@ -119,11 +139,17 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         placeholder={"Виберите категория"}
                         label={"Категория"}
                         isClearable
+                        isSearchable={true}
                         loadOptionsUrl="/categories"
                         className="mb-20"
                         optionLabel={`name_${lang}`}
                         filterParams={{
                             type: 1
+                        }}
+                        loadOptionsParams={(search) => {
+                            return{
+                                extra: {name: search}
+                            }
                         }}
                     />
 

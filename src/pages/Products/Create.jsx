@@ -96,8 +96,12 @@ const Create = () => {
             value: [],
             required: true,
             onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+          },
+          {
+            name: 'posts',
+            value: [],
+            onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
           }
-
         ]}
         params={{
           include: "category",
