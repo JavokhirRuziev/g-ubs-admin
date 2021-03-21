@@ -40,7 +40,7 @@ const FileManager = ({
       width={1048}
     >
       <div className="fm-block">
-        <FMFolders {...{setActiveFolder}}/>
+        <FMFolders {...{setActiveFolder, activeFolder}}/>
         <FMList {...{selected, setSelected, filterType, activeFolder, setLoading, isLoading}}/>
         <FMSettings {...{size, setSize, selected, setAltText, filterType, setFilterType}}/>
       </div>

@@ -1,11 +1,11 @@
 const feedbackLabel = (type) => {
   switch (type) {
-    case 1:
-      return "Задать вопрос";
-    case 2:
-      return "Отправить педложение";
     case 3:
-      return "Пожаловатся";
+      return "Педложение";
+    case 4:
+      return "Критика";
+    case 5:
+      return "Заявка";
     default:
       return ""
   }

@@ -49,7 +49,7 @@ const Update = ({location, history, match}) => {
             </Panel>
             <EntityForm.Main
               method={'put'}
-              entity="setting"
+              entity="locations"
               name={`locations`}
               url={`/shops/${get(item, 'id')}`}
               updateData

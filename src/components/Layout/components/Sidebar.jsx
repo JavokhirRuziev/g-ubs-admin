@@ -51,7 +51,8 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
         {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
         {id: 'banners', title: t('Баннеры'), link: '/banners', icon: 'menu-i-page'},
         {id: 'shops', title: t('Локации'), link: '/locations', icon: 'menu-i-page'},
-        {id: 'feedback', title: t('Обратная связь'), link: '/feedback', icon: 'menu-i-list'}
+        {id: 'feedback', title: t('Обратная связь'), link: '/feedback', icon: 'menu-i-list'},
+        {id: 'ad-support', title: t('Рекламная поддержка'), link: '/ad-support', icon: 'menu-i-list'}
     ];
 
     const [toggledSubmenu, setToggleSubmenu] = useState(null);

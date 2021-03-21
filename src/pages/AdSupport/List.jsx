@@ -1,19 +1,26 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
-import {Pagination, Spin, Modal, notification} from "antd";
+import {Table, Board, Avatar} from "components";
+import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
 
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
-import {helpers} from "services";
+import {useSelector, useDispatch} from "react-redux";
 
-const List = ({history}) => {
-  const [page, setPage] = useState(1);
+import config from "config";
+import get from "lodash/get";
+import qs from "query-string";
+import {Link} from "react-router-dom";
 
+const List = ({history, location}) => {
+  const langCode = useSelector(state => state.system.currentLangCode);
+  const params = qs.parse(location.search, {ignoreQueryPrefix: true});
   const {t} = useTranslation();
   const dispatch = useDispatch();
+
+  const {lang, page} = params;
+  const [tabLang, setTabLang] = useState(lang || langCode);
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -28,12 +35,15 @@ const List = ({history}) => {
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "feedback",
-      name: `feedback`,
+      entity: "advertising",
+      name: `advertising-${tabLang}`,
       id: id,
-      url: `/feedback/${id}`,
+      url: `/advertising/${id}`,
       deleteData: true,
       primaryKey: 'id',
+      params: {
+       extra: { _l: tabLang }
+      },
       cb: {
         success: () => {
           notification["success"]({
@@ -52,21 +62,50 @@ const List = ({history}) => {
     }))
   };
 
+  const onChange = page => {
+    const search = { ...params, page };
+
+    history.push({
+      search: qs.stringify(search)
+    });
+  };
+
+  const TabPane = Tabs.TabPane;
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список заявок")}</div>
+        <div className="title-md">{t("Рекламная поддержка")}</div>
+        <Button
+          type="primary"
+          size="large"
+          className="fs-14 fw-300 ml-10"
+          htmlType="button"
+          onClick={() => history.push(`/ad-support/create?lang=${tabLang}`)}
+        >{t('Добавить')}</Button>
       </div>
 
       <Board className="border-none">
+        <div>
+          <Tabs
+            activeKey={tabLang}
+            onChange={value => setTabLang(value)}
+            className="tabs--board-head"
+          >
+            {config.API_LANGUAGES.map(item => (
+              <TabPane key={item.code} tab={t(item.title)} />
+            ))}
+          </Tabs>
+        </div>
+
         <EntityContainer.All
-          entity="feedback"
-          name={"feedback"}
-          url="/feedback"
+          entity="advertising"
+          name={`advertising-${tabLang}`}
+          url="/advertising"
           primaryKey="id"
           params={{
-            sort: '-id',
-            limit: 30,
+            sort: 'sort',
+            limit: 20,
+            extra: {_l: tabLang, name: params.title,},
             page
           }}
         >
@@ -78,7 +117,7 @@ const List = ({history}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/feedback/update/${value.id}`)}
+                    onEdit={value => history.push(`/ad-support/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -88,25 +127,22 @@ const List = ({history}) => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Имя"),
-                        dataIndex: "name",
-                        render: value => <div className="divider-wrapper">{value}</div>
-                      },
-                      {
-                        title: t("Телефон"),
-                        dataIndex: "phone",
-                        render: value => <div className="divider-wrapper">{value}</div>
-                      },
-                      {
-                        title: t("Тип"),
-                        dataIndex: "type",
-                        render: value => <div className="divider-wrapper">{helpers.feedbackLabel(value)}</div>
-                      },
-                      {
-                        title: t("Дата"),
-                        dataIndex: "created_at",
+                        title: t("Фото"),
+                        dataIndex: "file",
+                        className: 'w-82 text-cen',
                         render: value => <div className="divider-wrapper">
-                          {helpers.formatDate(value, "DD.MM.YYYY / HH:mm:ss")}
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
+                        </div>
+                      },
+                      {
+                        title: t("Загаловок"),
+                        dataIndex: "title",
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Предметы"),
+                        render: (value, row) => <div className="divider-wrapper">
+                          <Link to={`/ad-support/subjects/${row.id}`} className={"cr-blue"}>Предметы - {get(row, 'subjects_count')}</Link>
                         </div>
                       },
                       {
@@ -129,7 +165,7 @@ const List = ({history}) => {
                       current={meta.currentPage}
                       pageSize={meta.perPage}
                       total={meta.totalCount}
-                      onChange={setPage}
+                      onChange={onChange}
                     />
                   </div>
                 )}

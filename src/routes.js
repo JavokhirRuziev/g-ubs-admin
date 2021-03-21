@@ -32,6 +32,10 @@ const ProductsUpdate = lazy(() => import("./pages/Products/Update"));
 const Pages = lazy(() => import("./pages/Pages/List"));
 const PagesCreate = lazy(() => import("./pages/Pages/Create"));
 const PagesUpdate = lazy(() => import("./pages/Pages/Update"));
+const AdSupportSubjects = lazy(() => import("./pages/AdSupportSubjects/List"));
+const AdSupport = lazy(() => import("./pages/AdSupport/List"));
+const AdSupportCreate = lazy(() => import("./pages/AdSupport/Create"));
+const AdSupportUpdate = lazy(() => import("./pages/AdSupport/Update"));
 const Banners = lazy(() => import("./pages/Banner/List"));
 
 const Locations = lazy(() => import("./pages/Locations"));
@@ -82,6 +86,10 @@ const routes = [
 	{ path: "/pages", exact: true, component: Pages },
 	{ path: "/pages/create", exact: true, component: PagesCreate },
 	{ path: "/pages/update/:id", exact: true, component: PagesUpdate },
+	{ path: "/ad-support/subjects/:parent_id", exact: true, component: AdSupportSubjects },
+	{ path: "/ad-support", exact: true, component: AdSupport },
+	{ path: "/ad-support/create", exact: true, component: AdSupportCreate },
+	{ path: "/ad-support/update/:id", exact: true, component: AdSupportUpdate },
 	{ path: "/banners", exact: true, component: Banners },
 
 	{path: "/locations", exact: true, component: Locations},
