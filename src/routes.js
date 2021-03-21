@@ -10,18 +10,21 @@ import App from "./App";
 // const Home = lazy(() => import("./pages/Home"));
 const CategoriesPosts = lazy(() => import("./pages/Categories/Posts/List"));
 const CategoriesProducts = lazy(() => import("./pages/Categories/Products/List"));
+
 const GalleryPhoto = lazy(() => import("./pages/Gallery/Photo/List"));
 const GalleryPhotoCreate = lazy(() => import("./pages/Gallery/Photo/Create"));
 const GalleryPhotoUpdate = lazy(() => import("./pages/Gallery/Photo/Update"));
 const GalleryVideo = lazy(() => import("./pages/Gallery/Video/List"));
 const GalleryVideoCreate = lazy(() => import("./pages/Gallery/Video/Create"));
 const GalleryVideoUpdate = lazy(() => import("./pages/Gallery/Video/Update"));
+
 const Posts = lazy(() => import("./pages/Posts/News/List"));
 const PostsCreate = lazy(() => import("./pages/Posts/News/Create"));
 const PostsUpdate = lazy(() => import("./pages/Posts/News/Update"));
 const Blogs = lazy(() => import("./pages/Posts/Blog/List"));
 const BlogsCreate = lazy(() => import("./pages/Posts/Blog/Create"));
 const BlogsUpdate = lazy(() => import("./pages/Posts/Blog/Update"));
+
 const Products = lazy(() => import("./pages/Products/List"));
 const ProductsCreate = lazy(() => import("./pages/Products/Create"));
 const ProductsUpdate = lazy(() => import("./pages/Products/Update"));
@@ -30,6 +33,10 @@ const Pages = lazy(() => import("./pages/Pages/List"));
 const PagesCreate = lazy(() => import("./pages/Pages/Create"));
 const PagesUpdate = lazy(() => import("./pages/Pages/Update"));
 const Banners = lazy(() => import("./pages/Banner/List"));
+
+const Locations = lazy(() => import("./pages/Locations"));
+const LocationsCreate = lazy(() => import("./pages/Locations/Create"));
+const LocationsUpdate = lazy(() => import("./pages/Locations/Update"));
 
 const Settings = lazy(() => import("./pages/Settings/List"));
 const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
@@ -42,8 +49,6 @@ const Feedback = lazy(() => import("./pages/Feedback/List"));
 const FeedbackUpdate = lazy(() => import("./pages/Feedback/Update"));
 const Translation = lazy(() => import("./pages/Translation"));
 const Users = lazy(() => import("./pages/Users/List"));
-const Countries = lazy(() => import("./pages/Locations/Countries"));
-const Regions = lazy(() => import("./pages/Locations/Regions"));
 const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
 const Faq = lazy(() => import("./pages/Faq/List"));
@@ -54,32 +59,39 @@ const Profile = lazy(() => import("./pages/Profile"));
 const routes = [
 	{ path: "/categories/posts", exact: true, component: CategoriesPosts },
 	{ path: "/categories/products", exact: true, component: CategoriesProducts },
+
 	{ path: "/gallery/photo", exact: true, component: GalleryPhoto },
 	{ path: "/gallery/photo/create", exact: true, component: GalleryPhotoCreate },
 	{ path: "/gallery/photo/update/:id", exact: true, component: GalleryPhotoUpdate },
 	{ path: "/gallery/video", exact: true, component: GalleryVideo },
 	{ path: "/gallery/video/create", exact: true, component: GalleryVideoCreate },
 	{ path: "/gallery/video/update/:id", exact: true, component: GalleryVideoUpdate },
+
 	{ path: "/posts", exact: true, component: Posts },
 	{ path: "/posts/create", exact: true, component: PostsCreate },
 	{ path: "/posts/update/:id", exact: true, component: PostsUpdate },
 	{ path: "/blogs", exact: true, component: Blogs },
 	{ path: "/blogs/create", exact: true, component: BlogsCreate },
 	{ path: "/blogs/update/:id", exact: true, component: BlogsUpdate },
+
 	{ path: "/products", exact: true, component: Products },
 	{ path: "/products/create", exact: true, component: ProductsCreate },
 	{ path: "/products/update/:id", exact: true, component: ProductsUpdate },
-	{ path: "/menu", exact: true, component: Menu },
-	{ path: "/menu/:id", exact: true, component: MenuView },
 
-	{ path: "/", exact: true, component: Posts },
-	{ path: "/logout", exact: true, component: Logout },
 
 	{ path: "/pages", exact: true, component: Pages },
 	{ path: "/pages/create", exact: true, component: PagesCreate },
 	{ path: "/pages/update/:id", exact: true, component: PagesUpdate },
 	{ path: "/banners", exact: true, component: Banners },
 
+	{path: "/locations", exact: true, component: Locations},
+	{path: "/locations/create", exact: true, component: LocationsCreate},
+	{path: "/locations/update/:id", exact: true, component: LocationsUpdate},
+
+	{ path: "/", exact: true, component: Posts },
+	{ path: "/logout", exact: true, component: Logout },
+	{ path: "/menu", exact: true, component: Menu },
+	{ path: "/menu/:id", exact: true, component: MenuView },
 	{ path: "/settings", exact: true, component: Settings },
 	{ path: "/settings/create", exact: true, component: SettingsCreate },
 	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate },
@@ -89,8 +101,6 @@ const routes = [
 	{ path: "/map", exact: true, component: Map },
 	{ path: "/users", exact: true, component: Users },
 	{ path: "/translation", exact: true, component: Translation },
-	{ path: "/countries", exact: true, component: Countries },
-	{ path: "/regions", exact: true, component: Regions },
 	{ path: "/faq", exact: true, component: Faq },
 	{ path: "/faq/create", exact: true, component: CreateFaq },
 	{ path: "/faq/update/:id", exact: true, component: UpdateFaq },

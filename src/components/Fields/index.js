@@ -8,6 +8,7 @@ import UploadImageManager from "./UploadImageManager";
 import UploadImageManagerWithColor from "./UploadImageManagerWithColor";
 import AntDatePicker from "./AntDatePicker";
 import AntCheckbox from "./AntCheckbox";
+import Map from "./Map";
 
 import {
     AntInput,
@@ -31,6 +32,7 @@ export default {
     UploadImageManagerWithColor,
     AntDatePicker,
     AntCheckbox,
+    Map,
     AntInput,
     AntTextarea,
     AntSelect,

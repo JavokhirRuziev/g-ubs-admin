@@ -11,8 +11,7 @@ import {withTranslation} from "react-i18next";
 class Filter extends Component {
 
   render() {
-    const { handleSubmit, t, history} = this.props;
-
+    const { handleSubmit, t, history } = this.props;
     const clearForm = () => {
       history.push({
         search: qs.stringify({}, {encode: false})
@@ -20,21 +19,40 @@ class Filter extends Component {
     };
 
     return (
-      <div className="filter-row">
+      <div className="filter-row pt-20 pl-15 pr-15">
         <form onSubmit={handleSubmit}>
           <GridElements.Row gutter={10} wrap>
             <GridElements.Column gutter={10} xs={110} calc>
-              <GridElements.Row gutter={10} wrap>
-                <GridElements.Column xs={6} gutter={10}>
+              <GridElements.Row gutter={10}>
+                <GridElements.Column xs={3} gutter={10}>
                   <Field
                     component={Fields.AntInput}
-                    name="name"
+                    name="title"
                     type="text"
-                    placeholder={t("Поиск страну")}
+                    placeholder={t("Поиск по загаловок")}
                     size="large"
-                    style={{marginBottom: 5}}
+                    style={{marginBottom: 0}}
+                    className={"mb-0"}
                   />
                 </GridElements.Column>
+                <GridElements.Column xs={3} gutter={10}>
+                  <Field
+                      component={Fields.AntSelect}
+                      name="status"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder={t("Поиск по типь")}
+                      size={'large'}
+                      allowClear
+                      selectOptions={[
+                        {name: t("Не Активный"), value: "0"},
+                        {name: t("Активный"), value: "1"}
+                      ]}
+                      className={"mb-0"}
+                      style={{marginBottom: 0}}
+                  />
+                </GridElements.Column>
+
               </GridElements.Row>
             </GridElements.Column>
             <GridElements.Column xs={110} gutter={10} customSize>
@@ -71,11 +89,16 @@ Filter = withFormik({
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
     return ({
-      name: params.name || '',
+      title: params.title || ''
     })
 
   },
   handleSubmit: (values, { props: { location, history } }) => {
+
+    values = {
+      ...values
+    };
+
     const query = qs.parse(location.search);
 
     values = Object.keys({ ...query, ...values }).reduce(
