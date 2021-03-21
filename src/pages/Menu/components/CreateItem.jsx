@@ -34,7 +34,7 @@ const Create = ({ visible, menuId, onCancel, lang }) => {
 						},
 						{
 							name: "menu_id",
-							value: menuId
+							value: Number(menuId)
 						}
 					]}
 					prependData={true}
