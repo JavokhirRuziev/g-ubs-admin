@@ -2,12 +2,12 @@ import React from 'react';
 
 import {Fields} from "components";
 import {Field} from "formik";
-import {Button, Switch} from "antd";
+import {Button} from "antd";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
     return (
         <div>
-            <div className="title-md fs-16 mb-20">{isUpdate ? "Изменить категорию" : "Добавить категорию"}</div>
+            <div className="title-md fs-16 mb-20">{isUpdate ? "Изменить" : "Добавить"}</div>
             <Field
                 component={Fields.AntInput}
                 name="name_uz"
