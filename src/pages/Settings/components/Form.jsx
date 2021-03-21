@@ -29,6 +29,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             placeholder={t("Введите слуг")}
             label={t("Слуг")}
             size="large"
+            disabled={isUpdate}
           />
           <Field
             component={Fields.AntInput}
@@ -57,6 +58,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             placeholder={t("Введите алиас")}
             label={t("Алиас")}
             size="large"
+            disabled={isUpdate}
           />
 
           <Field
