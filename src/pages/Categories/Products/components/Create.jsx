@@ -43,6 +43,11 @@ const Create = ({showCreateModal}) => {
           name: "sort"
         },
         {
+          name: "top",
+          value: false,
+          onSubmitValue: value => value ? 1 : 0
+        },
+        {
           name: "parent_id",
           onSubmitValue: value => get(value, "id")
         },

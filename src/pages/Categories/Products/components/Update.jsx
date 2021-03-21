@@ -39,6 +39,11 @@ const Update = ({selected, showUpdateModal}) => {
           onSubmitValue: value => value ? 1 : 0
         },
         {
+          name: "top",
+          value: get(selected, 'top') === 1,
+          onSubmitValue: value => value ? 1 : 0
+        },
+        {
           name: "type",
           value: 1
         },

@@ -62,13 +62,25 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                     />
                 </div>
                 <div className="col-md-6">
-                    <div className="ant-label">{"Активный статус"}</div>
-                    <Switch
-                        onChange={value => {
-                            setFieldValue('status', value)
-                        }}
-                        checked={values.status}
-                    />
+                    <div>
+                        <div className="ant-label">{"Активный статус"}</div>
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('status', value)
+                            }}
+                            checked={values.status}
+                        />
+                    </div>
+
+                    <div className="mt-20">
+                        <div className="ant-label">{"Топ"}</div>
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('top', value)
+                            }}
+                            checked={values.top}
+                        />
+                    </div>
                 </div>
             </div>
 
