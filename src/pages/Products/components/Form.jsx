@@ -22,6 +22,9 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
         setLangKey(key)
     }
 
+    console.log(activeLangKey)
+    console.log(values)
+
     return (
         <GridElements.Row gutter={10} className={"mb-30"}>
             <GridElements.Column xs={8} gutter={10}>
