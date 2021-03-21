@@ -90,7 +90,8 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "slug",
-                  value: get(item, 'slug')
+                  value: get(item, 'slug'),
+                  onSubmitValue: value => value ? value : null
                 },
                 {
                   name: "alias",

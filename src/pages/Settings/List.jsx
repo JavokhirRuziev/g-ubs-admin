@@ -103,7 +103,7 @@ const List = ({history}) => {
                 <div className="default-table pad-15">
                   <Table
                     hasEdit={true}
-                    hasDelete={true}
+                    hasDelete={false}
                     rowKey="id"
                     onEdit={value => history.push(`/settings/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}

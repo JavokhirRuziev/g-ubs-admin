@@ -39,7 +39,9 @@ const Create = ({location, history}) => {
           name: "link"
         },
         {
-          name: "slug"
+          name: "slug",
+          value: "",
+          onSubmitValue: value => value ? value : null
         },
         {
           name: "alias"
