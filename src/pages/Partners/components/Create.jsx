@@ -8,9 +8,9 @@ const Create = ({showCreateModal}) => {
   return (
     <EntityForm.Main
       method="post"
-      entity="category"
-      name="categoryPost"
-      url="/categories"
+      entity="partner"
+      name="partners"
+      url="/partners"
       appendData
       primaryKey="id"
       normalizeData={data => data}
@@ -18,30 +18,21 @@ const Create = ({showCreateModal}) => {
         resetForm();
         showCreateModal(false)
       }}
+      params={{
+        include: 'file',
+      }}
       fields={[
         {
           name: "name_ru",
-          required: true
         },
         {
           name: "name_en",
-          required: true
         },
         {
           name: "name_uz",
-          required: true
         },
         {
-          name: "status",
-          value: true,
-          onSubmitValue: value => value ? 1 : 0
-        },
-        {
-          name: "type",
-          value: 2
-        },
-        {
-          name: "sort",
+          name: "link",
         },
         {
           name: "file",

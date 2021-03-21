@@ -9,9 +9,9 @@ const Update = ({selected, showUpdateModal}) => {
   return (
     <EntityForm.Main
       method="put"
-      entity="category"
-      name={`categoryPost`}
-      url={`/categories/${get(selected, 'id')}`}
+      entity="partner"
+      name={`partners`}
+      url={`/partners/${get(selected, 'id')}`}
       primaryKey="id"
       normalizeData={data => data}
       id={get(selected, 'id')}
@@ -19,35 +19,25 @@ const Update = ({selected, showUpdateModal}) => {
         resetForm();
         showUpdateModal(false)
       }}
+      params={{
+        include: 'file',
+      }}
       fields={[
         {
           name: "name_ru",
           value: get(selected, 'name_ru'),
-          required: true
         },
         {
           name: "name_en",
           value: get(selected, 'name_en'),
-          required: true
         },
         {
           name: "name_uz",
           value: get(selected, 'name_uz'),
-          required: true
         },
         {
-          name: "status",
-          required: true,
-          value: get(selected, 'status') === 1,
-          onSubmitValue: value => value ? 1 : 0
-        },
-        {
-          name: "type",
-          value: 2
-        },
-        {
-          name: "sort",
-          value: get(selected, 'sort')
+          name: "link",
+          value: get(selected, 'link'),
         },
         {
           name: "file",
