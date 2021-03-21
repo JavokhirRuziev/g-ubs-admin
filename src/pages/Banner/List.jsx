@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
 import {Table, Board, Avatar} from "components";
-import {CopyToClipboard} from "components/SmallComponents";
 import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
