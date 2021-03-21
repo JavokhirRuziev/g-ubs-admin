@@ -12,7 +12,6 @@ import {useSelector, useDispatch} from "react-redux";
 import config from "config";
 import get from "lodash/get";
 import qs from "query-string";
-import Filter from "./components/Filter";
 import Create from "./components/Create";
 import Update from "./components/Update";
 
@@ -130,8 +129,6 @@ const List = ({history, location}) => {
             ))}
           </Tabs>
         </div>
-
-        <Filter/>
 
         <EntityContainer.All
           entity="banner"

@@ -106,7 +106,7 @@ const List = ({history, location}) => {
           primaryKey="id"
           params={{
             sort: '-id',
-            limit: 10,
+            limit: 30,
             include: 'category',
             filter: {
               category_id: params.category ? Number(params.category.split('/')[0]) : ''

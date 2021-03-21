@@ -66,7 +66,7 @@ const List = ({history}) => {
           primaryKey="id"
           params={{
             sort: '-id',
-            limit: 10,
+            limit: 30,
             page,
             filter: {not: {type: 4}}
 

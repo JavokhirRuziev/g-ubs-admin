@@ -86,7 +86,7 @@ const List = ({history, location}) => {
           primaryKey="id"
           params={{
             sort: '-id',
-            limit: 10,
+            limit: 20,
             filter: {type: 2},
             extra: {title: params.title,},
             page

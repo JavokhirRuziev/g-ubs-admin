@@ -107,7 +107,7 @@ const List = ({history, location}) => {
           primaryKey="id"
           params={{
             sort: '-publish_time',
-            limit: 10,
+            limit: 20,
             extra: {_l: tabLang, title: params.title},
             include: "category,file",
             fields: ["id", "title", "status", "publish_time"],

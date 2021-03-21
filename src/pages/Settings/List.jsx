@@ -92,7 +92,7 @@ const List = ({history}) => {
           primaryKey="id"
           params={{
             sort: '-id',
-            limit: 10,
+            limit: 50,
             extra: {_l: tabLang},
             page
           }}

@@ -108,7 +108,7 @@ const List = () => {
                     url="/categories"
                     params={{
                         sort: '-id',
-                        limit: 10,
+                        limit: 50,
                         page,
                         include: "file",
                         filter: {type: 1}
