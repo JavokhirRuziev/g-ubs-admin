@@ -45,7 +45,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate }) => {
                         className="mb-20"
                         optionLabel={`name_${lang}`}
                         filterParams={{
-                            type: 2
+                            type: 3
                         }}
                     />
 

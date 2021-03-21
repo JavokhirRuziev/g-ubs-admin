@@ -34,7 +34,8 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             title: t('Категория'),
             icon: 'menu-i-category',
             submenu: [
-                {id: 'category-posts', title: "Посты", link: '/categories/posts'},
+                {id: 'category-posts', title: "Новости", link: '/categories/posts'},
+                {id: 'category-blogs', title: "Блоги", link: '/categories/blogs'},
                 {id: 'category-products', title: "Продукты", link: '/categories/products'},
             ]
         },

@@ -9,6 +9,7 @@ import App from "./App";
 
 // const Home = lazy(() => import("./pages/Home"));
 const CategoriesPosts = lazy(() => import("./pages/Categories/Posts/List"));
+const CategoriesBlogs = lazy(() => import("./pages/Categories/Blogs/List"));
 const CategoriesProducts = lazy(() => import("./pages/Categories/Products/List"));
 
 const GalleryPhoto = lazy(() => import("./pages/Gallery/Photo/List"));
@@ -63,6 +64,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 
 const routes = [
 	{ path: "/categories/posts", exact: true, component: CategoriesPosts },
+	{ path: "/categories/blogs", exact: true, component: CategoriesBlogs },
 	{ path: "/categories/products", exact: true, component: CategoriesProducts },
 
 	{ path: "/gallery/photo", exact: true, component: GalleryPhoto },
