@@ -64,7 +64,6 @@ const Update = ({history, match}) => {
                                 },
                                 {
                                     name: "name_uz",
-                                    required: true,
                                     value: get(item, 'name_uz', '')
                                 },
                                 {
@@ -74,7 +73,6 @@ const Update = ({history, match}) => {
                                 },
                                 {
                                     name: "name_en",
-                                    required: true,
                                     value: get(item, 'name_en', '')
                                 },
                                 {

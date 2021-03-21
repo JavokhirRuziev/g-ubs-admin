@@ -39,10 +39,10 @@ const Create = () => {
           },
           {
             name: "name_uz",
-            required: true
           },
           {
             name: "name_ru",
+            required: true
           },
           {
             name: "name_en",

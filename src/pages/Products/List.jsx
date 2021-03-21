@@ -121,7 +121,7 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Загаловок"),
-                        dataIndex: "name",
+                        dataIndex: "name_ru",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
