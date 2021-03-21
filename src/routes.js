@@ -29,6 +29,8 @@ const ProductsUpdate = lazy(() => import("./pages/Products/Update"));
 const Pages = lazy(() => import("./pages/Pages/List"));
 const PagesCreate = lazy(() => import("./pages/Pages/Create"));
 const PagesUpdate = lazy(() => import("./pages/Pages/Update"));
+const Banners = lazy(() => import("./pages/Banner/List"));
+
 const Settings = lazy(() => import("./pages/Settings/List"));
 const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
 const SettingsUpdate = lazy(() => import("./pages/Settings/Update"));
@@ -76,6 +78,8 @@ const routes = [
 	{ path: "/pages", exact: true, component: Pages },
 	{ path: "/pages/create", exact: true, component: PagesCreate },
 	{ path: "/pages/update/:id", exact: true, component: PagesUpdate },
+	{ path: "/banners", exact: true, component: Banners },
+
 	{ path: "/settings", exact: true, component: Settings },
 	{ path: "/settings/create", exact: true, component: SettingsCreate },
 	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate },
