@@ -66,7 +66,6 @@ const List = ({history, location}) => {
     history.push({
       search: qs.stringify(search)
     });
-    console.log(qs.stringify(search))
   };
   const {page = 1, lang} = qs.parse(location.search);
 
