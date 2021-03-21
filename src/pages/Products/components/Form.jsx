@@ -33,7 +33,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         <TabPane tab="Контент - ru" key="ru">
                             <Field
                                 component={Fields.AntInput}
-                                name={`name_${activeLangKey}`}
+                                name={`name_ru`}
                                 type="text"
                                 placeholder={t("Введите загаловок")}
                                 label={t("Заголовок")}
@@ -41,7 +41,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                             />
                             <Field
                                 component={Ckeditor}
-                                name={`body_${activeLangKey}`}
+                                name={`body_ru`}
                                 placeholder={t("Полный текст новости")}
                                 label={t("Полный текст новости")}
                             />
@@ -49,7 +49,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         <TabPane tab="Контент - uz" key="uz">
                             <Field
                                 component={Fields.AntInput}
-                                name={`name_${activeLangKey}`}
+                                name={`name_uz`}
                                 type="text"
                                 placeholder={t("Введите загаловок")}
                                 label={t("Заголовок")}
@@ -57,7 +57,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                             />
                             <Field
                                 component={Ckeditor}
-                                name={`body_${activeLangKey}`}
+                                name={`body_uz`}
                                 placeholder={t("Полный текст новости")}
                                 label={t("Полный текст новости")}
                             />
@@ -65,7 +65,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         <TabPane tab="Контент - en" key="en">
                             <Field
                                 component={Fields.AntInput}
-                                name={`name_${activeLangKey}`}
+                                name={`name_en`}
                                 type="text"
                                 placeholder={t("Введите загаловок")}
                                 label={t("Заголовок")}
@@ -73,7 +73,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                             />
                             <Field
                                 component={Ckeditor}
-                                name={`body_${activeLangKey}`}
+                                name={`body_en`}
                                 placeholder={t("Полный текст новости")}
                                 label={t("Полный текст новости")}
                             />
