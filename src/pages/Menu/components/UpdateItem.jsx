@@ -23,7 +23,7 @@ const UpdateItem = ({ item, visible, menuId, onCancel, lang }) => {
 					id={get(item, "menu_item_id")}
 					entity="menuItems"
 					name={`menuItems-${menuId}`}
-					url={`/menu-item/${menuId}`}
+					url={`/menu-item/${item.id}`}
 					normalizeData={data => data}
 					primaryKey="id"
 					fields={[
