@@ -15,7 +15,7 @@ const queryBuilder = (url, { fields = [], include = [], limit = 0, sort = "", fi
 	}
 
 	if(limit > 0){
-		queryObj.param("per-page", Number(limit));
+		queryObj.param("per_page", Number(limit));
 	}
 
 	if(sort){
