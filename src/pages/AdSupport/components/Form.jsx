@@ -86,7 +86,7 @@ const Form = ({lang, setFieldValue, values, setSaveType}) => {
               size="large"
               className="fs-14 fw-300"
               htmlType="button"
-              onClick={() => history.push(`/pages?lang=${lang}`)}
+              onClick={() => history.push(`/ad-support?lang=${lang}`)}
             >{t("Отменить")}</Button>
 
             <Button

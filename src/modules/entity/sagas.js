@@ -9,7 +9,7 @@ import EntitySchema from "./schema";
 
 export function* LoadAll(action){
 
-	const { entity, name, url, params, dataKey, metaKey, appendData, prependData, primaryKey, cb } = action.payload;
+	const { entity, name, url, params, dataKey, appendData, prependData, primaryKey, cb } = action.payload;
 
 	try {
 
@@ -29,7 +29,12 @@ export function* LoadAll(action){
 			appendData,
 			prependData,
 			params,
-			meta: data[metaKey],
+			meta: {
+				currentPage: data.current_page,
+				pageCount: data.last_page,
+				perPage: data.per_page,
+				totalCount: data.total
+			},
 		}));
 
     yield call(cb.success, data);
