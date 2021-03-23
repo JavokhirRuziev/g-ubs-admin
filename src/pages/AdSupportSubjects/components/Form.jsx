@@ -46,7 +46,9 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         allowClear
                         selectOptions={[
                             {name: t("Карточка"), value: 1},
-                            {name: t("Сетка"), value: 2},
+                            {name: t("Сетка-2"), value: 2},
+                            {name: t("Сетка-4"), value: 4},
+                            {name: t("Сетка-5"), value: 5},
                             {name: t("Простой"), value: 3}
                         ]}
                     />
