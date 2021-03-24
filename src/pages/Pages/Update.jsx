@@ -89,7 +89,6 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "slug",
-                  required: true,
                   value: get(item, 'slug')
                 },
                 {
@@ -117,8 +116,7 @@ const Update = ({location, history, match}) => {
                 }
               ]}
               params={{
-                include: ['translations', 'files'],
-                extra: {_l: tabLang}
+                extra: {append: 'documents0',_l: lang}
               }}
             >
               {({isSubmitting, values, setFieldValue}) => {

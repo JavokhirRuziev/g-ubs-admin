@@ -19,7 +19,8 @@ const Create = ({showCreateModal, tabLang}) => {
         showCreateModal(false)
       }}
       params={{
-        extra: {_l: tabLang}
+        extra: {_l: tabLang},
+        include: 'file'
       }}
       fields={[
         {

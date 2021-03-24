@@ -22,7 +22,7 @@ const Update = ({history, match}) => {
             primaryKey="id"
             id={id}
             params={{
-                include: "category",
+                include: "category,posts",
                 extra: {append: 'palette0,documents0'}
             }}
         >
@@ -130,10 +130,15 @@ const Update = ({history, match}) => {
                                 {
                                     name: "lang_hash",
                                     value: get(item, 'lang_hash')
+                                },
+                                {
+                                    name: 'posts',
+                                    value: get(item, 'posts'),
+                                    onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], [])
                                 }
                             ]}
                             params={{
-                                include: ['category'],
+                                include: ['category','posts'],
                                 extra: {append: 'palette0,documents0'}
                             }}
                         >

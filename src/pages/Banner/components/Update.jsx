@@ -19,6 +19,9 @@ const Update = ({selected, showUpdateModal, tabLang}) => {
         resetForm();
         showUpdateModal(false)
       }}
+      params={{
+        include: 'file'
+      }}
       fields={[
         {
           name: "link",
