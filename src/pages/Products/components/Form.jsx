@@ -9,6 +9,7 @@ import {ReactComponent as PlusIcon} from "assets/images/icons/plus.svg";
 import {useHistory} from "react-router";
 import { ChromePicker } from "react-color";
 import styled from "styled-components";
+import RelationProducts from "./RelationProducts";
 
 const { TabPane } = Tabs;
 
@@ -17,15 +18,19 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
     const history = useHistory();
     const {t} = useTranslation();
     const [activeLangKey, setLangKey] = useState("ru")
+    const [activeTabOptions, setTabOptions] = useState(1)
 
     function callback(key) {
         setLangKey(key)
+    }
+    function callbackOptions(id) {
+        setTabOptions(id)
     }
 
     return (
         <GridElements.Row gutter={10} className={"mb-30"}>
             <GridElements.Column xs={8} gutter={10}>
-                <Panel>
+                <Panel className="h-100p">
                     <Tabs defaultActiveKey={activeLangKey} onChange={callback}>
                         <TabPane tab="Контент - ru" key="ru">
                             <Field
@@ -76,122 +81,120 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                             />
                         </TabPane>
                     </Tabs>
-
-
-                    <Field
-                        component={Fields.UploadImageManager}
-                        name="documents"
-                        isDocument={true}
-                        label={t("Файл для загрузки")}
-                        size="large"
-                        className={"mb-10"}
-                        isMulti
-                        limit={100}
-                        columns={6}
-                    />
-
-                    <Field
-                        component={Fields.AsyncSelect}
-                        name="posts"
-                        placeholder={t("Выберите блогов")}
-                        label={"Блоги"}
-                        isClearable={true}
-                        isSearchable={true}
-                        isMulti={true}
-                        loadOptionsUrl="/post"
-                        style={{marginBottom: 0}}
-                        className={"mb-0"}
-                        optionLabel={`title`}
-                        filterParams={{type: 2}}
-                        loadOptionsParams={(search) => {
-                            return{
-                                extra: {title: search}
-                            }
-                        }}
-                    />
+                    {isUpdate && (
+                        <RelationProducts/>
+                    )}
                 </Panel>
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>
-                <Panel>
-                    {isFetched && (
-                        <Field
-                            component={Fields.UploadImageManager}
-                            name="file"
-                            label={t("Главный фото")}
-                            size="large"
-                            className={"mb-10"}
-                        />
-                    )}
+                <Panel className="h-100p d-flex flex-column justify-content-between">
+                    <Tabs defaultActiveKey={activeTabOptions} onChange={callbackOptions}>
+                        <TabPane tab="Параметри" key={1}>
+                            <Field
+                                component={Fields.AntInput}
+                                name="price"
+                                type="text"
+                                placeholder={t("Введите цена")}
+                                label={t("Цена")}
+                                size="large"
+                            />
+                            <Field
+                                component={Fields.AsyncSelect}
+                                name="category_id"
+                                placeholder={"Виберите категория"}
+                                label={"Категория"}
+                                isClearable
+                                isSearchable={true}
+                                loadOptionsUrl="/categories"
+                                className="mb-20"
+                                optionLabel={`name_${lang}`}
+                                filterParams={{
+                                    type: 1
+                                }}
+                                loadOptionsParams={(search) => {
+                                    return{
+                                        extra: {name: search}
+                                    }
+                                }}
+                            />
+                            <Field
+                                component={Fields.AsyncSelect}
+                                name="posts"
+                                placeholder={t("Выберите блогов")}
+                                label={"Блоги"}
+                                isClearable={true}
+                                isSearchable={true}
+                                isMulti={true}
+                                loadOptionsUrl="/post"
+                                className="mb-20"
+                                optionLabel={`title`}
+                                filterParams={{type: 2}}
+                                loadOptionsParams={(search) => {
+                                    return{
+                                        extra: {title: search}
+                                    }
+                                }}
+                            />
+                            <div className="d-flex align-items-center mb-20">
+                                <Switch
+                                    onChange={value => {
+                                        setFieldValue('status', value)
+                                    }}
+                                    checked={values.status}
+                                />
+                                <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
+                            </div>
+                            <div className="d-flex align-items-center mb-20">
+                                <Switch
+                                    onChange={value => {
+                                        setFieldValue('top', value)
+                                    }}
+                                    checked={values.top}
+                                />
+                                <div className="ant-label mb-0 ml-10">{t('Топ')}</div>
+                            </div>
+                        </TabPane>
+                        <TabPane tab="Файлы" key={2}>
+                            <Field
+                                component={Fields.UploadImageManager}
+                                name="file"
+                                label={t("Главный фото")}
+                                size="large"
+                                className={"mb-10"}
+                            />
+                            <Field
+                                component={Fields.UploadImageManager}
+                                name="documents"
+                                isDocument={true}
+                                label={t("Файл для загрузки")}
+                                size="large"
+                                className={"mb-10"}
+                                isMulti
+                                limit={100}
+                                columns={12}
+                            />
 
+                            <div className="mb-30">
+                                <div className="ant-label">{t("Галерея")}</div>
+                                <ColorContainer>
+                                    <ChromePicker
+                                        disableAlpha={true}
+                                        color={values.color ? values.color : "#000"}
+                                        onChangeComplete={color => setFieldValue("color", color.hex)}
+                                        onChange={color => setFieldValue("color", color.hex)}
+                                    />
+                                </ColorContainer>
+                                <Field
+                                    component={Fields.UploadImageManagerWithColor}
+                                    name="paletteUpload"
+                                    limit={30}
+                                    size="large"
+                                    className={"mb-0"}
+                                />
+                            </div>
 
-                    <Field
-                        component={Fields.AntInput}
-                        name="price"
-                        type="text"
-                        placeholder={t("Введите цена")}
-                        label={t("Цена")}
-                        size="large"
-                    />
-
-                    <Field
-                        component={Fields.AsyncSelect}
-                        name="category_id"
-                        placeholder={"Виберите категория"}
-                        label={"Категория"}
-                        isClearable
-                        isSearchable={true}
-                        loadOptionsUrl="/categories"
-                        className="mb-20"
-                        optionLabel={`name_${lang}`}
-                        filterParams={{
-                            type: 1
-                        }}
-                        loadOptionsParams={(search) => {
-                            return{
-                                extra: {name: search}
-                            }
-                        }}
-                    />
-
-                    <ColorContainer>
-                        <ChromePicker
-                            disableAlpha={true}
-                            color={values.color ? values.color : "#000"}
-                            onChangeComplete={color => setFieldValue("color", color.hex)}
-                            onChange={color => setFieldValue("color", color.hex)}
-                        />
-                    </ColorContainer>
-
-                    {isFetched && (
-                        <Field
-                            component={Fields.UploadImageManagerWithColor}
-                            name="paletteUpload"
-                            label={t("Галерея")}
-                            limit={30}
-                            size="large"
-                            className={"mb-10"}
-                        />
-                    )}
-
-                    <div className="d-flex align-items-center mb-20">
-                        <Switch
-                            onChange={value => {
-                                setFieldValue('status', value)
-                            }}
-                            checked={values.status}
-                        />
-                        <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
-                    </div>
-
-                    <div className="d-flex align-items-center mb-20">
-                        <Switch
-                            onChange={value => {
-                                setFieldValue('top', value)
-                            }}
-                            checked={values.top}
-                        />
-                        <div className="ant-label mb-0 ml-10">{t('Топ')}</div>
-                    </div>
+                        </TabPane>
+                    </Tabs>
 
                     <div className="buttons-wrap">
                         {isUpdate ? (

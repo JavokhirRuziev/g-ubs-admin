@@ -686,9 +686,16 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
 .btn-with-icon{
   display: flex;
   align-items: center;
-  &:hover{
+  &.ant-btn-primary{
     svg{
-      fill: #40a9ff;
+      fill: #ffffff;
+    }
+  }
+  &:not(.ant-btn-primary){
+    &:hover{
+      svg{
+        fill: #40a9ff;
+      }
     }
   }
   svg{
@@ -698,4 +705,10 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
     margin-right: 10px;
     fill: rgba(0, 0, 0, 0.65);
   }
+}
+
+.default-table--wb{
+  padding: 0 8px;
+  background-color: #f2f2f3;
+  border-radius: 10px;
 }

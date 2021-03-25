@@ -37,7 +37,6 @@ const List = () => {
             onOk: () => deleteAction(menuId),
         });
     };
-
     const deleteAction = id => {
         dispatch(Actions.Form.request({
             method: 'delete',
