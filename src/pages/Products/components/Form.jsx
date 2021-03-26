@@ -88,7 +88,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>
                 <Panel className="h-100p d-flex flex-column justify-content-between">
-                    <Tabs defaultActiveKey={activeTabOptions} onChange={callbackOptions}>
+                    <Tabs defaultActiveKey={activeTabOptions} onChange={callbackOptions} className={"pl-5 pr-5"}>
                         <TabPane tab="Параметри" key={1}>
                             <Field
                                 component={Fields.AntInput}
@@ -153,6 +153,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                                 />
                                 <div className="ant-label mb-0 ml-10">{t('Топ')}</div>
                             </div>
+                            <div className="pb-210"/>
                         </TabPane>
                         <TabPane tab="Файлы" key={2}>
                             <Field

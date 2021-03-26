@@ -123,7 +123,6 @@ const Update = ({history, match}) => {
                                 },
                                 {
                                     name: "file",
-                                    required: true,
                                     value: get(item, 'file') ? [get(item, 'file')] : [],
                                     onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                                 },

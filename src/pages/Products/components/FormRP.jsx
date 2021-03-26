@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Fields} from "components";
 import {Field} from "formik";
-import {Button, Switch} from "antd";
+import {Button} from "antd";
 
 const Form = ({isUpdate, submitForm}) => {
     return (

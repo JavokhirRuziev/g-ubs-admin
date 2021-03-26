@@ -9,8 +9,8 @@ import Actions from "modules/entity/actions";
 import Create from "./CreateRP";
 import Update from "./UpdateRP";
 import {useDispatch} from "react-redux";
-import {Table} from "../../../components";
-import EntityContainer from "../../../modules/entity/containers";
+import {Table} from "components";
+import EntityContainer from "modules/entity/containers";
 
 const RelationProducts = () => {
     const {t} = useTranslation();

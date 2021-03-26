@@ -94,7 +94,6 @@ const Create = () => {
           {
             name: "file",
             value: [],
-            required: true,
             onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
           },
           {
