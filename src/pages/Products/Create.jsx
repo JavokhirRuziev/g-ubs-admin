@@ -104,7 +104,7 @@ const Create = () => {
         ]}
         params={{
           include: "category",
-          extra: {append: 'palette0,documents0',}
+          extra: {append: 'palette0,documents0,threeD0',}
         }}
       >
         {({isSubmitting, values, setFieldValue}) => {

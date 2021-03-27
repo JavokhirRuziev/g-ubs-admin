@@ -174,7 +174,17 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                                 limit={100}
                                 columns={12}
                             />
-
+                            <Field
+                                component={Fields.UploadImageManager}
+                                name="threeD"
+                                isDocument={true}
+                                label={t("Файл для 3D")}
+                                size="large"
+                                className={"mb-10"}
+                                isMulti
+                                limit={100}
+                                columns={12}
+                            />
                             <div className="mb-30">
                                 <div className="ant-label">{t("Галерея")}</div>
                                 <ColorContainer>

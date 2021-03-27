@@ -23,7 +23,7 @@ const Update = ({history, match}) => {
             id={id}
             params={{
                 include: "category,posts",
-                extra: {append: 'palette0,documents0'}
+                extra: {append: 'palette0,documents0,threeD0'}
             }}
         >
             {({item, isFetched}) => {
@@ -113,7 +113,7 @@ const Update = ({history, match}) => {
                                 },
                                 {
                                     name: "threeD",
-                                    value: [],
+                                    value: get(item, 'threeD0', []),
                                     onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                                 },
                                 {
@@ -138,7 +138,7 @@ const Update = ({history, match}) => {
                             ]}
                             params={{
                                 include: ['category','posts'],
-                                extra: {append: 'palette0,documents0'}
+                                extra: {append: 'palette0,documents0,threeD0'}
                             }}
                         >
                             {({isSubmitting, values, setFieldValue}) => {
