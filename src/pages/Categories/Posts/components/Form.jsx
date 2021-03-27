@@ -29,13 +29,6 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 placeholder="Введите название (EN)"
                 size="large"
             />
-            <Field
-                component={Fields.AntInput}
-                name="sort"
-                type="text"
-                placeholder="Сортировка"
-                size="large"
-            />
             <div className="row mb-20">
                 <div className="col-md-6">
                     <Field

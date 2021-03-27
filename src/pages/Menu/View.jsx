@@ -25,6 +25,7 @@ const View = ({location, match}) => {
     const {id} = match.params;
     const query = qs.parse(location.search);
     const {alias} = query;
+    const [canUpdate, setCanUpdate] = useState(false);
     const {t} = useTranslation();
 
     const openModal = name => {
@@ -42,6 +43,7 @@ const View = ({location, match}) => {
     };
 
     const updateMenuItems = (items) => {
+
         dispatch(EntityActions.FormDefault.request({
             method: 'put',
             url: `/menu-item/sort`,
@@ -50,8 +52,17 @@ const View = ({location, match}) => {
             },
             cb: {
                 success: () => {
+                    notification["success"]({
+                        message: t("Успешно изменено"),
+                        duration: 2
+                    });
+                    setCanUpdate(!canUpdate)
                 },
                 error: () => {
+                    notification["error"]({
+                        message: t("Что-то пошло не так"),
+                        duration: 2
+                    });
                 },
                 finally: () => {
                 }
@@ -130,6 +141,7 @@ const View = ({location, match}) => {
                     name={`menuItems-${id}`}
                     url="/menu-item"
                     primaryKey={"id"}
+                    canUpdate={!canUpdate}
                     params={{
                         limit: 50,
                         sort: 'sort',
@@ -142,7 +154,7 @@ const View = ({location, match}) => {
                                 {items.length > 0 ? (
                                     <div className="pad-20">
                                         <Nestable
-                                            maxDepth={3}
+                                            maxDepth={2}
                                             items={items}
                                             childrenProp="menuItems"
                                             collapsed={false}

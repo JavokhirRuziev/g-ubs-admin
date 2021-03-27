@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
@@ -10,12 +10,16 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import get from "lodash/get";
 import qs from "query-string";
+import Import from "./components/Import";
+import {ReactComponent as PlusIcon} from "../../assets/images/icons/plus.svg";
 
 const List = ({history, location}) => {
   const params = qs.parse(location.search, {ignoreQueryPrefix: true});
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {page} = params;
+  const [importModal, showImportModal] = useState(false);
+  const [canUpdate, setCanUpdate] = useState(false);
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -62,17 +66,43 @@ const List = ({history, location}) => {
     });
   };
 
+  const successCbImport = () => {
+    onChange(1);
+    setCanUpdate(!canUpdate)
+  }
+
   return (
     <>
+      <Modal
+          visible={importModal}
+          onOk={() => showImportModal(true)}
+          onCancel={() => showImportModal(false)}
+          footer={null}
+          centered
+          width={430}
+          destroyOnClose
+      >
+        <Import {...{showImportModal, successCbImport}}/>
+      </Modal>
+
       <div className="d-flex justify-content-between align-items-center mb-20">
         <div className="title-md">{t("Список товаров")}</div>
-        <Button
-          type="primary"
-          size="large"
-          className="fs-14 fw-300 ml-10"
-          htmlType="button"
-          onClick={() => history.push(`/products/create`)}
-        >{t('Добавить')}</Button>
+
+        <div className="d-flex">
+          <Button
+              size="large"
+              className="fs-14 fw-300 btn-with-icon"
+              htmlType="submit"
+              onClick={() => showImportModal(true)}
+          ><PlusIcon/> {t("Импорт")}</Button>
+          <Button
+              type="primary"
+              size="large"
+              className="fs-14 fw-300 ml-10"
+              htmlType="button"
+              onClick={() => history.push(`/products/create`)}
+          >{t('Добавить')}</Button>
+        </div>
       </div>
 
       <Board className="border-none">

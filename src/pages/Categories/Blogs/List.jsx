@@ -1,15 +1,19 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
-import {Button, Pagination, Spin, Modal, notification} from "antd";
+import {Board} from "components";
+import {Button, Spin, Modal, notification, Dropdown, Menu, Icon} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
 import Update from "./components/Update";
-import Actions from "modules/entity/actions";
+import ModulesActions from "modules/entity/actions";
+import Actions from "store/actions";
 import {CopyToClipboard} from "components/SmallComponents";
 
 import {useTranslation} from "react-i18next";
 import {useSelector, useDispatch} from "react-redux";
+import Nestable from "react-nestable";
+import get from "lodash/get";
+import {ReactComponent as DotsIcon} from "../../../assets/images/base/dots.svg";
 
 const List = () => {
     const langCode = useSelector(state => state.system.currentLangCode);
@@ -17,7 +21,6 @@ const List = () => {
     const [createModal, showCreateModal] = useState(false);
     const [updateModal, showUpdateModal] = useState(false);
     const [selected, setSelected] = useState(null);
-    const [page, setPage] = useState(1);
 
     const {t} = useTranslation();
     const dispatch = useDispatch();
@@ -39,7 +42,7 @@ const List = () => {
     };
 
     const deleteAction = id => {
-        dispatch(Actions.Form.request({
+        dispatch(ModulesActions.Form.request({
             method: 'delete',
             entity: "category",
             name: `categoryBlog`,
@@ -64,6 +67,45 @@ const List = () => {
             }
         }))
     };
+
+    const updateMenuItems = (items) => {
+        const ids = items.reduce((prev, curr) => [...prev, curr.id], []);
+        dispatch(ModulesActions.FormDefault.request({
+            method: 'put',
+            url: `/categories/sort`,
+            values: {
+                nestable: items
+            },
+            cb: {
+                success: () => {
+                    notification["success"]({
+                        message: t("Успешно изменено"),
+                        duration: 2
+                    });
+                    dispatch(Actions.entity.LoadAll.success({
+                        ids: ids,
+                        entity: 'category',
+                        name: 'categoryBlog',
+                        params: {page: 1},
+                        meta: {
+                            currentPage: 1,
+                            pageCount: 1,
+                            perPage: 50,
+                            totalCount: items.length
+                        },
+                    }))
+                },
+                error: () => {
+                    notification["error"]({
+                        message: t("Что-то пошло не так"),
+                        duration: 2
+                    });
+                },
+                finally: () => {
+                }
+            }
+        }))
+    }
 
     return (
         <>
@@ -91,7 +133,7 @@ const List = () => {
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
-                <div className="title-md">{t("Категория новостей")}</div>
+                <div className="title-md">{t("Категория блогов")}</div>
                 <Button
                     type="primary"
                     size="large"
@@ -107,9 +149,8 @@ const List = () => {
                     name="categoryBlog"
                     url="/categories"
                     params={{
-                        sort: '-id',
+                        sort: 'sort',
                         limit: 50,
-                        page,
                         include: "file",
                         filter: {type: 3}
                     }}
@@ -117,57 +158,47 @@ const List = () => {
                     {({items, isFetched, meta}) => {
                         return (
                             <Spin spinning={!isFetched}>
-                                <div className="default-table pad-15">
-                                    <Table
-                                        hasEdit={true}
-                                        hasDelete={true}
-                                        rowKey="id"
-                                        onEdit={value => openEditModal(value)}
-                                        onDelete={value => onDeleteHandler(value.id)}
-                                        columns={[
-                                            {
-                                                title: t("ID"),
-                                                dataIndex: "id",
-                                                className: 'w-50',
-                                                render: value => <div className="divider-wrapper">{value}</div>
-                                            },
-                                            {
-                                                title: t("Название"),
-                                                dataIndex: `name_${langCode}`,
-                                                render: value => <div className="divider-wrapper">{value}</div>
-                                            },
-                                            {
-                                                title: t("Ссылька"),
-                                                dataIndex: "slug",
-                                                render: value => <div className="divider-wrapper">
-                                                    <CopyToClipboard str={`/posts/categories/${value}`}/>
-                                                </div>
-                                            },
-                                            {
-                                                title: t("Статус"),
-                                                dataIndex: "status",
-                                                className: 'text-cen w-82',
-                                                render: value => {
-                                                    return <div className="divider-wrapper">
-                                                        <div className="color-view-ellipse m-0-auto"
-                                                             style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                                <div className="pad-20">
+                                    <Nestable
+                                        maxDepth={1}
+                                        items={items}
+                                        childrenProp={"children"}
+                                        collapsed={false}
+                                        renderItem={({item, collapseIcon}) => (
+                                            <div className={`mx-subdivision--item`}>
+                                                <div className="d-flex align-items-center">
+                                                    <div className="mx-title" style={{minWidth: '300px'}}>
+                                                        {collapseIcon} {get(item, `name_${langCode}`)}
                                                     </div>
-                                                }
-                                            }
-                                        ]}
-                                        dataSource={items}
+                                                    <div className="pl-30">
+                                                        <CopyToClipboard str={`/blogs/categories/${get(item, 'slug')}`}/>
+                                                    </div>
+                                                </div>
+                                                <Dropdown
+                                                    trigger={["click"]}
+                                                    overlay={
+                                                        <Menu style={{marginTop: 10}}>
+                                                            <Menu.Item onClick={() => {
+                                                                openEditModal(item)
+                                                            }}>
+                                                                <Icon type="edit"/>
+                                                                <span>{t('Редактировать')}</span>
+                                                            </Menu.Item>
+                                                            <Menu.Item onClick={() => onDeleteHandler(item.id)}>
+                                                                <Icon type="delete" />
+                                                                <span>{t('Удалить')}</span>
+                                                            </Menu.Item>
+                                                        </Menu>
+                                                    }>
+                                                    <Icon component={DotsIcon}/>
+                                                </Dropdown>
+                                            </div>
+                                        )}
+                                        onChange={(items) => {
+                                            updateMenuItems(items)
+                                        }}
                                     />
                                 </div>
-                                {meta && meta.perPage && (
-                                    <div className="pad-15 d-flex justify-content-end">
-                                        <Pagination
-                                            current={meta.currentPage}
-                                            pageSize={meta.perPage}
-                                            total={meta.totalCount}
-                                            onChange={newPage => setPage(newPage)}
-                                        />
-                                    </div>
-                                )}
                             </Spin>
                         );
                     }}
