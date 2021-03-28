@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 import {Table, Board, Avatar} from "components";
-import {Button, Pagination, Spin, Modal, notification} from "antd";
+import {Button, Pagination, Spin, Modal, notification, Tag} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
 import Filter from "./components/Filter";
@@ -175,7 +175,15 @@ const List = ({history, location}) => {
                             <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
                           </div>
                         }
-                      }
+                      },
+                      {
+                        title: t("SEO"),
+                        render: (value, row) => {
+                          return <div className="divider-wrapper">
+                            <Tag color={"red"}>SEO</Tag>
+                          </div>
+                        }
+                      },
                     ]}
                     dataSource={items}
                   />
