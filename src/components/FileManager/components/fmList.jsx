@@ -32,7 +32,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activ
         page,
         extra: {title: searchQuery},
         filter: {
-          ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx', 'xsl', 'xslx', 'txt', 'doc', 'pdf'],
+          ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx', 'xls', 'xlsx', 'txt', 'doc', 'pdf'],
           folder_id: activeFolder ? activeFolder.id : ''
         }
       }}>
