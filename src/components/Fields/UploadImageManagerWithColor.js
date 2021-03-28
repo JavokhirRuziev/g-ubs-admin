@@ -17,8 +17,21 @@ const UploadImageManager = ({
                             }) => {
     const [visible, setVisible] = useState(false);
 
-    const removeHandler = selected => {
-        setFieldValue(field.name, values[field.name].filter(item => item.id !== selected.id))
+    const removeHandler = ({item, color}) => {
+        let newData = values.palette.reduce((prev,curr) => [...prev, {
+            color: curr.color,
+            files: color === curr.color ? curr.files.filter(f => f.id !== item.id) : curr.files
+        }], []);
+
+        let arr = [];
+
+        newData.forEach(i => {
+            if(i.files.length > 0){
+                arr.push(i)
+            }
+        })
+
+        setFieldValue('palette', arr)
     };
 
     const classNames = cx("upload-photos", touched[field.name] && errors[field.name] && "has-error", className);
@@ -59,7 +72,7 @@ const UploadImageManager = ({
                         <div className="preview-list">
                             {palette.files.map((item, i) => (
                                 <div className="preview-item" key={get(item, 'id', `${i}`)}>
-                                    <div className="delete-btn" onClick={() => removeHandler(item)}>
+                                    <div className="delete-btn" onClick={() => removeHandler({item, color: palette.color})}>
                                         <DeleteIcon height={22} width={22}/>
                                     </div>
                                     <img src={get(item, 'thumbnails.small.src')} alt=""/>

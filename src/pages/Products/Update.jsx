@@ -4,12 +4,15 @@ import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
 import EntityContainer from 'modules/entity/containers';
 import Form from './components/Form';
+import Actions from "store/actions/entities";
 
 import {useTranslation} from "react-i18next";
 import get from "lodash/get";
+import {useDispatch} from "react-redux";
 
 const Update = ({history, match}) => {
     const {t} = useTranslation();
+    const dispatch = useDispatch();
 
     const {id} = match.params;
     const [saveType, setSaveType] = useState('list');
@@ -47,6 +50,12 @@ const Update = ({history, match}) => {
                                 } else if (saveType === 'create') {
                                     history.push(`/products/create`)
                                 }
+
+                                dispatch(Actions.Update.success({
+                                    entity: 'product',
+                                    entityId: Number(id),
+                                    data: data
+                                }))
                             }}
                             fields={[
                                 {
