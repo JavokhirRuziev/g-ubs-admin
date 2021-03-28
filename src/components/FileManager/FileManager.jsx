@@ -5,47 +5,73 @@ import {Modal} from "antd";
 
 import FMFolders from "./components/fmFolders";
 import FMList from "./components/fmList";
+import FMListMulti from "./components/fmListMulti";
 import FMSettings from "./components/fmSettings";
 
-import get from "lodash/get";
-
 const FileManager = ({
-                       addImage, visible = false, onCancel = () => {}, isDocument
+                         addImage,
+                         visible = false,
+                         onCancel = () => {},
+                         isDocument,
+                         isMulti
                      }) => {
-  const [isLoading, setLoading] = useState(false);
-  const [size, setSize] = useState('low');
-  const [alt, setAltText] = useState('');
-  const [selected, setSelected] = useState(null);
-  const [activeFolder, setActiveFolder] = useState(null);
-  const [filterType, setFilterType] = useState(isDocument ? 'documents' : 'images');
+    const [isLoading, setLoading] = useState(false);
+    const [size, setSize] = useState('low');
 
-  const url = get(selected, `thumbnails.${size}.src`, "");
+    const [selected, setSelected] = useState(null);
+    const [selectedItems, setSelectedItems] = useState([]);
 
-  return (
-    <Modal
-      className="file-manager"
-      visible={visible}
-      onOk={() => {
-        addImage({url, alt, selected});
-        onCancel();
-        setTimeout(() => {
-          setAltText('');
-          setSelected(null);
-        }, 300)
-      }}
-      onCancel={onCancel}
-      closable={true}
-      destroyOnClose
-      title="File Manager"
-      width={1048}
-    >
-      <div className="fm-block">
-        <FMFolders {...{setActiveFolder, activeFolder}}/>
-        <FMList {...{selected, setSelected, filterType, activeFolder, setLoading, isLoading}}/>
-        <FMSettings {...{size, setSize, selected, setAltText, filterType, setFilterType}}/>
-      </div>
-    </Modal>
-  );
+    const [activeFolder, setActiveFolder] = useState(null);
+    const [filterType, setFilterType] = useState(isDocument ? 'documents' : 'images');
+
+    return (
+        <Modal
+            className="file-manager"
+            visible={visible}
+            onOk={() => {
+                if(isMulti){
+                    addImage(selectedItems);
+                }else{
+                    addImage(selected);
+                }
+                onCancel();
+                setTimeout(() => {
+                    setSelected(null);
+                    setSelectedItems([]);
+                }, 300)
+            }}
+            onCancel={onCancel}
+            closable={true}
+            destroyOnClose
+            title="File Manager"
+            width={1048}
+        >
+            <div className="fm-block">
+                <FMFolders {...{setActiveFolder, activeFolder}}/>
+                {isMulti ? (
+                    <FMListMulti {...{
+                        selectedItems,
+                        setSelectedItems,
+                        filterType,
+                        activeFolder,
+                        setLoading,
+                        isLoading,
+                    }}/>
+                ) : (
+                    <FMList {...{
+                        isMulti,
+                        selected,
+                        setSelected,
+                        filterType,
+                        activeFolder,
+                        setLoading,
+                        isLoading,
+                    }}/>
+                )}
+                <FMSettings {...{size, setSize, selected, filterType, setFilterType}}/>
+            </div>
+        </Modal>
+    );
 };
 
 export default FileManager;

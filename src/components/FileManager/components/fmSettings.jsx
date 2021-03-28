@@ -5,7 +5,7 @@ import EntityActions from "modules/entity/actions";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 
-const FmSettings = ({size, setSize, setAltText, selected, filterType, setFilterType}) => {
+const FmSettings = ({size, setSize, selected, filterType, setFilterType}) => {
   const [fileTitle, setFileTitle] = useState(get(selected, 'title'));
   const [loading, setLoading] = useState(false);
 

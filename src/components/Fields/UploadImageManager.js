@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import {FileManager, GridElements} from "components";
 import get from "lodash/get";
+import uniqBy from "lodash/uniqBy";
 
 import {ReactComponent as DeleteIcon} from "./icons/delete.svg";
 import cx from "classnames";
@@ -18,16 +19,17 @@ const UploadImageManager = ({columns=12, isMulti, isDocument = false, limit = 1,
   return (
     <>
       <FileManager
-        addImage={({selected}) => {
+        addImage={(data) => {
           if (isMulti) {
-            setFieldValue(field.name, [...values[field.name], selected])
+            setFieldValue(field.name, uniqBy([...values[field.name], ...data], 'id'))
           } else {
-            setFieldValue(field.name, [selected])
+            setFieldValue(field.name, [data])
           }
         }}
         onCancel={() => {
           setVisible(false)
         }}
+        isMulti={isMulti}
         visible={visible}
         isDocument={isDocument}
       />
