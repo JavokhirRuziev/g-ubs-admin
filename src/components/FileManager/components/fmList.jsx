@@ -27,7 +27,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activ
       primaryKey="id"
       appendData={true}
       params={{
-        limit: filterType === 'images' ? 20 : 6,
+        limit: 20,
         sort: "-id",
         page,
         extra: {title: searchQuery},
@@ -62,7 +62,7 @@ const FmList = ({selected, setSelected, filterType, setLoading, isLoading, activ
             ) : (
               <div className="fm-list__doc">
                 <FMUpload {...{setLoading, isLoading, filterType, activeFolder}}/>
-                {items.slice(0, 6).map(file => (
+                {items.map(file => (
                   <div className={`doc-file ${get(selected, 'id') === file.id ? 'selected' : ''}`} key={file.id}
                        onClick={() => setSelected(file)}>
                     <div className="doc-file__item">
