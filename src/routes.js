@@ -100,7 +100,7 @@ const routes = [
 	{path: "/locations/create", exact: true, component: LocationsCreate},
 	{path: "/locations/update/:id", exact: true, component: LocationsUpdate},
 
-	{ path: "/", exact: true, component: Posts },
+	{ path: "/", exact: true, component: Products },
 	{ path: "/logout", exact: true, component: Logout },
 	{ path: "/menu", exact: true, component: Menu },
 	{ path: "/menu/:id", exact: true, component: MenuView },

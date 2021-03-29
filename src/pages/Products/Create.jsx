@@ -41,6 +41,9 @@ const Create = () => {
             name: "name_uz",
           },
           {
+            name: "code",
+          },
+          {
             name: "name_ru",
             required: true
           },

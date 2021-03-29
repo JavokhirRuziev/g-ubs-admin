@@ -92,6 +92,14 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                         <TabPane tab="Параметри" key={1}>
                             <Field
                                 component={Fields.AntInput}
+                                name="code"
+                                type="text"
+                                placeholder={t("Введите артикул")}
+                                label={t("Артикул")}
+                                size="large"
+                            />
+                            <Field
+                                component={Fields.AntInput}
                                 name="price"
                                 type="text"
                                 placeholder={t("Введите цена")}

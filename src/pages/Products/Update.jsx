@@ -76,6 +76,10 @@ const Update = ({history, match}) => {
                                     value: get(item, 'name_uz', '')
                                 },
                                 {
+                                    name: "code",
+                                    value: get(item, 'code', '')
+                                },
+                                {
                                     name: "name_ru",
                                     required: true,
                                     value: get(item, 'name_ru', '')
