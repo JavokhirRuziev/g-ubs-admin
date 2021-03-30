@@ -111,6 +111,7 @@ const Create = () => {
         }}
       >
         {({isSubmitting, values, setFieldValue}) => {
+          console.log(values)
           return (
             <Spin spinning={isSubmitting}>
               <div className="title-md mb-20 mt-14">{t('Создать продукт')}</div>

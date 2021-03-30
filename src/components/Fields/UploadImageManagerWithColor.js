@@ -38,7 +38,7 @@ const UploadImageManager = ({
     return (
         <>
             <FileManager
-                addImage={({selected}) => {
+                addImage={(data) => {
                     let activeColor = get(values, 'color');
                     let activePalette = values.palette.find(p => p.color === activeColor);
                     let withOutActivePalette = [];
@@ -47,9 +47,9 @@ const UploadImageManager = ({
                     let newItems = [];
                     if(activePalette){
                         withOutActivePalette = values.palette.filter(p => p.color !== activeColor);
-                        newItems = [...withOutActivePalette, {color: activePalette.color, files: [selected, ...activePalette.files]}]
+                        newItems = [...withOutActivePalette, {color: activePalette.color, files: [...data, ...activePalette.files]}]
                     }else{
-                        newItems = [...values.palette, {color: activeColor, files: [selected]}]
+                        newItems = [...values.palette, {color: activeColor, files: [...data]}]
                     }
 
                     setFieldValue('palette', newItems);
@@ -57,6 +57,7 @@ const UploadImageManager = ({
                 onCancel={() => {
                     setVisible(false)
                 }}
+                isMulti={true}
                 visible={visible}
                 isDocument={isDocument}
             />
