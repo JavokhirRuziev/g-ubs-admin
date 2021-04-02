@@ -14,6 +14,7 @@ import EditableTable from "./EditableTable";
 import Ckeditor from "./Ckeditor";
 import FileManager from "./FileManager";
 import NetworkError from './NetworkError';
+import Meta from './Meta';
 
 export {
   Button,
@@ -31,5 +32,6 @@ export {
   EditableTable,
   Ckeditor,
   FileManager,
-  NetworkError
+  NetworkError,
+  Meta
 }

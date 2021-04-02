@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
-import {Table, Board, Avatar} from "components";
-import Meta from "components/Meta";
+import {Table, Board, Avatar, Meta} from "components";
 import {Button, Pagination, Spin, Modal, notification, Tag} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
@@ -97,7 +96,7 @@ const List = ({history, location}) => {
                 width={430}
                 destroyOnClose
             >
-                <Meta {...{showMetaModal, selected, type: 'product'}}/>
+                <Meta.MetaProduct {...{showMetaModal, selected}}/>
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
@@ -160,7 +159,8 @@ const List = ({history, location}) => {
                                                 title: t("Артикул"),
                                                 dataIndex: "code",
                                                 className: 'w-50',
-                                                render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                                render: value => <div
+                                                    className="divider-wrapper">{value ? value : '-'}</div>
                                             },
                                             {
                                                 title: t("Фото"),
@@ -202,17 +202,18 @@ const List = ({history, location}) => {
                                                 }
                                             },
                                             {
-                                              title: t("SEO"),
-                                              render: (value, row) => {
-                                                return <div className="divider-wrapper">
-                                                  <Tag color={"blue"} className="cursor-pointer" onClick={() => {
-                                                    setSelected(row);
-                                                    showMetaModal(true);
-                                                  }}>
-                                                    <b>SEO</b>
-                                                  </Tag>
-                                                </div>
-                                              }
+                                                title: t("SEO"),
+                                                dataIndex: "meta",
+                                                render: (value, row) => {
+                                                    return <div className="divider-wrapper">
+                                                        <Tag color={value ? 'green' : 'blue'} className="cursor-pointer" onClick={() => {
+                                                            setSelected(row);
+                                                            showMetaModal(true);
+                                                        }}>
+                                                            <b>SEO</b>
+                                                        </Tag>
+                                                    </div>
+                                                }
                                             },
                                         ]}
                                         dataSource={items}
