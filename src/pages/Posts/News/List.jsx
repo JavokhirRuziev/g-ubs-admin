@@ -123,7 +123,7 @@ const List = ({history, location}) => {
             sort: '-publish_time',
             limit: 20,
             extra: {_l: tabLang, title: params.title},
-            include: "category,file",
+            include: "category,file,meta",
             fields: ["id", "title", "status", "publish_time"],
             filter: {
               type: 1,

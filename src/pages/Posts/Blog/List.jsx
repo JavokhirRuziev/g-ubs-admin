@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
-import {Table, Board, Avatar} from "components";
-import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
+import {Table, Board, Avatar, Meta} from "components";
+import {Button, Pagination, Spin, Tabs, Modal, notification, Tag} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
 import Filter from "./components/Filter";
@@ -21,6 +21,8 @@ const List = ({history, location}) => {
 
   const {lang, page} = params;
   const [tabLang, setTabLang] = useState(lang || langCode);
+  const [metaModal, showMetaModal] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -74,6 +76,17 @@ const List = ({history, location}) => {
 
   return (
     <>
+      <Modal
+          visible={metaModal}
+          onOk={() => showMetaModal(true)}
+          onCancel={() => showMetaModal(false)}
+          footer={null}
+          centered
+          width={430}
+          destroyOnClose
+      >
+        <Meta.MetaPost {...{showMetaModal, selected, lang: tabLang}}/>
+      </Modal>
       <div className="d-flex justify-content-between align-items-center mb-20">
         <div className="title-md">{t("Список блогов")}</div>
         <Button
@@ -109,7 +122,7 @@ const List = ({history, location}) => {
             sort: '-publish_time',
             limit: 20,
             extra: {_l: tabLang, title: params.title},
-            include: "category,file",
+            include: "category,file,meta",
             fields: ["id", "title", "status", "publish_time"],
             filter: {
               category_id: params.category ? Number(params.category.split('/')[0]) : '',
@@ -171,7 +184,21 @@ const List = ({history, location}) => {
                             <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
                           </div>
                         }
-                      }
+                      },
+                      {
+                        title: t("SEO"),
+                        dataIndex: "meta",
+                        render: (value, row) => {
+                          return <div className="divider-wrapper">
+                            <Tag color={value ? 'green' : 'blue'} className="cursor-pointer" onClick={() => {
+                              setSelected(row);
+                              showMetaModal(true);
+                            }}>
+                              <b>SEO</b>
+                            </Tag>
+                          </div>
+                        }
+                      },
                     ]}
                     dataSource={items}
                   />

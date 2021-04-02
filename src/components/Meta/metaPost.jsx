@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import {Button, Spin, Tabs} from 'antd';
+import {Button, Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
 import Actions from "store/actions";
 
@@ -10,7 +10,6 @@ import {Fields} from "../index";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 
-const { TabPane } = Tabs;
 
 const Meta = ({selected, showMetaModal, lang='ru'}) => {
     const {t} = useTranslation();
