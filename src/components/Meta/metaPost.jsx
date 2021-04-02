@@ -1,37 +1,60 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import {Button, Spin} from 'antd';
+import {Button, Spin, Tabs} from 'antd';
 import EntityForm from 'modules/entity/forms';
+import Actions from "store/actions";
+
 import get from "lodash/get";
 import {Field} from "formik";
 import {Fields} from "../index";
 import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
 
-const Meta = ({selected, showMetaModal, lang}) => {
+const { TabPane } = Tabs;
+
+const Meta = ({selected, showMetaModal, lang='ru'}) => {
     const {t} = useTranslation();
+    const dispatch = useDispatch();
+
+    const meta = get(selected, 'meta');
+
+    const includeMeta = (meta) => {
+        dispatch(Actions.entities.Update.success({
+            entity: 'post',
+            entityId: get(selected, 'id'),
+            data: {
+                ...selected,
+                meta: meta
+            }
+        }))
+    }
 
     return (
         <EntityForm.Main
-            method="post"
+            method={meta ? 'put' : 'post'}
             entity="meta"
             name={`meta`}
-            url={`/meta`}
+            url={meta ? `/meta/${get(meta, 'id')}` : '/meta'}
             primaryKey="id"
             normalizeData={data => data}
             id={get(selected, 'id')}
             onSuccess={(data, resetForm) => {
                 resetForm();
-                showMetaModal(false)
+                showMetaModal(false);
+                includeMeta(data);
             }}
             fields={[
                 {
                     name: `meta_title_${lang}`,
+                    value: get(meta, `meta_title_${lang}`, '')
                 },
                 {
                     name: `meta_description_${lang}`,
+                    value: get(meta, `meta_description_${lang}`, '')
                 },
                 {
                     name: `meta_keywords_${lang}`,
+                    value: get(meta, `meta_keywords_${lang}`, '')
                 },
                 {
                     name: "metaable_type",
