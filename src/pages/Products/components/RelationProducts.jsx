@@ -136,6 +136,11 @@ const RelationProducts = () => {
                                             render: value => <div className="divider-wrapper">{value}</div>
                                         },
                                         {
+                                            title: t("Упаковка шт."),
+                                            dataIndex: `amount`,
+                                            render: value => <div className="divider-wrapper">{value}</div>
+                                        },
+                                        {
                                             title: t("Цена"),
                                             dataIndex: `price`,
                                             render: value => <div className="divider-wrapper">{value}</div>

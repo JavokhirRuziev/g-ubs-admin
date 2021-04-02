@@ -31,6 +31,10 @@ const CreateRP = ({showCreateModal, parent_id}) => {
           required: true
         },
         {
+          name: "amount",
+          required: true,
+        },
+        {
           name: "parent_id",
           value: parent_id,
         },

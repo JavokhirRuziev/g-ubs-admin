@@ -34,6 +34,11 @@ const UpdateRP = ({selected, showUpdateModal, parent_id}) => {
           required: true
         },
         {
+          name: "amount",
+          required: true,
+          value: get(selected, 'amount'),
+        },
+        {
           name: "price",
         },
         {

@@ -15,12 +15,18 @@ const Form = ({isUpdate, submitForm}) => {
                 placeholder="Артикул"
                 size="large"
             />
-
             <Field
                 component={Fields.AntInput}
                 name="size"
                 type="text"
                 placeholder="Размер"
+                size="large"
+            />
+            <Field
+                component={Fields.AntInput}
+                name="amount"
+                type="text"
+                placeholder="Упаковка/количество"
                 size="large"
             />
             <Field

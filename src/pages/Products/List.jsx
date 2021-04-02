@@ -201,19 +201,19 @@ const List = ({history, location}) => {
                                                     </div>
                                                 }
                                             },
-                                            // {
-                                            //   title: t("SEO"),
-                                            //   render: (value, row) => {
-                                            //     return <div className="divider-wrapper">
-                                            //       <Tag color={"blue"} className="cursor-pointer" onClick={() => {
-                                            //         setSelected(row);
-                                            //         showMetaModal(true);
-                                            //       }}>
-                                            //         <b>SEO</b>
-                                            //       </Tag>
-                                            //     </div>
-                                            //   }
-                                            // },
+                                            {
+                                              title: t("SEO"),
+                                              render: (value, row) => {
+                                                return <div className="divider-wrapper">
+                                                  <Tag color={"blue"} className="cursor-pointer" onClick={() => {
+                                                    setSelected(row);
+                                                    showMetaModal(true);
+                                                  }}>
+                                                    <b>SEO</b>
+                                                  </Tag>
+                                                </div>
+                                              }
+                                            },
                                         ]}
                                         dataSource={items}
                                     />
