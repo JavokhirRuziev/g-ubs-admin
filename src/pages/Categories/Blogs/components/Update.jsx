@@ -19,6 +19,9 @@ const Update = ({selected, showUpdateModal}) => {
         resetForm();
         showUpdateModal(false)
       }}
+      params={{
+        include: 'meta'
+      }}
       fields={[
         {
           name: "name_ru",

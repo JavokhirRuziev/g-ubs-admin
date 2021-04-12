@@ -20,6 +20,9 @@ const Create = ({showCreateModal}) => {
         resetForm();
         showCreateModal(false)
       }}
+      params={{
+        include: 'meta'
+      }}
       fields={[
         {
           name: "name_uz"
