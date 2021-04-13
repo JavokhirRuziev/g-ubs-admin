@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
-import {Board} from "components";
-import {Button, Spin, Modal, notification, Dropdown, Menu, Icon} from "antd";
+import {Board, Meta} from "components";
+import {Button, Spin, Modal, notification, Dropdown, Menu, Icon, Tag} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
 import Update from "./components/Update";
@@ -10,10 +10,10 @@ import Actions from "store/actions";
 
 import {useTranslation} from "react-i18next";
 import {useSelector, useDispatch} from "react-redux";
-import {CopyToClipboard} from "../../../components/SmallComponents";
+import {CopyToClipboard} from "components/SmallComponents";
 import Nestable from "react-nestable";
 import get from "lodash/get";
-import {ReactComponent as DotsIcon} from "../../../assets/images/base/dots.svg";
+import {ReactComponent as DotsIcon} from "assets/images/base/dots.svg";
 
 const List = () => {
     const langCode = useSelector(state => state.system.currentLangCode);
@@ -21,6 +21,7 @@ const List = () => {
     const [createModal, showCreateModal] = useState(false);
     const [updateModal, showUpdateModal] = useState(false);
     const [selected, setSelected] = useState(null);
+    const [metaModal, showMetaModal] = useState(false);
 
     const {t} = useTranslation();
     const dispatch = useDispatch();
@@ -110,6 +111,17 @@ const List = () => {
     return (
         <>
             <Modal
+                visible={metaModal}
+                onOk={() => showMetaModal(true)}
+                onCancel={() => showMetaModal(false)}
+                footer={null}
+                centered
+                width={430}
+                destroyOnClose
+            >
+                <Meta.MetaCategory {...{showMetaModal, selected}}/>
+            </Modal>
+            <Modal
                 visible={createModal}
                 onOk={() => showCreateModal(true)}
                 onCancel={() => showCreateModal(false)}
@@ -151,7 +163,7 @@ const List = () => {
                     params={{
                         sort: 'sort',
                         limit: 50,
-                        include: "file",
+                        include: "file,meta",
                         filter: {type: 1}
                     }}
                 >
@@ -166,13 +178,19 @@ const List = () => {
                                         collapsed={false}
                                         renderItem={({item, collapseIcon}) => (
                                             <div className={`mx-subdivision--item`}>
-                                                <div className="d-flex align-items-center">
-                                                    <div className="mx-title" style={{minWidth: '300px'}}>
+                                                <div className="d-flex align-items-center" style={{width: '100%'}}>
+                                                    <div className="mx-title" style={{width: '40%'}}>
                                                         {collapseIcon} {get(item, `name_${langCode}`)}
                                                     </div>
-                                                    <div className="pl-30">
+                                                    <div className="pl-30" style={{width: '40%'}}>
                                                         <CopyToClipboard str={`/category/${get(item, 'slug')}`}/>
                                                     </div>
+                                                    <Tag color={item.meta ? 'green' : 'blue'} className="cursor-pointer" onClick={() => {
+                                                        setSelected(item);
+                                                        showMetaModal(true);
+                                                    }}>
+                                                        <b>SEO</b>
+                                                    </Tag>
                                                 </div>
                                                 <Dropdown
                                                     trigger={["click"]}
