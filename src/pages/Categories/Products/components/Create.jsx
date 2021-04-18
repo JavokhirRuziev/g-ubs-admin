@@ -6,19 +6,15 @@ import Form from './Form';
 
 import get from "lodash/get";
 
-const Create = ({showCreateModal}) => {
+const Create = ({showCreateModal, loadMenuItems}) => {
   return (
-    <EntityForm.Main
+    <EntityForm.Default
       method="post"
-      entity="category"
-      name="categoryProduct"
       url="/categories"
-      appendData
-      primaryKey="id"
-      normalizeData={data => data}
       onSuccess={(data, resetForm) => {
         resetForm();
-        showCreateModal(false)
+        showCreateModal(false);
+        loadMenuItems()
       }}
       params={{
         include: 'meta'
@@ -70,7 +66,7 @@ const Create = ({showCreateModal}) => {
           </Spin>
         );
       }}
-    </EntityForm.Main>
+    </EntityForm.Default>
   );
 };
 
