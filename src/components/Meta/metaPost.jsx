@@ -44,6 +44,10 @@ const Meta = ({selected, showMetaModal, lang='ru'}) => {
             }}
             fields={[
                 {
+                    name: `title_${lang}`,
+                    value: get(meta, `title_${lang}`, '')
+                },
+                {
                     name: `meta_title_${lang}`,
                     value: get(meta, `meta_title_${lang}`, '')
                 },
@@ -72,7 +76,13 @@ const Meta = ({selected, showMetaModal, lang='ru'}) => {
 
                         <div>
                             <div className="title-md fs-16 mb-20">Мета теги</div>
-
+                            <Field
+                                component={Fields.AntInput}
+                                name={`title_${lang}`}
+                                type="text"
+                                placeholder="Введите заголовок (h1)"
+                                size="large"
+                            />
                             <Field
                                 component={Fields.AntInput}
                                 name={`meta_title_${lang}`}

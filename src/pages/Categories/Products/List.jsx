@@ -6,7 +6,6 @@ import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
 import Update from "./components/Update";
 import ModulesActions from "modules/entity/actions";
-import Actions from "store/actions";
 
 import {useTranslation} from "react-i18next";
 import {useSelector, useDispatch} from "react-redux";
@@ -22,6 +21,7 @@ const List = () => {
     const [updateModal, showUpdateModal] = useState(false);
     const [selected, setSelected] = useState(null);
     const [metaModal, showMetaModal] = useState(false);
+    const [canUpdate, setCanUpdate] = useState(false);
 
     const {t} = useTranslation();
     const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const List = () => {
     };
 
     const deleteAction = id => {
-        dispatch(Actions.Form.request({
+        dispatch(ModulesActions.Form.request({
             method: 'delete',
             entity: "category",
             name: `categoryProduct`,
@@ -56,6 +56,7 @@ const List = () => {
                         message: t("Успешно удалена"),
                         duration: 2
                     });
+                    setCanUpdate(prevState => !prevState);
                 },
                 error: () => {
                     notification["error"]({
@@ -70,7 +71,6 @@ const List = () => {
     };
 
     const updateMenuItems = (items) => {
-        const ids = items.reduce((prev, curr) => [...prev, curr.id], []);
         dispatch(ModulesActions.FormDefault.request({
             method: 'put',
             url: `/categories/sort`,
@@ -83,18 +83,6 @@ const List = () => {
                         message: t("Успешно изменено"),
                         duration: 2
                     });
-                    dispatch(Actions.entity.LoadAll.success({
-                        ids: ids,
-                        entity: 'category',
-                        name: 'categoryProduct',
-                        params: {page: 1},
-                        meta: {
-                            currentPage: 1,
-                            pageCount: 1,
-                            perPage: 50,
-                            totalCount: items.length
-                        },
-                    }))
                 },
                 error: () => {
                     notification["error"]({
@@ -160,10 +148,11 @@ const List = () => {
                     entity="category"
                     name="categoryProduct"
                     url="/categories"
+                    canUpdate={canUpdate}
                     params={{
                         sort: 'sort',
                         limit: 50,
-                        include: "file,meta",
+                        include: "file,meta,children",
                         filter: {type: 1}
                     }}
                 >
@@ -172,7 +161,7 @@ const List = () => {
                             <Spin spinning={!isFetched}>
                                 <div className="pad-20">
                                     <Nestable
-                                        maxDepth={1}
+                                        maxDepth={2}
                                         items={items}
                                         childrenProp={"children"}
                                         collapsed={false}
