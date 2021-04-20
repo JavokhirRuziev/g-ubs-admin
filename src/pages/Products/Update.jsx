@@ -9,6 +9,7 @@ import Actions from "store/actions/entities";
 import {useTranslation} from "react-i18next";
 import get from "lodash/get";
 import {useDispatch} from "react-redux";
+import moment from "moment";
 
 const Update = ({history, match}) => {
     const {t} = useTranslation();
@@ -58,6 +59,11 @@ const Update = ({history, match}) => {
                                 }))
                             }}
                             fields={[
+                                {
+                                    name: "created_at",
+                                    value: moment(get(item, 'created_at')),
+                                    onSubmitValue: value => (!!value ? moment(value).unix() : ""),
+                                },
                                 {
                                     name: "color",
                                     value: '#000000',
