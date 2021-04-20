@@ -116,14 +116,14 @@ const Update = ({location, history, match}) => {
                 }
               ]}
               params={{
-                extra: {append: 'documents0',_l: lang}
+                extra: {append: 'documents0',_l: tabLang}
               }}
             >
               {({isSubmitting, values, setFieldValue}) => {
                 return (
                   <Spin spinning={isSubmitting}>
 
-                    <Form {...{values, lang, setFieldValue, isUpdate: true, setSaveType}}/>
+                    <Form {...{values, lang:tabLang, setFieldValue, isUpdate: true, setSaveType}}/>
 
                   </Spin>
                 );
