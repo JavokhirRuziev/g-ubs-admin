@@ -154,7 +154,7 @@ const View = ({location, match}) => {
                                 {items.length > 0 ? (
                                     <div className="pad-20">
                                         <Nestable
-                                            maxDepth={5}
+                                            maxDepth={1}
                                             items={items}
                                             childrenProp="menuItems"
                                             collapsed={false}

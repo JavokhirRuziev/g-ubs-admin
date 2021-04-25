@@ -168,7 +168,7 @@ const List = () => {
                 <Spin spinning={!isFetched}>
                     <div className="pad-20">
                         <Nestable
-                            maxDepth={2}
+                            maxDepth={5}
                             items={items}
                             childrenProp={"children"}
                             collapsed={false}
