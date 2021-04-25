@@ -101,7 +101,7 @@ const List = () => {
             params: {
                 sort: 'sort',
                 limit: 50,
-                include: "file,meta,children",
+                include: "file,meta,children.children.children.children.children.children",
                 filter: {type: 1}
             },
             cb: {
