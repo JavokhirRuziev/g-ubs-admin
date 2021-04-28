@@ -7,7 +7,7 @@ import config from "config";
 import Actions from "modules/entity/actions";
 import {useDispatch} from "react-redux";
 
-const FmUpload = ({isLoading, setLoading, filterType, activeFolder}) => {
+const FmUpload = ({isLoading, setLoading, filterType, activeFolder,useFileName}) => {
     const [files, setValue] = useState([]);
     const [progress, setProgress] = useState("");
     const [visible, setVisible] = useState(true);
@@ -44,6 +44,7 @@ const FmUpload = ({isLoading, setLoading, filterType, activeFolder}) => {
           activeFolderId={activeFolder ? activeFolder.id : ''}
           showUploadList={false}
           defaultFileList={files}
+          useFileName={useFileName}
           multiple
           acceptAll
           setProgress={setProgress}

@@ -199,6 +199,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                                 component={Fields.UploadImageManager}
                                 name="threeD"
                                 isDocument={true}
+                                useFileName={1}
                                 label={t("Файл для 3D")}
                                 size="large"
                                 className={"mb-10"}
