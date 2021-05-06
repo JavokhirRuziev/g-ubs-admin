@@ -12,6 +12,7 @@ import get from "lodash/get";
 import qs from "query-string";
 import Import from "./components/Import";
 import {ReactComponent as PlusIcon} from "../../assets/images/icons/plus.svg";
+import {helpers} from "../../services";
 
 const List = ({history, location}) => {
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -128,7 +129,7 @@ const List = ({history, location}) => {
                     url="/products"
                     primaryKey="id"
                     params={{
-                        sort: '-id',
+                        sort: '-created_at',
                         limit: 30,
                         include: 'category,meta',
                         filter: {
@@ -161,6 +162,13 @@ const List = ({history, location}) => {
                                                 className: 'w-50',
                                                 render: value => <div
                                                     className="divider-wrapper">{value ? value : '-'}</div>
+                                            },
+                                            {
+                                                title: t("Дата"),
+                                                dataIndex: "created_at",
+                                                render: value => {
+                                                    return <div className="divider-wrapper">{helpers.formatDate(value)}</div>
+                                                }
                                             },
                                             {
                                                 title: t("Фото"),

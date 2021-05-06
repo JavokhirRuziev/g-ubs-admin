@@ -5,19 +5,15 @@ import EntityForm from 'modules/entity/forms';
 import Form from './Form';
 import get from "lodash/get";
 
-const Update = ({selected, showUpdateModal}) => {
+const Update = ({selected, showUpdateModal, loadMenuItems}) => {
   return (
     <EntityForm.Main
       method="put"
-      entity="category"
-      name={`categoryProduct`}
       url={`/categories/${get(selected, 'id')}`}
-      primaryKey="id"
-      normalizeData={data => data}
-      id={get(selected, 'id')}
       onSuccess={(data, resetForm) => {
         resetForm();
-        showUpdateModal(false)
+        showUpdateModal(false);
+        loadMenuItems();
       }}
       params={{
         include: 'meta'
@@ -65,7 +61,6 @@ const Update = ({selected, showUpdateModal}) => {
           onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : undefined
         }
       ]}
-      updateData
     >
       {({isSubmitting, values, setFieldValue}) => {
         return (

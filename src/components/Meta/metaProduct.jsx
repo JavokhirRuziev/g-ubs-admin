@@ -46,6 +46,10 @@ const Meta = ({selected, showMetaModal}) => {
             }}
             fields={[
                 {
+                    name: "title_ru",
+                    value: get(meta, 'title_ru', '')
+                },
+                {
                     name: "meta_title_ru",
                     value: get(meta, 'meta_title_ru', '')
                 },
@@ -58,6 +62,10 @@ const Meta = ({selected, showMetaModal}) => {
                     value: get(meta, 'meta_keywords_ru', '')
                 },
                 {
+                    name: "title_uz",
+                    value: get(meta, 'title_uz', '')
+                },
+                {
                     name: "meta_title_uz",
                     value: get(meta, 'meta_title_uz', '')
                 },
@@ -68,6 +76,10 @@ const Meta = ({selected, showMetaModal}) => {
                 {
                     name: "meta_keywords_uz",
                     value: get(meta, 'meta_keywords_uz', '')
+                },
+                {
+                    name: "title_en",
+                    value: get(meta, 'title_en', '')
                 },
                 {
                     name: "meta_title_en",
@@ -103,6 +115,13 @@ const Meta = ({selected, showMetaModal}) => {
                                 <TabPane tab="RU" key={'ru'}>
                                     <Field
                                         component={Fields.AntInput}
+                                        name="title_ru"
+                                        type="text"
+                                        placeholder="Введите заголовок (h1)"
+                                        size="large"
+                                    />
+                                    <Field
+                                        component={Fields.AntInput}
                                         name="meta_title_ru"
                                         type="text"
                                         placeholder="Введите meta title"
@@ -127,6 +146,13 @@ const Meta = ({selected, showMetaModal}) => {
                                 <TabPane tab="UZ" key={'uz'}>
                                     <Field
                                         component={Fields.AntInput}
+                                        name="title_uz"
+                                        type="text"
+                                        placeholder="Введите заголовок (h1)"
+                                        size="large"
+                                    />
+                                    <Field
+                                        component={Fields.AntInput}
                                         name="meta_title_uz"
                                         type="text"
                                         placeholder="Введите meta title"
@@ -149,6 +175,13 @@ const Meta = ({selected, showMetaModal}) => {
                                     />
                                 </TabPane>
                                 <TabPane tab="EN" key={'en'}>
+                                    <Field
+                                        component={Fields.AntInput}
+                                        name="title_en"
+                                        type="text"
+                                        placeholder="Введите заголовок (h1)"
+                                        size="large"
+                                    />
                                     <Field
                                         component={Fields.AntInput}
                                         name="meta_title_en"

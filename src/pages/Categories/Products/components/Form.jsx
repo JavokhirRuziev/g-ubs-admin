@@ -48,7 +48,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 className="mb-20"
                 optionLabel={`name_${lang}`}
                 filterParams={{
-                    type: "post"
+                    type: 1
                 }}
             />
 

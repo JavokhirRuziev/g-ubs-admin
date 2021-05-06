@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Board, Meta} from "components";
 import {Button, Spin, Modal, notification, Dropdown, Menu, Icon, Tag} from "antd";
-import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
 import Update from "./components/Update";
 import ModulesActions from "modules/entity/actions";
-import Actions from "store/actions";
 
 import {useTranslation} from "react-i18next";
 import {useSelector, useDispatch} from "react-redux";
@@ -22,6 +20,8 @@ const List = () => {
     const [updateModal, showUpdateModal] = useState(false);
     const [selected, setSelected] = useState(null);
     const [metaModal, showMetaModal] = useState(false);
+    const [items, setItems] = useState([]);
+    const [isFetched, setIsFetched] = useState(false);
 
     const {t} = useTranslation();
     const dispatch = useDispatch();
@@ -30,7 +30,6 @@ const List = () => {
         setSelected(value);
         showUpdateModal(true);
     };
-
     const onDeleteHandler = menuId => {
         Modal.confirm({
             title: t("Вы действительно хотите удалить?"),
@@ -43,7 +42,7 @@ const List = () => {
     };
 
     const deleteAction = id => {
-        dispatch(Actions.Form.request({
+        dispatch(ModulesActions.Form.request({
             method: 'delete',
             entity: "category",
             name: `categoryProduct`,
@@ -56,6 +55,7 @@ const List = () => {
                         message: t("Успешно удалена"),
                         duration: 2
                     });
+                    loadMenuItems();
                 },
                 error: () => {
                     notification["error"]({
@@ -68,9 +68,7 @@ const List = () => {
             }
         }))
     };
-
     const updateMenuItems = (items) => {
-        const ids = items.reduce((prev, curr) => [...prev, curr.id], []);
         dispatch(ModulesActions.FormDefault.request({
             method: 'put',
             url: `/categories/sort`,
@@ -83,18 +81,7 @@ const List = () => {
                         message: t("Успешно изменено"),
                         duration: 2
                     });
-                    dispatch(Actions.entity.LoadAll.success({
-                        ids: ids,
-                        entity: 'category',
-                        name: 'categoryProduct',
-                        params: {page: 1},
-                        meta: {
-                            currentPage: 1,
-                            pageCount: 1,
-                            perPage: 50,
-                            totalCount: items.length
-                        },
-                    }))
+                    loadMenuItems();
                 },
                 error: () => {
                     notification["error"]({
@@ -107,6 +94,28 @@ const List = () => {
             }
         }))
     }
+    const loadMenuItems = () => {
+        setIsFetched(false);
+        dispatch(ModulesActions.LoadDefault.request({
+            url: 'categories',
+            params: {
+                sort: 'sort',
+                limit: 50,
+                include: "file,meta,children.children.children.children.children.children",
+                filter: {type: 1}
+            },
+            cb: {
+                success:data => {
+                    setIsFetched(true);
+                    setItems(data.data)
+                }
+            }
+        }))
+    }
+
+    useEffect(() => {
+        loadMenuItems();
+    }, []);
 
     return (
         <>
@@ -130,7 +139,7 @@ const List = () => {
                 width={430}
                 destroyOnClose
             >
-                <Create {...{showCreateModal}}/>
+                <Create {...{showCreateModal, loadMenuItems}}/>
             </Modal>
             <Modal
                 visible={updateModal}
@@ -141,7 +150,7 @@ const List = () => {
                 width={430}
                 destroyOnClose
             >
-                <Update {...{selected, showUpdateModal}}/>
+                <Update {...{selected, showUpdateModal, loadMenuItems}}/>
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
@@ -156,71 +165,55 @@ const List = () => {
             </div>
 
             <Board className="border-none">
-                <EntityContainer.All
-                    entity="category"
-                    name="categoryProduct"
-                    url="/categories"
-                    params={{
-                        sort: 'sort',
-                        limit: 50,
-                        include: "file,meta",
-                        filter: {type: 1}
-                    }}
-                >
-                    {({items, isFetched, meta}) => {
-                        return (
-                            <Spin spinning={!isFetched}>
-                                <div className="pad-20">
-                                    <Nestable
-                                        maxDepth={1}
-                                        items={items}
-                                        childrenProp={"children"}
-                                        collapsed={false}
-                                        renderItem={({item, collapseIcon}) => (
-                                            <div className={`mx-subdivision--item`}>
-                                                <div className="d-flex align-items-center" style={{width: '100%'}}>
-                                                    <div className="mx-title" style={{width: '40%'}}>
-                                                        {collapseIcon} {get(item, `name_${langCode}`)}
-                                                    </div>
-                                                    <div className="pl-30" style={{width: '40%'}}>
-                                                        <CopyToClipboard str={`/category/${get(item, 'slug')}`}/>
-                                                    </div>
-                                                    <Tag color={item.meta ? 'green' : 'blue'} className="cursor-pointer" onClick={() => {
-                                                        setSelected(item);
-                                                        showMetaModal(true);
-                                                    }}>
-                                                        <b>SEO</b>
-                                                    </Tag>
-                                                </div>
-                                                <Dropdown
-                                                    trigger={["click"]}
-                                                    overlay={
-                                                        <Menu style={{marginTop: 10}}>
-                                                            <Menu.Item onClick={() => {
-                                                                openEditModal(item)
-                                                            }}>
-                                                                <Icon type="edit"/>
-                                                                <span>{t('Редактировать')}</span>
-                                                            </Menu.Item>
-                                                            <Menu.Item onClick={() => onDeleteHandler(item.id)}>
-                                                                <Icon type="delete" />
-                                                                <span>{t('Удалить')}</span>
-                                                            </Menu.Item>
-                                                        </Menu>
-                                                    }>
-                                                    <Icon component={DotsIcon}/>
-                                                </Dropdown>
-                                            </div>
-                                        )}
-                                        onChange={(items) => {
-                                            updateMenuItems(items)
-                                        }}
-                                    />
+                <Spin spinning={!isFetched}>
+                    <div className="pad-20">
+                        <Nestable
+                            maxDepth={5}
+                            items={items}
+                            childrenProp={"children"}
+                            collapsed={false}
+                            renderItem={({item, collapseIcon}) => (
+                                <div className={`mx-subdivision--item`}>
+                                    <div className="d-flex align-items-center" style={{width: '100%'}}>
+                                        <div className="mx-title" style={{width: '40%'}}>
+                                            {collapseIcon} {get(item, `name_${langCode}`)}
+                                        </div>
+                                        <div className="pl-30" style={{width: '40%'}}>
+                                            <CopyToClipboard str={`/category/${get(item, 'slug')}`}/>
+                                        </div>
+                                        <Tag color={item.meta ? 'green' : 'blue'} className="cursor-pointer" onClick={() => {
+                                            setSelected(item);
+                                            showMetaModal(true);
+                                        }}>
+                                            <b>SEO</b>
+                                        </Tag>
+                                    </div>
+                                    <Dropdown
+                                        trigger={["click"]}
+                                        overlay={
+                                            <Menu style={{marginTop: 10}}>
+                                                <Menu.Item onClick={() => {
+                                                    openEditModal(item)
+                                                }}>
+                                                    <Icon type="edit"/>
+                                                    <span>{t('Редактировать')}</span>
+                                                </Menu.Item>
+                                                <Menu.Item onClick={() => onDeleteHandler(item.id)}>
+                                                    <Icon type="delete" />
+                                                    <span>{t('Удалить')}</span>
+                                                </Menu.Item>
+                                            </Menu>
+                                        }>
+                                        <Icon component={DotsIcon}/>
+                                    </Dropdown>
                                 </div>
-                            </Spin>
-                        );
-                    }}
-                </EntityContainer.All>
+                            )}
+                            onChange={(items) => {
+                                updateMenuItems(items)
+                            }}
+                        />
+                    </div>
+                </Spin>
             </Board>
         </>
     );

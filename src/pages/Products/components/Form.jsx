@@ -143,6 +143,19 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                                     }
                                 }}
                             />
+                            <Field
+                                component={Fields.AntDatePicker}
+                                name="created_at"
+                                size="large"
+                                label={t("Дата создания")}
+                                placeholder={t("Дата создания")}
+                                style={{width: '100%'}}
+                                format={"DD.MM.YYYY / HH:mm"}
+                                showTime={true}
+                                onChange={(date) => {
+                                    setFieldValue('created_at', date)
+                                }}
+                            />
                             <div className="d-flex align-items-center mb-20">
                                 <Switch
                                     onChange={value => {
@@ -186,6 +199,7 @@ const Form = ({ lang, setFieldValue, values, setSaveType, isUpdate, isFetched })
                                 component={Fields.UploadImageManager}
                                 name="threeD"
                                 isDocument={true}
+                                useFileName={1}
                                 label={t("Файл для 3D")}
                                 size="large"
                                 className={"mb-10"}

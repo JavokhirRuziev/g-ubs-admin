@@ -7,6 +7,7 @@ import Form from './components/Form';
 import {useTranslation} from "react-i18next";
 import get from "lodash/get";
 import {useHistory} from "react-router";
+import moment from "moment";
 
 const Create = () => {
   const {t} = useTranslation();
@@ -27,6 +28,11 @@ const Create = () => {
           history.push(`/products/update/${get(data, 'id')}`)
         }}
         fields={[
+          {
+            name: "created_at",
+            value: moment(),
+            onSubmitValue: value => (!!value ? moment(value).unix() : ""),
+          },
           {
             name: "color",
             value: '#000000',
