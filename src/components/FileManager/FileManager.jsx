@@ -14,7 +14,8 @@ const FileManager = ({
                          onCancel = () => {},
                          isDocument,
                          isMulti,
-                         useFileName
+                         useFileName,
+                         useFolderPath
                      }) => {
     const [isLoading, setLoading] = useState(false);
     const [size, setSize] = useState('low');
@@ -57,7 +58,8 @@ const FileManager = ({
                         activeFolder,
                         setLoading,
                         isLoading,
-                        useFileName
+                        useFileName,
+                        useFolderPath
                     }}/>
                 ) : (
                     <FMList {...{

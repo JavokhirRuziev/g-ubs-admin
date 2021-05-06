@@ -9,7 +9,7 @@ import {helpers} from "services";
 import FMUpload from "./fmUpload";
 import {useDebounce} from "use-debounce";
 
-const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoading, activeFolder, useFileName}) => {
+const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoading, activeFolder, useFileName,useFolderPath}) => {
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
     const [searchQuery] = useDebounce(query, 600);
@@ -65,7 +65,7 @@ const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoad
 
                         {filterType === "images" ? (
                             <div className="fm-list">
-                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder, useFileName}}/>
+                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder, useFileName,useFolderPath}}/>
                                 {items.map(file => {
                                     let isActive = selectedItems.find(i => i.id === file.id);
                                     return(
