@@ -46,6 +46,11 @@ const Update = ({selected, showUpdateModal}) => {
           onSubmitValue: value => value ? 1 : 0
         },
         {
+          name: "can_download",
+          value: get(selected, 'can_download'),
+          onSubmitValue: value => value ? 1 : 0
+        },
+        {
           name: "files",
           value: get(selected, 'files0') ? get(selected, 'files0', []) : [],
           onSubmitValue: value => value ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : undefined

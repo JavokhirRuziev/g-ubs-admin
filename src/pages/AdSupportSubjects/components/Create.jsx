@@ -42,6 +42,11 @@ const Create = ({showCreateModal, parent_id}) => {
           onSubmitValue: value => value ? 1 : 0
         },
         {
+          name: "can_download",
+          value: true,
+          onSubmitValue: value => value ? 1 : 0
+        },
+        {
           name: "files",
           value: [],
           onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")

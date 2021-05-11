@@ -86,6 +86,16 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 />
             </div>
 
+            <div className="mb-20">
+                <div className="ant-label">{"Показать ссылька скачать"}</div>
+                <Switch
+                    onChange={value => {
+                        setFieldValue('can_download', value)
+                    }}
+                    checked={values.can_download}
+                />
+            </div>
+
             <Button
                 type="primary"
                 size="large"
