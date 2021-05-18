@@ -9,14 +9,14 @@ import {helpers} from "services";
 import FMUpload from "./fmUpload";
 import {useDebounce} from "use-debounce";
 
-const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoading, activeFolder}) => {
+const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoading, activeFolder, useFileName,useFolderPath}) => {
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
     const [searchQuery] = useDebounce(query, 600);
 
     useEffect(() => {
         setPage(1);
-    }, [filterType]);
+    }, [filterType,activeFolder]);
 
     const onClickHandler = (e, item) => {
         if(e.ctrlKey) {
@@ -47,7 +47,7 @@ const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoad
                 page,
                 extra: {title: searchQuery},
                 filter: {
-                    ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx', 'xls', 'xlsx', 'txt', 'doc', 'pdf'],
+                    ext: filterType === 'images' ? ['jpg', 'jpeg', 'png', 'svg'] : ['docx','xls','xlsx','txt','doc','pdf','mtl','obj'],
                     folder_id: activeFolder ? activeFolder.id : ''
                 }
             }}>
@@ -65,7 +65,7 @@ const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoad
 
                         {filterType === "images" ? (
                             <div className="fm-list">
-                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder}}/>
+                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder, useFileName,useFolderPath}}/>
                                 {items.map(file => {
                                     let isActive = selectedItems.find(i => i.id === file.id);
                                     return(
@@ -80,7 +80,7 @@ const FmList = ({selectedItems, setSelectedItems, filterType, setLoading, isLoad
                             </div>
                         ) : (
                             <div className="fm-list__doc">
-                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder}}/>
+                                <FMUpload {...{setLoading, isLoading, filterType, activeFolder, useFileName}}/>
                                 {items.map(file => {
                                     let isActive = selectedItems.find(i => i.id === file.id);
                                     return(

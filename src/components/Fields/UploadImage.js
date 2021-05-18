@@ -6,7 +6,7 @@ import get from "lodash/get";
 
 const UploadImage = (props) => {
   const token = storage.get("token");
-  const { setProgress, errorCb, activeFolderId, acceptAll } = props;
+  const { setProgress, errorCb, activeFolderId, useFileName, useFolderPath, acceptAll } = props;
 
   const config = {
     onUploadProgress: function(progressEvent) {
@@ -27,6 +27,10 @@ const UploadImage = (props) => {
     if(activeFolderId){
       data.append('folder_id', activeFolderId);
     }
+    if(useFolderPath){
+      data.append('useFolderPath', useFolderPath);
+    }
+    data.append('useFileName', useFileName);
 
     axios
       .post(options.action, data, config)

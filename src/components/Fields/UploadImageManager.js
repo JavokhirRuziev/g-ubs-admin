@@ -8,7 +8,7 @@ import {ReactComponent as DeleteIcon} from "./icons/delete.svg";
 import cx from "classnames";
 import {helpers} from "services";
 
-const UploadImageManager = ({columns=12, isMulti, isDocument = false, limit = 1, label, field, form: {touched, errors, setFieldValue, values}, className}) => {
+const UploadImageManager = ({useFileName=0,useFolderPath,columns=12, isMulti, isDocument = false, limit = 1, label, field, form: {touched, errors, setFieldValue, values}, className}) => {
   const [visible, setVisible] = useState(false);
 
   const removeHandler = selected => {
@@ -29,6 +29,8 @@ const UploadImageManager = ({columns=12, isMulti, isDocument = false, limit = 1,
         onCancel={() => {
           setVisible(false)
         }}
+        useFileName={useFileName}
+        useFolderPath={useFolderPath}
         isMulti={isMulti}
         visible={visible}
         isDocument={isDocument}

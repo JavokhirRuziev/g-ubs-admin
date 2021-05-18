@@ -170,7 +170,8 @@ const Update = ({history, match}) => {
                                             setFieldValue,
                                             isUpdate: true,
                                             isFetched,
-                                            setSaveType
+                                            setSaveType,
+                                            productId: get(item, 'id')
                                         }}/>
 
                                     </Spin>

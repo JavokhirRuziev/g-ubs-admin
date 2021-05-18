@@ -101,7 +101,7 @@ const List = () => {
             params: {
                 sort: 'sort',
                 limit: 50,
-                include: "file,meta,children",
+                include: "file,meta,children.children.children.children.children.children",
                 filter: {type: 1}
             },
             cb: {
@@ -168,7 +168,7 @@ const List = () => {
                 <Spin spinning={!isFetched}>
                     <div className="pad-20">
                         <Nestable
-                            maxDepth={2}
+                            maxDepth={5}
                             items={items}
                             childrenProp={"children"}
                             collapsed={false}
