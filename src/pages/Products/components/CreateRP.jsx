@@ -20,7 +20,8 @@ const CreateRP = ({showCreateModal, parent_id}) => {
       }}
       fields={[
         {
-          name: "code"
+          name: "parent_id",
+          value: parent_id,
         },
         {
           name: "name_ru",
@@ -31,15 +32,31 @@ const CreateRP = ({showCreateModal, parent_id}) => {
           required: true
         },
         {
-          name: "amount",
-          required: true,
+          name: "code"
         },
         {
-          name: "parent_id",
-          value: parent_id,
+          name: "amount",
         },
         {
           name: "price",
+        },
+        {
+          name: 'ten'
+        },
+        {
+          name: "amount_box"
+        },
+        {
+          name: "price_box"
+        },
+        {
+          name: "width"
+        },
+        {
+          name: "length"
+        },
+        {
+          name: "thickness"
         }
       ]}
     >
