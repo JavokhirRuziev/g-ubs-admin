@@ -31,11 +31,9 @@ const UpdateRP = ({selected, showUpdateModal, parent_id}) => {
         {
           name: "size",
           value: get(selected, 'size'),
-          required: true
         },
         {
           name: "amount",
-          required: true,
           value: get(selected, 'amount'),
         },
         {
