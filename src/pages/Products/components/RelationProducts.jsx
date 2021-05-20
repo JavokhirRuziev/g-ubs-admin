@@ -70,7 +70,7 @@ const RelationProducts = () => {
                 onCancel={() => showCreateModal(false)}
                 footer={null}
                 centered
-                width={430}
+                width={600}
                 destroyOnClose
             >
                 <Create {...{showCreateModal, parent_id: id}}/>
@@ -81,7 +81,7 @@ const RelationProducts = () => {
                 onCancel={() => showUpdateModal(false)}
                 footer={null}
                 centered
-                width={430}
+                width={600}
                 destroyOnClose
             >
                 <Update {...{selected, showUpdateModal, parent_id: id}}/>
@@ -113,39 +113,71 @@ const RelationProducts = () => {
                         <Spin spinning={!isFetched}>
                             <div className="default-table default-table--wb">
                                 <Table
-                                    hasEdit={true}
                                     hasDelete={true}
                                     rowKey="id"
-                                    onEdit={value => openEditModal(value)}
                                     onDelete={value => onDeleteHandler(value.id)}
+                                    onRow={(record, rowIndex) => {
+                                        return {
+                                            onClick: () => openEditModal(record), // click row
+                                        };
+                                    }}
                                     columns={[
-                                        {
-                                            title: t("ID"),
-                                            dataIndex: "id",
-                                            className: 'w-50',
-                                            render: value => <div className="divider-wrapper">{value}</div>
-                                        },
+                                        // {
+                                        //     title: t("ID"),
+                                        //     dataIndex: "id",
+                                        //     className: 'w-50',
+                                        //     render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        // },
                                         {
                                             title: t("Артикул"),
                                             dataIndex: `code`,
-                                            render: value => <div className="divider-wrapper">{value}</div>
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                                         },
                                         {
-                                            title: t("Размер"),
-                                            dataIndex: `size`,
-                                            render: value => <div className="divider-wrapper">{value}</div>
+                                            title: t("Тен №"),
+                                            dataIndex: `ten`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                                         },
                                         {
                                             title: t("Упаковка шт."),
                                             dataIndex: `amount`,
-                                            render: value => <div className="divider-wrapper">{value}</div>
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Штук в коробке"),
+                                            dataIndex: `amount_box`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                                         },
                                         {
                                             title: t("Цена"),
                                             dataIndex: `price`,
-                                            render: value => <div className="divider-wrapper">{value}</div>
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                                         },
-
+                                        {
+                                            title: t("Цена коробки"),
+                                            dataIndex: `price_box`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Размер"),
+                                            dataIndex: `size`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Толщина мм."),
+                                            dataIndex: `thickness`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Ширина"),
+                                            dataIndex: `width`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Длина"),
+                                            dataIndex: `length`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        }
                                     ]}
                                     dataSource={items}
                                 />
