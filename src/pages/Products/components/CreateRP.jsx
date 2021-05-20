@@ -29,7 +29,6 @@ const CreateRP = ({showCreateModal, parent_id}) => {
         },
         {
           name: "size",
-          required: true
         },
         {
           name: "code"
