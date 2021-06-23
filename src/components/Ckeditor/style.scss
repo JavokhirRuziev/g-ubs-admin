@@ -18,15 +18,15 @@
     background-color: #e6e6e6;
   }
 }
+.ck .ck-content{
+  height: 500px;
+  overflow-y: auto;
 
-.ck-editor__main {
-    height: 400px;
-	overflow-y: auto;
 }
 
 .description .ck-editor__main {
 	height: 200px;
-	
+
 	.ck-editor__editable_inline {
 		min-height: 190px;
 	}

@@ -9,7 +9,7 @@
     "@sentry/browser": "^4.6.5",
     "antd": "^3.20.6",
     "axios": "^0.18.0",
-    "ckeditor-custom-ckeditor5-build-classic-with-plenty-add-features": "^19.0.1",
+    "ckeditor5-build-oks": "^1.0.0",
     "classnames": "^2.2.6",
     "formik": "^1.5.1",
     "history": "^4.7.2",
@@ -56,9 +56,7 @@
     "build-develop": "cp ./.env.develop .env && cross-env NODE_ENV=production CI=false react-scripts build",
     "build-master": "cp ./.env.master .env && cross-env NODE_ENV=production CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test-coverage": "react-scripts test --env=jsdom --coverage",
-    "createFuncComponent": "node cli/createFuncComponent.js --path",
-    "createClassComponent": "node cli/createClassComponent.js --path"
+    "test-coverage": "react-scripts test --env=jsdom --coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
