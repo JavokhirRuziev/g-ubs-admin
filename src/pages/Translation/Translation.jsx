@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Pagination, Spin, notification} from "antd";
+import { Pagination, Spin, notification } from "antd";
 import { withTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -34,7 +34,7 @@ class List extends Component {
 			method: "post",
 			entity: "translation",
 			name: "all",
-			url: "/main/list/react",
+			url: "/translations/list",
 			primaryKey: "id",
 			id: newValue.id,
 			values: newValue,
@@ -64,7 +64,7 @@ class List extends Component {
 		const { t, location } = this.props;
 		const { page } = qs.parse(location.search);
 
-    const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+		const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 
 		return (
 			<>
@@ -73,14 +73,14 @@ class List extends Component {
 				</div>
 				<Board>
 					<div className="default-table pad-15">
-						<Filter/>
+						<Filter />
 						<EntityContainer.All
 							entity="translation"
 							name="all"
 							primaryKey="id"
 							dataKey="data"
-							url="/main/list/react"
-              params={{ limit: 10, sort: "-id", page, extra: {message: params.message} }}>
+							url="/translations/list"
+							params={{ limit: 10, sort: "-id", page, extra: { message: params.message } }}>
 							{({ items, isFetched, meta = {} }) => (
 								<>
 									<Spin spinning={!isFetched || this.state.loading}>
@@ -97,7 +97,7 @@ class List extends Component {
 													dataIndex: "message"
 												},
 												{
-													title: t("Лотин алифбосида"),
+													title: t("Узбекский"),
 													dataIndex: "uz",
 													editable: true,
 													render: (text, record) => {
@@ -105,21 +105,13 @@ class List extends Component {
 													}
 												},
 												{
-													title: t("На русском языке"),
+													title: t("Русский"),
 													dataIndex: "ru",
 													editable: true,
 													render: (text, record) => {
 														return get(record, "ru", "");
 													}
-												},
-												{
-													title: t("In English"),
-													dataIndex: "en",
-													editable: true,
-													render: (text, record) => {
-														return get(record, "en", "");
-													}
-												},
+												}
 											]}
 											dataSource={items}
 										/>
