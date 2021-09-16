@@ -56,6 +56,18 @@ const CreateRP = ({showCreateModal, parent_id}) => {
         },
         {
           name: "thickness"
+        },
+        {
+          name: "capacity"
+        },
+        {
+          name: "weight"
+        },
+        {
+          name: "height"
+        },
+        {
+          name: "diameter"
         }
       ]}
     >

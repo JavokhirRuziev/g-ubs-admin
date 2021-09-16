@@ -100,6 +100,43 @@ const Form = ({isUpdate, submitForm}) => {
                         size="large"
                     />
                 </div>
+
+                <div className="col-6">
+                    <Field
+                        component={Fields.AntInput}
+                        name="capacity"
+                        type="text"
+                        placeholder="Объем, л"
+                        size="large"
+                    />
+                </div>
+                <div className="col-6">
+                    <Field
+                        component={Fields.AntInput}
+                        name="weight"
+                        type="text"
+                        placeholder="Масса нетто, кг"
+                        size="large"
+                    />
+                </div>
+                <div className="col-6">
+                    <Field
+                        component={Fields.AntInput}
+                        name="height"
+                        type="text"
+                        placeholder="Высота, мм"
+                        size="large"
+                    />
+                </div>
+                <div className="col-6">
+                    <Field
+                        component={Fields.AntInput}
+                        name="diameter"
+                        type="text"
+                        placeholder="Диаметр, мм"
+                        size="large"
+                    />
+                </div>
             </div>
 
             <Button

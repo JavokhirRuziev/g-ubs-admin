@@ -122,12 +122,6 @@ const RelationProducts = () => {
                                         };
                                     }}
                                     columns={[
-                                        // {
-                                        //     title: t("ID"),
-                                        //     dataIndex: "id",
-                                        //     className: 'w-50',
-                                        //     render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
-                                        // },
                                         {
                                             title: t("Артикул"),
                                             dataIndex: `code`,
@@ -177,7 +171,28 @@ const RelationProducts = () => {
                                             title: t("Длина"),
                                             dataIndex: `length`,
                                             render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
-                                        }
+                                        },
+
+                                        {
+                                            title: t("Объем, л"),
+                                            dataIndex: `capacity`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Масса нетто, кг"),
+                                            dataIndex: `weight`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Высота, мм"),
+                                            dataIndex: `height`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
+                                        {
+                                            title: t("Диаметр, мм"),
+                                            dataIndex: `diameter`,
+                                            render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                                        },
                                     ]}
                                     dataSource={items}
                                 />

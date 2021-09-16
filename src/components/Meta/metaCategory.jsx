@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 
 const { TabPane } = Tabs;
 
-const Meta = ({selected, showMetaModal}) => {
+const Meta = ({selected, showMetaModal, customUpdate, successCb = () => {}}) => {
     const {t} = useTranslation();
     const [activeTab, setTab] = useState('ru');
     const dispatch = useDispatch();
@@ -42,7 +42,11 @@ const Meta = ({selected, showMetaModal}) => {
             onSuccess={(data, resetForm) => {
                 resetForm();
                 showMetaModal(false);
-                includeMeta(data);
+                if(customUpdate){
+                    successCb()
+                }else{
+                    includeMeta(data);
+                }
             }}
             fields={[
                 {

@@ -67,6 +67,22 @@ const UpdateRP = ({selected, showUpdateModal, parent_id}) => {
         {
           name: "thickness",
           value: get(selected, 'thickness'),
+        },
+        {
+          name: "capacity",
+          value: get(selected, 'capacity'),
+        },
+        {
+          name: "weight",
+          value: get(selected, 'weight'),
+        },
+        {
+          name: "height",
+          value: get(selected, 'height'),
+        },
+        {
+          name: "diameter",
+          value: get(selected, 'diameter'),
         }
       ]}
       updateData

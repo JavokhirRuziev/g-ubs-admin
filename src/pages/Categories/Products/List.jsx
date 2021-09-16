@@ -128,7 +128,13 @@ const List = () => {
                 width={430}
                 destroyOnClose
             >
-                <Meta.MetaCategory {...{showMetaModal, selected}}/>
+                <Meta.MetaCategory
+                    {...{showMetaModal, selected}}
+                    customUpdate={true}
+                    successCb={() => {
+                        loadMenuItems();
+                    }}
+                />
             </Modal>
             <Modal
                 visible={createModal}
