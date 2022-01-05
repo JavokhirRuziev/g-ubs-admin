@@ -1,21 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
-import {Table, Board } from "components";
+import {Table, Board} from "components";
 import {Button, Pagination, Spin, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
+import Create from "./components/Create";
+import Update from "./components/Update";
 import Actions from "modules/entity/actions";
+
 import {useTranslation} from "react-i18next";
-import {useSelector, useDispatch} from "react-redux";
-import qs from "query-string";
-import Filter from "./components/Filter";
+import {useDispatch} from "react-redux";
 
-const List = ({history, location}) => {
+const Index = () => {
 
+  const [createModal, showCreateModal] = useState(false);
+  const [updateModal, showUpdateModal] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [page, setPage] = useState(1);
 
-  const langCode = useSelector(state => state.system.currentLangCode);
-  const [tabLang, setTabLang] = useState(langCode);
   const {t} = useTranslation();
   const dispatch = useDispatch();
+
+  const openEditModal = value => {
+    setSelected(value);
+    showUpdateModal(true);
+  };
 
   const onDeleteHandler = menuId => {
     Modal.confirm({
@@ -27,18 +35,15 @@ const List = ({history, location}) => {
       onOk: () => deleteAction(menuId),
     });
   };
+
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "locations",
-      name: `locations`,
+      entity: "category",
+      name: `all`,
       id: id,
-      url: `/shops/${id}`,
+      url: `/categories/${id}`,
       deleteData: true,
-      primaryKey: 'id',
-      params: {
-       extra: { _l: tabLang }
-      },
       cb: {
         success: () => {
           notification["success"]({
@@ -57,55 +62,51 @@ const List = ({history, location}) => {
     }))
   };
 
-  const params = qs.parse(location.search, {ignoreQueryPrefix: true});
-
-
-  const onChange = page => {
-    const query = qs.parse(location.search);
-    const search = {...query, page};
-    history.push({
-      search: qs.stringify(search)
-    });
-  };
-  const {page = 1, lang} = qs.parse(location.search);
-
-
-  useEffect(()=> {
-    if (lang){
-      setTabLang(lang)
-    }
-  }, []);
   return (
     <>
+      <Modal
+        visible={createModal}
+        onOk={() => showCreateModal(true)}
+        onCancel={() => showCreateModal(false)}
+        footer={null}
+        centered
+        width={430}
+        destroyOnClose
+      >
+        <Create {...{showCreateModal}}/>
+      </Modal>
+      <Modal
+        visible={updateModal}
+        onOk={() => showUpdateModal(true)}
+        onCancel={() => showUpdateModal(false)}
+        footer={null}
+        centered
+        width={430}
+        destroyOnClose
+      >
+        <Update {...{selected, showUpdateModal}}/>
+      </Modal>
+
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t('Локации')}</div>
+        <div className="title-md">{t("Категории")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/locations/create?lang=${tabLang}&page=${page}`)}
+          onClick={() => showCreateModal(true)}
         >{t('Добавить')}</Button>
       </div>
 
-
       <Board className="border-none">
-        <Filter/>
         <EntityContainer.All
-          entity="locations"
-          name={`locations`}
-          url="/shops"
-          primaryKey="id"
+          entity="category"
+          name={`all`}
+          url="/categories"
           params={{
-            sort: '-id',
-            limit: 10,
-            extra: {
-              title: params.title
-            },
-            filter: {
-              status: params.status,
-            },
-            page
+            limit: 50,
+            page,
+            sort: 'sort'
           }}
         >
           {({items, isFetched, meta}) => {
@@ -116,7 +117,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/locations/update/${value.id}?lang=${tabLang}&page=${page}`)}
+                    onEdit={value => openEditModal(value)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -126,13 +127,18 @@ const List = ({history, location}) => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Загаловок"),
-                        dataIndex: `title_${tabLang}`,
+                        title: t("Название (RU)"),
+                        dataIndex: "title_ru",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
-                        title: t("Телефон"),
-                        dataIndex: "phone",
+                        title: t("Название (UZ)"),
+                        dataIndex: "title_uz",
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Название (EN)"),
+                        dataIndex: "title_en",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
@@ -155,7 +161,7 @@ const List = ({history, location}) => {
                       current={meta.currentPage}
                       pageSize={meta.perPage}
                       total={meta.totalCount}
-                      onChange={onChange}
+                      onChange={newPage => setPage(newPage)}
                     />
                   </div>
                 )}
@@ -168,4 +174,4 @@ const List = ({history, location}) => {
   );
 };
 
-export default List;
+export default Index;

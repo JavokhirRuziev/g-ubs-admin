@@ -9,7 +9,7 @@ const Create = ({showCreateModal}) => {
     <EntityForm.Main
       method="post"
       entity="category"
-      name="categoryPost"
+      name={`all`}
       url="/categories"
       appendData
       primaryKey="id"
@@ -19,35 +19,11 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {
-          name: "name_ru",
-          required: true
-        },
-        {
-          name: "name_en",
-          required: true
-        },
-        {
-          name: "name_uz",
-          required: true
-        },
-        {
-          name: "status",
-          value: true,
-          onSubmitValue: value => value ? 1 : 0
-        },
-        {
-          name: "type",
-          value: 2
-        },
-        {
-          name: "sort",
-        },
-        {
-          name: "file",
-          value: [],
-          onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-        },
+        {name: "title_ru", required: true},
+        {name: "title_uz", required: true},
+        {name: "title_en", required: true},
+        {name: "sort", type: 'number'},
+        {name: "status", value: true, onSubmitValue: value => value ? 1 : 0}
       ]}
     >
       {({isSubmitting, values, setFieldValue}) => {

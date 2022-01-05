@@ -7,54 +7,10 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
     const menu = [
         {
             id: 'product',
-            title: t('Продукты'),
-            link: '/products',
-            icon: 'menu-i-page'
-        },
-        {
-            id: 'posts',
-            title: t('Посты'),
-            icon: 'menu-i-category',
-            submenu: [
-                {id: 'post-news', title: "Новости", link: '/posts'},
-                {id: 'post-blog', title: "Блоги", link: '/blogs'},
-            ]
-        },
-        {
-            id: 'gallery',
-            title: t('Галерея'),
-            icon: 'menu-i-category',
-            submenu: [
-                {id: 'gallery-photo', title: "Фото", link: '/gallery/photo'},
-                {id: 'gallery-video', title: "Видео", link: '/gallery/video'},
-            ]
-        },
-        {
-            id: 'category',
-            title: t('Категория'),
-            icon: 'menu-i-category',
-            submenu: [
-                {id: 'category-posts', title: "Новости", link: '/categories/posts'},
-                {id: 'category-blogs', title: "Блоги", link: '/categories/blogs'},
-                {id: 'category-products', title: "Продукты", link: '/categories/products'},
-            ]
-        },
-        {
-            id: 'settings',
-            title: t('Настройки'),
-            icon: 'menu-i-setting',
-            submenu: [
-                {id: 'settings-menu', title: t('Меню'), link: '/menu'},
-                {id: 'settings-others', title: t('Основные'), link: '/settings'},
-                {id: 'settings-translation', title: t('Переводы'), link: '/translation'},
-            ]
-        },
-        {id: 'pages', title: t('Страницы'), link: '/pages', icon: 'menu-i-page'},
-        {id: 'partners', title: t('Партнеры'), link: '/partners', icon: 'menu-i-page'},
-        {id: 'banners', title: t('Баннеры'), link: '/banners', icon: 'menu-i-page'},
-        {id: 'shops', title: t('Локации'), link: '/locations', icon: 'menu-i-page'},
-        {id: 'feedback', title: t('Обратная связь'), link: '/feedback', icon: 'menu-i-list'},
-        {id: 'ad-support', title: t('Рекламная поддержка'), link: '/ad-support', icon: 'menu-i-list'}
+            title: t('Категории'),
+            link: '/categories',
+            icon: 'menu-i-category'
+        }
     ];
 
     const [toggledSubmenu, setToggleSubmenu] = useState(null);
