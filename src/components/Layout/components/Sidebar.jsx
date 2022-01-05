@@ -6,10 +6,16 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
     const {t} = useTranslation();
     const menu = [
         {
-            id: 'product',
+            id: 'category',
             title: t('Категории'),
             link: '/categories',
             icon: 'menu-i-category'
+        },
+        {
+            id: 'company',
+            title: t('Компании'),
+            link: '/companies',
+            icon: 'menu-i-list'
         }
     ];
 

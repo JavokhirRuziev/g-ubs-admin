@@ -9,9 +9,14 @@ import App from "./App";
 
 const Categories = lazy(() => import("./pages/Categories"));
 
+const Companies = lazy(() => import("./pages/Companies/List"));
+const CompaniesCreate = lazy(() => import("./pages/Companies/Create"));
+const CompaniesUpdate = lazy(() => import("./pages/Companies/Update"));
+
 const Settings = lazy(() => import("./pages/Settings/List"));
 const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
 const SettingsUpdate = lazy(() => import("./pages/Settings/Update"));
+
 const Translation = lazy(() => import("./pages/Translation"));
 const Users = lazy(() => import("./pages/Users/List"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -21,6 +26,10 @@ const Logout = lazy(() => import("./pages/Login/Logout"));
 
 const routes = [
 	{ path: "/categories", exact: true, component: Categories },
+
+	{ path: "/companies", exact: true, component: Companies },
+	{ path: "/companies/create", exact: true, component: CompaniesCreate },
+	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate },
 
 	{ path: "/settings", exact: true, component: Settings },
 	{ path: "/settings/create", exact: true, component: SettingsCreate },
