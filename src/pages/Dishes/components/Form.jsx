@@ -3,6 +3,7 @@ import React from 'react';
 import {Fields, GridElements, Panel} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
+import Ingredients from "./Ingredients";
 
 import {useTranslation} from "react-i18next";
 import get from "lodash/get";
@@ -53,6 +54,10 @@ const Form = ({isUpdate, setFieldValue, values, lang}) => {
                         }}
                         optionLabel={option => get(option, 'translate.name')}
                     />
+
+                    {isUpdate && (
+                        <Ingredients/>
+                    )}
                 </Panel>
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>

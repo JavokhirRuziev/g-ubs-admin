@@ -94,7 +94,7 @@ const Update = ({location, history, match}) => {
                 },
                 {
                   name: "gallery",
-                  value: get(item, 'gallery0', []),
+                  value: get(item, 'gallery0') ? get(item, 'gallery0') : [],
                   onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
                 },
                 {

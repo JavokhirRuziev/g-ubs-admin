@@ -29,6 +29,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
 
 const routes = [
+	{ path: "/", exact: true, component: Dishes },
 	{ path: "/categories", exact: true, component: Categories },
 
 	{ path: "/companies", exact: true, component: Companies },
