@@ -13,6 +13,10 @@ const Companies = lazy(() => import("./pages/Companies/List"));
 const CompaniesCreate = lazy(() => import("./pages/Companies/Create"));
 const CompaniesUpdate = lazy(() => import("./pages/Companies/Update"));
 
+const Dishes = lazy(() => import("./pages/Dishes/List"));
+const DishesCreate = lazy(() => import("./pages/Dishes/Create"));
+const DishesUpdate = lazy(() => import("./pages/Dishes/Update"));
+
 const Settings = lazy(() => import("./pages/Settings/List"));
 const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
 const SettingsUpdate = lazy(() => import("./pages/Settings/Update"));
@@ -30,6 +34,10 @@ const routes = [
 	{ path: "/companies", exact: true, component: Companies },
 	{ path: "/companies/create", exact: true, component: CompaniesCreate },
 	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate },
+
+	{ path: "/dishes", exact: true, component: Dishes },
+	{ path: "/dishes/create", exact: true, component: DishesCreate },
+	{ path: "/dishes/update/:id", exact: true, component: DishesUpdate },
 
 	{ path: "/settings", exact: true, component: Settings },
 	{ path: "/settings/create", exact: true, component: SettingsCreate },

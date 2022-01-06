@@ -7,7 +7,6 @@ import Actions from "modules/entity/actions";
 
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
-import get from "lodash/get";
 
 import config from "config";
 import qs from "query-string";
@@ -35,10 +34,10 @@ const List = ({history, location}) => {
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "company",
+      entity: "dishes",
       name: `all-${tabLang}`,
       id: id,
-      url: `/companies/${id}`,
+      url: `/dishes/${id}`,
       deleteData: true,
       primaryKey: 'id',
       params: {
@@ -66,13 +65,13 @@ const List = ({history, location}) => {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Компании")}</div>
+        <div className="title-md">{t("Еды")}</div>
         <Button
           type="primary"
           size="large"
           className="fs-14 fw-300 ml-10"
           htmlType="button"
-          onClick={() => history.push(`/companies/create?lang=${tabLang}`)}
+          onClick={() => history.push(`/dishes/create?lang=${tabLang}`)}
         >{t('Добавить')}</Button>
       </div>
 
@@ -89,9 +88,9 @@ const List = ({history, location}) => {
           </Tabs>
         </div>
         <EntityContainer.All
-          entity="company"
+          entity="dishes"
           name={`all-${tabLang}`}
-          url="/companies"
+          url="/dishes"
           primaryKey="id"
           params={{
             sort: '-id',
@@ -109,7 +108,7 @@ const List = ({history, location}) => {
                     hasEdit={true}
                     hasDelete={true}
                     rowKey="id"
-                    onEdit={value => history.push(`/companies/update/${value.id}?lang=${tabLang}`)}
+                    onEdit={value => history.push(`/dishes/update/${value.id}?lang=${tabLang}`)}
                     onDelete={value => onDeleteHandler(value.id)}
                     columns={[
                       {
@@ -120,8 +119,8 @@ const List = ({history, location}) => {
                       },
                       {
                         title: t("Загаловок"),
-                        dataIndex: "translate",
-                        render: value => <div className="divider-wrapper">{get(value, 'name', "-")}</div>
+                        dataIndex: "translate.name",
+                        render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                       },
                       {
                         title: t("Статус"),

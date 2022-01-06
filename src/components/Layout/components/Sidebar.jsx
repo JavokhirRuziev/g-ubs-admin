@@ -16,6 +16,12 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             title: t('Компании'),
             link: '/companies',
             icon: 'menu-i-list'
+        },
+        {
+            id: 'dishes',
+            title: t('Еды'),
+            link: '/dishes',
+            icon: 'menu-i-list'
         }
     ];
 

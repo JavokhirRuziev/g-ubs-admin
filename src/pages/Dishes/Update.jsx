@@ -22,25 +22,25 @@ const Update = ({location, history, match}) => {
   const [tabLang, setTabLang] = useState(lang);
 
   const changeTab = (value) => {
-    history.push(`/companies/update/${id}?lang=${value}`)
+    history.push(`/dishes/update/${id}?lang=${value}`)
   };
 
   return (
     <EntityContainer.One
-      entity="company"
-      name={`company-${id}`}
-      url={`/companies/${id}`}
+      entity="dishes"
+      name={`dishes-${id}`}
+      url={`/dishes/${id}`}
       primaryKey="id"
       id={id}
       params={{
-        include: "translate",
+        include: "translate,file,video,company",
         extra: {_l: tabLang, append: 'gallery0'}
       }}
     >
       {({item, isFetched}) => {
         return (
           <Spin spinning={!isFetched}>
-            <div className="title-md mb-20 mt-14">{t('Изменить компанию')}</div>
+            <div className="title-md mb-20 mt-14">{t('Изменить еду')}</div>
             <Panel className="pad-0 mb-30">
               <Tabs
                 activeKey={tabLang}
@@ -60,42 +60,42 @@ const Update = ({location, history, match}) => {
 
             <EntityForm.Main
               method='put'
-              entity="company"
+              entity="dishes"
               name={`all-${tabLang}`}
-              url={`/companies/${get(item, 'id')}`}
+              url={`/dishes/${get(item, 'id')}`}
               updateData={true}
               primaryKey="id"
               normalizeData={data => data}
               onSuccess={(data, resetForm) => {
                 resetForm();
-                history.push(`/companies?lang=${tabLang}`)
+                history.push(`/dishes?lang=${tabLang}`)
               }}
               fields={[
                 {
-                  name: "tip",
-                  value: get(item, 'tip'),
+                  name: "company_id",
+                  value: get(item, 'company', null),
+                  onSubmitValue: value => value ? value.id : null
+                },
+                {
+                  name: "price",
+                  value: get(item, 'price'),
                   required: true,
                   type: 'number',
                 },
                 {
                   name: "file_id",
                   value: get(item, 'file') ? [get(item, 'file')] : [],
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+                  onSubmitValue: value => value.length > 0 ? value[0].id : null
+                },
+                {
+                  name: "video_id",
+                  value: get(item, 'video') ? [get(item, 'video')] : [],
+                  onSubmitValue: value => value.length > 0 ? value[0].id : null
                 },
                 {
                   name: "gallery",
                   value: get(item, 'gallery0', []),
-                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
-                },
-                {
-                  name: "latitude",
-                  value: get(item, 'latitude'),
-                  onSubmitValue: value => value && String(value)
-                },
-                {
-                  name: "longitude",
-                  value: get(item, 'longitude'),
-                  onSubmitValue: value => value && String(value)
+                  onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
                 },
                 {
                   name: "status",
@@ -105,21 +105,12 @@ const Update = ({location, history, match}) => {
                 {
                   name: "name",
                   required: true,
-                  value: get(item, 'translate.name', "")
-                },
-                {
-                  name: "address",
-                  required: true,
-                  value: get(item, 'translate.address', "")
-                },
-                {
-                  name: "working_times",
-                  value: get(item, 'working_times')
+                  value: get(item, 'translate.name', "-")
                 },
                 {
                   name: "description",
                   required: true,
-                  value: get(item, 'translate.description', "")
+                  value: get(item, 'translate.description', "-")
                 }
               ]}
               params={{
@@ -131,7 +122,7 @@ const Update = ({location, history, match}) => {
                 return (
                   <Spin spinning={isSubmitting}>
 
-                    <Form {...{values, lang, setFieldValue, isUpdate: true}}/>
+                    <Form {...{values, lang: tabLang, setFieldValue, isUpdate: true}}/>
 
                   </Spin>
                 );
