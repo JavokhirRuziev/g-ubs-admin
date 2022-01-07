@@ -12,6 +12,12 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             icon: 'menu-i-category'
         },
         {
+            id: 'menus',
+            title: t('Меню'),
+            link: '/menus',
+            icon: 'menu-i-category'
+        },
+        {
             id: 'company',
             title: t('Компании'),
             link: '/companies',

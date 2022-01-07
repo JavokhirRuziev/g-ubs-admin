@@ -39,10 +39,10 @@ const Index = () => {
   const deleteAction = id => {
     dispatch(Actions.Form.request({
       method: 'delete',
-      entity: "category",
+      entity: "menu",
       name: `all`,
       id: id,
-      url: `/categories/${id}`,
+      url: `/menus/${id}`,
       deleteData: true,
       cb: {
         success: () => {
@@ -88,7 +88,7 @@ const Index = () => {
       </Modal>
 
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Категории")}</div>
+        <div className="title-md">{t("Меню")}</div>
         <Button
           type="primary"
           size="large"
@@ -100,13 +100,15 @@ const Index = () => {
 
       <Board className="border-none">
         <EntityContainer.All
-          entity="category"
+          entity="menu"
           name={`all`}
-          url="/categories"
+          url="/menus"
           params={{
             limit: 50,
             page,
-            sort: 'sort'
+            sort: 'sort',
+            include: 'company',
+            extra: {_l: 'ru'},
           }}
         >
           {({items, isFetched, meta}) => {
