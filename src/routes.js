@@ -24,11 +24,13 @@ const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
 const SettingsUpdate = lazy(() => import("./pages/Settings/Update"));
 
 const Translation = lazy(() => import("./pages/Translation"));
-const Users = lazy(() => import("./pages/Users/List"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
+
+const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
+
 
 const routes = [
 	{ path: "/", exact: true, component: Dishes },
@@ -48,7 +50,7 @@ const routes = [
 	{ path: "/settings/create", exact: true, component: SettingsCreate },
 	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate },
 
-	{ path: "/users", exact: true, component: Users },
+	{ path: "/users/manager", exact: true, component: UsersManager },
 	{ path: "/translation", exact: true, component: Translation },
 	{ path: "/profile", exact: true, component: Profile },
 	{ path: "/logout", exact: true, component: Logout },

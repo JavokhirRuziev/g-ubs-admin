@@ -34,6 +34,14 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             title: t('Еды'),
             link: '/dishes',
             icon: 'menu-i-list'
+        },
+        {
+            id: 'users',
+            title: t('Пользователи'),
+            icon: 'menu-i-list',
+            submenu: [
+                {id: 'manager-users', link: '/users/manager', title: t('Менеджер')}
+            ]
         }
     ];
 

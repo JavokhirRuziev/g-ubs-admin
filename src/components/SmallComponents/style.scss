@@ -25,3 +25,10 @@ $hc: #1890ff;
   }
 }
 
+.fake-inputs{
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+}

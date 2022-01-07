@@ -19,14 +19,20 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {name: "user", required: true},
+        {name: "role", required: true, value: 'manager'},
+        {name: "name", required: true},
+        {name: "login", required: true},
         {name: "password", required: true},
-        {
-          name: "status",
-          value: true,
-          onSubmitValue: value => value ? 10 : 1
-        }
+        {name: "company_id", required: true, onSubmitValue: value => value.id},
+          {
+              name: "status",
+              value: true,
+              onSubmitValue: value => value ? 1 : 0
+          },
       ]}
+      params={{
+          include: 'company'
+      }}
     >
       {({isSubmitting, values, setFieldValue}) => {
         return (

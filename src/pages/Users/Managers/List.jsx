@@ -89,7 +89,7 @@ const List = () => {
       </Modal>
 
       <div className="d-flex justify-content-between align-items-center mb-20">
-        <div className="title-md">{t("Список пользователов")}</div>
+        <div className="title-md">{t("Список менеджеров")}</div>
         <Button
           type="primary"
           size="large"
@@ -104,11 +104,13 @@ const List = () => {
           entity="user"
           name="users"
           url="/user"
-          dataKey={"items"}
+          dataKey={"data"}
           params={{
             sort: '-id',
             limit: 10,
-            page
+            page,
+            filter: {['role.role']: 'manager'},
+            include: 'company'
           }}
         >
           {({items, isFetched, meta}) => {
@@ -129,8 +131,13 @@ const List = () => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
+                        title: t("Имя"),
+                        dataIndex: "name",
+                        render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
                         title: t("Логин"),
-                        dataIndex: "user",
+                        dataIndex: "login",
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
@@ -139,7 +146,7 @@ const List = () => {
                         className: 'text-cen w-100',
                         render: value => {
                           return <div className="divider-wrapper">
-                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 10 ? '#4caf50' : '#f44336'}}/>
+                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
                           </div>
                         }
                       }

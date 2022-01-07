@@ -21,21 +21,39 @@ const Update = ({selected, showUpdateModal}) => {
       }}
       fields={[
         {
-          name: "user",
+          name: "role",
           required: true,
-          value: get(selected, 'user')
+          value: 'manager'
+        },
+        {
+          name: "name",
+          required: true,
+          value: get(selected, 'name')
+        },
+        {
+          name: "login",
+          required: true,
+          value: get(selected, 'login')
         },
         {
           name: "password",
         },
         {
-          name: "status",
+          name: "company_id",
           required: true,
-          value: get(selected, 'status') === 10,
-          onSubmitValue: value => value ? 10 : 1
-        }
+          value: get(selected, 'company'),
+          onSubmitValue: value => value.id
+        },
+        {
+          name: "status",
+          value: get(selected, 'status') === 1,
+          onSubmitValue: value => value ? 1 : 0
+        },
       ]}
       updateData
+      params={{
+        include: 'company'
+      }}
     >
       {({isSubmitting, values, setFieldValue}) => {
         return (
