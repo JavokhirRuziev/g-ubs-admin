@@ -18,6 +18,12 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             icon: 'menu-i-category'
         },
         {
+            id: 'place',
+            title: t('Место'),
+            link: '/places',
+            icon: 'menu-i-category'
+        },
+        {
             id: 'company',
             title: t('Компании'),
             link: '/companies',

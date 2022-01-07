@@ -9,6 +9,7 @@ import App from "./App";
 
 const Categories = lazy(() => import("./pages/Categories"));
 const Menus = lazy(() => import("./pages/Menus"));
+const Places = lazy(() => import("./pages/Places"));
 
 const Companies = lazy(() => import("./pages/Companies/List"));
 const CompaniesCreate = lazy(() => import("./pages/Companies/Create"));
@@ -33,6 +34,7 @@ const routes = [
 	{ path: "/", exact: true, component: Dishes },
 	{ path: "/categories", exact: true, component: Categories },
 	{ path: "/menus", exact: true, component: Menus },
+	{ path: "/places", exact: true, component: Places },
 
 	{ path: "/companies", exact: true, component: Companies },
 	{ path: "/companies/create", exact: true, component: CompaniesCreate },
