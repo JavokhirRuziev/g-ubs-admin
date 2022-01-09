@@ -4,7 +4,6 @@ import {Fields} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
 import {useTranslation} from 'react-i18next'
-import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
     const {t} = useTranslation();
@@ -13,18 +12,18 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             <div className="title-md fs-16 mb-20">{isUpdate ? t('Изменить') : t('Добавить')}</div>
             <Field
                 component={Fields.AntInput}
-                name="title_uz"
-                type="text"
-                placeholder={t("Введите название")}
-                label={t("Названия (UZ)")}
-                size="large"
-            />
-            <Field
-                component={Fields.AntInput}
                 name="title_ru"
                 type="text"
                 placeholder={t("Введите название")}
                 label={t("Названия (RU)")}
+                size="large"
+            />
+            <Field
+                component={Fields.AntInput}
+                name="title_uz"
+                type="text"
+                placeholder={t("Введите название")}
+                label={t("Названия (UZ)")}
                 size="large"
             />
             <Field
@@ -42,21 +41,6 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 placeholder="Сортировка"
                 label="Сортировка"
                 size="large"
-            />
-            <Field
-                component={Fields.AsyncSelect}
-                name="company_id"
-                placeholder={t("Компания")}
-                isClearable={true}
-                loadOptionsUrl="/companies"
-                label={t("Компания")}
-                loadOptionsParams={(search) => {
-                    return{
-                        extra: {_l: 'ru'}
-                    }
-                }}
-                className={"mb-24"}
-                optionLabel={option => get(option, 'translate.name')}
             />
 
             <div className="d-flex align-items-center mb-20">

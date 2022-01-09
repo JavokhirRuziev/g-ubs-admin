@@ -22,7 +22,6 @@ const Create = ({showCreateModal}) => {
                 {
                     name: "company_id",
                     value: null,
-                    onSubmitValue: value => value ? value.id : null
                 },
                 {name: "title_ru", required: true},
                 {name: "title_uz", required: true},

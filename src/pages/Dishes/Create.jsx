@@ -30,7 +30,6 @@ const Create = ({location, history}) => {
         {
           name: "company_id",
           value: null,
-          onSubmitValue: value => value ? value.id : null
         },
         {
           name: "price",

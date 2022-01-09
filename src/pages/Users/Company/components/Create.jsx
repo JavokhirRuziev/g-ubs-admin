@@ -9,7 +9,7 @@ const Create = ({showCreateModal}) => {
     <EntityForm.Main
       method="post"
       entity="user"
-      name="managers"
+      name="companies"
       url="/user"
       appendData
       primaryKey="id"
@@ -19,7 +19,7 @@ const Create = ({showCreateModal}) => {
         showCreateModal(false)
       }}
       fields={[
-        {name: "role", required: true, value: 'manager'},
+        {name: "role", required: true, value: 'company'},
         {name: "name", required: true},
         {name: "login", required: true},
         {name: "password", required: true},

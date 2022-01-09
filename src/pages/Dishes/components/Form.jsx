@@ -6,7 +6,7 @@ import {Button, Switch} from "antd";
 import Ingredients from "./Ingredients";
 
 import {useTranslation} from "react-i18next";
-import get from "lodash/get";
+// import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values, lang}) => {
 
@@ -40,20 +40,20 @@ const Form = ({isUpdate, setFieldValue, values, lang}) => {
                         label={t("Цена")}
                         size="large"
                     />
-                    <Field
-                        component={Fields.AsyncSelect}
-                        name="company_id"
-                        placeholder={t("Компания")}
-                        isClearable={true}
-                        loadOptionsUrl="/companies"
-                        label={t("Компания")}
-                        loadOptionsParams={(search) => {
-                            return{
-                                extra: {_l: lang}
-                            }
-                        }}
-                        optionLabel={option => get(option, 'translate.name')}
-                    />
+                    {/*<Field*/}
+                    {/*    component={Fields.AsyncSelect}*/}
+                    {/*    name="company_id"*/}
+                    {/*    placeholder={t("Компания")}*/}
+                    {/*    isClearable={true}*/}
+                    {/*    loadOptionsUrl="/companies"*/}
+                    {/*    label={t("Компания")}*/}
+                    {/*    loadOptionsParams={(search) => {*/}
+                    {/*        return{*/}
+                    {/*            extra: {_l: lang}*/}
+                    {/*        }*/}
+                    {/*    }}*/}
+                    {/*    optionLabel={option => get(option, 'translate.name')}*/}
+                    {/*/>*/}
 
                     {isUpdate && (
                         <Ingredients/>

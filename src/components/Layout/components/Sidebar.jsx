@@ -1,50 +1,11 @@
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import getMenu from "./getMenu";
+import get from "lodash/get";
+import {useSelector} from "react-redux";
 
 const Sidebar = ({isCollapsed, setCollapse}) => {
-    const {t} = useTranslation();
-    const menu = [
-        {
-            id: 'category',
-            title: t('Категории'),
-            link: '/categories',
-            icon: 'menu-i-category'
-        },
-        {
-            id: 'menus',
-            title: t('Меню'),
-            link: '/menus',
-            icon: 'menu-i-category'
-        },
-        {
-            id: 'place',
-            title: t('Место'),
-            link: '/places',
-            icon: 'menu-i-category'
-        },
-        {
-            id: 'company',
-            title: t('Компании'),
-            link: '/companies',
-            icon: 'menu-i-list'
-        },
-        {
-            id: 'dishes',
-            title: t('Еды'),
-            link: '/dishes',
-            icon: 'menu-i-list'
-        },
-        {
-            id: 'users',
-            title: t('Пользователи'),
-            icon: 'menu-i-list',
-            submenu: [
-                {id: 'manager-users', link: '/users/manager', title: t('Менеджер')}
-            ]
-        }
-    ];
-
+    const profile = useSelector(state => state.auth.data)
     const [toggledSubmenu, setToggleSubmenu] = useState(null);
 
     const toggle = () => {
@@ -76,7 +37,7 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
                 </div>
 
                 <ul className="m-menu">
-                    {menu.map((m, i) => {
+                    {getMenu(get(profile, 'success.role')).map((m, i) => {
                         if (m.submenu) {
                             return (
                                 <li key={i}

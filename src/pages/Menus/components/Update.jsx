@@ -22,8 +22,7 @@ const Update = ({selected, showUpdateModal}) => {
             fields={[
                 {
                     name: "company_id",
-                    value: get(selected, 'company', null),
-                    onSubmitValue: value => value ? value.id : null
+                    value: null,
                 },
                 {name: "title_uz", required: true, value: get(selected, 'title_uz')},
                 {name: "title_ru", required: true, value: get(selected, 'title_ru')},

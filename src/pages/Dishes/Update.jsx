@@ -73,8 +73,7 @@ const Update = ({location, history, match}) => {
               fields={[
                 {
                   name: "company_id",
-                  value: get(item, 'company', null),
-                  onSubmitValue: value => value ? value.id : null
+                  value: null,
                 },
                 {
                   name: "price",

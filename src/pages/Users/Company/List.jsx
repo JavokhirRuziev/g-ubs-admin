@@ -40,7 +40,7 @@ const List = () => {
         dispatch(Actions.Form.request({
             method: 'put',
             entity: "user",
-            name: `managers`,
+            name: `companies`,
             id: id,
             values: {status: 1},
             url: `/user/${id}`,
@@ -91,7 +91,7 @@ const List = () => {
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
-                <div className="title-md">{t("Список менеджеров")}</div>
+                <div className="title-md">{t("Список менеджеров компании")}</div>
                 <Button
                     type="primary"
                     size="large"
@@ -104,14 +104,14 @@ const List = () => {
             <Board className="border-none">
                 <EntityContainer.All
                     entity="user"
-                    name="managers"
+                    name="companies"
                     url="/user"
                     dataKey={"data"}
                     params={{
                         sort: '-id',
                         limit: 10,
                         page,
-                        filter: {['role.role']: 'manager'},
+                        filter: {['role.role']: 'company'},
                         include: 'company'
                     }}
                 >

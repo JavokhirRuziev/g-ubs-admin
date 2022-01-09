@@ -67,7 +67,9 @@ const enhacedLogin = withFormik({
 		props.LoginRequest({
 			values,
 			cb: {
-				success: () => {},
+				success: () => {
+					props.GetMeRequest()
+				},
 				error: (errors) => {
 					if (errors instanceof Array) {
 						errors.map(({ field, message }) => setFieldError(field, message));
@@ -93,7 +95,8 @@ const enhacedLogin = withFormik({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(
 	{
-		LoginRequest: Actions.auth.Login.request
+		LoginRequest: Actions.auth.Login.request,
+		GetMeRequest: Actions.auth.GetMe
 	},
 	dispatch
 );

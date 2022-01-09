@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import {Layout} from "components";
 import {Spinner} from "components";
 import App from "./App";
+import get from "lodash/get";
 
 const Categories = lazy(() => import("./pages/Categories"));
 const Menus = lazy(() => import("./pages/Menus"));
@@ -30,49 +31,67 @@ const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
 
 const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
+const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 
 const routes = [
-	{ path: "/", exact: true, component: Dishes },
-	{ path: "/categories", exact: true, component: Categories },
-	{ path: "/menus", exact: true, component: Menus },
-	{ path: "/places", exact: true, component: Places },
+	{ path: "/", exact: true, component: Categories, access: ["admin"] },
+	{ path: "/", exact: true, component: Dishes, access: ["company"] },
+	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
+	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
+	{ path: "/places", exact: true, component: Places, access: ["company"] },
 
-	{ path: "/companies", exact: true, component: Companies },
-	{ path: "/companies/create", exact: true, component: CompaniesCreate },
-	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate },
+	{ path: "/companies", exact: true, component: Companies, access: ["admin"] },
+	{ path: "/companies/create", exact: true, component: CompaniesCreate, access: ["admin"] },
+	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate, access: ["admin"] },
 
-	{ path: "/dishes", exact: true, component: Dishes },
-	{ path: "/dishes/create", exact: true, component: DishesCreate },
-	{ path: "/dishes/update/:id", exact: true, component: DishesUpdate },
+	{ path: "/dishes", exact: true, component: Dishes, access: ["company"] },
+	{ path: "/dishes/create", exact: true, component: DishesCreate, access: ["company"] },
+	{ path: "/dishes/update/:id", exact: true, component: DishesUpdate, access: ["company"] },
 
-	{ path: "/settings", exact: true, component: Settings },
-	{ path: "/settings/create", exact: true, component: SettingsCreate },
-	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate },
+	{ path: "/settings", exact: true, component: Settings, access: ["admin"] },
+	{ path: "/settings/create", exact: true, component: SettingsCreate, access: ["admin"] },
+	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate, access: ["admin"] },
 
-	{ path: "/users/manager", exact: true, component: UsersManager },
-	{ path: "/translation", exact: true, component: Translation },
-	{ path: "/profile", exact: true, component: Profile },
-	{ path: "/logout", exact: true, component: Logout },
+	{ path: "/users/manager", exact: true, component: UsersManager, access: ["admin"] },
+	{ path: "/users/content-manager", exact: true, component: UsersCompany, access: ["admin"] },
+	{ path: "/translation", exact: true, component: Translation, access: ["admin"] },
+	{ path: "/profile", exact: true, component: Profile, access: ["admin","manager","company"] },
+	{ path: "/logout", exact: true, component: Logout, access: ["admin","manager","company"] }
 ];
+
+const adminRoutes = routes.filter(i => i.access.includes("admin"));
+const contentManagerRoutes = routes.filter(i => i.access.includes("company"));
 
 export default () => (
 	<Router {...{ history }}>
     <App>
-      {({ isFetched, isAuthenticated }) => (
+      {({ isFetched, isAuthenticated, data }) => (
         isFetched && (
           isAuthenticated ? (
             <Layout>
               <Suspense fallback={<Spinner position={"full"}/>}>
                 <Switch>
-                  {routes.map((route, key) => (
-                    <Route
-                      key={key}
-                      path={route.path}
-                      component={route.component}
-                      exact
-                    />
-                  ))}
+					{(get(data, 'success.role') === 'admin') && (
+						adminRoutes.map((route, key) => (
+							<Route
+								key={key}
+								path={route.path}
+								component={route.component}
+								exact
+							/>
+						))
+					)}
+					{(get(data, 'success.role') === 'company') && (
+						contentManagerRoutes.map((route, key) => (
+							<Route
+								key={key}
+								path={route.path}
+								component={route.component}
+								exact
+							/>
+						))
+					)}
                 </Switch>
               </Suspense>
             </Layout>

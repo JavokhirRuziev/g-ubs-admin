@@ -10,7 +10,7 @@ const Update = ({selected, showUpdateModal}) => {
     <EntityForm.Main
       method="put"
       entity="user"
-      name={`managers`}
+      name={`companies`}
       url={`/user/${get(selected, 'id')}`}
       primaryKey="id"
       normalizeData={data => data}
@@ -23,7 +23,7 @@ const Update = ({selected, showUpdateModal}) => {
         {
           name: "role",
           required: true,
-          value: 'manager'
+          value: 'company'
         },
         {
           name: "name",
