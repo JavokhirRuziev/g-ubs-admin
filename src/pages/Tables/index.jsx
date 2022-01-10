@@ -143,7 +143,7 @@ const Index = () => {
                                                 title: t("Место"),
                                                 dataIndex: "place",
                                                 render: value => <div
-                                                    className="divider-wrapper">{value ? value : '-'}</div>
+                                                    className="divider-wrapper">{value ? value.title_ru : '-'}</div>
                                             },
                                             {
                                                 title: t("Статус"),
