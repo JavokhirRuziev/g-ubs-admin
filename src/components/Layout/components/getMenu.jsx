@@ -32,13 +32,19 @@ const contentManagerRoutes = [
         id: 'menus',
         title: "Меню",
         link: '/menus',
-        icon: 'menu-i-category'
+        icon: 'menu-i-list'
     },
     {
-        id: 'place',
+        id: 'places',
         title: "Место",
         link: '/places',
-        icon: 'menu-i-category'
+        icon: 'menu-i-list'
+    },
+    {
+        id: 'tables',
+        title: "Столы",
+        link: '/tables',
+        icon: 'menu-i-list'
     }
 ]
 

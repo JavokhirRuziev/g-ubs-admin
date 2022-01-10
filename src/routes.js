@@ -11,6 +11,7 @@ import get from "lodash/get";
 const Categories = lazy(() => import("./pages/Categories"));
 const Menus = lazy(() => import("./pages/Menus"));
 const Places = lazy(() => import("./pages/Places"));
+const Tables = lazy(() => import("./pages/Tables"));
 
 const Companies = lazy(() => import("./pages/Companies/List"));
 const CompaniesCreate = lazy(() => import("./pages/Companies/Create"));
@@ -40,6 +41,7 @@ const routes = [
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
 	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
 	{ path: "/places", exact: true, component: Places, access: ["company"] },
+	{ path: "/tables", exact: true, component: Tables, access: ["company"] },
 
 	{ path: "/companies", exact: true, component: Companies, access: ["admin"] },
 	{ path: "/companies/create", exact: true, component: CompaniesCreate, access: ["admin"] },
