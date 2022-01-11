@@ -12,6 +12,12 @@ const adminMenus = [
         icon: 'menu-i-list'
     },
     {
+        id: 'popular-queries',
+        title: "Популярный запросы",
+        link: '/popular-queries',
+        icon: 'menu-i-list'
+    },
+    {
         id: 'users',
         title: "Пользователи",
         icon: 'menu-i-list',
