@@ -10,7 +10,6 @@ import {Button, notification, Spin} from "antd";
 import get from "lodash/get";
 
 import "./style.scss";
-import bgImage from "./icons/login-bg.svg";
 
 const Login = ({ isSubmitting }) => {
 	return (
@@ -21,12 +20,16 @@ const Login = ({ isSubmitting }) => {
 						<div className="login-box__header">
 							<div>
 								<div className="login-box__title">Добро пожаловать</div>
-								<div className="login-box__subtitle">Панель управления сайтом MBP</div>
+								<div className="login-box__subtitle">Панель управления Zim-Zim</div>
 							</div>
 						</div>
 						<div className="login-box__form">
 							<Spin spinning={isSubmitting}>
 								<Form autoComplete="false">
+									<div className="fake-inputs">
+										<input type="text" name="name"/>
+										<input type="password" name="password"/>
+									</div>
 									<Field
 										component={Fields.TextInputLogin}
 										name="name"
@@ -44,7 +47,6 @@ const Login = ({ isSubmitting }) => {
 							</Spin>
 						</div>
 					</div>
-					<img className="login-page__bg" src={bgImage} alt=""/>
 				</div>
 			</div>
 		</div>
