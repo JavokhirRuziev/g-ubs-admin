@@ -6,7 +6,6 @@ import EntityContainer from 'modules/entity/containers';
 import Create from "./components/Create";
 import Update from "./components/Update";
 import Actions from "modules/entity/actions";
-import get from "lodash/get";
 
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -38,14 +37,12 @@ const List = () => {
 
     const deleteAction = id => {
         dispatch(Actions.Form.request({
-            method: 'put',
+            method: 'delete',
             entity: "user",
-            name: `managers`,
+            name: `kitchener`,
             id: id,
-            values: {status: 1},
             url: `/user/${id}`,
-            normalizeData: data => data,
-            updateData: true,
+            deleteData: true,
             cb: {
                 success: () => {
                     notification["success"]({
@@ -91,7 +88,7 @@ const List = () => {
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
-                <div className="title-md">{t("Список менеджеров")}</div>
+                <div className="title-md">{t("Список поворов")}</div>
                 <Button
                     type="primary"
                     size="large"
@@ -104,15 +101,14 @@ const List = () => {
             <Board className="border-none">
                 <EntityContainer.All
                     entity="user"
-                    name="managers"
+                    name="kitchener"
                     url="/user"
                     dataKey={"data"}
                     params={{
                         sort: '-id',
                         limit: 10,
                         page,
-                        filter: {['role.role']: 'manager'},
-                        include: 'company'
+                        filter: {['role.role']: 'kitchener'},
                     }}
                 >
                     {({items, isFetched, meta}) => {
@@ -141,11 +137,6 @@ const List = () => {
                                                 title: t("Логин"),
                                                 dataIndex: "login",
                                                 render: value => <div className="divider-wrapper">{value}</div>
-                                            },
-                                            {
-                                                title: t("Компания"),
-                                                dataIndex: "company",
-                                                render: value => <div className="divider-wrapper">{get(value, 'translate.name', '-')}</div>
                                             },
                                             {
                                                 title: t("Статус"),

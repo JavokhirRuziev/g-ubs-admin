@@ -4,7 +4,6 @@ import {Fields} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
 import {useTranslation} from "react-i18next";
-import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
     const {t} = useTranslation();
@@ -41,16 +40,6 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 placeholder={t("Введите пароль")}
                 label={t("Пароль")}
                 size="large"
-            />
-
-            <Field
-                component={Fields.AsyncSelect}
-                name="company_id"
-                placeholder={t("Компания")}
-                isClearable={true}
-                loadOptionsUrl="/companies"
-                label={t("Компания")}
-                optionLabel={option => get(option, 'translate.name')}
             />
 
             <div className="d-flex align-items-center mb-20 mt-20">
