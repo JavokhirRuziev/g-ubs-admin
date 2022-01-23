@@ -69,8 +69,6 @@ const Update = ({location, history}) => {
               primaryKey="id"
               normalizeData={data => data}
               onSuccess={(data, resetForm) => {
-                resetForm();
-                history.push(`/companies?lang=${tabLang}`)
               }}
               fields={[
                 {
