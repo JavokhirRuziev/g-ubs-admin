@@ -47,6 +47,11 @@ const Update = ({selected, showUpdateModal}) => {
           value: get(selected, 'status') === 1,
           onSubmitValue: value => value ? 1 : 0
         },
+        {
+          name: "companyStatus",
+          value: get(selected, 'company.status') === 1,
+          onSubmitValue: value => value ? 1 : 0
+        },
       ]}
       updateData
       params={{

@@ -24,6 +24,12 @@ const adminMenus = [
         icon: 'menu-i-list'
     },
     {
+        id: 'reviews',
+        title: "Отзывы",
+        link: '/reviews',
+        icon: 'menu-i-list'
+    },
+    {
         id: 'users',
         title: "Контрагент",
         link: '/users/company-admins',

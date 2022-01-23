@@ -53,14 +53,25 @@ const Form = ({isUpdate, setFieldValue, values}) => {
 
 
             {isUpdate && (
-                <div className="d-flex align-items-center mb-20 mt-20">
-                    <Switch
-                        onChange={value => {
-                            setFieldValue('status', value)
-                        }}
-                        checked={values.status}
-                    />
-                    <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
+                <div>
+                    <div className="d-flex align-items-center mb-20 mt-20">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('status', value)
+                            }}
+                            checked={values.status}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('Статус пользователя')}</div>
+                    </div>
+                    <div className="d-flex align-items-center mb-20 mt-20">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('companyStatus', value)
+                            }}
+                            checked={values.companyStatus}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('Статус компании')}</div>
+                    </div>
                 </div>
             )}
 

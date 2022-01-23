@@ -146,8 +146,19 @@ const List = () => {
                                                 render: value => <div className="divider-wrapper">{get(value, 'translate.name', '-')}</div>
                                             },
                                             {
-                                                title: t("Статус"),
+                                                title: t("Статус пользователя"),
                                                 dataIndex: "status",
+                                                className: 'text-cen w-100',
+                                                render: value => {
+                                                    return <div className="divider-wrapper">
+                                                        <div className="color-view-ellipse m-0-auto"
+                                                             style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                                                    </div>
+                                                }
+                                            },
+                                            {
+                                                title: t("Статус компании"),
+                                                dataIndex: "company.status",
                                                 className: 'text-cen w-100',
                                                 render: value => {
                                                     return <div className="divider-wrapper">
