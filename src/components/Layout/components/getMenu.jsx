@@ -64,13 +64,19 @@ const contentManagerRoutes = [
     {
         id: 'users',
         title: "Пользователи",
-        icon: 'menu-i-list',
+        icon: 'menu-i-user',
         submenu: [
             {id: 'waiter-users', link: '/users/waiter', title: "Официант"},
             {id: 'kitchener-users', link: '/users/kitchener', title: "Повор"},
             {id: 'manager-users', link: '/users/manager', title: "Менеджер"}
         ]
-    }
+    },
+    {
+        id: 'profile',
+        title: "Профиль компании",
+        link: '/profile/company',
+        icon: 'menu-i-dashboard'
+    },
 ]
 
 

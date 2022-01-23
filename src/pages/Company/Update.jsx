@@ -10,19 +10,21 @@ import {useTranslation} from "react-i18next";
 import qs from "query-string";
 import get from "lodash/get";
 import config from "config";
+import {useSelector} from "react-redux";
 
-const Update = ({location, history, match}) => {
+const Update = ({location, history}) => {
   const TabPane = Tabs.TabPane;
   const {t} = useTranslation();
 
   const query = qs.parse(location.search);
   const {lang} = query;
-  const {id} = match.params;
+  const profile = useSelector(state => state.auth.data.success);
+  const id = get(profile, 'company_id');
 
-  const [tabLang, setTabLang] = useState(lang);
+  const [tabLang, setTabLang] = useState(lang || 'ru');
 
   const changeTab = (value) => {
-    history.push(`/companies/update/${id}?lang=${value}`)
+    history.push(`/profile/company?lang=${value}`)
   };
 
   return (
