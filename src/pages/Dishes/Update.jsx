@@ -33,7 +33,7 @@ const Update = ({location, history, match}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "translate,file,video,company",
+        include: "translate,file,video,company,menus",
         extra: {_l: tabLang, append: 'gallery0'}
       }}
     >
@@ -110,10 +110,15 @@ const Update = ({location, history, match}) => {
                   name: "description",
                   required: true,
                   value: get(item, 'translate.description', "-")
-                }
+                },
+                {
+                  name: "menus",
+                  value: get(item, 'menus'),
+                  onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
+                },
               ]}
               params={{
-                include: "translate",
+                include: "translate,menus,file",
                 extra: {_l: tabLang}
               }}
             >

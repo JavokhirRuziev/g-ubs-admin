@@ -6,7 +6,7 @@ import {Button, Switch} from "antd";
 import Ingredients from "./Ingredients";
 
 import {useTranslation} from "react-i18next";
-// import get from "lodash/get";
+import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values, lang}) => {
 
@@ -40,21 +40,6 @@ const Form = ({isUpdate, setFieldValue, values, lang}) => {
                         label={t("Цена")}
                         size="large"
                     />
-                    {/*<Field*/}
-                    {/*    component={Fields.AsyncSelect}*/}
-                    {/*    name="company_id"*/}
-                    {/*    placeholder={t("Компания")}*/}
-                    {/*    isClearable={true}*/}
-                    {/*    loadOptionsUrl="/companies"*/}
-                    {/*    label={t("Компания")}*/}
-                    {/*    loadOptionsParams={(search) => {*/}
-                    {/*        return{*/}
-                    {/*            extra: {_l: lang}*/}
-                    {/*        }*/}
-                    {/*    }}*/}
-                    {/*    optionLabel={option => get(option, 'translate.name')}*/}
-                    {/*/>*/}
-
                     {isUpdate && (
                         <Ingredients/>
                     )}
@@ -62,6 +47,17 @@ const Form = ({isUpdate, setFieldValue, values, lang}) => {
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>
                 <Panel>
+                    <Field
+                        component={Fields.AsyncSelect}
+                        name="menus"
+                        placeholder={t("Меню")}
+                        isClearable={true}
+                        loadOptionsUrl="/menus"
+                        className={"mb-24"}
+                        label={t("Меню")}
+                        isMulti={true}
+                        optionLabel={option => get(option, `title_${lang}`)}
+                    />
                     <Field
                         component={Fields.UploadImageManager}
                         name="file_id"

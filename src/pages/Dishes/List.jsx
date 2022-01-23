@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Table, Board} from "components";
+import {Table, Board, Avatar} from "components";
 import {Button, Pagination, Spin, Tabs, Modal, notification} from "antd";
 import EntityContainer from 'modules/entity/containers';
 import Actions from "modules/entity/actions";
@@ -10,6 +10,7 @@ import {useDispatch} from "react-redux";
 
 import config from "config";
 import qs from "query-string";
+import get from "lodash/get";
 
 const List = ({history, location}) => {
   const query = qs.parse(location.search);
@@ -95,7 +96,7 @@ const List = ({history, location}) => {
           params={{
             sort: '-id',
             limit: 50,
-            include: 'translate',
+            include: 'translate,file',
             extra: {_l: tabLang},
             page
           }}
@@ -118,8 +119,21 @@ const List = ({history, location}) => {
                         render: value => <div className="divider-wrapper">{value}</div>
                       },
                       {
+                        title: t("Фото"),
+                        dataIndex: "file",
+                        className: 'w-82 text-cen',
+                        render: value => <div className="divider-wrapper">
+                          <Avatar isRectangle isProduct image={get(value, 'thumbnails.small.src')}/>
+                        </div>
+                      },
+                      {
                         title: t("Загаловок"),
                         dataIndex: "translate.name",
+                        render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                      },
+                      {
+                        title: t("Цена"),
+                        dataIndex: "price",
                         render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                       },
                       {

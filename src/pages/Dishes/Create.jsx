@@ -37,6 +37,11 @@ const Create = ({location, history}) => {
           required: true
         },
         {
+          name: "menus",
+          value: [],
+          onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
+        },
+        {
           name: "file_id",
           value: [],
           required: true,
@@ -67,6 +72,7 @@ const Create = ({location, history}) => {
         }
       ]}
       params={{
+        include: 'menus,file',
         extra: {_l: lang}
       }}
     >

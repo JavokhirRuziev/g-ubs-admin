@@ -66,8 +66,9 @@ const contentManagerRoutes = [
         title: "Пользователи",
         icon: 'menu-i-list',
         submenu: [
-            {id: 'manager-users', link: '/users/manager', title: "Менеджер"},
-            {id: 'content-manager-users', link: '/users/content-manager', title: "Контент-менеджер"}
+            {id: 'waiter-users', link: '/users/waiter', title: "Официант"},
+            {id: 'kitchener-users', link: '/users/kitchener', title: "Повор"},
+            {id: 'manager-users', link: '/users/manager', title: "Менеджер"}
         ]
     }
 ]

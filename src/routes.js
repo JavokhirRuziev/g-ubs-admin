@@ -35,7 +35,9 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
 
-// const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
+const UsersKitchener = lazy(() => import("./pages/Users/Kitchener/List"));
+const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
+const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 
@@ -64,6 +66,11 @@ const routes = [
 	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate, access: ["admin"] },
 
 	{ path: "/users/company-admins", exact: true, component: UsersCompany, access: ["admin"] },
+
+	{ path: "/users/waiter", exact: true, component: UsersWaiter, access: ["company"] },
+	{ path: "/users/kitchener", exact: true, component: UsersKitchener, access: ["company"] },
+	{ path: "/users/manager", exact: true, component: UsersManager, access: ["company"] },
+
 	{ path: "/translation", exact: true, component: Translation, access: ["admin"] },
 	{ path: "/profile", exact: true, component: Profile, access: ["admin","manager","company"] },
 	{ path: "/logout", exact: true, component: Logout, access: ["admin","manager","company"] }
