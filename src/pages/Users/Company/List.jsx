@@ -38,14 +38,12 @@ const List = () => {
 
     const deleteAction = id => {
         dispatch(Actions.Form.request({
-            method: 'put',
+            method: 'delete',
             entity: "user",
             name: `companies`,
             id: id,
-            values: {status: 1},
             url: `/user/${id}`,
-            normalizeData: data => data,
-            updateData: true,
+            deleteData: true,
             cb: {
                 success: () => {
                     notification["success"]({
@@ -91,7 +89,7 @@ const List = () => {
             </Modal>
 
             <div className="d-flex justify-content-between align-items-center mb-20">
-                <div className="title-md">{t("Список менеджеров компании")}</div>
+                <div className="title-md">{t("Список контрагентов")}</div>
                 <Button
                     type="primary"
                     size="large"

@@ -18,13 +18,16 @@ const adminMenus = [
         icon: 'menu-i-list'
     },
     {
+        id: 'banner',
+        title: "Баннеры",
+        link: '/banner',
+        icon: 'menu-i-list'
+    },
+    {
         id: 'users',
-        title: "Пользователи",
-        icon: 'menu-i-list',
-        submenu: [
-            {id: 'manager-users', link: '/users/manager', title: "Менеджер"},
-            {id: 'content-manager-users', link: '/users/content-manager', title: "Контент-менеджер"}
-        ]
+        title: "Контрагент",
+        link: '/users/company-admins',
+        icon: 'menu-i-list'
     }
 ]
 const contentManagerRoutes = [
@@ -51,6 +54,15 @@ const contentManagerRoutes = [
         title: "Столы",
         link: '/tables',
         icon: 'menu-i-list'
+    },
+    {
+        id: 'users',
+        title: "Пользователи",
+        icon: 'menu-i-list',
+        submenu: [
+            {id: 'manager-users', link: '/users/manager', title: "Менеджер"},
+            {id: 'content-manager-users', link: '/users/content-manager', title: "Контент-менеджер"}
+        ]
     }
 ]
 

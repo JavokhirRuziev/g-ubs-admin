@@ -712,3 +712,30 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
   background-color: #f2f2f3;
   border-radius: 10px;
 }
+
+.info-col{
+  &:not(:last-child){
+    margin-bottom: 30px;
+  }
+  &__label{
+    font-size: 14px;
+    color: #000;
+    font-weight: 700;
+    line-height: 20px;
+    margin-bottom: 5px;
+  }
+  &__value{
+    font-size: 16px;
+  }
+  img{
+    max-width: 100%;
+    border-radius: 10px;
+  }
+}
+
+.info-row{
+  display: flex;
+  &:not(:last-child){
+    margin-bottom: 30px;
+  }
+}

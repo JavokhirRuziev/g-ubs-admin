@@ -39,10 +39,8 @@ const Update = ({selected, showUpdateModal}) => {
           name: "password",
         },
         {
-          name: "company_id",
-          required: true,
-          value: get(selected, 'company'),
-          onSubmitValue: value => value.id
+          name: "companyName",
+          value: get(selected, 'company.translate.name')
         },
         {
           name: "status",

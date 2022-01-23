@@ -10,6 +10,7 @@ import get from "lodash/get";
 
 const Categories = lazy(() => import("./pages/Categories"));
 const PopularQueries = lazy(() => import("./pages/PopularQueries"));
+const Banner = lazy(() => import("./pages/Banner"));
 const Menus = lazy(() => import("./pages/Menus"));
 const Places = lazy(() => import("./pages/Places"));
 const Tables = lazy(() => import("./pages/Tables"));
@@ -17,6 +18,7 @@ const Tables = lazy(() => import("./pages/Tables"));
 const Companies = lazy(() => import("./pages/Companies/List"));
 const CompaniesCreate = lazy(() => import("./pages/Companies/Create"));
 const CompaniesUpdate = lazy(() => import("./pages/Companies/Update"));
+const CompaniesView = lazy(() => import("./pages/Companies/View"));
 
 const Dishes = lazy(() => import("./pages/Dishes/List"));
 const DishesCreate = lazy(() => import("./pages/Dishes/Create"));
@@ -32,7 +34,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
 
-const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
+// const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 
@@ -41,6 +43,7 @@ const routes = [
 	{ path: "/", exact: true, component: Dishes, access: ["company"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
 	{ path: "/popular-queries", exact: true, component: PopularQueries, access: ["admin"] },
+	{ path: "/banner", exact: true, component: Banner, access: ["admin"] },
 	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
 	{ path: "/places", exact: true, component: Places, access: ["company"] },
 	{ path: "/tables", exact: true, component: Tables, access: ["company"] },
@@ -48,6 +51,7 @@ const routes = [
 	{ path: "/companies", exact: true, component: Companies, access: ["admin"] },
 	{ path: "/companies/create", exact: true, component: CompaniesCreate, access: ["admin"] },
 	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate, access: ["admin"] },
+	{ path: "/companies/view/:id", exact: true, component: CompaniesView, access: ["admin"] },
 
 	{ path: "/dishes", exact: true, component: Dishes, access: ["company"] },
 	{ path: "/dishes/create", exact: true, component: DishesCreate, access: ["company"] },
@@ -57,8 +61,7 @@ const routes = [
 	{ path: "/settings/create", exact: true, component: SettingsCreate, access: ["admin"] },
 	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate, access: ["admin"] },
 
-	{ path: "/users/manager", exact: true, component: UsersManager, access: ["admin"] },
-	{ path: "/users/content-manager", exact: true, component: UsersCompany, access: ["admin"] },
+	{ path: "/users/company-admins", exact: true, component: UsersCompany, access: ["admin"] },
 	{ path: "/translation", exact: true, component: Translation, access: ["admin"] },
 	{ path: "/profile", exact: true, component: Profile, access: ["admin","manager","company"] },
 	{ path: "/logout", exact: true, component: Logout, access: ["admin","manager","company"] }

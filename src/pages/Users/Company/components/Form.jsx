@@ -4,7 +4,6 @@ import {Fields} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
 import {useTranslation} from "react-i18next";
-import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
     const {t} = useTranslation();
@@ -42,26 +41,29 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 label={t("Пароль")}
                 size="large"
             />
-
             <Field
-                component={Fields.AsyncSelect}
-                name="company_id"
-                placeholder={t("Компания")}
-                isClearable={true}
-                loadOptionsUrl="/companies"
-                label={t("Компания")}
-                optionLabel={option => get(option, 'translate.name')}
+                component={Fields.AntInput}
+                name="companyName"
+                type="text"
+                placeholder={t("Введите название компании")}
+                label={t("Название компании")}
+                size="large"
+                disabled={isUpdate}
             />
 
-            <div className="d-flex align-items-center mb-20 mt-20">
-                <Switch
-                    onChange={value => {
-                        setFieldValue('status', value)
-                    }}
-                    checked={values.status}
-                />
-                <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
-            </div>
+
+            {isUpdate && (
+                <div className="d-flex align-items-center mb-20 mt-20">
+                    <Switch
+                        onChange={value => {
+                            setFieldValue('status', value)
+                        }}
+                        checked={values.status}
+                    />
+                    <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
+                </div>
+            )}
+
 
             <Button
                 type="primary"
