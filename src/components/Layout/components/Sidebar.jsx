@@ -31,7 +31,7 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             <div className="m-sidebar-wrapper">
                 <div className="m-sidebar-head">
                     <a href="/" target="_blank" rel="noopener noreferrer" className="m-sidebar-logo">
-                        <span>MS admin</span>
+                        <span>Zim-Zim admin</span>
                     </a>
                     <div className="menu-collapse-btn" onClick={toggle}/>
                 </div>

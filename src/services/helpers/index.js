@@ -11,6 +11,19 @@ const feedbackLabel = (type) => {
   }
 };
 
+const notificationType = (type) => {
+  switch (type) {
+    case 3:
+      return "Обновление приложения";
+    case 2:
+      return "Скидки";
+    case 1:
+      return "Информация";
+    default:
+      return ""
+  }
+};
+
 const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return "0 Bytes";
 
@@ -45,5 +58,6 @@ const formatDate = (date, format) => {
 export default {
   formatBytes,
   feedbackLabel,
-  formatDate
+  formatDate,
+  notificationType
 }

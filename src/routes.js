@@ -8,6 +8,8 @@ import {Spinner} from "components";
 import App from "./App";
 import get from "lodash/get";
 
+const Notification = lazy(() => import("./pages/Notification"));
+const Faq = lazy(() => import("./pages/Faq"));
 const Categories = lazy(() => import("./pages/Categories"));
 const PopularQueries = lazy(() => import("./pages/PopularQueries"));
 const Reviews = lazy(() => import("./pages/Reviews"));
@@ -45,6 +47,8 @@ const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 const routes = [
 	{ path: "/", exact: true, component: Categories, access: ["admin"] },
 	{ path: "/", exact: true, component: Dishes, access: ["company"] },
+	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
+	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
 	{ path: "/popular-queries", exact: true, component: PopularQueries, access: ["admin"] },
 	{ path: "/reviews", exact: true, component: Reviews, access: ["admin"] },

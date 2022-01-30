@@ -120,6 +120,36 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
                     </div>
 
+                    <div className="d-flex align-items-center mb-24">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('has_delivery', value)
+                            }}
+                            checked={values.has_delivery}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('Доставка')}</div>
+                    </div>
+
+                    <div className="d-flex align-items-center mb-24">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('has_takeaway', value)
+                            }}
+                            checked={values.has_takeaway}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('На вынос')}</div>
+                    </div>
+
+                    <div className="d-flex align-items-center mb-24">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('table_order', value)
+                            }}
+                            checked={values.table_order}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('На стол')}</div>
+                    </div>
+
                     <Button
                         type="primary"
                         size="large"

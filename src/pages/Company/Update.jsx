@@ -103,6 +103,21 @@ const Update = ({location, history}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
+                  name: "has_delivery",
+                  value: get(item, 'has_delivery') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                  name: "has_takeaway",
+                  value: get(item, 'has_takeaway') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                  name: "table_order",
+                  value: get(item, 'table_order') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "name",
                   required: true,
                   value: get(item, 'translate.name', "")

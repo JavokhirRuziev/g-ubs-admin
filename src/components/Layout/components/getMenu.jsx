@@ -34,6 +34,18 @@ const adminMenus = [
         title: "Контрагент",
         link: '/users/company-admins',
         icon: 'menu-i-list'
+    },
+    {
+        id: 'faq',
+        title: "FAQ",
+        link: '/faq',
+        icon: 'menu-i-list'
+    },
+    {
+        id: 'notification',
+        title: "Уведомление",
+        link: '/notification',
+        icon: 'menu-i-list'
     }
 ]
 const contentManagerRoutes = [
