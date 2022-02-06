@@ -17,6 +17,7 @@ const Banner = lazy(() => import("./pages/Banner"));
 const Menus = lazy(() => import("./pages/Menus"));
 const Places = lazy(() => import("./pages/Places"));
 const Tables = lazy(() => import("./pages/Tables"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 
 const Company = lazy(() => import("./pages/Company/Update"));
 const Companies = lazy(() => import("./pages/Companies/List"));
@@ -56,6 +57,7 @@ const routes = [
 	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
 	{ path: "/places", exact: true, component: Places, access: ["company"] },
 	{ path: "/tables", exact: true, component: Tables, access: ["company"] },
+	{ path: "/dashboard", exact: true, component: Dashboard, access: ["company","admin"] },
 
 	{ path: "/profile/company", exact: true, component: Company, access: ["company"] },
 	{ path: "/companies", exact: true, component: Companies, access: ["admin"] },

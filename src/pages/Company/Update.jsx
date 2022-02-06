@@ -36,7 +36,7 @@ const Update = ({location, history}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "translate",
+        include: "translate,workingTimes",
         extra: {_l: tabLang, append: 'gallery0'}
       }}
     >
@@ -154,9 +154,9 @@ const Update = ({location, history}) => {
               }}
             </EntityForm.Main>
 
-            {/*<Board>*/}
-            {/*  <Schedule/>*/}
-            {/*</Board>*/}
+            <Board>
+              <Schedule schedule={get(item, 'working_times', [])}/>
+            </Board>
 
           </Spin>
         )
