@@ -31,7 +31,7 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
             <div className="m-sidebar-wrapper">
                 <div className="m-sidebar-head">
                     <a href="/" target="_blank" rel="noopener noreferrer" className="m-sidebar-logo">
-                        <span>Zim-Zim admin</span>
+                        <span>{get(profile, 'success.name') !== "admin" ? get(profile, 'success.name') : 'Zim-Zim'} admin</span>
                     </a>
                     <div className="menu-collapse-btn" onClick={toggle}/>
                 </div>

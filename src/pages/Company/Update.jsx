@@ -90,12 +90,12 @@ const Update = ({location, history}) => {
                 },
                 {
                   name: "latitude",
-                  value: get(item, 'latitude'),
+                  value: get(item, 'latitude') ? get(item, 'latitude') : '41.3137234',
                   onSubmitValue: value => value && String(value)
                 },
                 {
                   name: "longitude",
-                  value: get(item, 'longitude'),
+                  value: get(item, 'longitude') ? get(item, 'longitude') : '69.2396271',
                   onSubmitValue: value => value && String(value)
                 },
                 {

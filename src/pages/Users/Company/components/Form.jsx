@@ -10,7 +10,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
     return (
         <div>
             <div
-                className="title-md fs-16 mb-20">{isUpdate ? t('Изменение менеджера') : t('Добавление менеджера')}</div>
+                className="title-md fs-16 mb-20">{isUpdate ? t('Изменение контрагента') : t('Добавление контрагента')}</div>
 
             <div className="fake-inputs">
                 <input type="text" name={"login"} placeholder={t("Введите логин")}/>
