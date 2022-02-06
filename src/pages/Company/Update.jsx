@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 
 import {Spin, Tabs} from 'antd';
-import {Panel} from 'components';
+import {Board, Panel} from 'components';
 import EntityForm from 'modules/entity/forms';
 import EntityContainer from 'modules/entity/containers';
 import Form from './components/Form';
+import Schedule from "./components/Schedule";
 
 import {useTranslation} from "react-i18next";
 import qs from "query-string";
@@ -84,7 +85,7 @@ const Update = ({location, history}) => {
                 },
                 {
                   name: "gallery",
-                  value: get(item, 'gallery0', []),
+                  value: get(item, 'gallery0') ? get(item, 'gallery0') : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
                 {
@@ -152,6 +153,10 @@ const Update = ({location, history}) => {
                 );
               }}
             </EntityForm.Main>
+
+            {/*<Board>*/}
+            {/*  <Schedule/>*/}
+            {/*</Board>*/}
 
           </Spin>
         )
