@@ -60,7 +60,7 @@ body {
   font-weight: 300;
   color: $mainColor;
   font-size: 14px;
-  background-color: #f2f2f3;
+  background-color: #f4f7fa;
 
   &.modal-open {
     //padding-right: 17px;
@@ -81,7 +81,7 @@ body {
   color: $blueColor!important;
 }
 .title-md {
-  color: #000000;
+  color: #3f4d67;
   font-size: 18px;
   font-weight: 700;
 }
@@ -746,4 +746,12 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
 
 .no-wrap{
   white-space: nowrap;
+}
+
+.ant-modal-mask{
+  background-color: rgba(214,217,229,.55);
+}
+
+.ant-table{
+  color: #3f4d67;
 }

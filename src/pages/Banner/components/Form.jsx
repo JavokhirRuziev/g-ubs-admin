@@ -42,6 +42,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 label="Линк"
                 size="large"
             />
+
             <Field
                 component={Fields.UploadImageManager}
                 name="file_id"

@@ -1,5 +1,11 @@
 const adminMenus = [
     {
+        id: 'dashboard',
+        title: "Dashboard",
+        link: '/dashboard',
+        icon: 'menu-i-dashboard'
+    },
+    {
         id: 'category',
         title: "Категории",
         link: '/categories',
@@ -9,7 +15,7 @@ const adminMenus = [
         id: 'company',
         title: "Компании",
         link: '/companies',
-        icon: 'menu-i-list'
+        icon: 'menu-i-embassy'
     },
     {
         id: 'popular-queries',
@@ -50,6 +56,12 @@ const adminMenus = [
 ]
 const contentManagerRoutes = [
     {
+        id: 'dashboard',
+        title: "Dashboard",
+        link: '/dashboard',
+        icon: 'menu-i-dashboard'
+    },
+    {
         id: 'dishes',
         title: "Еды",
         link: '/dishes',
@@ -59,7 +71,7 @@ const contentManagerRoutes = [
         id: 'menus',
         title: "Меню",
         link: '/menus',
-        icon: 'menu-i-list'
+        icon: 'menu-i-file'
     },
     {
         id: 'places',

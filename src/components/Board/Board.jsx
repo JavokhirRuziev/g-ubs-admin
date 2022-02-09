@@ -24,7 +24,7 @@ Board.defaultProps = {
 const BoardWrap = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #dcdde0;
+  background-color: #d6d9e5;
   border-radius: 10px;
   ${props => css`
     height: calc(100vh - ${props.calc}px)

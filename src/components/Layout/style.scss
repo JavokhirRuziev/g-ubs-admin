@@ -153,12 +153,13 @@ $hc: #1890ff;
 .m-layout{
   display: flex;
   .m-sidebar{
+    box-shadow: 1px 0 20px 0 #3f4d67;
     width: 100%;
     max-width: 60px;
     height: 100vh;
     overflow: hidden;
     overflow-y: auto;
-    background-color: #051c3f;
+    background-color: #3f4d67;
     color: #ffffff;
     position: fixed;
     left: 0;
@@ -214,12 +215,13 @@ $hc: #1890ff;
       align-items: center;
       span{
         color: #ffffff;
-        font-size: 12px;
+        font-size: 14px;
         text-transform: uppercase;
         margin-left: 10px;
         font-weight: 500;
         opacity: 0;
         transition: .2s ease;
+        white-space: nowrap;
       }
       img{
         width: 36px;
@@ -265,7 +267,7 @@ $hc: #1890ff;
     }
     .submenu{
       //padding: 10px 0;
-      background-color: #0f2547;
+      background-color: #2d3e5c;
       max-height: 0;
       opacity: 0;
       transition: .2s ease-in-out;
@@ -352,7 +354,7 @@ $hc: #1890ff;
       }
     }
     a, div, .m-menu-link{
-      color: #ffffff;
+      color: #a9b7d0;
       text-decoration: none;
       display: block;
     }

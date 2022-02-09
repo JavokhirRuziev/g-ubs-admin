@@ -46,8 +46,7 @@ const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 
 const routes = [
-	{ path: "/", exact: true, component: Categories, access: ["admin"] },
-	{ path: "/", exact: true, component: Dishes, access: ["company"] },
+	{ path: "/", exact: true, component: Dashboard, access: ["admin","company"] },
 	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
 	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },

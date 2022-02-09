@@ -15,6 +15,7 @@ import {
     SearchControl,
     TypeSelector
 } from "react-yandex-maps";
+import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
 
@@ -86,6 +87,17 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             </GridElements.Column>
             <GridElements.Column xs={4} gutter={10}>
                 <Panel>
+                    <Field
+                        component={Fields.AsyncSelect}
+                        name="categories"
+                        placeholder={t("Категория")}
+                        isClearable={true}
+                        loadOptionsUrl="/categories"
+                        className={"mb-24"}
+                        label={t("Категория")}
+                        optionLabel={"title_ru"}
+                        isMulti={true}
+                    />
                     <Field
                         component={Fields.AntInput}
                         name="tip"
