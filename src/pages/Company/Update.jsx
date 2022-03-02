@@ -114,6 +114,11 @@ const Update = ({location, history}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
+                  name: "has_booking",
+                  value: get(item, 'has_booking') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "table_order",
                   value: get(item, 'table_order') === 1,
                   onSubmitValue: value => value ? 1 : 0

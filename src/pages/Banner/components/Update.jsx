@@ -27,6 +27,7 @@ const Update = ({selected, showUpdateModal}) => {
                 {name: "title_ru", required: true, value: get(selected, 'title_ru')},
                 {name: "title_en", required: true, value: get(selected, 'title_en')},
                 {name: "link", value: get(selected, 'link')},
+                {name: "color", value: get(selected, 'color')},
                 {
                     name: "status",
                     value: !!get(selected, 'status'),

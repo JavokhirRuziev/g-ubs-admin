@@ -162,6 +162,16 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         <div className="ant-label mb-0 ml-10">{t('На стол')}</div>
                     </div>
 
+                    <div className="d-flex align-items-center mb-24">
+                        <Switch
+                            onChange={value => {
+                                setFieldValue('has_booking', value)
+                            }}
+                            checked={values.has_booking}
+                        />
+                        <div className="ant-label mb-0 ml-10">{t('Забронировать')}</div>
+                    </div>
+
                     <Button
                         type="primary"
                         size="large"

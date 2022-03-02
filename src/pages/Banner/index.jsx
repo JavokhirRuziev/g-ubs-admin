@@ -71,7 +71,7 @@ const Index = () => {
         onCancel={() => showCreateModal(false)}
         footer={null}
         centered
-        width={430}
+        width={700}
         destroyOnClose
       >
         <Create {...{showCreateModal}}/>
@@ -82,7 +82,7 @@ const Index = () => {
         onCancel={() => showUpdateModal(false)}
         footer={null}
         centered
-        width={430}
+        width={700}
         destroyOnClose
       >
         <Update {...{selected, showUpdateModal}}/>
@@ -149,6 +149,16 @@ const Index = () => {
                         title: t("Название (EN)"),
                         dataIndex: "title_en",
                         render: value => <div className="divider-wrapper">{value}</div>
+                      },
+                      {
+                        title: t("Цвет фона"),
+                        dataIndex: "color",
+                        className: 'text-cen w-82',
+                        render: value => {
+                          return <div className="divider-wrapper">
+                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value ? value : '#000000'}}/>
+                          </div>
+                        }
                       },
                       {
                         title: t("Статус"),

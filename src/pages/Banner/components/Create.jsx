@@ -26,6 +26,7 @@ const Create = ({showCreateModal}) => {
                 {name: "title_en", required: true},
                 {name: "title_uz", required: true},
                 {name: "link"},
+                {name: "color"},
                 {name: "status", value: true, onSubmitValue: value => value ? 1 : 0},
                 {
                     name: "file_id",
