@@ -85,6 +85,7 @@ const routes = [
 
 const adminRoutes = routes.filter(i => i.access.includes("admin"));
 const contentManagerRoutes = routes.filter(i => i.access.includes("company"));
+const managerRoutes = routes.filter(i => i.access.includes("manager"));
 
 export default () => (
 	<Router {...{ history }}>
@@ -107,6 +108,16 @@ export default () => (
 					)}
 					{(get(data, 'success.role') === 'company') && (
 						contentManagerRoutes.map((route, key) => (
+							<Route
+								key={key}
+								path={route.path}
+								component={route.component}
+								exact
+							/>
+						))
+					)}
+					{(get(data, 'success.role') === 'manager') && (
+						managerRoutes.map((route, key) => (
 							<Route
 								key={key}
 								path={route.path}
