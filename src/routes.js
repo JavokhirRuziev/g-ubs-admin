@@ -80,12 +80,10 @@ const routes = [
 
 	{ path: "/translation", exact: true, component: Translation, access: ["admin"] },
 	{ path: "/profile", exact: true, component: Profile, access: ["admin","manager","company"] },
-	{ path: "/logout", exact: true, component: Logout, access: ["admin","manager","company"] }
 ];
 
 const adminRoutes = routes.filter(i => i.access.includes("admin"));
 const contentManagerRoutes = routes.filter(i => i.access.includes("company"));
-const managerRoutes = routes.filter(i => i.access.includes("manager"));
 
 export default () => (
 	<Router {...{ history }}>
@@ -116,16 +114,11 @@ export default () => (
 							/>
 						))
 					)}
-					{(get(data, 'success.role') === 'manager') && (
-						managerRoutes.map((route, key) => (
-							<Route
-								key={key}
-								path={route.path}
-								component={route.component}
-								exact
-							/>
-						))
-					)}
+					<Route
+						path="/logout"
+						component={Logout}
+						exact
+					/>
                 </Switch>
               </Suspense>
             </Layout>
