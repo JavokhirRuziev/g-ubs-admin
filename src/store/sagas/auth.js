@@ -10,7 +10,7 @@ export function* LoginRequest(action){
 
   try {
 
-    const { data } = yield call(api.request.post, queryBuilder("/user/sign-in", {include: 'token'}), { name, password });
+    const { data } = yield call(api.request.post, queryBuilder("/user/sign-in", {include: 'token'}), { login:name, password });
 
     yield call(storage.set, "token", data.success.token);
 
