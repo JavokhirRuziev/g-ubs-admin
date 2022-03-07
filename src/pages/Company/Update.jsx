@@ -79,6 +79,10 @@ const Update = ({location, history}) => {
                   type: 'number',
                 },
                 {
+                  name: "delivery_price",
+                  value: get(item, 'delivery_price')
+                },
+                {
                   name: "file_id",
                   value: get(item, 'file') ? [get(item, 'file')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")

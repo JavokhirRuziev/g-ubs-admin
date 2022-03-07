@@ -142,6 +142,18 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         <div className="ant-label mb-0 ml-10">{t('Доставка')}</div>
                     </div>
 
+                    {values.has_delivery && (
+                        <Field
+                            component={Fields.AntInput}
+                            name="delivery_price"
+                            type="text"
+                            placeholder={t("Введите сумму доставку")}
+                            label={t("Цена за доставку")}
+                            size="large"
+                        />
+                    )}
+
+
                     <div className="d-flex align-items-center mb-24">
                         <Switch
                             onChange={value => {

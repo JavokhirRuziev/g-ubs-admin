@@ -42,6 +42,10 @@ const Create = ({location, history}) => {
           onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
         },
         {
+          name: "kitchener_id",
+          onSubmitValue: value => value && value.id
+        },
+        {
           name: "file_id",
           value: [],
           required: true,
