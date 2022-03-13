@@ -101,6 +101,12 @@ const contentManagerRoutes = [
         link: '/profile/company',
         icon: 'menu-i-dashboard'
     },
+    {
+        id: 'printers',
+        title: "Принтеры",
+        link: '/printers',
+        icon: 'menu-i-dashboard'
+    },
 ]
 
 
