@@ -107,7 +107,7 @@ const List = () => {
                     dataKey={"data"}
                     params={{
                         sort: '-id',
-                        limit: 10,
+                        limit: 100,
                         page,
                         filter: {['role.role']: 'company'},
                         include: 'company'
