@@ -1,8 +1,8 @@
 const adminMenus = [
     {
-        id: 'dashboard',
-        title: "Dashboard",
-        link: '/dashboard',
+        id: 'orders',
+        title: "Заказы",
+        link: '/orders',
         icon: 'menu-i-dashboard'
     },
     {
@@ -56,16 +56,10 @@ const adminMenus = [
 ]
 const contentManagerRoutes = [
     {
-        id: 'dashboard',
-        title: "Dashboard",
-        link: '/dashboard',
-        icon: 'menu-i-dashboard'
-    },
-    {
         id: 'dishes',
         title: "Еды",
         link: '/dishes',
-        icon: 'menu-i-list'
+        icon: 'menu-i-dashboard'
     },
     {
         id: 'menus',

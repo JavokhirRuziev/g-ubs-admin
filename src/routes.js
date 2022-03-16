@@ -8,6 +8,7 @@ import {Spinner} from "components";
 import App from "./App";
 import get from "lodash/get";
 
+const Orders = lazy(() => import("./pages/Orders"));
 const Notification = lazy(() => import("./pages/Notification"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Categories = lazy(() => import("./pages/Categories"));
@@ -47,7 +48,9 @@ const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 
 const routes = [
-	{ path: "/", exact: true, component: Dashboard, access: ["admin","company"] },
+	{ path: "/", exact: true, component: Dashboard, access: ["company"] },
+	{ path: "/", exact: true, component: Orders, access: ["admin"] },
+	{ path: "/orders", exact: true, component: Orders, access: ["admin"] },
 	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
 	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
