@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Table, Board } from "components";
 import { Pagination, Spin, Tag } from "antd";
@@ -9,11 +9,18 @@ import qs from "query-string";
 
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
+import variables from "../../variables";
 
-const Index = ({location}) => {
-	const [page, setPage] = useState(1);
+const Index = ({location, history}) => {
 	const { t } = useTranslation();
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+
+	const page = params.page;
+	const setPage = (page) => {
+		history.push({
+			search: qs.stringify({...params, page}, {encode: false})
+		})
+	}
 
 	return (
 		<>
@@ -31,7 +38,7 @@ const Index = ({location}) => {
 					params={{
 						limit: 50,
 						include: "user,waiter,payments",
-						page,
+						page: page ? page : 1,
 						filter: {
 							status: params.status && params.status,
 							type: params.type && params.type,
@@ -43,6 +50,8 @@ const Index = ({location}) => {
 					}}
 				>
 					{({ items, isFetched, meta }) => {
+						const currentPage = get(meta, 'currentPage');
+						const perPage = get(meta, 'perPage');
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -50,10 +59,29 @@ const Index = ({location}) => {
 										rowKey="id"
 										columns={[
 											{
-												title: "ID",
+												title: "№",
+												className: "w-100",
+												render: (value,row,index) => {
+													const a = Number(currentPage-1)*Number(perPage);
+													const n = currentPage > 1 ? a+index+1 : index+1
+													return (
+														<div className="divider-wrapper">{n}</div>
+													)
+												}
+											},
+											{
+												title: "Заказ - ID",
 												dataIndex: "id",
 												className: "w-100",
 												render: value => <div className="divider-wrapper">{value}</div>
+											},
+											{
+												title: "Дата",
+												dataIndex: "created_at",
+												className: "",
+												render: value => <div className="divider-wrapper">
+													{helpers.formatDate(value, "HH:mm / DD.MM.YYYY")}
+												</div>
 											},
 											{
 												title: "Тип",
@@ -61,6 +89,14 @@ const Index = ({location}) => {
 												className: "",
 												render: value => <div className="divider-wrapper">
 													{helpers.getOrderType(value)}
+												</div>
+											},
+											{
+												title: "Официант",
+												dataIndex: "waiter",
+												className: "",
+												render: value => <div className="divider-wrapper">
+													{value ? get(value, 'to_user.name') : '-'}
 												</div>
 											},
 											{
@@ -72,11 +108,34 @@ const Index = ({location}) => {
 												</div>
 											},
 											{
-												title: "Дата",
-												dataIndex: "created_at",
+												title: "Цена доставки",
+												dataIndex: "delivery_price",
+												className: "",
+												render: (value,row) => <div className="divider-wrapper">
+													{row.type === variables.TYPE_DELIVERY ? <span>{value ? value.toLocaleString() : '-'}</span> : '-'}
+												</div>
+											},
+											{
+												title: "Цена обслуги",
+												dataIndex: "tip_price",
+												className: "",
+												render: (value) => <div className="divider-wrapper">
+													<span>{value ? value.toLocaleString() : '-'}</span>
+												</div>
+											},
+											{
+												title: "Тип оплаты",
+												dataIndex: "payments",
 												className: "",
 												render: value => <div className="divider-wrapper">
-													{helpers.formatDate(value, "HH:mm / DD.MM.YYYY")}
+													{(Array.isArray(value) && value.length > 0) ? (
+														value.map(v => (
+															<div className="d-flex">
+																<span>{helpers.getPaymentType(v.payment_type)}</span>
+																<span className="ml-10" style={{opacity: '.6'}}>{v.amount.toLocaleString()}</span>
+															</div>
+														))
+													) : '-'}
 												</div>
 											},
 											{

@@ -114,6 +114,21 @@ const getOrderStatus = (status) => {
 	}
 };
 
+const getPaymentType = (status) => {
+	switch (status){
+		case 1:
+			return "Cash";
+		case 2:
+			return "Payme";
+		case 3:
+			return "Click";
+		case 4:
+			return "Terminal";
+		default:
+			return "Не указон"
+	}
+}
+
 export default {
 	formatBytes,
 	feedbackLabel,
@@ -121,6 +136,7 @@ export default {
 	notificationType,
 	getOrderType,
 	getOrderStatus,
+	getPaymentType,
 	orderTypes,
-	orderStatus
+	orderStatus,
 };
