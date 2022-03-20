@@ -52,7 +52,13 @@ const adminMenus = [
         title: "Уведомление",
         link: '/notification',
         icon: 'menu-i-list'
-    }
+    },
+    {
+        id: 'settings',
+        title: "Настройки",
+        link: '/settings',
+        icon: 'menu-i-setting'
+    },
 ]
 const contentManagerRoutes = [
     {
