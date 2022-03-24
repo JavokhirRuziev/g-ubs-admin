@@ -44,14 +44,14 @@ export class One extends Component {
 		}
 	}
 
-	Load = (id, entity, name, url, { fields = [], include = [], extra = {} } = {}, primaryKey, relations, onSuccess, onError) => {
+	Load = (id, entity, name, url, { fields = [], include = [], extra = {}, filter = {} } = {}, primaryKey, relations, onSuccess, onError) => {
 		const { LoadOne } = this.props;
 		LoadOne({
 			id,
 			entity,
 			name,
 			url,
-			params: { fields, include, extra },
+			params: { fields, include, filter, extra },
 			primaryKey,
 			relations,
 			cb: {

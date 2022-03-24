@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Table, Board } from "components";
 import { Pagination, Spin, Tag } from "antd";
@@ -10,9 +10,14 @@ import qs from "query-string";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import variables from "../../variables";
+import "../Dashboard/style.scss";
+import { useDispatch } from "react-redux";
+import Actions from "../../modules/entity/actions";
 
 const Index = ({location, history}) => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const [statistic, setStatistic] = useState([]);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
 	const page = params.page;
@@ -22,13 +27,41 @@ const Index = ({location, history}) => {
 		})
 	}
 
+	useEffect(() => {
+		dispatch(Actions.LoadDefault.request({
+			url: '/dashboard/payment-reports',
+			params: {
+				filter: {
+					'orders.status': params.status && params.status,
+					'orders.type': params.type && params.type,
+				},
+				extra: {
+					start_date: params.start_at && params.start_at,
+					end_date: params.end_at && params.end_at
+				}
+			},
+			cb: {
+				success: (data) => {
+					setStatistic(data)
+				},
+				error: () => {},
+			}
+		}))
+	}, [params.type, params.status, params.start_at, params.end_at])
+
+
+	const cash = statistic.find(a => a.payment_type === 1);
+	const payme = statistic.find(a => a.payment_type === 2);
+	const click = statistic.find(a => a.payment_type === 3);
+	const terminal = statistic.find(a => a.payment_type === 4);
+
 	return (
 		<>
 			<div className="d-flex justify-content-between align-items-center mb-20">
 				<div className="title-md">{t("Заказы")}</div>
 			</div>
 
-			<Board className="border-none">
+			<Board className="border-none mb-30">
 				<Filter/>
 
 				<EntityContainer.All
@@ -174,6 +207,65 @@ const Index = ({location, history}) => {
 					}}
 				</EntityContainer.All>
 			</Board>
+
+			<div className="row mb-30">
+				<div className="col-3">
+					<div className="dashboard-card">
+						<div>
+							<div className="dashboard-card__label">Наличние</div>
+							<div className="dashboard-card__num">
+								<span>{cash ? cash.amount.toLocaleString() : 0}</span>
+								<span>сум</span>
+							</div>
+						</div>
+						<div>
+							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+						</div>
+					</div>
+				</div>
+				<div className="col-3">
+					<div className="dashboard-card">
+						<div>
+							<div className="dashboard-card__label">Payme</div>
+							<div className="dashboard-card__num">
+								<span>{payme ? payme.amount.toLocaleString() : 0}</span>
+								<span>сум</span>
+							</div>
+						</div>
+						<div>
+							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+						</div>
+					</div>
+				</div>
+				<div className="col-3">
+					<div className="dashboard-card">
+						<div>
+							<div className="dashboard-card__label">Click</div>
+							<div className="dashboard-card__num">
+								<span>{click ? click.amount.toLocaleString() : 0}</span>
+								<span>сум</span>
+							</div>
+						</div>
+						<div>
+							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+						</div>
+					</div>
+				</div>
+				<div className="col-3">
+					<div className="dashboard-card">
+						<div>
+							<div className="dashboard-card__label">Терминал</div>
+							<div className="dashboard-card__num">
+								<span>{terminal ? terminal.amount.toLocaleString() : 0}</span>
+								<span>сум</span>
+							</div>
+						</div>
+						<div>
+							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+						</div>
+					</div>
+				</div>
+			</div>
 		</>
 	);
 };
