@@ -69,7 +69,7 @@ const Index = ({location, history}) => {
 					name={`all`}
 					url="/dashboard/orders"
 					params={{
-						limit: 50,
+						limit: 100,
 						include: "user,waiter,payments",
 						page: page ? page : 1,
 						filter: {
