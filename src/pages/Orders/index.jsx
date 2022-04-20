@@ -63,8 +63,8 @@ const Index = ({location, history}) => {
 		axios({
 			url: queryBuilder(config.API_ROOT + `/dashboard/report`, {
 				filter: {
-					type: params.type,
-					status: params.status
+					"orders.type": params.type,
+					"orders.status": params.status
 				},
 				extra: {
 					start_date: params.start_at,
