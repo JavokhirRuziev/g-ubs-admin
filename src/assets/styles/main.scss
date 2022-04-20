@@ -755,3 +755,22 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
 .ant-table{
   color: #3f4d67;
 }
+
+.download-excel-btn{
+  background-color: #4caf50;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  img{
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
+  }
+  button{
+    background-color: initial;
+    padding: 10px 20px 10px 0;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+}

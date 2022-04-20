@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { useDispatch } from "react-redux";
 import Actions from "modules/entity/actions";
-import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 
 const DashboardChart = ({ isDashboardOnly }) => {

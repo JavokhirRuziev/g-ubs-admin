@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Board } from "components";
 import { Pagination, Spin, Tag } from "antd";
 import EntityContainer from "modules/entity/containers";
-import { helpers } from "services";
+import { helpers, queryBuilder } from "services";
 import Filter from "./Filter";
 import qs from "query-string";
 
@@ -13,6 +13,9 @@ import variables from "../../variables";
 import "../Dashboard/style.scss";
 import { useDispatch } from "react-redux";
 import Actions from "../../modules/entity/actions";
+import ExcelIcon from "assets/images/icons/excel-icon.svg"
+import axios from "axios";
+import config from "config"
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
@@ -54,6 +57,35 @@ const Index = ({location, history}) => {
 	const payme = statistic.find(a => a.payment_type === 2);
 	const click = statistic.find(a => a.payment_type === 3);
 	const terminal = statistic.find(a => a.payment_type === 4);
+
+	const downloadReport = () => {
+		// setSubmitting(true);
+		axios({
+			url: queryBuilder(config.API_ROOT + `/dashboard/report`, {
+				filter: {
+					type: params.type,
+					status: params.status
+				},
+				extra: {
+					start_date: params.start_at,
+					end_date: params.end_at,
+
+				}
+			}), //your url
+			method: 'GET',
+			responseType: 'blob', // important
+		}).then((response) => {
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', 'report.xlsx'); //or any other extension
+			document.body.appendChild(link);
+			link.click();
+			// setSubmitting(false);
+		}).catch(function (error) {
+			// setSubmitting(false);
+		});
+	};
 
 	return (
 		<>
@@ -193,7 +225,13 @@ const Index = ({location, history}) => {
 									/>
 								</div>
 								{meta && meta.perPage && (
-									<div className="pad-15 d-flex justify-content-end">
+									<div className="pad-15 d-flex justify-content-between align-items-center">
+										<div className="download-excel-btn" onClick={downloadReport}>
+											<img src={ExcelIcon} alt="" />
+											<button>
+												Скачать excel
+											</button>
+										</div>
 										<Pagination
 											current={meta.currentPage}
 											pageSize={meta.perPage}
