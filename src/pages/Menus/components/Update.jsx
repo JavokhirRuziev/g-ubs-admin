@@ -32,6 +32,11 @@ const Update = ({selected, showUpdateModal}) => {
                     name: "status",
                     value: !!get(selected, 'status'),
                     onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                    name: "eighteen",
+                    value: !!get(selected, 'eighteen'),
+                    onSubmitValue: value => value ? 1 : 0
                 }
             ]}
             params={{

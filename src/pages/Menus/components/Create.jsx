@@ -27,7 +27,8 @@ const Create = ({showCreateModal}) => {
                 {name: "title_uz", required: true},
                 {name: "title_en", required: true},
                 {name: "sort", type: 'number'},
-                {name: "status", value: true, onSubmitValue: value => value ? 1 : 0}
+                {name: "status", value: true, onSubmitValue: value => value ? 1 : 0},
+                {name: "eighteen", value: false, onSubmitValue: value => value ? 1 : 0}
             ]}
             params={{
                 extra: {_l: 'ru'},

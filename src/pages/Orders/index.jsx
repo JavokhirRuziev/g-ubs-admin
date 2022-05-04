@@ -107,10 +107,12 @@ const Index = ({location, history}) => {
 						filter: {
 							status: params.status && params.status,
 							type: params.type && params.type,
+							order_number: params.order_number && params.order_number
 						},
 						extra: {
 							start_date: params.start_at && params.start_at,
-							end_date: params.end_at && params.end_at
+							end_date: params.end_at && params.end_at,
+							dish_id: params.dish_id && params.dish_id.split('/')[0]
 						}
 					}}
 				>
@@ -135,8 +137,8 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Заказ - ID",
-												dataIndex: "id",
+												title: "Номер заказа",
+												dataIndex: "order_number",
 												className: "w-100",
 												render: value => <div className="divider-wrapper">{value}</div>
 											},

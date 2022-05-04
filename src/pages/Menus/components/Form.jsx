@@ -53,6 +53,16 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
             </div>
 
+            <div className="d-flex align-items-center mb-20">
+                <Switch
+                    onChange={value => {
+                        setFieldValue('eighteen', value)
+                    }}
+                    checked={values.eighteen}
+                />
+                <div className="ant-label mb-0 ml-10">{t('18 +')}</div>
+            </div>
+
             <Button
                 type="primary"
                 size="large"

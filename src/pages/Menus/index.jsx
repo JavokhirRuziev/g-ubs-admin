@@ -157,7 +157,17 @@ const Index = () => {
                             <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
                           </div>
                         }
-                      }
+                      },
+                        {
+                        title: '*',
+                        dataIndex: "eighteen",
+                        className: 'text-cen w-82',
+                        render: value => {
+                          return <div className="divider-wrapper">
+                            <div className="color-view-ellipse m-0-auto" style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                          </div>
+                        }
+                      },
                     ]}
                     dataSource={items}
                   />
