@@ -67,6 +67,7 @@ const Index = ({location, history}) => {
 					"orders.status": params.status
 				},
 				extra: {
+					dish_id: params.dish_id && params.dish_id.split('/')[0],
 					start_date: params.start_at,
 					end_date: params.end_at,
 
