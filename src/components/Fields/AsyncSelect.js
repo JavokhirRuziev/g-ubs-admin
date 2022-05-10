@@ -58,8 +58,8 @@ class AsyncSelect extends Component {
           ? [...extraOptions, ...loadOptionsKey(data)]
           : [...extraOptions, ...get(data, loadOptionsKey, [])]
         : data,
-      hasMore: get(data, "_meta.currentPage", 1) < get(data, "_meta.pageCount", 1),
-      additional: { page: get(data, "_meta.currentPage", 1) + 1 }
+      hasMore: get(data, "current_page", 1) < get(data, "last_page", 1),
+      additional: { page: get(data, "current_page", 1) + 1 }
     };
   };
 
