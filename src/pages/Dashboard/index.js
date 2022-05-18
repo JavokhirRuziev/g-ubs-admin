@@ -5,6 +5,7 @@ import Actions from "modules/entity/actions";
 
 import get from "lodash/get";
 import "./style.scss";
+import { Spinner } from "../../components";
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -49,8 +50,10 @@ const Index = () => {
             <div className="title-md mb-20">Dashboard</div>
             <div className="dashboard-block">
                 <div className="dashboard-block__left">
-                    {isFetched && (
+                    {isFetched ? (
                         <DashboardChart {...{isFetched, chartInfo}}/>
+                    ) : (
+                        <Spinner/>
                     )}
                 </div>
                 <div className="dashboard-block__right">
