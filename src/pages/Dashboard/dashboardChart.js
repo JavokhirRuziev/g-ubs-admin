@@ -1,56 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { useDispatch } from "react-redux";
-import Actions from "modules/entity/actions";
 import { useTranslation } from "react-i18next";
+import get from "lodash/get";
+import moment from "moment";
 
-const DashboardChart = ({ isDashboardOnly }) => {
-	const dispatch = useDispatch();
-	const [current, setCurrent] = useState([]);
-	const [last, setLast] = useState([]);
-	const [isFetched, setFetched] = useState(false);
+const DashboardChart = ({isFetched, chartInfo}) => {
+	const [dataBooking, setDataBooking] = useState([]);
+	const [dataDelivery, setDataDelivery] = useState([]);
+	const [dataOnTable, setDataOnTable] = useState([]);
+	const [dataTakeaway, setDataTakeaway] = useState([]);
+
 	const { t } = useTranslation();
+	const daysOnMonth = moment().endOf('month').format('DD');
 
-
-	useEffect(() => {
-		loadChartData();
-		const interval3 = setInterval(() => {
-			if (isDashboardOnly) {
-				loadChartData();
-			}
-		}, 11000);
-
-		return () => {
-			clearInterval(interval3);
-		};
-	}, []);
-
-	const loadChartData = () => {
-		setFetched(false);
-		dispatch(Actions.LoadDefault.request({
-			url: `/boss/boss/chart`,
-			params: {
-				limit: 100
-			},
-			cb: {
-				success: data => {
-					setCurrent(Object.values(data.current));
-					setLast(Object.values(data.last));
-					setFetched(true);
-				},
-				error: () => {
-					setFetched(true);
-				}
-			}
-		}));
-	};
-
+	const formatDate = value => {
+		const a = value.split(" ")[0];
+		const month = a.split("-")[1]
+		const day = a.split("-")[2]
+		return day + "-" + month;
+	}
 	const dataLineChart = {
-		labels: ['01.02','02.02','03.02','04.02','05.02','06.02','07.02','08.02','09.02','10.02','11.02','12.02','13.02','14.02','15.02','16.02','17.02','18.02','19.02','20.02','21.02','22.02','23.02','24.02','25.02','26.02','27.02','28.02'],
+		labels: dataBooking.reduce((prev,curr) => [...prev, formatDate(curr.date)], []),
 		datasets: [
 			{
-				label: "Заказы (шт)",
-				data: [6,8,15,7,8,6,2,4,4,5,6,8,5,7,8,6,5,4,4,5,6,8,5,7,8,6,4,4],
+				label: "Доставка (шт)",
+				data: dataDelivery.reduce((prev,curr) => [...prev, curr.count], []),
 				backgroundColor: "rgba(255,255,255,0)",
 				borderColor: "#00A389",
 				pointHoverRadius: 10,
@@ -60,7 +34,7 @@ const DashboardChart = ({ isDashboardOnly }) => {
 			},
 			{
 				label: "Бронирование (шт)",
-				data: [3,8,15,2,8,6,4,4,2,3,6,8,4,7,8,6,4,4,4,5,6,5,5,7,8,6,4,4],
+				data: dataBooking.reduce((prev,curr) => [...prev, curr.count], []),
 				backgroundColor: "rgba(255,255,255,0)",
 				borderColor: "#FFBB54",
 				pointHoverRadius: 10,
@@ -70,7 +44,7 @@ const DashboardChart = ({ isDashboardOnly }) => {
 			},
 			{
 				label: "На стол (шт)",
-				data: [2,8,7,2,8,6,7,4,4,5,6,8,15,7,8,6,1,4,3,5,6,8,2,7,8,6,4,4],
+				data: dataOnTable.reduce((prev,curr) => [...prev, curr.count], []),
 				backgroundColor: "rgba(255,255,255,0)",
 				borderColor: "#03a9f4",
 				pointHoverRadius: 10,
@@ -79,8 +53,8 @@ const DashboardChart = ({ isDashboardOnly }) => {
 				pointBackgroundColor: "#03a9f4"
 			},
 			{
-				label: "Продажа (сум)",
-				data: [2,2,3,4,2,3,3,4,2,5,6,8,10,7,8,6,5,4,4,5,6,8,9,9,9,4,3,4],
+				label: "Собой (шт)",
+				data: dataTakeaway.reduce((prev,curr) => [...prev, curr.count], []),
 				backgroundColor: "rgba(255,255,255,0)",
 				borderColor: "#9c27b0",
 				pointHoverRadius: 10,
@@ -113,6 +87,80 @@ const DashboardChart = ({ isDashboardOnly }) => {
 		}
 	};
 
+	useEffect(() => {
+		//Booking
+		const booking = get(chartInfo, 'chart.booking', []);
+		const date = moment(get(booking, "[0].date"));
+		const newDataBooking = [...Array(Number(daysOnMonth))].map((item, i) => {
+			const currentDay = moment(`${date.year()}-${date.month() + 1}-${i + 1} 12:00:00`);
+			const day = currentDay.dayOfYear();
+			const hasDate = booking.find(j => Number(j.doy) === day);
+			if (hasDate) {
+				return hasDate;
+			}
+			return {
+				count: get(item, "count", 0),
+				date: get(item, "date", currentDay.format("YYYY-MM-DD HH:mm:ss")),
+				doy: String(currentDay.dayOfYear())
+			};
+		});
+		setDataBooking(newDataBooking);
+
+		//Delivery
+		const delivery = get(chartInfo, 'chart.delivery', []);
+		const date2 = moment(get(delivery, "[0].date"));
+		const newDataDelivery = [...Array(Number(daysOnMonth))].map((item, i) => {
+			const currentDay = moment(`${date2.year()}-${date.month() + 1}-${i + 1} 12:00:00`);
+			const day = currentDay.dayOfYear();
+			const hasDate = delivery.find(j => Number(j.doy) === day);
+			if (hasDate) {
+				return hasDate;
+			}
+			return {
+				count: get(item, "count", 0),
+				date: get(item, "date", currentDay.format("YYYY-MM-DD HH:mm:ss")),
+				doy: String(currentDay.dayOfYear())
+			};
+		});
+		setDataDelivery(newDataDelivery);
+
+		//OnTable
+		const onTable = get(chartInfo, 'chart.on_table', []);
+		const date3 = moment(get(onTable, "[0].date"));
+		const newDataOnTable = [...Array(Number(daysOnMonth))].map((item, i) => {
+			const currentDay = moment(`${date3.year()}-${date.month() + 1}-${i + 1} 12:00:00`);
+			const day = currentDay.dayOfYear();
+			const hasDate = onTable.find(j => Number(j.doy) === day);
+			if (hasDate) {
+				return hasDate;
+			}
+			return {
+				count: get(item, "count", 0),
+				date: get(item, "date", currentDay.format("YYYY-MM-DD HH:mm:ss")),
+				doy: String(currentDay.dayOfYear())
+			};
+		});
+		setDataOnTable(newDataOnTable);
+
+		//OnTable
+		const takeaway = get(chartInfo, 'chart.takeaway', []);
+		const date4 = moment(get(takeaway, "[0].date"));
+		const newDataTakeaway = [...Array(Number(daysOnMonth))].map((item, i) => {
+			const currentDay = moment(`${date4.year()}-${date.month() + 1}-${i + 1} 12:00:00`);
+			const day = currentDay.dayOfYear();
+			const hasDate = takeaway.find(j => Number(j.doy) === day);
+			if (hasDate) {
+				return hasDate;
+			}
+			return {
+				count: get(item, "count", 0),
+				date: get(item, "date", currentDay.format("YYYY-MM-DD HH:mm:ss")),
+				doy: String(currentDay.dayOfYear())
+			};
+		});
+		setDataTakeaway(newDataTakeaway);
+
+	}, [])
 	return (
 		<div>
 			{isFetched && (
@@ -121,27 +169,27 @@ const DashboardChart = ({ isDashboardOnly }) => {
 					<div className="dashboard-chart__content">
 						<div className="dashboard-chart__data">
 							<div className="dashboard-chart__head">
-								<h3>{t("Графика заказов")}</h3>
+								<h3>{t("Графика заказов на последний месяц")}</h3>
 							</div>
 
 							<Line data={dataLineChart} options={options} />
 						</div>
 						<div className="dashboard-chart__info">
 							<div>
-								<span className="desc-ui desc-ui--green">{t("Заказы")}</span>
-								<span>114 {t("шт")}</span>
-							</div>
-							<div>
-								<span className="desc-ui desc-ui--yellow">{t("Бронирование")}</span>
-								<span>54 {t("шт")}</span>
+								<span className="desc-ui desc-ui--pink">{t("Собой")}</span>
+								<span>{get(chartInfo, 'statistics.takeaway')} {t("шт")}</span>
 							</div>
 							<div>
 								<span className="desc-ui desc-ui--blue">{t("На стол")}</span>
-								<span>65 {t("шт")}</span>
+								<span>{get(chartInfo, 'statistics.on_table')} {t("шт")}</span>
 							</div>
 							<div>
-								<span className="desc-ui desc-ui--pink">{t("Доставка")}</span>
-								<span>32 {t("шт")}</span>
+								<span className="desc-ui desc-ui--green">{t("Доставка")}</span>
+								<span>{get(chartInfo, 'statistics.delivery')} {t("шт")}</span>
+							</div>
+							<div>
+								<span className="desc-ui desc-ui--yellow">{t("Бронирование")}</span>
+								<span>{get(chartInfo, 'statistics.booking')} {t("шт")}</span>
 							</div>
 						</div>
 					</div>

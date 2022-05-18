@@ -9,6 +9,8 @@ import "./style.scss";
 const Index = () => {
     const dispatch = useDispatch();
     const [statistic, setStatistic] = useState(null);
+    const [chartInfo, setChartInfo] = useState(null);
+    const [isFetched, setFetched] = useState(false);
 
     const loadDashboardStat = () => {
         dispatch(Actions.LoadDefault.request({
@@ -22,9 +24,24 @@ const Index = () => {
             }
         }))
     }
+    const loadDashboardChart = () => {
+        setFetched(false)
+        dispatch(Actions.LoadDefault.request({
+            url: `/dashboard/dashboard`,
+            cb: {
+                success: data => {
+                    setChartInfo(data)
+                    setFetched(true)
+                },
+                error: () => {
+                }
+            }
+        }))
+    }
 
     useEffect(() => {
         loadDashboardStat()
+        loadDashboardChart()
     }, [])
 
     return (
@@ -32,7 +49,9 @@ const Index = () => {
             <div className="title-md mb-20">Dashboard</div>
             <div className="dashboard-block">
                 <div className="dashboard-block__left">
-                    <DashboardChart/>
+                    {isFetched && (
+                        <DashboardChart {...{isFetched, chartInfo}}/>
+                    )}
                 </div>
                 <div className="dashboard-block__right">
                     <div className="dashboard-card">

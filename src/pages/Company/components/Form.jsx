@@ -15,7 +15,6 @@ import {
     SearchControl,
     TypeSelector
 } from "react-yandex-maps";
-import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
 
