@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Table, Board } from "components";
-import { Pagination, Spin, Tag } from "antd";
+import { Modal, Pagination, Spin, Tag } from "antd";
 import EntityContainer from "modules/entity/containers";
 import { helpers, queryBuilder } from "services";
 import Filter from "./Filter";
@@ -14,13 +14,16 @@ import "../Dashboard/style.scss";
 import { useDispatch } from "react-redux";
 import Actions from "../../modules/entity/actions";
 import ExcelIcon from "assets/images/icons/excel-icon.svg"
+import DangerSignalIcon from "assets/images/icons/danger-signal.svg"
 import axios from "axios";
 import config from "config"
+import KillModal from "./Kill"
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const [statistic, setStatistic] = useState([]);
+	const [killModal, showKillModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
 	const page = params.page;
@@ -93,6 +96,18 @@ const Index = ({location, history}) => {
 			<div className="d-flex justify-content-between align-items-center mb-20">
 				<div className="title-md">{t("Заказы")}</div>
 			</div>
+
+			<Modal
+				visible={killModal}
+				onOk={() => showKillModal(true)}
+				onCancel={() => showKillModal(false)}
+				footer={null}
+				centered
+				width={430}
+				destroyOnClose
+			>
+				<KillModal {...{showKillModal}}/>
+			</Modal>
 
 			<Board className="border-none mb-30">
 				<Filter/>
@@ -229,11 +244,19 @@ const Index = ({location, history}) => {
 								</div>
 								{meta && meta.perPage && (
 									<div className="pad-15 d-flex justify-content-between align-items-center">
-										<div className="download-excel-btn" onClick={downloadReport}>
-											<img src={ExcelIcon} alt="" />
-											<button>
-												Скачать excel
-											</button>
+										<div className="d-flex">
+											<div className="download-excel-btn" onClick={downloadReport}>
+												<img src={ExcelIcon} alt="" />
+												<button>
+													Скачать excel
+												</button>
+											</div>
+											<div className="download-excel-btn ml-10" style={{backgroundColor: '#ff9800'}} onClick={() => showKillModal(true)}>
+												<img src={DangerSignalIcon} alt="" />
+												<button className="ml-10">
+													#unknown
+												</button>
+											</div>
 										</div>
 										<Pagination
 											current={meta.currentPage}
