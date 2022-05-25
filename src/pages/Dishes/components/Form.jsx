@@ -32,14 +32,31 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						label={t("Описания")}
 						placeholder={t("Введите описания")}
 					/>
-					<Field
-						component={Fields.AntInput}
-						name="price"
-						type="text"
-						placeholder={t("Введите цену")}
-						label={t("Цена")}
-						size="large"
-					/>
+					<div className="row">
+						<div className="col-8">
+							<Field
+								component={Fields.AntInput}
+								name="price"
+								type="text"
+								placeholder={t("Введите цену")}
+								label={t("Цена")}
+								size="large"
+							/>
+						</div>
+						<div className="col-4">
+							<Field
+								component={Fields.AsyncSelect}
+								name="unit_id"
+								placeholder={t("Ед изм")}
+								isClearable={true}
+								loadOptionsUrl="/units"
+								label={t("Ед изм")}
+								className={"mb-24"}
+								optionLabel={"title_ru"}
+							/>
+						</div>
+					</div>
+
 					{isUpdate && (
 						<Ingredients />
 					)}

@@ -96,7 +96,7 @@ const List = ({history, location}) => {
           params={{
             sort: '-id',
             limit: 50,
-            include: 'translate,file',
+            include: 'translate,file,unit',
             extra: {_l: tabLang},
             page
           }}
@@ -130,6 +130,11 @@ const List = ({history, location}) => {
                         title: t("Загаловок"),
                         dataIndex: "translate.name",
                         render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
+                      },
+                      {
+                        title: t("Ед изм"),
+                        dataIndex: "unit",
+                        render: value => <div className="divider-wrapper">{value ? get(value, 'title_ru') : '-'}</div>
                       },
                       {
                         title: t("Цена"),

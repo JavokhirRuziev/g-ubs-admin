@@ -59,6 +59,12 @@ const adminMenus = [
         link: '/settings',
         icon: 'menu-i-setting'
     },
+    {
+        id: 'unit',
+        title: "Ед. изм",
+        link: '/units',
+        icon: 'menu-i-category'
+    },
 ]
 const contentManagerRoutes = [
     {

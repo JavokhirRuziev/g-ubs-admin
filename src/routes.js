@@ -12,6 +12,7 @@ const Orders = lazy(() => import("./pages/Orders"));
 const Notification = lazy(() => import("./pages/Notification"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Categories = lazy(() => import("./pages/Categories"));
+const Units = lazy(() => import("./pages/Units"));
 const PopularQueries = lazy(() => import("./pages/PopularQueries"));
 const Reviews = lazy(() => import("./pages/Reviews"));
 const Printers = lazy(() => import("./pages/Printers"));
@@ -54,6 +55,7 @@ const routes = [
 	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
 	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
+	{ path: "/units", exact: true, component: Units, access: ["admin"] },
 	{ path: "/popular-queries", exact: true, component: PopularQueries, access: ["admin"] },
 	{ path: "/reviews", exact: true, component: Reviews, access: ["admin"] },
 	{ path: "/banner", exact: true, component: Banner, access: ["admin"] },
