@@ -243,12 +243,12 @@ const Index = ({location, history}) => {
 									/>
 								</div>
 								{meta && meta.perPage && (
-									<div className="pad-15 d-flex justify-content-between align-items-center">
+									<div className="pagination-foot-buttons">
 										<div className="d-flex">
 											<div className="download-excel-btn" onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
 												<button>
-													Скачать excel
+													Отчёт
 												</button>
 											</div>
 											<div className="download-excel-btn ml-10" style={{backgroundColor: '#ff9800'}} onClick={() => showKillModal(true)}>
@@ -272,8 +272,8 @@ const Index = ({location, history}) => {
 				</EntityContainer.All>
 			</Board>
 
-			<div className="row mb-30">
-				<div className="col-3">
+			<div className="row">
+				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
 							<div className="dashboard-card__label">Наличние</div>
@@ -287,7 +287,7 @@ const Index = ({location, history}) => {
 						</div>
 					</div>
 				</div>
-				<div className="col-3">
+				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
 							<div className="dashboard-card__label">Payme</div>
@@ -301,7 +301,7 @@ const Index = ({location, history}) => {
 						</div>
 					</div>
 				</div>
-				<div className="col-3">
+				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
 							<div className="dashboard-card__label">Click</div>
@@ -315,7 +315,7 @@ const Index = ({location, history}) => {
 						</div>
 					</div>
 				</div>
-				<div className="col-3">
+				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
 							<div className="dashboard-card__label">Терминал</div>

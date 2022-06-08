@@ -186,3 +186,23 @@
     margin: 0 auto;
   }
 }
+
+@media (max-width: 768px) {
+  .login-page .login-box .login-box__header{
+    padding: 20px;
+  }
+  .login-page .login-box .login-box__form{
+    padding: 30px 20px;
+  }
+  .login-page .login-box .login-box__form .form-field__group{
+    margin-bottom: 20px;
+  }
+  .login-page .login-box .login-box__form .form-field__group .form-field__input{
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+  .login-page .login-box .login-box__form .ant-btn{
+    margin-top: 10px;
+  }
+
+}

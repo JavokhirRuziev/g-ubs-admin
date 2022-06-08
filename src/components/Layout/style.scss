@@ -401,3 +401,28 @@ $hc: #1890ff;
     }
   }
 }
+
+@media (max-width: 768px) {
+  .m-layout .m-sidebar-head .menu-collapse-btn{
+    display: none;
+  }
+  .m-header-wrapper .ant-dropdown-trigger{
+    display: none;
+  }
+  .filter-row{
+    overflow: hidden;
+    overflow-x: auto;
+    form{
+      min-width: 1000px;
+    }
+  }
+  .m-content{
+    padding: 70px 0 0 0;
+  }
+  .m-content{
+    overflow: initial;
+  }
+  .bb-panel{
+    padding: 20px!important;
+  }
+}

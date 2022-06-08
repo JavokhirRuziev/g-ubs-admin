@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Fields, GridElements, Panel } from "components";
+import { Fields, Panel } from "components";
 import { Field } from "formik";
 import { Button, Switch } from "antd";
 import Ingredients from "./Ingredients";
@@ -13,9 +13,9 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 	const { t } = useTranslation();
 
 	return (
-		<GridElements.Row gutter={10} className={"mb-30"}>
-			<GridElements.Column xs={8} gutter={10}>
-				<Panel>
+		<div className="row">
+			<div className="col-xl-8 col-md-12">
+				<Panel className="mb-20">
 					<Field
 						component={Fields.AntInput}
 						name="name"
@@ -33,7 +33,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						placeholder={t("Введите описания")}
 					/>
 					<div className="row">
-						<div className="col-8">
+						<div className="col-lg-8 col-12">
 							<Field
 								component={Fields.AntInput}
 								name="price"
@@ -43,7 +43,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								size="large"
 							/>
 						</div>
-						<div className="col-4">
+						<div className="col-lg-4 col-12">
 							<Field
 								component={Fields.AsyncSelect}
 								name="unit_id"
@@ -61,9 +61,9 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						<Ingredients />
 					)}
 				</Panel>
-			</GridElements.Column>
-			<GridElements.Column xs={4} gutter={10}>
-				<Panel>
+			</div>
+			<div className="col-xl-4 col-md-12">
+				<Panel className="mb-20">
 					<Field
 						component={Fields.AsyncSelect}
 						name="menus"
@@ -132,8 +132,8 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						htmlType="submit"
 					>{isUpdate ? t("Сохранить") : t("Создать")}</Button>
 				</Panel>
-			</GridElements.Column>
-		</GridElements.Row>
+			</div>
+		</div>
 	);
 };
 

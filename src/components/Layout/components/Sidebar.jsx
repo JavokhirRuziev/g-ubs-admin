@@ -61,7 +61,14 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
                             )
                         } else {
                             return (
-                                <li key={i}>
+                                <li key={i} onClick={() => {
+                                    const sidebar = document.querySelector('.m-sidebar');
+                                    sidebar.style.pointerEvents = 'none';
+
+                                    setTimeout(() => {
+                                        sidebar.style.pointerEvents = 'auto';
+                                    }, 1000)
+                                }}>
                                     <Link to={m.link}
                                           className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`}>
                                         <div>

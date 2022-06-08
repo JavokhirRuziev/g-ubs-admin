@@ -12,6 +12,7 @@ import Routes from "./routes";
 
 // import styles
 import "antd/dist/antd.css";
+import "assets/styles/responsive.scss";
 
 import "assets/styles/main.scss";
 import "assets/styles/fonts.css";
