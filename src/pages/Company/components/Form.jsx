@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Fields, GridElements, Panel} from "components";
+import {Fields, Panel} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
 

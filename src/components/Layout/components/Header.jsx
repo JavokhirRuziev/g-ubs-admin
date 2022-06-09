@@ -1,32 +1,12 @@
 import React from 'react';
 
 import {useTranslation} from "react-i18next";
-import {useSelector} from 'react-redux'
-
 import { Breadcrumb } from "components";
-import { Menu, Dropdown, Button } from "antd";
 import defaultAvatar from "assets/images/icons/user.svg";
 import {Link} from "react-router-dom";
 
 const Header = () => {
-
-    const currentLangCode = useSelector(state => state.system.currentLangCode);
     const {t} = useTranslation();
-
-    const menu = (
-      <Menu>
-          <Menu.Item>
-              <Link to={`/products/create?lang=${currentLangCode}`}>
-                  {t('Продукты')}
-              </Link>
-          </Menu.Item>
-          <Menu.Item>
-              <Link to={`/posts/create?lang=${currentLangCode}`}>
-                  {t('Посты')}
-              </Link>
-          </Menu.Item>
-      </Menu>
-    );
 
     return (
         <div className="m-header">
@@ -35,9 +15,6 @@ const Header = () => {
                     <Breadcrumb
                       className="mb-0 bb-breadcrumb--outline"
                     />
-                    <Dropdown overlay={menu}>
-                        <Button>+ {t('Новый')}</Button>
-                    </Dropdown>
                 </div>
                 <div className="d-flex align-items-center">
                     <div className="profile-dropdown cm-dropdown">

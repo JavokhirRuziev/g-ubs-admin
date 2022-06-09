@@ -74,6 +74,12 @@ const contentManagerRoutes = [
         icon: 'menu-i-dashboard'
     },
     {
+        id: 'monitoring',
+        title: "Мониторинг",
+        link: '/monitoring',
+        icon: 'menu-i-dashboard'
+    },
+    {
         id: 'dishes',
         title: "Еды",
         link: '/dishes',
