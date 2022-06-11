@@ -167,10 +167,10 @@ const Index = ({location, history}) => {
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
 													const amount = get(row, 'amount');
-													const quantity = get(row, 'quantity');
+													const quantity = Number(get(row, 'quantity'));
 													return(
 														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{amount*quantity}
+															{Math.round(amount*quantity).toLocaleString()}
 														</div>
 													)
 												}
