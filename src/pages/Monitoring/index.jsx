@@ -34,6 +34,7 @@ const Index = ({location, history}) => {
 					"orders.status": params.status
 				},
 				extra: {
+					kitchener_id: params.kitchener_id && params.kitchener_id.split('/')[0],
 					dish_id: params.dish_id && params.dish_id.split('/')[0],
 					start_date: params.start_at,
 					end_date: params.end_at,
@@ -96,9 +97,10 @@ const Index = ({location, history}) => {
 						const total = {
 							uid: '001',
 							name: 'Всего',
-							amount: withPrice.reduce((prev,curr) => prev + Number(curr.amount), 0),
+							unit: " ",
+							amount: " ",
+							quantity: " ",
 							price: withPrice.reduce((prev,curr) => prev + Number(curr.price), 0),
-							quantity: withPrice.reduce((prev,curr) => prev + Number(curr.quantity), 0),
 							is_total: true
 						}
 
