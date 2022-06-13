@@ -78,7 +78,8 @@ const Index = ({location, history}) => {
 						extra: {
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
-							dish_id: params.dish_id && params.dish_id.split('/')[0]
+							dish_id: params.dish_id && params.dish_id.split('/')[0],
+							kitchener_id: params.kitchener_id && params.kitchener_id.split('/')[0]
 						}
 					}}
 				>

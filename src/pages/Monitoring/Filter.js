@@ -87,6 +87,23 @@ class Filter extends Component {
                   />
                 </GridElements.Column>
               </GridElements.Row>
+              <GridElements.Row gutter={10}>
+                <GridElements.Column xs={3} gutter={10}>
+                  <Field
+                      component={Fields.AsyncSelect}
+                      name="kitchener_id"
+                      placeholder={t("Повор")}
+                      isClearable={true}
+                      loadOptionsUrl="/user"
+                      optionLabel={"name"}
+                      loadOptionsParams={() => {
+                        return({
+                          filter: {['role.role']: 'kitchener'}
+                        })
+                      }}
+                  />
+                </GridElements.Column>
+              </GridElements.Row>
 
             </GridElements.Column>
             <GridElements.Column xs={110} gutter={10} customSize>
@@ -126,7 +143,8 @@ Filter = withFormik({
       status: params.status ? Number(params.status) : undefined,
       start_at: params.start_at ? moment.unix(params.start_at) : '',
       end_at: params.end_at ? moment.unix(params.end_at) : '',
-      dish_id: params.dish_id ? {id: params.dish_id.split('/')[0], translate: { name: params.dish_id.split('/')[1] }} : null
+      dish_id: params.dish_id ? {id: params.dish_id.split('/')[0], translate: { name: params.dish_id.split('/')[1] }} : null,
+      kitchener_id: params.kitchener_id ? {id: params.kitchener_id.split('/')[0], name: params.kitchener_id.split('/')[1] } : null
     })
 
   },
@@ -136,7 +154,8 @@ Filter = withFormik({
       ...values,
       start_at: values.start_at ? moment(values.start_at).unix() : "",
       end_at: values.end_at ? moment(values.end_at).unix() : "",
-      dish_id: values.dish_id ? values.dish_id.id+'/'+get(values, 'dish_id.translate.name') : ''
+      dish_id: values.dish_id ? values.dish_id.id+'/'+get(values, 'dish_id.translate.name') : '',
+      kitchener_id: values.kitchener_id ? values.kitchener_id.id+'/'+get(values, 'kitchener_id.name') : ''
     };
 
     const query = qs.parse(location.search);
