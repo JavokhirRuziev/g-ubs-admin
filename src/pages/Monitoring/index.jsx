@@ -9,15 +9,16 @@ import qs from "query-string";
 
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
-import variables from "../../variables";
 import "../Dashboard/style.scss";
 import ExcelIcon from "assets/images/icons/excel-icon.svg"
 import axios from "axios";
 import config from "config"
+import { useSelector } from "react-redux";
 
 const Index = ({location, history}) => {
 	const { t } = useTranslation();
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+	const windowWidth = useSelector(state => state.system.width);
 
 	const page = params.page;
 	const setPage = (page) => {
@@ -63,7 +64,9 @@ const Index = ({location, history}) => {
 			</div>
 
 			<Board className="border-none mb-30">
-				<Filter/>
+				{(windowWidth > 1250) && (
+					<Filter/>
+				)}
 
 				<EntityContainer.All
 					entity="monitoring"
