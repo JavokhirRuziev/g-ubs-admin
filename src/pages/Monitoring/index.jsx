@@ -87,15 +87,22 @@ const Index = ({location, history}) => {
 						const currentPage = get(meta, 'currentPage');
 						const perPage = get(meta, 'perPage');
 
+
+						const withPrice = items.reduce((prev,curr) => [...prev, {
+							...curr,
+							price: (curr.amount * Number(curr.quantity)).toFixed(2)
+						}], [])
+
 						const total = {
 							uid: '001',
 							name: 'Всего',
-							amount: items.reduce((prev,curr) => prev + Number(curr.amount), 0),
-							price: items.reduce((prev,curr) => prev + Number(curr.price), 0),
-							quantity: items.reduce((prev,curr) => prev + Number(curr.quantity), 0),
+							amount: withPrice.reduce((prev,curr) => prev + Number(curr.amount), 0),
+							price: withPrice.reduce((prev,curr) => prev + Number(curr.price), 0),
+							quantity: withPrice.reduce((prev,curr) => prev + Number(curr.quantity), 0),
 							is_total: true
 						}
-						const newArr = items.length > 0 ? [...items, total] : [];
+
+						const newArr = items.length > 0 ? [...withPrice, total] : [];
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -167,11 +174,9 @@ const Index = ({location, history}) => {
 												dataIndex: "price",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
-													const amount = get(row, 'amount');
-													const quantity = Number(get(row, 'quantity'));
 													return(
 														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{Math.round(amount*quantity).toLocaleString()}
+															{value ? value : "-"}
 														</div>
 													)
 												}
