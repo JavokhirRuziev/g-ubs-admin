@@ -11,20 +11,23 @@ import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import variables from "../../variables";
 import "../Dashboard/style.scss";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Actions from "../../modules/entity/actions";
 import ExcelIcon from "assets/images/icons/excel-icon.svg"
 import DangerSignalIcon from "assets/images/icons/danger-signal.svg"
 import axios from "axios";
 import config from "config"
 import KillModal from "./Kill"
+import MobFilter from "./MobFilter";
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const [statistic, setStatistic] = useState([]);
 	const [killModal, showKillModal] = useState(false);
+	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+	const windowWidth = useSelector(state => state.system.width);
 
 	const page = params.page;
 	const setPage = (page) => {
@@ -110,7 +113,11 @@ const Index = ({location, history}) => {
 			</Modal>
 
 			<Board className="border-none mb-30">
-				<Filter/>
+				{(windowWidth > 1250) ? (
+					<Filter/>
+				) : (
+					<MobFilter {...{filterModal, showFilterModal}}/>
+				)}
 
 				<EntityContainer.All
 					entity="order"

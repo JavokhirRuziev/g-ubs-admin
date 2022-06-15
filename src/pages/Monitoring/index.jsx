@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Table, Board } from "components";
 import { Pagination, Spin, Tag } from "antd";
 import EntityContainer from "modules/entity/containers";
 import { helpers, queryBuilder } from "services";
 import Filter from "./Filter";
+import MobFilter from "./MobFilter";
 import qs from "query-string";
 
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,7 @@ import { useSelector } from "react-redux";
 
 const Index = ({location, history}) => {
 	const { t } = useTranslation();
+	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 	const windowWidth = useSelector(state => state.system.width);
 
@@ -64,8 +66,10 @@ const Index = ({location, history}) => {
 			</div>
 
 			<Board className="border-none mb-30">
-				{(windowWidth > 1250) && (
+				{(windowWidth > 1250) ? (
 					<Filter/>
+				) : (
+					<MobFilter {...{filterModal, showFilterModal}}/>
 				)}
 
 				<EntityContainer.All
