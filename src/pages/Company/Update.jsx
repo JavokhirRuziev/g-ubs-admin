@@ -36,7 +36,7 @@ const Update = ({location, history}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "translate,workingTimes,categories",
+        include: "translate,workingTimes,categories,region,district",
         extra: {_l: tabLang, append: 'gallery0'}
       }}
     >
@@ -149,11 +149,13 @@ const Update = ({location, history}) => {
                 {
                   name: "region_id",
                   required: true,
+                  value: get(item, 'region'),
                   onSubmitValue: value => value.id
                 },
                 {
                   name: "district_id",
                   required: true,
+                  value: get(item, 'district'),
                   onSubmitValue: value => value.id
                 },
                 {
