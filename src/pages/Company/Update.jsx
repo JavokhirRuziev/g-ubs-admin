@@ -123,6 +123,11 @@ const Update = ({location, history}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
+                  name: "random_waiter",
+                  value: get(item, 'random_waiter') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "table_order",
                   value: get(item, 'table_order') === 1,
                   onSubmitValue: value => value ? 1 : 0
@@ -140,6 +145,16 @@ const Update = ({location, history}) => {
                 {
                   name: "working_times",
                   value: get(item, 'working_times')
+                },
+                {
+                  name: "region_id",
+                  required: true,
+                  onSubmitValue: value => value.id
+                },
+                {
+                  name: "district_id",
+                  required: true,
+                  onSubmitValue: value => value.id
                 },
                 {
                   name: "description",

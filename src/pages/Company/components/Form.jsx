@@ -3,6 +3,7 @@ import React from 'react';
 import {Fields, Panel} from "components";
 import {Field} from "formik";
 import {Button, Switch} from "antd";
+import get from "lodash/get";
 
 import {useTranslation} from "react-i18next";
 import {
@@ -49,6 +50,38 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                             label={t("Адрес")}
                             placeholder={t("Введите адрес")}
                         />
+
+                        <div className="row">
+                            <div className="col-6">
+                                <Field
+                                    component={Fields.AsyncSelect}
+                                    name="region_id"
+                                    placeholder={t("Регион")}
+                                    isClearable={true}
+                                    loadOptionsUrl="/regions"
+                                    className={"mb-24"}
+                                    label={t("Регион")}
+                                    optionLabel={"name_ru"}
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Field
+                                    component={Fields.AsyncSelect}
+                                    name="district_id"
+                                    placeholder={t("Район")}
+                                    isClearable={true}
+                                    loadOptionsUrl="/districts"
+                                    className={"mb-24"}
+                                    label={t("Район")}
+                                    isDisabled={!get(values, 'region_id')}
+                                    optionLabel={"name_ru"}
+                                    filterParams={{
+                                        region_id: get(values, 'region_id.id')
+                                    }}
+                                />
+                            </div>
+                        </div>
+
                         <YMaps>
                             <div
                                 style={{display: "flex", flexDirection: "column"}}
@@ -130,6 +163,16 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                                 checked={values.status}
                             />
                             <div className="ant-label mb-0 ml-10">{t('Активный статус')}</div>
+                        </div>
+
+                        <div className="d-flex align-items-center mb-24">
+                            <Switch
+                                onChange={value => {
+                                    setFieldValue('random_waiter', value)
+                                }}
+                                checked={values.random_waiter}
+                            />
+                            <div className="ant-label mb-0 ml-10">{t('Рандом официант')}</div>
                         </div>
 
                         <div className="d-flex align-items-center mb-24">
