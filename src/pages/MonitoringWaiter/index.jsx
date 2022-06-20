@@ -32,16 +32,13 @@ const Index = ({location, history}) => {
 	const downloadReport = () => {
 		// setSubmitting(true);
 		axios({
-			url: queryBuilder(config.API_ROOT + `/dashboard/report-monitoring`, {
-				filter: {
-					"orders.status": params.status
-				},
+			url: queryBuilder(config.API_ROOT + `/dashboard/waiter-monitoring`, {
 				extra: {
-					kitchener_id: params.kitchener_id && params.kitchener_id.split('/')[0],
-					dish_id: params.dish_id && params.dish_id.split('/')[0],
-					start_date: params.start_at,
-					end_date: params.end_at,
-
+					percent: params.percent && params.percent,
+					status: params.status && params.status,
+					start_date: params.start_at && params.start_at,
+					end_date: params.end_at && params.end_at,
+					waiter_id: params.waiter_id && params.waiter_id.split('/')[0]
 				}
 			}), //your url
 			method: 'GET',
