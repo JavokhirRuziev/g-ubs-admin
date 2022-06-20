@@ -8,6 +8,7 @@ import {Spinner} from "components";
 import App from "./App";
 import get from "lodash/get";
 
+const MonitoringWaiter = lazy(() => import("./pages/MonitoringWaiter"));
 const Monitoring = lazy(() => import("./pages/Monitoring"));
 const Orders = lazy(() => import("./pages/Orders"));
 const Notification = lazy(() => import("./pages/Notification"));
@@ -52,6 +53,7 @@ const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 const routes = [
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{ path: "/", exact: true, component: Orders, access: ["company"] },
+	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },
 	{ path: "/monitoring", exact: true, component: Monitoring, access: ["company"] },
 	{ path: "/orders", exact: true, component: Orders, access: ["company"] },
 	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },

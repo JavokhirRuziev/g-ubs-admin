@@ -80,6 +80,12 @@ const contentManagerRoutes = [
         icon: 'menu-i-dashboard'
     },
     {
+        id: 'monitoringWaiter',
+        title: "Мониторинг официант",
+        link: '/monitoring-waiter',
+        icon: 'menu-i-dashboard'
+    },
+    {
         id: 'dishes',
         title: "Еды",
         link: '/dishes',
