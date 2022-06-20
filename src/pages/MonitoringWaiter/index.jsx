@@ -32,7 +32,7 @@ const Index = ({location, history}) => {
 	const downloadReport = () => {
 		// setSubmitting(true);
 		axios({
-			url: queryBuilder(config.API_ROOT + `/dashboard/waiter-monitoring`, {
+			url: queryBuilder(config.API_ROOT + `/dashboard/report-waiter-monitoring`, {
 				extra: {
 					percent: params.percent && params.percent,
 					status: params.status && params.status,

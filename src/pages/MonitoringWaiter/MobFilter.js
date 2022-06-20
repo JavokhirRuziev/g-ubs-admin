@@ -37,30 +37,35 @@ class Filter extends Component {
             destroyOnClose
         >
           <form onSubmit={handleSubmit}>
-            <Field
-                component={Fields.AsyncSelect}
-                name="dish_id"
-                placeholder={t("Еда")}
-                isClearable={true}
-                loadOptionsUrl="/dishes"
-                className={"mb-24"}
-                optionLabel={option => get(option, `translate.name`)}
-                loadOptionsParams={() => {
-                  return({
-                    include: 'translate'
-                  })
-                }}
-            />
+              <Field
+                  component={Fields.AsyncSelect}
+                  name="waiter_id"
+                  placeholder={t("Официант")}
+                  isClearable={true}
+                  loadOptionsUrl="/user"
+                  className={"mb-0"}
+                  optionLabel={"name"}
+                  loadOptionsParams={() => {
+                      return({
+                          filter: {['role.role']: 'waiter'}
+                      })
+                  }}
+              />
 
-            <Field
-                component={Fields.AntSelect}
-                name="status"
-                placeholder={t("Филтр по статус")}
-                size={'large'}
-                allowClear
-                selectOptions={helpers.orderStatus}
-                className={"w-100p"}
-            />
+              <Field
+                  component={Fields.AntSelect}
+                  name="status"
+                  placeholder={t("Филтр по статус")}
+                  size={'large'}
+                  allowClear
+                  selectOptions={[
+                      {value: "20", name: "Завершенные"},
+                      {value: "processing", name: "В процессе"},
+                      {value: "30", name: "Отклоненные"},
+                  ]}
+                  className={"mb-0"}
+                  style={{marginBottom: 0}}
+              />
 
             <Field
                 component={Fields.AntDatePicker}
@@ -88,20 +93,13 @@ class Filter extends Component {
                 }}
             />
 
-            <Field
-                component={Fields.AsyncSelect}
-                name="kitchener_id"
-                placeholder={t("Повор")}
-                isClearable={true}
-                loadOptionsUrl="/user"
-                optionLabel={"name"}
-                className={"mb-24"}
-                loadOptionsParams={() => {
-                  return({
-                    filter: {'role.role': 'kitchener'}
-                  })
-                }}
-            />
+              <Field
+                  component={Fields.AntInput}
+                  name="percent"
+                  type={"number"}
+                  placeholder={t("Процент")}
+                  style={{marginBottom: 0}}
+              />
 
             <div className="d-flex justify-content-between">
               <Button
@@ -141,23 +139,21 @@ Filter = withFormik({
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
     return ({
-      type: params.type ? Number(params.type) : undefined,
-      status: params.status ? Number(params.status) : undefined,
-      start_at: params.start_at ? moment.unix(params.start_at) : '',
-      end_at: params.end_at ? moment.unix(params.end_at) : '',
-      dish_id: params.dish_id ? {id: params.dish_id.split('/')[0], translate: { name: params.dish_id.split('/')[1] }} : null,
-      kitchener_id: params.kitchener_id ? {id: params.kitchener_id.split('/')[0], name: params.kitchener_id.split('/')[1] } : null
+        percent: params.percent ? params.percent : '',
+        status: params.status ? params.status : undefined,
+        start_at: params.start_at ? moment.unix(params.start_at) : '',
+        end_at: params.end_at ? moment.unix(params.end_at) : '',
+        waiter_id: params.waiter_id ? {id: params.waiter_id.split('/')[0], name: params.waiter_id.split('/')[1] } : null
     })
 
   },
   handleSubmit: (values, { props: { location, history, showFilterModal } }) => {
 
     values = {
-      ...values,
-      start_at: values.start_at ? moment(values.start_at).unix() : "",
-      end_at: values.end_at ? moment(values.end_at).unix() : "",
-      dish_id: values.dish_id ? values.dish_id.id+'/'+get(values, 'dish_id.translate.name') : '',
-      kitchener_id: values.kitchener_id ? values.kitchener_id.id+'/'+get(values, 'kitchener_id.name') : ''
+        ...values,
+        start_at: values.start_at ? moment(values.start_at).unix() : "",
+        end_at: values.end_at ? moment(values.end_at).unix() : "",
+        waiter_id: values.waiter_id ? values.waiter_id.id+'/'+get(values, 'waiter_id.name') : ''
     };
 
     const query = qs.parse(location.search);
