@@ -158,7 +158,7 @@ const Index = ({location, history}) => {
 												dataIndex: "total_sum",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
-													const sum = (row.total_price - row.tip_price)*params.percent/100
+													const sum = row.total_price*params.percent/100
 													return(
 														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
 															{params.percent ? <div>{sum ? Number(sum).toLocaleString() : '-'}</div> : '-'}
