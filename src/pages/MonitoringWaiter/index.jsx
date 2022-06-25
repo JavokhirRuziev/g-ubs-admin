@@ -93,8 +93,8 @@ const Index = ({location, history}) => {
 						const total = {
 							uid: '001',
 							name: 'Всего',
-							total_price: items.reduce((prev,curr) => prev+curr.total_price, 0),
-							tip_price: items.reduce((prev,curr) => prev+curr.tip_price, 0),
+							total_price: items.reduce((prev,curr) => prev+Number(curr.total_price), 0),
+							tip_price: items.reduce((prev,curr) => prev+Number(curr.tip_price), 0),
 							is_total: true,
 						}
 
