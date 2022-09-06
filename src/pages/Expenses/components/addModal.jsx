@@ -33,6 +33,10 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 					onSubmitValue: value => value ? value.id : ""
 				},
 				{
+					name: "customer_id",
+					onSubmitValue: value => value ? value.id : ""
+				},
+				{
 					name: "company_id",
 					value: null,
 				},
@@ -63,6 +67,23 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 								loadOptionsUrl={`/expense-categories`}
 								className="mb-20"
 								optionLabel="title"
+								optionValue="id"
+								isSearchable
+								loadOptionsParams={search => {
+									return {
+										extra: { name: search }
+									};
+								}}
+							/>
+
+							<Field
+								component={Fields.AsyncSelect}
+								name="customer_id"
+								placeholder={t("Виберите клинта")}
+								isClearable
+								loadOptionsUrl={`/customers`}
+								className="mb-20"
+								optionLabel={option => option.surname + ' ' + option.name}
 								optionValue="id"
 								isSearchable
 								loadOptionsParams={search => {

@@ -97,18 +97,18 @@ const List = ({ selectedCategory }) => {
 			</Modal>
 			<div className={"pt-15 pl-15 pr-15 d-flex justify-content-between align-items-center"}>
 				<div className="fs-16">
-					<span className="--black pr-20">
-						<span className="pr-5">{t("Сум")}:</span>
-						<span className="fw-500">{sum}</span>
-					</span>
-					<span className="--black pr-20">
-						<span className="pr-5">{t("Вторичный")}:</span>
-						<span className="fw-500">{uy}</span>
-					</span>
-					<span className="--black">
-						<span className="pr-5">{t("Перечисление")}:</span>
-						<span className="fw-500">{bank}</span>
-					</span>
+					{/*<span className="--black pr-20">*/}
+					{/*	<span className="pr-5">{t("Сум")}:</span>*/}
+					{/*	<span className="fw-500">{sum}</span>*/}
+					{/*</span>*/}
+					{/*<span className="--black pr-20">*/}
+					{/*	<span className="pr-5">{t("Вторичный")}:</span>*/}
+					{/*	<span className="fw-500">{uy}</span>*/}
+					{/*</span>*/}
+					{/*<span className="--black">*/}
+					{/*	<span className="pr-5">{t("Перечисление")}:</span>*/}
+					{/*	<span className="fw-500">{bank}</span>*/}
+					{/*</span>*/}
 				</div>
 
 				<Button
@@ -131,7 +131,7 @@ const List = ({ selectedCategory }) => {
 					filter: {
 						category_id: get(selectedCategory, "id"),
 					},
-					include: "category",
+					include: "category,customer",
 					extra: {
 						name: searchQuery
 					}
@@ -160,6 +160,13 @@ const List = ({ selectedCategory }) => {
 												className: "text-cen",
 												render: value => <div
 													className="divider-wrapper">{value ? value.title : "-"}</div>
+											},
+											{
+												title: t("Контрагент"),
+												dataIndex: "customer",
+												className: "text-cen",
+												render: value => <div
+													className="divider-wrapper">{value ? value.surname + " " + value.name : "-"}</div>
 											},
 											{
 												title: t("Сумма"),

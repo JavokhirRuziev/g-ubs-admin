@@ -24,7 +24,6 @@ const Layout = (props) => {
 
     return (
         <div className={`m-layout ${isCollapsed ? 'm-layout--collapsed' : ''}`}>
-            <NetworkError/>
             <Sidebar {...{isCollapsed, setCollapse}}/>
             <div className="m-wrapper">
                 <Header/>

@@ -50,8 +50,10 @@ const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
 const Expenses = lazy(() => import("./pages/Expenses"));
+const Clients = lazy(() => import("./pages/Clients"));
 
 const routes = [
+	{ path: "/customers", exact: true, component: Clients, access: ["company"] },
 	{ path: "/expenses", exact: true, component: Expenses, access: ["company"] },
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{ path: "/", exact: true, component: Orders, access: ["company"] },

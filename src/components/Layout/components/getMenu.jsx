@@ -137,6 +137,12 @@ const contentManagerRoutes = [
         link: '/expenses',
         icon: 'menu-i-dashboard'
     },
+    {
+        id: 'customers',
+        title: "Клиенты",
+        link: '/customers',
+        icon: 'menu-i-dashboard'
+    },
 ]
 
 

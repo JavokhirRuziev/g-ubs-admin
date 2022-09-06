@@ -1,7 +1,7 @@
 .no-connection{
   pointer-events: none;
   &.--visible{
-    .no-connection__content{
+    .no-connection__{
       transform: translateY(0);
       opacity: 1;
     }
@@ -9,7 +9,7 @@
       opacity: .6;
     }
   }
-  &__content{
+  &__{
     position: fixed;
     top: 30px;
     width: 100%;
@@ -22,7 +22,7 @@
     border-radius: 4px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-: space-between;
     opacity: 0;
     transition: .2s ease-in-out;
     transform: translateY(-100%);
