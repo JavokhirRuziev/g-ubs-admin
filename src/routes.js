@@ -49,8 +49,10 @@ const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
 const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
+const Expenses = lazy(() => import("./pages/Expenses"));
 
 const routes = [
+	{ path: "/expenses", exact: true, component: Expenses, access: ["company"] },
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{ path: "/", exact: true, component: Orders, access: ["company"] },
 	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },

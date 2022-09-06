@@ -129,6 +129,38 @@ const getPaymentType = (status) => {
 	}
 }
 
+const getPaymentTypeExpenses = type => {
+	switch (type) {
+		case 1:
+			return "Наличние";
+		case 2:
+			return "Терминал";
+		case 3:
+			return "Перечисления";
+		case 4:
+			return "Вторая степенная";
+		default:
+			return "-"
+	}
+};
+
+function convertToReadable(number) {
+	function isFloat(n) {
+		return Number(n) === n && n % 1 !== 0;
+	}
+
+	let newValue
+	if (isFloat(Number(number))) {
+		newValue = number.toString().split(".")
+		newValue[0] = newValue[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+		newValue = newValue.join('.')
+	} else {
+		newValue = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+	}
+
+	return newValue
+}
+
 export default {
 	formatBytes,
 	feedbackLabel,
@@ -137,6 +169,8 @@ export default {
 	getOrderType,
 	getOrderStatus,
 	getPaymentType,
+	getPaymentTypeExpenses,
 	orderTypes,
 	orderStatus,
+	convertToReadable
 };

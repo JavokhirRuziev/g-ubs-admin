@@ -131,6 +131,12 @@ const contentManagerRoutes = [
         link: '/printers',
         icon: 'menu-i-dashboard'
     },
+    {
+        id: 'expenses',
+        title: "Расходы",
+        link: '/expenses',
+        icon: 'menu-i-dashboard'
+    },
 ]
 
 
