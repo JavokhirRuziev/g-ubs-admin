@@ -11,6 +11,7 @@ import get from "lodash/get";
 const MonitoringWaiter = lazy(() => import("./pages/MonitoringWaiter"));
 const Monitoring = lazy(() => import("./pages/Monitoring"));
 const Orders = lazy(() => import("./pages/Orders"));
+const OrdersOnTable = lazy(() => import("./pages/OrdersOnTable"));
 const Notification = lazy(() => import("./pages/Notification"));
 const Faq = lazy(() => import("./pages/Faq"));
 const Categories = lazy(() => import("./pages/Categories"));
@@ -60,6 +61,7 @@ const routes = [
 	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },
 	{ path: "/monitoring", exact: true, component: Monitoring, access: ["company"] },
 	{ path: "/orders", exact: true, component: Orders, access: ["company"] },
+	{ path: "/orders-on-table", exact: true, component: OrdersOnTable, access: ["company"] },
 	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
 	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
 	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },

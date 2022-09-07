@@ -549,6 +549,9 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
     max-width: 100%;
     border-radius: 10px;
   }
+  .ant-tag{
+    white-space: pre-wrap!important;
+  }
 }
 
 .info-row{
@@ -660,4 +663,55 @@ input::placeholder, textarea::placeholder, .ant-select-selection__placeholder {
 
 .user-card.title-bold .user-card__title {
   font-weight: 700;
+}
+
+table.bordered {
+  border: solid #ccc 1px;
+  border-radius: 6px;
+  margin: 0 auto;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table.bordered tr:hover {
+  background: #f8f8f8;
+  transition: all 0.1s ease-in-out;
+}
+
+table.bordered td, .bordered th {
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+table.bordered th {
+  background-color: #f8f8f8;
+  border-top: none;
+  font-weight: 500;
+}
+
+table.bordered td:first-child, .bordered th:first-child {
+  border-left: none;
+}
+
+table.bordered th:first-child {
+  border-radius: 6px 0 0 0;
+}
+
+table.bordered th:last-child {
+  border-radius: 0 6px 0 0;
+}
+
+table.bordered th:only-child {
+  border-radius: 6px 6px 0 0;
+}
+
+table.bordered tr:last-child td:first-child {
+  border-radius: 0 0 0 6px;
+}
+
+table.bordered tr:last-child td:last-child {
+  border-radius: 0 0 6px 0;
 }

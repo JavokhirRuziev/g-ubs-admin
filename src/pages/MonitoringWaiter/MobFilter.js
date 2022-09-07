@@ -43,7 +43,7 @@ class Filter extends Component {
                   placeholder={t("Официант")}
                   isClearable={true}
                   loadOptionsUrl="/user"
-                  className={"mb-0"}
+                  className={"mb-24"}
                   optionLabel={"name"}
                   loadOptionsParams={() => {
                       return({
@@ -63,7 +63,7 @@ class Filter extends Component {
                       {value: "processing", name: "В процессе"},
                       {value: "30", name: "Отклоненные"},
                   ]}
-                  className={"mb-0"}
+                  className={"mb-24"}
                   style={{marginBottom: 0}}
               />
 
@@ -98,7 +98,6 @@ class Filter extends Component {
                   name="percent"
                   type={"number"}
                   placeholder={t("Процент")}
-                  style={{marginBottom: 0}}
               />
 
             <div className="d-flex justify-content-between">

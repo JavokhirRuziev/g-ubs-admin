@@ -19,11 +19,14 @@ import axios from "axios";
 import config from "config"
 import KillModal from "./Kill"
 import MobFilter from "./MobFilter";
+import ViewModal from "./components/viewModal"
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 	const [statistic, setStatistic] = useState([]);
+	const [selected, setSelected] = useState(null);
+	const [viewModal, showViewModal] = useState(false);
 	const [killModal, showKillModal] = useState(false);
 	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -112,6 +115,17 @@ const Index = ({location, history}) => {
 				<KillModal {...{showKillModal}}/>
 			</Modal>
 
+			<Modal
+				visible={viewModal}
+				onCancel={() => showViewModal(false)}
+				footer={null}
+				centered
+				width={700}
+				destroyOnClose
+			>
+				<ViewModal {...{selected, showViewModal}}/>
+			</Modal>
+
 			<Board className="border-none mb-30">
 				{(windowWidth > 1250) ? (
 					<Filter/>
@@ -125,7 +139,7 @@ const Index = ({location, history}) => {
 					url="/dashboard/orders"
 					params={{
 						limit: 100,
-						include: "user,waiter,payments",
+						include: "user,waiter,payments,goods",
 						page: page ? page : 1,
 						filter: {
 							status: params.status && params.status,
@@ -146,6 +160,11 @@ const Index = ({location, history}) => {
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
 									<Table
+										onRowClick={row => {
+											setSelected(row);
+											showViewModal(true)
+										}}
+										rowClassName={'cursor-pointer'}
 										rowKey="id"
 										columns={[
 											{
