@@ -12,7 +12,7 @@ const OrdersModal = ({selected, showViewModal, setSelectedOrder}) => {
         dispatch(Actions.LoadDefault.request({
             url: `/dashboard/table-monitoring-ids`,
             params: {
-                include: "user,waiter,payments,goods",
+                include: "user,waiter,payments,goods,booking.table",
                 extra: {
                     closed_at: get(selected, 'closed_at'),
                     number: get(selected, 'number')

@@ -68,7 +68,7 @@ const Index = ({location, history}) => {
 				)}
 
 				<EntityContainer.All
-					entity="order"
+					entity="ordersOnTable"
 					name={`all`}
 					primaryKey={'closed_at'}
 					url="/dashboard/table-monitoring"
