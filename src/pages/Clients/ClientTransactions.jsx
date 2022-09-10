@@ -91,6 +91,14 @@ const ClientTransactions = ({match}) => {
                                                     className="divider-wrapper">{value ? value.title : "-"}</div>
                                             },
                                             {
+                                                title: t("Сумма"),
+                                                dataIndex: "value",
+                                                className: "text-cen",
+                                                render: value => <div className="divider-wrapper">
+                                                    {value ? helpers.convertToReadable(value) : ""}
+                                                </div>
+                                            },
+                                            {
                                                 title: t("Тип суммы"),
                                                 dataIndex: "price_type",
                                                 className: "text-cen",
