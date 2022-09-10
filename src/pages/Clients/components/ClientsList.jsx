@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import EntityContainer from "modules/entity/containers";
-import { Pagination, Spin, Button, Modal } from "antd";
+import { Pagination, Spin, Modal } from "antd";
 import { Table } from "components";
 import { useHistory, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
-import { get } from "lodash";
 import UpdateClient from "./UpdateClient";
-import PaymentModal from "./PaymentModal";
 import { Link } from "react-router-dom";
+import {helpers} from "../../../services";
 
 let content = document.querySelector(".m-content");
 
@@ -48,7 +47,7 @@ const ClientsList = ({ searchQuery }) => {
 			params={{
 				limit: 50,
 				page,
-				extra: { name: searchQuery },
+				extra: { append: 'balance', name: searchQuery },
 			}}
 		>
 			{({ items, isFetched, meta }) => {
@@ -88,7 +87,8 @@ const ClientsList = ({ searchQuery }) => {
 										title: t("Контрагент"),
 										dataIndex: "name",
 										render: (value, row) => <div className="divider-wrapper fw-700">
-											{row.surname ? row.surname : ''} {value ? value : '-'}
+											<Link className={'cr-blue'} to={`/customers/transactions/${row.id}`}>{row.surname ? row.surname : ''} {value ? value : '-'}</Link>
+
 										</div>
 									},
 									{
@@ -98,7 +98,27 @@ const ClientsList = ({ searchQuery }) => {
 										render: value => <div className="divider-wrapper">
 											{value ? value : t("нет номера")}
 										</div>
-									}
+									},
+									{
+										title: t("Баланс сум"),
+										dataIndex: "balance",
+										className: "",
+										render: (value) => {
+											return (
+												<div
+													className="divider-wrapper fw-700">
+													{value >= 0 ? (
+														<span style={{color: 'green'}}>
+															{value ? helpers.convertToReadable(value) : 0}
+														</span>
+													) : (
+														<span style={{color: 'red'}}>{value ? helpers.convertToReadable(value) : 0}</span>
+													)}
+
+												</div>
+											);
+										}
+									},
 								]}
 								dataSource={items}
 							/>

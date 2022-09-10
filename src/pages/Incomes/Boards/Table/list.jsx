@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, notification, Pagination, Spin } from "antd";
+import React, { useState } from "react";
+import {Button, Modal, notification, Pagination, Spin} from "antd";
 import EntityContainer from "modules/entity/containers";
-import Actions from "modules/entity/actions";
-import EntityActions from "modules/entity/actions";
-import { Fields, Table } from "components";
+import { Table } from "components";
 
 import { useTranslation } from "react-i18next";
-import get from "lodash/get";
-import useDebounce from "use-debounce/lib/useDebounce";
-import { helpers, time } from "services";
+import { helpers } from "services";
 import AddModal from "../../components/addModal";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
+import Actions from "modules/entity/actions";
 
-const List = ({ selectedCategory }) => {
+const List = () => {
 	const { t } = useTranslation();
-	const dispatch = useDispatch();
-	const [query, setQuery] = useState("");
-	const [searchQuery] = useDebounce(query, 600);
 	const [page, setPage] = useState();
+	const dispatch = useDispatch();
 	const [addModal, showAddModal] = useState(false);
-	const [filterAuthor, setFilterAuthor] = useState(null);
-	const [data, setData] = useState();
-
-
-	let sum = get(data, "sum", 0).toLocaleString();
-	let uy = get(data, "uy", 0).toLocaleString();
-	let bank = get(data, "bank", 0).toLocaleString();
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -40,8 +28,8 @@ const List = ({ selectedCategory }) => {
 	const deleteAction = id => {
 		dispatch(Actions.Form.request({
 			method: "delete",
-			entity: "expenses",
-			name: `all-${get(selectedCategory, "id")}`,
+			entity: "incomes",
+			name: `all`,
 			id: id,
 			url: `/transactions/${id}`,
 			deleteData: true,
@@ -64,24 +52,6 @@ const List = ({ selectedCategory }) => {
 		}));
 	};
 
-	const loadAccountBalance = () => {
-		dispatch(EntityActions.LoadDefault.request({
-			url: "/crm/account-balance/transfer",
-			cb: {
-				success: (data) => {
-					setData(data);
-				},
-				error: () => {
-				}
-			}
-		}));
-	};
-
-	useEffect(() => {
-		loadAccountBalance();
-	}, []);
-
-
 	return (
 		<>
 			<Modal
@@ -93,22 +63,10 @@ const List = ({ selectedCategory }) => {
 				width={430}
 				destroyOnClose
 			>
-				<AddModal {...{ showAddModal, selectedCategory, loadAccountBalance }} />
+				<AddModal {...{ showAddModal }} />
 			</Modal>
 			<div className={"pt-15 pl-15 pr-15 d-flex justify-content-between align-items-center"}>
 				<div className="fs-16">
-					{/*<span className="--black pr-20">*/}
-					{/*	<span className="pr-5">{t("Сум")}:</span>*/}
-					{/*	<span className="fw-500">{sum}</span>*/}
-					{/*</span>*/}
-					{/*<span className="--black pr-20">*/}
-					{/*	<span className="pr-5">{t("Вторичный")}:</span>*/}
-					{/*	<span className="fw-500">{uy}</span>*/}
-					{/*</span>*/}
-					{/*<span className="--black">*/}
-					{/*	<span className="pr-5">{t("Перечисление")}:</span>*/}
-					{/*	<span className="fw-500">{bank}</span>*/}
-					{/*</span>*/}
 				</div>
 
 				<Button
@@ -120,22 +78,16 @@ const List = ({ selectedCategory }) => {
 				>{t("Добавить")}</Button>
 			</div>
 			<EntityContainer.All
-				entity="expenses"
-				name={`all-${get(selectedCategory, "id")}`}
+				entity="incomes"
+				name={`all`}
 				url="/transactions"
 				primaryKey="id"
 				params={{
 					sort: "-id",
 					limit: 15,
+					filter: {type: 2},
 					page,
-					filter: {
-						type: 1,
-						category_id: get(selectedCategory, "id"),
-					},
-					include: "category,customer",
-					extra: {
-						name: searchQuery
-					}
+					include: "customer",
 				}}
 			>
 				{({ items, isFetched, meta }) => {
@@ -154,13 +106,6 @@ const List = ({ selectedCategory }) => {
 												dataIndex: "id",
 												className: "w-50 text-cen",
 												render: value => <div className="divider-wrapper">{value}</div>
-											},
-											{
-												title: t("Категория"),
-												dataIndex: "category",
-												className: "text-cen",
-												render: value => <div
-													className="divider-wrapper">{value ? value.title : "-"}</div>
 											},
 											{
 												title: t("Контрагент"),

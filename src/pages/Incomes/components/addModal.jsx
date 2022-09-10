@@ -7,30 +7,24 @@ import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 
-const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
+const AddModal = ({ showAddModal }) => {
 	const { t } = useTranslation();
 
 	return (
 		<EntityForm.Main
 			method="post"
-			entity="expenses"
-			name={`all-${get(selectedCategory, "id")}`}
+			entity="incomes"
+			name={`all`}
 			url="/transactions"
 			prependData={true}
 			primaryKey="id"
 			normalizeData={data => data}
 			onSuccess={(data, resetForm) => {
-				loadAccountBalance();
 				resetForm();
 				showAddModal(false);
 			}}
-			params={{ include: "category" }}
+			params={{ include: "customer" }}
 			fields={[
-				{
-					name: "category_id",
-					value: selectedCategory ? selectedCategory : null,
-					onSubmitValue: value => value ? value.id : ""
-				},
 				{
 					name: "customer_id",
 					onSubmitValue: value => value ? value.id : ""
@@ -52,8 +46,12 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 					name: "comment"
 				},
 				{
+					name: "added_at",
+					required: true
+				},
+				{
 					name: 'type',
-					value: 1
+					value: 2
 				}
 			]}
 		>
@@ -61,23 +59,7 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 				return (
 					<Spin spinning={isSubmitting}>
 						<div>
-							<div className="title-md fs-16 mb-20">{t("Добавление расходов")}</div>
-							<Field
-								component={Fields.AsyncSelect}
-								name="category_id"
-								placeholder={t("Виберите категорию")}
-								isClearable
-								loadOptionsUrl={`/expense-categories`}
-								className="mb-20"
-								optionLabel="title"
-								optionValue="id"
-								isSearchable
-								loadOptionsParams={search => {
-									return {
-										extra: { name: search }
-									};
-								}}
-							/>
+							<div className="title-md fs-16 mb-20">{t("Добавление приход")}</div>
 
 							<Field
 								component={Fields.AsyncSelect}
@@ -126,12 +108,14 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 
 							<div className="mb-24">
 								<div className="ant-label mr-6 mb-3">{t("Дата")}</div>
+
 								<Field
-									value={values.added_at}
-									component={DatePicker}
+									component={Fields.AntDatePicker}
 									name="added_at"
 									size="large"
 									placeholder={t("Выберите дату")}
+									style={{width: '100%', marginBottom: 0}}
+									format="YYYY-MM-DD HH:mm"
 									onChange={(date) => {
 										setFieldValue('added_at', date)
 									}}

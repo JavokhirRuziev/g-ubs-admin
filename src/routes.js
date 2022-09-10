@@ -50,12 +50,16 @@ const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
 const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
+const Incomes = lazy(() => import("./pages/Incomes"));
 const Expenses = lazy(() => import("./pages/Expenses"));
 const Clients = lazy(() => import("./pages/Clients"));
+const ClientsTransactions = lazy(() => import("./pages/Clients/ClientTransactions"));
 
 const routes = [
+	{ path: "/customers/transactions/:id", exact: true, component: ClientsTransactions, access: ["company"] },
 	{ path: "/customers", exact: true, component: Clients, access: ["company"] },
 	{ path: "/expenses", exact: true, component: Expenses, access: ["company"] },
+	{ path: "/incomes", exact: true, component: Incomes, access: ["company"] },
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{ path: "/", exact: true, component: Orders, access: ["company"] },
 	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },

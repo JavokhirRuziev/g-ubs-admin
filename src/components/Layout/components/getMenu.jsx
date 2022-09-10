@@ -72,7 +72,8 @@ const contentManagerRoutes = [
         title: "Отчет",
         icon: 'menu-i-dashboard',
         submenu: [
-            {id: 'orders', link: '/orders', title: 'Заказы'},
+            {id: 'dashboard', link: '/dashboard', title: 'Мониторинг'},
+            {id: 'orders', link: '/orders', title: 'Отчёт по заказом'},
             {id: 'monitoring', link: '/orders-on-table', title: 'Отчёт по стол'},
             {id: 'monitoring', link: '/monitoring', title: 'Отчёт по блюдам'},
             {id: 'monitoringWaiter', link: '/monitoring-waiter', title: 'Отчёт по официантом'}
@@ -128,6 +129,12 @@ const contentManagerRoutes = [
         id: 'expenses',
         title: "Расходы",
         link: '/expenses',
+        icon: 'menu-i-dashboard'
+    },
+    {
+        id: 'incomes',
+        title: "Приход",
+        link: '/incomes',
         icon: 'menu-i-dashboard'
     },
     {
