@@ -22,13 +22,7 @@ const Create = ({setCreateModal}) => {
             fields={[
                 {name: 'company_id', value:  null},
                 {name: "name", required: true},
-                {name: "surname"},
                 {name: "phone", required: true},
-                // {
-                //     name: "birthday",
-                //     onSubmitValue: value => (!!value ? moment(value).unix() : ""),
-                //     value: moment()
-                // }
             ]}
         >
             {({isSubmitting, values, setFieldValue, submitForm}) => {

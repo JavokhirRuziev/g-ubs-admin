@@ -163,11 +163,11 @@ const List = ({ selectedCategory }) => {
 													className="divider-wrapper">{value ? value.title : "-"}</div>
 											},
 											{
-												title: t("Контрагент"),
+												title: t("Клиент"),
 												dataIndex: "customer",
 												className: "text-cen",
 												render: value => <div
-													className="divider-wrapper">{value ? value.surname + " " + value.name : "-"}</div>
+													className="divider-wrapper">{value ? value : '-'}</div>
 											},
 											{
 												title: t("Сумма"),

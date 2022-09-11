@@ -86,7 +86,7 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 								isClearable
 								loadOptionsUrl={`/customers`}
 								className="mb-20"
-								optionLabel={option => option.surname + ' ' + option.name}
+								optionLabel="name"
 								optionValue="id"
 								isSearchable
 								loadOptionsParams={search => {

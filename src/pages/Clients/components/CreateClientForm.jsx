@@ -21,32 +21,12 @@ const Form = ({ isUpdate, values, setFieldValue, submitForm }) => {
                         size="large"
                     />
                     <Field
-                        component={Fields.AntInput}
-                        name="surname"
-                        type="text"
-                        placeholder={t("Фамилия")}
-                        size="large"
-                    />
-                    <Field
                         component={Fields.InputMaskField}
                         name="phone"
                         type="text"
                         mask="+\9\9\899 999-99-99"
                         placeholder={t("Номер телефона")}
                     />
-                    {/*<div className="mb-24">*/}
-                    {/*    <div className="ant-label mr-6 mb-3">{t("Дата рождения")}</div>*/}
-                    {/*    <Field*/}
-                    {/*        value={values.birthday}*/}
-                    {/*        component={DatePicker}*/}
-                    {/*        name="birthday"*/}
-                    {/*        size="large"*/}
-                    {/*        placeholder={t("Выберите дату")}*/}
-                    {/*        onChange={(date) => {*/}
-                    {/*            setFieldValue("birthday", date);*/}
-                    {/*        }}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
                 </GridElements.Column>
             </GridElements.Row>
 

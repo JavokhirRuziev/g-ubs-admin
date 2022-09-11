@@ -29,19 +29,10 @@ const Create = ({showUpdateModal, selected}) => {
                     value: get(selected, 'name')
                 },
                 {
-                    name: "surname",
-                    value: get(selected, 'surname')
-                },
-                {
                     name: "phone",
                     required: true,
                     value: get(selected, 'phone')
-                },
-                // {
-                //     name: "birthday",
-                //     onSubmitValue: value => (!!value ? moment(value).unix() : ""),
-                //     value: moment.unix(get(selected, 'birthday', null)),
-                // }
+                }
             ]}
         >
             {({isSubmitting, values, setFieldValue, submitForm}) => {

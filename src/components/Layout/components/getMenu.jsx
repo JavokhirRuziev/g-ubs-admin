@@ -72,7 +72,7 @@ const contentManagerRoutes = [
         title: "Отчет",
         icon: 'menu-i-dashboard',
         submenu: [
-            {id: 'dashboard', link: '/dashboard', title: 'Мониторинг'},
+            {id: 'statistics', link: '/statistics', title: 'Статистика'},
             {id: 'orders', link: '/orders', title: 'Отчёт по заказом'},
             {id: 'monitoring', link: '/orders-on-table', title: 'Отчёт по стол'},
             {id: 'monitoring', link: '/monitoring', title: 'Отчёт по блюдам'},

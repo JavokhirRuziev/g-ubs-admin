@@ -87,7 +87,7 @@ const ClientsList = ({ searchQuery }) => {
 										title: t("Контрагент"),
 										dataIndex: "name",
 										render: (value, row) => <div className="divider-wrapper fw-700">
-											<Link className={'cr-blue'} to={`/customers/transactions/${row.id}`}>{row.surname ? row.surname : ''} {value ? value : '-'}</Link>
+											<Link className={'cr-blue'} to={`/customers/transactions/${row.id}`}>{value ? value : '-'}</Link>
 
 										</div>
 									},
