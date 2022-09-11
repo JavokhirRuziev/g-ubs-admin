@@ -109,8 +109,7 @@ const List = () => {
 											},
 											{
 												title: t("Клиент"),
-												dataIndex: "customer",
-												className: "text-cen",
+												dataIndex: "customer.name",
 												render: value => <div
 													className="divider-wrapper">{value ? value : '-'}</div>
 											},
@@ -143,7 +142,7 @@ const List = () => {
 												dataIndex: "added_at",
 												className: "text-cen",
 												render: value => <div className="divider-wrapper">
-													{value ? helpers.formatDate(value, 'DD.MM.YYYY / HH:mm') : t("не указан")}
+													{value ? helpers.formatDate(value, 'DD.MM.YYYY') : t("не указан")}
 												</div>
 											}
 										]}

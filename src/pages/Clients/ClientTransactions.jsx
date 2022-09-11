@@ -38,7 +38,7 @@ const ClientTransactions = ({match}) => {
     return (
         <div>
             <div className="d-flex justify-content-between mb-20">
-                <div className="title-md">{t("Клиент")} - {get(customer, "surname") + " " + get(customer, "name")}</div>
+                <div className="title-md">{t("Клиент")} - {get(customer, "name")}</div>
                 <div className="fw-500 fs-16">
                     <span className="mr-10">{t("Салдо")}: {balance >= 0 ?
                         <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
