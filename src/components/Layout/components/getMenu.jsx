@@ -80,6 +80,16 @@ const contentManagerRoutes = [
         ]
     },
     {
+        id: 'accountant',
+        title: 'Бухгалтерия',
+        icon: 'menu-i-dashboard',
+        submenu: [
+            {id: 'expenses', title: "Расходы", link: '/expenses'},
+            {id: 'incomes', title: "Приход", link: '/incomes'},
+            {id: 'customers', title: "Клиенты", link: '/customers'},
+        ]
+    },
+    {
         id: 'dishes',
         title: "Еды",
         link: '/dishes',
@@ -124,25 +134,7 @@ const contentManagerRoutes = [
         title: "Принтеры",
         link: '/printers',
         icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'expenses',
-        title: "Расходы",
-        link: '/expenses',
-        icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'incomes',
-        title: "Приход",
-        link: '/incomes',
-        icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'customers',
-        title: "Клиенты",
-        link: '/customers',
-        icon: 'menu-i-dashboard'
-    },
+    }
 ]
 
 

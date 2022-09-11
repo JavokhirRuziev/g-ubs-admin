@@ -3,8 +3,14 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import Actions from "modules/entity/actions"
 import {helpers} from "../../services";
+import Filter from "./Filter";
+import {Board} from "../../components";
+import qs from "query-string";
 
-const Statistics = () => {
+const Statistics = ({location}) => {
+    const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+    const {t} = useTranslation();
+
     const [expensesTransactions, setExpensesTransactions] = useState([]);
     const [totalExpenses, setTotalExpenses] = useState(0);
 
@@ -17,6 +23,12 @@ const Statistics = () => {
     const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
             url: `/transactions/expenses-by-category`,
+            params: {
+                extra: {
+                    start_date: params.start_at && params.start_at,
+                    end_date: params.end_at && params.end_at,
+                }
+            },
             cb: {
                 success: data => {
                     setExpensesTransactions(data)
@@ -30,6 +42,12 @@ const Statistics = () => {
     const loadIncomesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
             url: `/transactions/incomes-by-category`,
+            params: {
+                extra: {
+                    start_date: params.start_at && params.start_at,
+                    end_date: params.end_at && params.end_at,
+                }
+            },
             cb: {
                 success: data => {
                     setIncomesTransactions(data)
@@ -43,6 +61,12 @@ const Statistics = () => {
     const loadIncomesBySales = () => {
         dispatch(Actions.LoadDefault.request({
             url: `/transactions/incomes-by-sales`,
+            params: {
+                extra: {
+                    start_date: params.start_at && params.start_at,
+                    end_date: params.end_at && params.end_at,
+                }
+            },
             cb: {
                 success: data => {
                     setIncomesSalesTransactions(data)
@@ -51,13 +75,12 @@ const Statistics = () => {
             }
         }))
     }
-    const {t} = useTranslation();
 
     useEffect(() => {
         loadExpensesByCategory()
         loadIncomesByCategory()
         loadIncomesBySales()
-    }, [])
+    }, [params.start_at,params.end_at])
 
     const cashSales = incomesSalesTransactions.find(i => i.price_type === 1) ? incomesSalesTransactions.find(i => i.price_type === 1).sum : 0;
     const terminalSales = incomesSalesTransactions.find(i => i.price_type === 4) ? incomesSalesTransactions.find(i => i.price_type === 4).sum : 0;
@@ -67,6 +90,9 @@ const Statistics = () => {
 
     return (
         <div>
+            <Board className='mb-30'>
+                <Filter/>
+            </Board>
             <div className="row mb-30">
                 <div className="col-4">
                     <div className="dashboard-card-st">
