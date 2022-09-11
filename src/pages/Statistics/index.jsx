@@ -102,7 +102,9 @@ const Statistics = ({location}) => {
                             </div>
                             <div className="--title">
                                 <span>{t("Касса")}</span>
-                                <span></span>
+                                {(!params.start_at && !params.end_at) && (
+                                    <span>За день</span>
+                                )}
                             </div>
                         </div>
                         <div className="dashboard-card-st__body">
@@ -131,7 +133,9 @@ const Statistics = ({location}) => {
                             </div>
                             <div className="--title">
                                 <span>{t("Приход")}</span>
-                                <span></span>
+                                {(!params.start_at && !params.end_at) && (
+                                    <span>За день</span>
+                                )}
                             </div>
                         </div>
 
@@ -166,7 +170,9 @@ const Statistics = ({location}) => {
                             </div>
                             <div className="--title">
                                 <span>{t("Расходы")}</span>
-                                <span></span>
+                                {(!params.start_at && !params.end_at) && (
+                                    <span>За день</span>
+                                )}
                             </div>
                         </div>
                         <div className="dashboard-card-st__body">
@@ -196,7 +202,9 @@ const Statistics = ({location}) => {
                             </div>
                             <div className="--title">
                                 <span>{t("Сумма продаж")}</span>
-                                <span></span>
+                                {(!params.start_at && !params.end_at) && (
+                                    <span>За день</span>
+                                )}
                             </div>
                         </div>
                         <div className="dashboard-card-st__body">
