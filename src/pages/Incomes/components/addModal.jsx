@@ -7,14 +7,14 @@ import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 
-const AddModal = ({ showAddModal }) => {
+const AddModal = ({ showAddModal, selectedCategory }) => {
 	const { t } = useTranslation();
 
 	return (
 		<EntityForm.Main
 			method="post"
 			entity="incomes"
-			name={`all`}
+			name={`all-${get(selectedCategory, "id")}`}
 			url="/transactions"
 			prependData={true}
 			primaryKey="id"
@@ -23,8 +23,14 @@ const AddModal = ({ showAddModal }) => {
 				resetForm();
 				showAddModal(false);
 			}}
-			params={{ include: "customer" }}
+			params={{ include: "category" }}
 			fields={[
+				{
+					name: "category_id",
+					value: selectedCategory ? selectedCategory : null,
+					onSubmitValue: value => value ? value.id : "",
+					required: true
+				},
 				{
 					name: "customer_id",
 					onSubmitValue: value => value ? value.id : ""
@@ -46,10 +52,6 @@ const AddModal = ({ showAddModal }) => {
 					name: "comment"
 				},
 				{
-					name: "added_at",
-					required: true
-				},
-				{
 					name: 'type',
 					value: 2
 				}
@@ -60,6 +62,22 @@ const AddModal = ({ showAddModal }) => {
 					<Spin spinning={isSubmitting}>
 						<div>
 							<div className="title-md fs-16 mb-20">{t("Добавление приход")}</div>
+							<Field
+								component={Fields.AsyncSelect}
+								name="category_id"
+								placeholder={t("Виберите категорию")}
+								isClearable
+								loadOptionsUrl={`/expense-categories`}
+								className="mb-20"
+								optionLabel="title"
+								optionValue="id"
+								isSearchable
+								loadOptionsParams={search => {
+									return {
+										extra: { name: search }
+									};
+								}}
+							/>
 
 							<Field
 								component={Fields.AsyncSelect}
@@ -79,11 +97,10 @@ const AddModal = ({ showAddModal }) => {
 							/>
 
 							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
-								onChange={e => setFieldValue("price_type", e.target.value)}>
+										 onChange={e => setFieldValue("price_type", e.target.value)}>
 								<Radio value={1}>{t("Наличние")}</Radio>
-								<Radio value={2}>{t("Терминал")}</Radio>
-								<Radio value={3}>{t("Перечисления")}</Radio>
-								<Radio value={4}>{t("Вторая степенная")}</Radio>
+								<Radio value={4}>{t("Терминал")}</Radio>
+								<Radio value={7}>{t("Онлайн")}</Radio>
 							</Radio.Group>
 
 							<Field
@@ -108,14 +125,12 @@ const AddModal = ({ showAddModal }) => {
 
 							<div className="mb-24">
 								<div className="ant-label mr-6 mb-3">{t("Дата")}</div>
-
 								<Field
-									component={Fields.AntDatePicker}
+									value={values.added_at}
+									component={DatePicker}
 									name="added_at"
 									size="large"
 									placeholder={t("Выберите дату")}
-									style={{width: '100%', marginBottom: 0}}
-									format="YYYY-MM-DD HH:mm"
 									onChange={(date) => {
 										setFieldValue('added_at', date)
 									}}

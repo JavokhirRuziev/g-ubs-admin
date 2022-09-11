@@ -7,7 +7,7 @@ import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 
-const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
+const AddModal = ({ showAddModal, selectedCategory }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -20,7 +20,6 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 			primaryKey="id"
 			normalizeData={data => data}
 			onSuccess={(data, resetForm) => {
-				loadAccountBalance();
 				resetForm();
 				showAddModal(false);
 			}}
@@ -29,7 +28,8 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 				{
 					name: "category_id",
 					value: selectedCategory ? selectedCategory : null,
-					onSubmitValue: value => value ? value.id : ""
+					onSubmitValue: value => value ? value.id : "",
+					required: true
 				},
 				{
 					name: "customer_id",
@@ -99,9 +99,8 @@ const AddModal = ({ showAddModal, selectedCategory, loadAccountBalance }) => {
 							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
 								onChange={e => setFieldValue("price_type", e.target.value)}>
 								<Radio value={1}>{t("Наличние")}</Radio>
-								<Radio value={2}>{t("Терминал")}</Radio>
-								<Radio value={3}>{t("Перечисления")}</Radio>
-								<Radio value={4}>{t("Вторая степенная")}</Radio>
+								<Radio value={4}>{t("Терминал")}</Radio>
+								<Radio value={7}>{t("Онлайн")}</Radio>
 							</Radio.Group>
 
 							<Field

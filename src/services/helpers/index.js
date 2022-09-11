@@ -117,13 +117,19 @@ const getOrderStatus = (status) => {
 const getPaymentType = (status) => {
 	switch (status){
 		case 1:
-			return "Cash";
+			return "Наличние";
 		case 2:
 			return "Payme";
 		case 3:
 			return "Click";
 		case 4:
-			return "Terminal";
+			return "Терминал";
+		case 5:
+			return "Долг";
+		case 6:
+			return "VIP";
+		case 7:
+			return "Онлайн";
 		default:
 			return "Не указон"
 	}
@@ -134,13 +140,19 @@ const getPaymentTypeExpenses = type => {
 		case 1:
 			return "Наличние";
 		case 2:
-			return "Терминал";
+			return "Payme";
 		case 3:
-			return "Перечисления";
+			return "Click";
 		case 4:
-			return "Вторая степенная";
+			return "Терминал";
+		case 5:
+			return "Долг";
+		case 6:
+			return "VIP";
+		case 7:
+			return "Онлайн";
 		default:
-			return "-"
+			return "Не указон"
 	}
 };
 

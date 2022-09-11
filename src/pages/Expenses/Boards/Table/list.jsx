@@ -19,13 +19,7 @@ const List = ({ selectedCategory }) => {
 	const [searchQuery] = useDebounce(query, 600);
 	const [page, setPage] = useState();
 	const [addModal, showAddModal] = useState(false);
-	const [filterAuthor, setFilterAuthor] = useState(null);
 	const [data, setData] = useState();
-
-
-	let sum = get(data, "sum", 0).toLocaleString();
-	let uy = get(data, "uy", 0).toLocaleString();
-	let bank = get(data, "bank", 0).toLocaleString();
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -64,24 +58,6 @@ const List = ({ selectedCategory }) => {
 		}));
 	};
 
-	const loadAccountBalance = () => {
-		dispatch(EntityActions.LoadDefault.request({
-			url: "/crm/account-balance/transfer",
-			cb: {
-				success: (data) => {
-					setData(data);
-				},
-				error: () => {
-				}
-			}
-		}));
-	};
-
-	useEffect(() => {
-		loadAccountBalance();
-	}, []);
-
-
 	return (
 		<>
 			<Modal
@@ -93,24 +69,10 @@ const List = ({ selectedCategory }) => {
 				width={430}
 				destroyOnClose
 			>
-				<AddModal {...{ showAddModal, selectedCategory, loadAccountBalance }} />
+				<AddModal {...{ showAddModal, selectedCategory }} />
 			</Modal>
 			<div className={"pt-15 pl-15 pr-15 d-flex justify-content-between align-items-center"}>
-				<div className="fs-16">
-					{/*<span className="--black pr-20">*/}
-					{/*	<span className="pr-5">{t("Сум")}:</span>*/}
-					{/*	<span className="fw-500">{sum}</span>*/}
-					{/*</span>*/}
-					{/*<span className="--black pr-20">*/}
-					{/*	<span className="pr-5">{t("Вторичный")}:</span>*/}
-					{/*	<span className="fw-500">{uy}</span>*/}
-					{/*</span>*/}
-					{/*<span className="--black">*/}
-					{/*	<span className="pr-5">{t("Перечисление")}:</span>*/}
-					{/*	<span className="fw-500">{bank}</span>*/}
-					{/*</span>*/}
-				</div>
-
+				<div/>
 				<Button
 					type="primary"
 					size="large"

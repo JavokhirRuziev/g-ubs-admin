@@ -8,8 +8,9 @@ import { helpers } from "services";
 import AddModal from "../../components/addModal";
 import {useDispatch} from "react-redux";
 import Actions from "modules/entity/actions";
+import get from "lodash/get";
 
-const List = () => {
+const List = ({selectedCategory}) => {
 	const { t } = useTranslation();
 	const [page, setPage] = useState();
 	const dispatch = useDispatch();
@@ -63,7 +64,7 @@ const List = () => {
 				width={430}
 				destroyOnClose
 			>
-				<AddModal {...{ showAddModal }} />
+				<AddModal {...{ showAddModal, selectedCategory }} />
 			</Modal>
 			<div className={"pt-15 pl-15 pr-15 d-flex justify-content-between align-items-center"}>
 				<div className="fs-16">
@@ -79,15 +80,18 @@ const List = () => {
 			</div>
 			<EntityContainer.All
 				entity="incomes"
-				name={`all`}
+				name={`all-${get(selectedCategory, "id")}`}
 				url="/transactions"
 				primaryKey="id"
 				params={{
 					sort: "-id",
 					limit: 15,
-					filter: {type: 2},
+					filter: {
+						type: 2,
+						category_id: get(selectedCategory, "id"),
+					},
 					page,
-					include: "customer",
+					include: "category,customer",
 				}}
 			>
 				{({ items, isFetched, meta }) => {
@@ -106,6 +110,13 @@ const List = () => {
 												dataIndex: "id",
 												className: "w-50 text-cen",
 												render: value => <div className="divider-wrapper">{value}</div>
+											},
+											{
+												title: t("Категория"),
+												dataIndex: "category",
+												className: "text-cen",
+												render: value => <div
+													className="divider-wrapper">{value ? value.title : "-"}</div>
 											},
 											{
 												title: t("Клиент"),

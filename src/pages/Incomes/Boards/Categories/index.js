@@ -62,7 +62,7 @@ const Customers = ({selectedCategory, setCategory}) => {
             width={430}
             destroyOnClose
           >
-            <Create {...{showCreateModal, type: 1}}/>
+            <Create {...{showCreateModal, type: 2}}/>
           </Modal>
           <Modal
             visible={updateModal}
@@ -73,12 +73,12 @@ const Customers = ({selectedCategory, setCategory}) => {
             width={430}
             destroyOnClose
           >
-            <Update {...{selected, showUpdateModal, type: 1}}/>
+            <Update {...{selected, showUpdateModal, type: 2}}/>
           </Modal>
         </div>
         <EntityContainer.All
           entity="transaction-category"
-          name="all-1"
+          name="all-2"
           url="/expense-categories"
           primaryKey="id"
           params={{
@@ -87,7 +87,7 @@ const Customers = ({selectedCategory, setCategory}) => {
             limit: 20,
             extra: {name: searchQuery},
             filter: {
-              type: 1
+              type: 2
             }
           }}
           appendData

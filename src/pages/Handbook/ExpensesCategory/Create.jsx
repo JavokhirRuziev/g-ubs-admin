@@ -4,12 +4,12 @@ import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
 import Form from './Form';
 
-const Create = ({showCreateModal}) => {
+const Create = ({showCreateModal, type}) => {
     return (
         <EntityForm.Main
             method="post"
-            entity="expense"
-            name="all"
+            entity="transaction-category"
+            name={`all-${type}`}
             url="/expense-categories"
             prependData={true}
             primaryKey="id"
@@ -21,6 +21,7 @@ const Create = ({showCreateModal}) => {
             fields={[
                 {name: "company_id", value: null},
                 {name: "title", required: true},
+                {name: 'type', value: type}
             ]}
         >
             {({isSubmitting, values, setFieldValue}) => {
