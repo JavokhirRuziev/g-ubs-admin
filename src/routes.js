@@ -63,7 +63,7 @@ const routes = [
 	{ path: "/statistics", exact: true, component: Statistics, access: ["company"] },
 	{ path: "/incomes", exact: true, component: Incomes, access: ["company"] },
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
-	{ path: "/", exact: true, component: Orders, access: ["company"] },
+	{ path: "/", exact: true, component: Statistics, access: ["company"] },
 	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },
 	{ path: "/monitoring", exact: true, component: Monitoring, access: ["company"] },
 	{ path: "/orders", exact: true, component: Orders, access: ["company"] },
