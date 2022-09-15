@@ -68,11 +68,16 @@ const adminMenus = [
 ]
 const contentManagerRoutes = [
     {
+        id: 'statistics',
+        link: '/statistics',
+        title: 'Главная',
+        icon: 'menu-i-category',
+    },
+    {
         id: 'report',
         title: "Отчет",
         icon: 'menu-i-dashboard',
         submenu: [
-            {id: 'statistics', link: '/statistics', title: 'Статистика'},
             {id: 'orders', link: '/orders', title: 'Отчёт по заказом'},
             {id: 'monitoring', link: '/orders-on-table', title: 'Отчёт по стол'},
             {id: 'monitoring', link: '/monitoring', title: 'Отчёт по блюдам'},
