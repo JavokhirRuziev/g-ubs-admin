@@ -6,6 +6,7 @@ import { Fields } from "components";
 import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
+import config from "config";
 
 const AddModal = ({ showAddModal, selectedCategory }) => {
 	const { t } = useTranslation();
@@ -72,8 +73,10 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								optionLabel="title"
 								optionValue="id"
 								isSearchable
+								isDisabled={true}
 								loadOptionsParams={search => {
 									return {
+										filter: {type: config.INCOME_CATEGORY_TYPE},
 										extra: { name: search }
 									};
 								}}
