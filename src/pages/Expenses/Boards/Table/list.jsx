@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal, notification, Pagination, Spin } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Actions from "modules/entity/actions";
-import EntityActions from "modules/entity/actions";
-import {Board, Fields, Table} from "components";
+import {Board, Table} from "components";
 
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import useDebounce from "use-debounce/lib/useDebounce";
-import { helpers, time } from "services";
+import { helpers } from "services";
 import AddModal from "../../components/addModal";
 import { useDispatch } from "react-redux";
+import Filter from "./filter";
+import qs from "query-string";
+import {useLocation} from "react-router";
 
 const List = ({ selectedCategory }) => {
 	const { t } = useTranslation();
+	const location = useLocation();
 	const dispatch = useDispatch();
+	const [filterModal, showFilterModal] = useState(false);
 	const [query, setQuery] = useState("");
 	const [searchQuery] = useDebounce(query, 600);
 	const [page, setPage] = useState();
 	const [addModal, showAddModal] = useState(false);
+	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -72,13 +77,16 @@ const List = ({ selectedCategory }) => {
 			</Modal>
 			<div className={"d-flex justify-content-between align-items-center mb-10"}>
 				<div className="title-md">{t("Расходы")}</div>
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300"
-					htmlType="button"
-					onClick={() => showAddModal(true)}
-				>{t("Добавить")}</Button>
+				<div className='d-flex'>
+					<Filter {...{filterModal, showFilterModal}}/>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300"
+						htmlType="button"
+						onClick={() => showAddModal(true)}
+					>{t("Добавить")}</Button>
+				</div>
 			</div>
 			<Board calc={160}>
 				<EntityContainer.All
@@ -91,11 +99,14 @@ const List = ({ selectedCategory }) => {
 						limit: 15,
 						page,
 						filter: {
+							price_type: params.price_type ? params.price_type : '',
 							type: 1,
-							category_id: get(selectedCategory, "id"),
+							category_id: params.category_id ? params.category_id.split("/")[0] : get(selectedCategory, "id"),
 						},
 						include: "category,customer",
 						extra: {
+							start_date: params.start_at ? params.start_at : '',
+							end_date: params.end_at ? params.end_at : '',
 							name: searchQuery
 						}
 					}}
@@ -134,7 +145,7 @@ const List = ({ selectedCategory }) => {
 													title: t("Сумма"),
 													dataIndex: "value",
 													className: "text-cen",
-													render: value => <div className="divider-wrapper">
+													render: value => <div className="divider-wrapper no-wrap">
 														{value ? helpers.convertToReadable(value) : ""}
 													</div>
 												},

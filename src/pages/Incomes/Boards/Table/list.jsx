@@ -9,12 +9,18 @@ import AddModal from "../../components/addModal";
 import {useDispatch} from "react-redux";
 import Actions from "modules/entity/actions";
 import get from "lodash/get";
+import Filter from "./filter";
+import {useLocation} from "react-router";
+import qs from "query-string";
 
 const List = ({selectedCategory}) => {
 	const { t } = useTranslation();
+	const location = useLocation();
 	const [page, setPage] = useState();
 	const dispatch = useDispatch();
 	const [addModal, showAddModal] = useState(false);
+	const [filterModal, showFilterModal] = useState(false);
+	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -68,6 +74,16 @@ const List = ({selectedCategory}) => {
 			</Modal>
 			<div className={"d-flex justify-content-between align-items-center mb-10"}>
 				<div className="title-md">{t("Приход")}</div>
+				<div className='d-flex'>
+					<Filter {...{filterModal, showFilterModal}}/>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300"
+						htmlType="button"
+						onClick={() => showAddModal(true)}
+					>{t("Добавить")}</Button>
+				</div>
 
 				{(get(selectedCategory, 'alias') === 'others' || get(selectedCategory, 'alias') === 'debt') && (
 					<Button
@@ -89,12 +105,17 @@ const List = ({selectedCategory}) => {
 					params={{
 						sort: "-id",
 						limit: 15,
-						filter: {
-							type: 2,
-							category_id: get(selectedCategory, "id"),
-						},
 						page,
+						filter: {
+							price_type: params.price_type ? params.price_type : '',
+							type: 2,
+							category_id: params.category_id ? params.category_id.split("/")[0] : get(selectedCategory, "id"),
+						},
 						include: "category,customer",
+						extra: {
+							start_date: params.start_at ? params.start_at : '',
+							end_date: params.end_at ? params.end_at : '',
+						}
 					}}
 				>
 					{({ items, isFetched, meta }) => {
@@ -131,7 +152,7 @@ const List = ({selectedCategory}) => {
 													title: t("Сумма"),
 													dataIndex: "value",
 													className: "text-cen",
-													render: value => <div className="divider-wrapper">
+													render: value => <div className="divider-wrapper no-wrap">
 														{value ? helpers.convertToReadable(value) : ""}
 													</div>
 												},
