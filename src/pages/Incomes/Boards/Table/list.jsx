@@ -76,24 +76,16 @@ const List = ({selectedCategory}) => {
 				<div className="title-md">{t("Приход")}</div>
 				<div className='d-flex'>
 					<Filter {...{filterModal, showFilterModal}}/>
-					<Button
-						type="primary"
-						size="large"
-						className="fs-14 fw-300"
-						htmlType="button"
-						onClick={() => showAddModal(true)}
-					>{t("Добавить")}</Button>
+					{(get(selectedCategory, 'alias') === 'others' || get(selectedCategory, 'alias') === 'debt') && (
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300"
+							htmlType="button"
+							onClick={() => showAddModal(true)}
+						>{t("Добавить")}</Button>
+					)}
 				</div>
-
-				{(get(selectedCategory, 'alias') === 'others' || get(selectedCategory, 'alias') === 'debt') && (
-					<Button
-						type="primary"
-						size="large"
-						className="fs-14 fw-300"
-						htmlType="button"
-						onClick={() => showAddModal(true)}
-					>{t("Добавить")}</Button>
-				)}
 
 			</div>
 			<Board calc={160}>

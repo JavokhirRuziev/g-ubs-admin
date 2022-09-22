@@ -1,0 +1,104 @@
+import React, {useEffect, useState} from 'react';
+import {helpers} from "services";
+import Actions from "modules/entity/actions";
+import {useDispatch} from "react-redux";
+import {useTranslation} from "react-i18next";
+import config from "config";
+import get from "lodash/get";
+
+const IncomesCard = ({params}) => {
+    const dispatch = useDispatch();
+    const {t} = useTranslation();
+
+    const [categories, setCategories] = useState([]);
+    const [incomesTransactions, setIncomesTransactions] = useState([]);
+    const [totalIncomes, setTotalIncomes] = useState(0);
+
+    const loadTotalsByCategory = () => {
+        dispatch(Actions.LoadDefault.request({
+            url: `/transactions/incomes-by-category`,
+            params: {
+                extra: {
+                    start_date: params.start_at && params.start_at,
+                    end_date: params.end_at && params.end_at,
+                }
+            },
+            cb: {
+                success: data => {
+                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+
+                    setIncomesTransactions(data)
+                    setTotalIncomes(total)
+                },
+                error: data => {}
+            }
+        }))
+    }
+    const loadCategories = () => {
+        dispatch(Actions.LoadDefault.request({
+            url: `/expense-categories`,
+            params: {
+                filter: {type: config.INCOME_CATEGORY_TYPE}
+            },
+            cb: {
+                success: data => {
+                    setCategories(data.data)
+                },
+                error: data => {}
+            }
+        }))
+    }
+
+    useEffect(() => {
+        loadCategories()
+    }, [])
+    useEffect(() => {
+        loadTotalsByCategory()
+    }, [params.start_at,params.end_at])
+
+
+    const vip = incomesTransactions.find(i => i.alias === 'vip')
+    return (
+        <div className="dashboard-card-st">
+            <div className="dashboard-card-st__head">
+                <div className="--icon --icon-orange">
+                    <img src={require("../icons/icon-3.svg")} alt="" />
+                </div>
+                <div className="--title">
+                    <span>{t("Приход")}</span>
+                    {(!params.start_at && !params.end_at) && (
+                        <span>За день</span>
+                    )}
+                </div>
+            </div>
+            <div className="dashboard-card-st__body">
+                {categories.length > 0 ? (
+                    categories.map(item => {
+                        const hasSum = incomesTransactions.find(a => a.alias === item.alias)
+                        return(
+                            <div className="dashboard-line --green">
+                                <span>{item.title}</span>
+                                <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                            </div>
+                        )
+                    })
+                ) : (
+                    <div>-</div>
+                )}
+                {vip && (
+                    <div className="dashboard-line --green">
+                        <span>{vip.title}</span>
+                        <div>{vip.sum ? helpers.convertToReadable(vip.sum) : 0} сум</div>
+                    </div>
+                )}
+
+            </div>
+            <div className="dashboard-card-st__footer">
+                <span>{t("Oбщая сумма")}:</span>
+                <span>{helpers.convertToReadable(totalIncomes+Number(get(vip, 'sum', 0)))} сум</span>
+            </div>
+        </div>
+    );
+};
+
+export default IncomesCard;
