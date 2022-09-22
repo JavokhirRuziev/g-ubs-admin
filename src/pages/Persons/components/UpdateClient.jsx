@@ -2,8 +2,7 @@ import React from 'react';
 
 import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
-import Form from './CreateClientForm';
-import moment from "moment";
+import Form from './ClientForm';
 import get from "lodash/get";
 
 const Create = ({showUpdateModal, selected}) => {

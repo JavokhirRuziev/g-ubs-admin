@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
-import Form from './CreateClientForm';
+import Form from './ClientForm';
 
 const Create = ({setCreateModal, type}) => {
     return (

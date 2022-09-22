@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Board } from "components";
 import { Search } from "components/SmallComponents";
-import PartnersList from "./components/ClientsList";
+import ClientsList from "./components/ClientsList";
 import CreateClient from "./components/CreateClient";
 import config from "../../config";
 
@@ -103,7 +103,7 @@ const List = ({ location, history }) => {
 			</div>
 
 			<Board>
-				<PartnersList {...{ searchQuery, type }} />
+				<ClientsList {...{ searchQuery, type }} />
 			</Board>
 		</div>
 	);

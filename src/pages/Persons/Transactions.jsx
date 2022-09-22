@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from "react";
 
 import {Board, Table} from "components";
-import {Pagination, Spin, Tag} from "antd";
+import {Button, Modal, Pagination, Spin, Tag} from "antd";
 import {useTranslation} from "react-i18next";
 import EntityContainer from "modules/entity/containers";
 import {useDispatch} from "react-redux";
 import EntityActions from "modules/entity/actions";
 import get from "lodash/get";
 import {helpers} from "../../services";
+import ExpenseModal from "./components/expenseModal";
+import IncomeModal from "./components/incomeModal";
 
 const ClientTransactions = ({match}) => {
 
+    const [expenseModal, showExpenseModal] = useState(false);
+    const [incomeModal, showIncomeModal] = useState(false);
     const [page, setPage] = useState(1);
     const [customer, setCustomer] = useState(null);
     const {t} = useTranslation();
@@ -37,19 +41,62 @@ const ClientTransactions = ({match}) => {
 
     return (
         <div>
+            <Modal
+                visible={expenseModal}
+                onOk={() => showExpenseModal(true)}
+                onCancel={() => showExpenseModal(false)}
+                footer={null}
+                centered
+                width={430}
+                destroyOnClose
+            >
+                <ExpenseModal {...{ showExpenseModal, id }} />
+            </Modal>
+            <Modal
+                visible={incomeModal}
+                onOk={() => showIncomeModal(true)}
+                onCancel={() => showIncomeModal(false)}
+                footer={null}
+                centered
+                width={430}
+                destroyOnClose
+            >
+                <IncomeModal {...{ showIncomeModal, id }} />
+            </Modal>
+
             <div className="d-flex justify-content-between mb-20">
-                <div className="title-md">{t("Клиент")} - {get(customer, "name")}</div>
-                <div className="fw-500 fs-16">
+                <div>
+                    <div className="title-md">{t("Клиент")} - {get(customer, "name")}</div>
+                    <div className="fw-500 fs-16">
                     <span className="mr-10">{t("Салдо")}: {balance >= 0 ?
                         <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
                         <span style={{color: 'red'}}>{helpers.convertToReadable(balance)}</span>}</span>
+                    </div>
                 </div>
+
+                <div className='d-flex'>
+                    <Button
+                        type="primary"
+                        size="large"
+                        className="fs-14 fw-300 ml-30"
+                        htmlType="button"
+                        onClick={() => showIncomeModal(true)}
+                    >Приход</Button>
+                    <Button
+                        type="primary"
+                        size="large"
+                        className="fs-14 fw-300 ml-30"
+                        htmlType="button"
+                        onClick={() => showExpenseModal(true)}
+                    >Расход</Button>
+                </div>
+
             </div>
 
             <Board>
                 <EntityContainer.All
-                    entity="transactions"
-                    name={`all-${id}`}
+                    entity="transaction"
+                    name={`customer-${id}`}
                     url="/transactions"
                     primaryKey="id"
                     params={{
