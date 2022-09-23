@@ -2,15 +2,14 @@ import React from 'react';
 
 import {Spin} from 'antd';
 import EntityForm from 'modules/entity/forms';
-import Form from './CreateClientForm';
-import moment from "moment";
+import Form from './ClientForm';
 
-const Create = ({setCreateModal}) => {
+const Create = ({setCreateModal, type}) => {
     return (
         <EntityForm.Main
             method="post"
-            entity="customer"
-            name="customers"
+            entity="person"
+            name={`type-${type}`}
             url="/customers"
             appendData
             primaryKey="id"
@@ -20,16 +19,17 @@ const Create = ({setCreateModal}) => {
                 setCreateModal(false)
             }}
             fields={[
+                {name: 'type', value: type},
                 {name: 'company_id', value:  null},
                 {name: "name", required: true},
                 {name: "phone", required: true},
             ]}
         >
-            {({isSubmitting, values, setFieldValue, submitForm}) => {
+            {({isSubmitting, values}) => {
                 return (
                     <Spin spinning={isSubmitting}>
 
-                        <Form {...{values, setFieldValue, submitForm}}/>
+                        <Form {...{values, type}}/>
 
                     </Spin>
                 );

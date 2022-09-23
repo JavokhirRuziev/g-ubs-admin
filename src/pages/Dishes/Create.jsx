@@ -46,6 +46,11 @@ const Create = ({location, history}) => {
           onSubmitValue: value => value && value.id
         },
         {
+          name: "quantity",
+          type: 'number',
+          required: true,
+        },
+        {
           name: "unit_id",
           required: true,
           onSubmitValue: value => value && value.id

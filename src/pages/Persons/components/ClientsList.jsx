@@ -11,7 +11,7 @@ import {helpers} from "../../../services";
 
 let content = document.querySelector(".m-content");
 
-const ClientsList = ({ searchQuery }) => {
+const ClientsList = ({ searchQuery, type }) => {
 
 	const { t } = useTranslation();
 	const location = useLocation();
@@ -40,12 +40,13 @@ const ClientsList = ({ searchQuery }) => {
 
 	return (
 		<EntityContainer.All
-			entity="customer"
-			name={`customers`}
+			entity="person"
+			name={`type-${type}`}
 			url="/customers"
 			primaryKey="id"
 			params={{
 				limit: 50,
+				filter: {type: type},
 				page,
 				extra: { append: 'balance', name: searchQuery },
 			}}
@@ -84,11 +85,10 @@ const ClientsList = ({ searchQuery }) => {
 										render: value => <div className="divider-wrapper">{value}</div>
 									},
 									{
-										title: t("Контрагент"),
+										title: t("Имя"),
 										dataIndex: "name",
 										render: (value, row) => <div className="divider-wrapper fw-700">
 											<Link className={'cr-blue'} to={`/customers/transactions/${row.id}`}>{value ? value : '-'}</Link>
-
 										</div>
 									},
 									{

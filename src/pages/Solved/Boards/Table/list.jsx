@@ -5,22 +5,19 @@ import Actions from "modules/entity/actions";
 import {Board, Table} from "components";
 
 import { useTranslation } from "react-i18next";
-import get from "lodash/get";
-import useDebounce from "use-debounce/lib/useDebounce";
 import { helpers } from "services";
 import AddModal from "../../components/addModal";
 import { useDispatch } from "react-redux";
 import Filter from "./filter";
 import qs from "query-string";
 import {useLocation} from "react-router";
+import config from "../../../../config";
 
-const List = ({ selectedCategory }) => {
+const List = () => {
 	const { t } = useTranslation();
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const [filterModal, showFilterModal] = useState(false);
-	const [query, setQuery] = useState("");
-	const [searchQuery] = useDebounce(query, 600);
 	const [page, setPage] = useState();
 	const [addModal, showAddModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -38,8 +35,8 @@ const List = ({ selectedCategory }) => {
 	const deleteAction = id => {
 		dispatch(Actions.Form.request({
 			method: "delete",
-			entity: "expenses",
-			name: `all-${get(selectedCategory, "id")}`,
+			entity: "solved",
+			name: `all`,
 			id: id,
 			url: `/transactions/${id}`,
 			deleteData: true,
@@ -73,10 +70,10 @@ const List = ({ selectedCategory }) => {
 				width={430}
 				destroyOnClose
 			>
-				<AddModal {...{ showAddModal, selectedCategory }} />
+				<AddModal {...{ showAddModal }} />
 			</Modal>
 			<div className={"d-flex justify-content-between align-items-center mb-10"}>
-				<div className="title-md">{t("Расходы")}</div>
+				<div className="title-md">{t("Снять деньги")}</div>
 				<div className='d-flex'>
 					<Filter {...{filterModal, showFilterModal}}/>
 					<Button
@@ -90,8 +87,8 @@ const List = ({ selectedCategory }) => {
 			</div>
 			<Board calc={160}>
 				<EntityContainer.All
-					entity="expenses"
-					name={`all-${get(selectedCategory, "id")}`}
+					entity="solved"
+					name={`all`}
 					url="/transactions"
 					primaryKey="id"
 					params={{
@@ -100,14 +97,11 @@ const List = ({ selectedCategory }) => {
 						page,
 						filter: {
 							price_type: params.price_type ? params.price_type : '',
-							type: 1,
-							category_id: params.category_id ? params.category_id.split("/")[0] : get(selectedCategory, "id"),
+							type: config.SOLVED_CATEGORY_TYPE,
 						},
-						include: "category,customer",
 						extra: {
 							start_date: params.start_at ? params.start_at : '',
 							end_date: params.end_at ? params.end_at : '',
-							name: searchQuery
 						}
 					}}
 				>
@@ -127,19 +121,6 @@ const List = ({ selectedCategory }) => {
 													dataIndex: "id",
 													className: "w-50 text-cen",
 													render: value => <div className="divider-wrapper">{value}</div>
-												},
-												{
-													title: t("Категория"),
-													dataIndex: "category",
-													className: "text-cen",
-													render: value => <div
-														className="divider-wrapper">{value ? value.title : "-"}</div>
-												},
-												{
-													title: t("Клиент"),
-													dataIndex: "customer.name",
-													render: value => <div
-														className="divider-wrapper">{value ? value : '-'}</div>
 												},
 												{
 													title: t("Сумма"),

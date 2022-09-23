@@ -3,38 +3,36 @@ import { Button, Radio, Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import { Field } from "formik";
 import { Fields } from "components";
-import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 import config from "config";
 
-const AddModal = ({ showAddModal, selectedCategory }) => {
+const IncomeModal = ({ showIncomeModal, id }) => {
 	const { t } = useTranslation();
 
 	return (
 		<EntityForm.Main
 			method="post"
-			entity="incomes"
-			name={`all-${get(selectedCategory, "id")}`}
+			entity="transaction"
+			name={`customer-${id}`}
 			url="/transactions"
 			prependData={true}
 			primaryKey="id"
 			normalizeData={data => data}
 			onSuccess={(data, resetForm) => {
 				resetForm();
-				showAddModal(false);
+				showIncomeModal(false);
 			}}
 			params={{ include: "category" }}
 			fields={[
 				{
 					name: "category_id",
-					value: selectedCategory ? selectedCategory : null,
 					onSubmitValue: value => value ? value.id : "",
 					required: true
 				},
 				{
 					name: "customer_id",
-					onSubmitValue: value => value ? value.id : ""
+					value: id,
 				},
 				{
 					name: "company_id",
@@ -73,27 +71,9 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								optionLabel="title"
 								optionValue="id"
 								isSearchable
-								isDisabled={true}
 								loadOptionsParams={search => {
 									return {
 										filter: {type: config.INCOME_CATEGORY_TYPE},
-										extra: { name: search }
-									};
-								}}
-							/>
-
-							<Field
-								component={Fields.AsyncSelect}
-								name="customer_id"
-								placeholder={t("Виберите клинта")}
-								isClearable
-								loadOptionsUrl={`/customers`}
-								className="mb-20"
-								optionLabel="name"
-								optionValue="id"
-								isSearchable
-								loadOptionsParams={search => {
-									return {
 										extra: { name: search }
 									};
 								}}
@@ -155,4 +135,4 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 	);
 };
 
-export default AddModal;
+export default IncomeModal;

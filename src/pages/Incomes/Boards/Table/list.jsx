@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button, Modal, notification, Pagination, Spin} from "antd";
 import EntityContainer from "modules/entity/containers";
-import { Table } from "components";
+import {Board, Table} from "components";
 
 import { useTranslation } from "react-i18next";
 import { helpers } from "services";
@@ -9,12 +9,18 @@ import AddModal from "../../components/addModal";
 import {useDispatch} from "react-redux";
 import Actions from "modules/entity/actions";
 import get from "lodash/get";
+import Filter from "./filter";
+import {useLocation} from "react-router";
+import qs from "query-string";
 
 const List = ({selectedCategory}) => {
 	const { t } = useTranslation();
+	const location = useLocation();
 	const [page, setPage] = useState();
 	const dispatch = useDispatch();
 	const [addModal, showAddModal] = useState(false);
+	const [filterModal, showFilterModal] = useState(false);
+	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -30,7 +36,7 @@ const List = ({selectedCategory}) => {
 		dispatch(Actions.Form.request({
 			method: "delete",
 			entity: "incomes",
-			name: `all`,
+			name: selectedCategory ? `all-${get(selectedCategory, "id")}` : `all-0`,
 			id: id,
 			url: `/transactions/${id}`,
 			deleteData: true,
@@ -66,126 +72,137 @@ const List = ({selectedCategory}) => {
 			>
 				<AddModal {...{ showAddModal, selectedCategory }} />
 			</Modal>
-			<div className={"pt-15 pl-15 pr-15 d-flex justify-content-between align-items-center"}>
-				<div className="fs-16">
+			<div className={"d-flex justify-content-between align-items-center mb-10"}>
+				<div className="title-md">{t("Приход")}</div>
+				<div className='d-flex'>
+					<Filter {...{filterModal, showFilterModal}}/>
+					{(get(selectedCategory, 'alias') === 'others' || get(selectedCategory, 'alias') === 'debt') && (
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300"
+							htmlType="button"
+							onClick={() => showAddModal(true)}
+						>{t("Добавить")}</Button>
+					)}
 				</div>
 
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300"
-					htmlType="button"
-					onClick={() => showAddModal(true)}
-				>{t("Добавить")}</Button>
 			</div>
-			<EntityContainer.All
-				entity="incomes"
-				name={`all-${get(selectedCategory, "id")}`}
-				url="/transactions"
-				primaryKey="id"
-				params={{
-					sort: "-id",
-					limit: 15,
-					filter: {
-						type: 2,
-						category_id: get(selectedCategory, "id"),
-					},
-					page,
-					include: "category,customer",
-				}}
-			>
-				{({ items, isFetched, meta }) => {
-					return (
-						<>
-							<div className="default-table pad-15"
-								style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}>
-								<Spin spinning={!isFetched}>
-									<Table
-										hasDelete={true}
-										onDelete={value => onDeleteHandler(value.id)}
-										rowKey={"id"}
-										columns={[
-											{
-												title: t("ID"),
-												dataIndex: "id",
-												className: "w-50 text-cen",
-												render: value => <div className="divider-wrapper">{value}</div>
-											},
-											{
-												title: t("Категория"),
-												dataIndex: "category",
-												className: "text-cen",
-												render: value => <div
-													className="divider-wrapper">{value ? value.title : "-"}</div>
-											},
-											{
-												title: t("Клиент"),
-												dataIndex: "customer.name",
-												render: value => <div
-													className="divider-wrapper">{value ? value : '-'}</div>
-											},
-											{
-												title: t("Сумма"),
-												dataIndex: "value",
-												className: "text-cen",
-												render: value => <div className="divider-wrapper">
-													{value ? helpers.convertToReadable(value) : ""}
-												</div>
-											},
-											{
-												title: t("Тип суммы"),
-												dataIndex: "price_type",
-												className: "text-cen",
-												render: value => <div className="divider-wrapper">
-													{helpers.getPaymentTypeExpenses(value)}
-												</div>
-											},
-											{
-												title: t("Комментария"),
-												dataIndex: "comment",
-												className: "text-cen max-w-200",
-												render: value => <div className="divider-wrapper">
-													{value ? value : "-"}
-												</div>
-											},
-											{
-												title: t("Дата"),
-												dataIndex: "added_at",
-												className: "text-cen",
-												render: value => <div className="divider-wrapper">
-													{value ? helpers.formatDate(value, 'DD.MM.YYYY') : t("не указан")}
-												</div>
-											}
-										]}
-										dataSource={items}
-									/>
-								</Spin>
-							</div>
-							{meta && meta.perPage && (
-								<div className="pad-15 d-flex justify-content-end">
-									<Pagination
-										current={meta.currentPage}
-										pageSize={meta.perPage}
-										total={meta.totalCount}
-										onChange={(page) => {
-											setPage(page)
-											let content = document.querySelector(".default-table");
-
-											if (content) {
-												content.scrollTo({
-													behavior: "smooth",
-													top: 0,
-													left: 0
-												})
-											}
-										}}
-									/>
+			<Board calc={160}>
+				<EntityContainer.All
+					entity="incomes"
+					name={selectedCategory ? `all-${get(selectedCategory, "id")}` : `all-0`}
+					url="/transactions"
+					primaryKey="id"
+					params={{
+						sort: "-id",
+						limit: 15,
+						page,
+						filter: {
+							price_type: params.price_type ? params.price_type : '',
+							type: 2,
+							category_id: params.category_id ? params.category_id.split("/")[0] : get(selectedCategory, "id"),
+						},
+						include: "category,customer",
+						extra: {
+							start_date: params.start_at ? params.start_at : '',
+							end_date: params.end_at ? params.end_at : '',
+						}
+					}}
+				>
+					{({ items, isFetched, meta }) => {
+						return (
+							<>
+								<div className="default-table pad-15"
+									 style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}>
+									<Spin spinning={!isFetched}>
+										<Table
+											hasDelete={true}
+											onDelete={value => onDeleteHandler(value.id)}
+											rowKey={"id"}
+											columns={[
+												{
+													title: t("ID"),
+													dataIndex: "id",
+													className: "w-50 text-cen",
+													render: value => <div className="divider-wrapper">{value}</div>
+												},
+												{
+													title: t("Категория"),
+													dataIndex: "category",
+													className: "text-cen",
+													render: value => <div
+														className="divider-wrapper">{value ? value.title : "-"}</div>
+												},
+												{
+													title: t("Клиент"),
+													dataIndex: "customer.name",
+													render: value => <div
+														className="divider-wrapper">{value ? value : '-'}</div>
+												},
+												{
+													title: t("Сумма"),
+													dataIndex: "value",
+													className: "text-cen",
+													render: value => <div className="divider-wrapper no-wrap">
+														{value ? helpers.convertToReadable(value) : ""}
+													</div>
+												},
+												{
+													title: t("Тип суммы"),
+													dataIndex: "price_type",
+													className: "text-cen",
+													render: value => <div className="divider-wrapper">
+														{helpers.getPaymentTypeExpenses(value)}
+													</div>
+												},
+												{
+													title: t("Комментария"),
+													dataIndex: "comment",
+													className: "text-cen max-w-200",
+													render: value => <div className="divider-wrapper">
+														{value ? value : "-"}
+													</div>
+												},
+												{
+													title: t("Дата"),
+													dataIndex: "added_at",
+													className: "text-cen",
+													render: value => <div className="divider-wrapper">
+														{value ? helpers.formatDate(value, 'DD.MM.YYYY') : t("не указан")}
+													</div>
+												}
+											]}
+											dataSource={items}
+										/>
+									</Spin>
 								</div>
-							)}
-						</>
-					);
-				}}
-			</EntityContainer.All>
+								{meta && meta.perPage && (
+									<div className="pad-15 d-flex justify-content-end">
+										<Pagination
+											current={meta.currentPage}
+											pageSize={meta.perPage}
+											total={meta.totalCount}
+											onChange={(page) => {
+												setPage(page)
+												let content = document.querySelector(".default-table");
+
+												if (content) {
+													content.scrollTo({
+														behavior: "smooth",
+														top: 0,
+														left: 0
+													})
+												}
+											}}
+										/>
+									</div>
+								)}
+							</>
+						);
+					}}
+				</EntityContainer.All>
+			</Board>
 		</>
 	);
 };

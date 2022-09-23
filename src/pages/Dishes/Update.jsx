@@ -88,6 +88,12 @@ const Update = ({location, history, match}) => {
                   onSubmitValue: value => value && value.id
                 },
                 {
+                  name: "quantity",
+                  type: 'number',
+                  required: true,
+                  value: get(item, 'quantity'),
+                },
+                {
                   name: "kitchener_id",
                   value: get(item, 'kitchener'),
                   onSubmitValue: value => value && value.id

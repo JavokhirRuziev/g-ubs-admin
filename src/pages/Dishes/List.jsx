@@ -143,6 +143,11 @@ const List = ({history, location}) => {
                         render: value => <div className="divider-wrapper">{value ? value : '-'}</div>
                       },
                       {
+                        title: t("Кол-во"),
+                        dataIndex: "quantity",
+                        render: value => <div className="divider-wrapper">{value ? value : 0}</div>
+                      },
+                      {
                         title: t("Статус"),
                         dataIndex: "status",
                         className: 'text-cen w-82',
