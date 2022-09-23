@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Fields, GridElements} from "components";
+import {Fields} from "components";
 import {Button, Tooltip} from "antd";
 
 import qs from 'qs';

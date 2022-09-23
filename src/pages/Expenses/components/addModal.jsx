@@ -74,7 +74,8 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								isSearchable
 								loadOptionsParams={search => {
 									return {
-										extra: { name: search }
+										extra: { name: search },
+										filter: {type: 1}
 									};
 								}}
 							/>
