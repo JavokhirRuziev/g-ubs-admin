@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import config from "config";
 import get from "lodash/get";
 
-const IncomesCard = ({params}) => {
+const IncomesCard = ({params, setTotalIncome}) => {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -26,9 +26,12 @@ const IncomesCard = ({params}) => {
             cb: {
                 success: data => {
                     const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+                    console.log(data)
+                    console.log(total)
 
                     setIncomesTransactions(data)
                     setTotalIncomes(total)
+                    setTotalIncome(total)
                 },
                 error: data => {}
             }
@@ -97,7 +100,7 @@ const IncomesCard = ({params}) => {
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalIncomes+Number(get(vip, 'sum', 0)))} сум</span>
+                <span>{helpers.convertToReadable(totalIncomes)} сум</span>
             </div>
         </div>
     );

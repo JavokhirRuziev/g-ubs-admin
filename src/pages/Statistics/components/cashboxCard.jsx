@@ -3,17 +3,17 @@ import {helpers} from "../../../services";
 import {useTranslation} from "react-i18next";
 import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
+import get from "lodash/get";
 
-const CashboxCard = ({params}) => {
+const CashboxCard = ({params, totalExpense, totalIncome}) => {
     const {t} = useTranslation();
     const dispatch = useDispatch()
 
-    const [totalSales, setTotalSales] = useState(0);
-    const [incomesSalesTransactions, setIncomesSalesTransactions] = useState([]);
+    const [solves, setSolves] = useState([]);
 
-    const loadIncomesBySales = () => {
+    const loadSolves = () => {
         dispatch(Actions.LoadDefault.request({
-            url: `/transactions/incomes-by-sales`,
+            url: `/transactions/solves-by-payment-type`,
             params: {
                 extra: {
                     start_date: params.start_at && params.start_at,
@@ -22,10 +22,7 @@ const CashboxCard = ({params}) => {
             },
             cb: {
                 success: data => {
-                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0);
-
-                    setIncomesSalesTransactions(data)
-                    setTotalSales(total)
+                    setSolves(data)
                 },
                 error: data => {}
             }
@@ -33,16 +30,15 @@ const CashboxCard = ({params}) => {
     }
 
     useEffect(() => {
-        loadIncomesBySales()
+        loadSolves()
     }, [params.start_at,params.end_at])
 
-    const paymentTypes = [
-        { price_type: 1, title: "Наличные" },
-        { price_type: 4, title: "Терминал" },
-        { price_type: 7, title: "Онлайн" },
-        { price_type: 5, title: "Долг" },
-        { price_type: 6, title: "VIP" },
-    ];
+
+    const cash = solves.find(s => s.price_type === 1);
+    const terminal = solves.find(s => s.price_type === 4);
+    const online = solves.find(s => s.price_type === 7);
+
+    const totalSolves = Number(get(cash, 'sum', 0)) + Number(get(terminal, 'sum', 0)) + Number(get(online, 'sum', 0))
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">
@@ -61,32 +57,32 @@ const CashboxCard = ({params}) => {
             <div className="dashboard-card-st__body">
                 <div className="dashboard-line --purple">
                     <span>Приход</span>
-                    <div>{0} сум</div>
+                    <div>{totalIncome ? helpers.convertToReadable(totalIncome) : 0} сум</div>
                 </div>
                 <div className="dashboard-line --purple">
                     <span>Расход</span>
-                    <div>{0} сум</div>
+                    <div>{totalExpense ? helpers.convertToReadable(totalExpense) : 0} сум</div>
                 </div>
                 <div className="dashboard-line --purple">
                     <span>Снять денги</span>
-                    <div>{0} сум</div>
+                    <div>{helpers.convertToReadable(totalSolves)} сум</div>
                 </div>
                 <div className="dashboard-line --purple ml-20">
                     <span>Наличные</span>
-                    <div>{0} сум</div>
+                    <div>{cash ? helpers.convertToReadable(cash.sum) : 0} сум</div>
                 </div>
                 <div className="dashboard-line --purple ml-20">
                     <span>Терминал</span>
-                    <div>{0} сум</div>
+                    <div>{terminal ? helpers.convertToReadable(terminal.sum) : 0} сум</div>
                 </div>
                 <div className="dashboard-line --purple ml-20">
                     <span>Онлайн</span>
-                    <div>{0} сум</div>
+                    <div>{online ? helpers.convertToReadable(online.sum) : 0} сум</div>
                 </div>
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalSales)} сум</span>
+                <span>{helpers.convertToReadable(totalIncome-totalSolves-totalExpense)} сум</span>
             </div>
         </div>
     );

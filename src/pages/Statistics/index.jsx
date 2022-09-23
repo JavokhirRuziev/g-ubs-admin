@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Filter from "./Filter";
 import {Board} from "../../components";
 import qs from "query-string";
@@ -9,6 +9,8 @@ import CashboxCard from "./components/cashboxCard";
 
 const Statistics = ({location}) => {
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+    const [totalExpense, setTotalExpense] = useState(0)
+    const [totalIncome, setTotalIncome] = useState(0)
 
     return (
         <div>
@@ -17,7 +19,7 @@ const Statistics = ({location}) => {
             </Board>
             <div className="row mb-30">
                 <div className="col-4">
-                    <IncomesCard {...{params}}/>
+                    <IncomesCard {...{params, setTotalIncome}}/>
                 </div>
 
                 <div className="col-4">
@@ -27,11 +29,11 @@ const Statistics = ({location}) => {
             <div className="row">
 
                 <div className="col-4">
-                    <ExpensesCard {...{params}}/>
+                    <ExpensesCard {...{params, setTotalExpense}}/>
                 </div>
 
                 <div className="col-4">
-                    <CashboxCard {...{params}}/>
+                    <CashboxCard {...{params, totalExpense, totalIncome}}/>
                 </div>
 
                 <div className="col-4">
