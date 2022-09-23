@@ -61,13 +61,15 @@ const IncomesCard = ({params}) => {
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">
-                <div className="--icon --icon-orange">
-                    <img src={require("../icons/icon-3.svg")} alt="" />
+                <div className="--icon --icon-blue">
+                    <img src={require("../icons/icon-2.svg")} alt="" />
                 </div>
                 <div className="--title">
                     <span>{t("Приход")}</span>
-                    {(!params.start_at && !params.end_at) && (
+                    {(!params.start_at && !params.end_at) ? (
                         <span>За день</span>
+                    ) : (
+                        <span>За выбранный период</span>
                     )}
                 </div>
             </div>
@@ -76,7 +78,7 @@ const IncomesCard = ({params}) => {
                     categories.map(item => {
                         const hasSum = incomesTransactions.find(a => a.alias === item.alias)
                         return(
-                            <div className="dashboard-line --green">
+                            <div className="dashboard-line --purple">
                                 <span>{item.title}</span>
                                 <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
                             </div>
@@ -86,7 +88,7 @@ const IncomesCard = ({params}) => {
                     <div>-</div>
                 )}
                 {vip && (
-                    <div className="dashboard-line --green">
+                    <div className="dashboard-line --purple">
                         <span>{vip.title}</span>
                         <div>{vip.sum ? helpers.convertToReadable(vip.sum) : 0} сум</div>
                     </div>

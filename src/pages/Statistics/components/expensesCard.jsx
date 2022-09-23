@@ -63,8 +63,10 @@ const ExpensesCard = ({params}) => {
                 </div>
                 <div className="--title">
                     <span>{t("Расходы")}</span>
-                    {(!params.start_at && !params.end_at) && (
+                    {(!params.start_at && !params.end_at) ? (
                         <span>За день</span>
+                    ) : (
+                        <span>За выбранный период</span>
                     )}
                 </div>
             </div>

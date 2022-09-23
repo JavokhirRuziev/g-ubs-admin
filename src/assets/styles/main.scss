@@ -762,6 +762,10 @@ table.bordered tr:last-child td:last-child {
       }
       &:last-child{
         color: #1ACD6B;
+        line-height: 22px;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 8px;
       }
     }
   }

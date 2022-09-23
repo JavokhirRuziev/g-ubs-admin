@@ -33,7 +33,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						placeholder={t("Введите описания")}
 					/>
 					<div className="row">
-						<div className="col-lg-8 col-12">
+						<div className="col-lg-6 col-12">
 							<Field
 								component={Fields.AntInput}
 								name="price"
@@ -43,7 +43,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								size="large"
 							/>
 						</div>
-						<div className="col-lg-4 col-12">
+						<div className="col-lg-3 col-12">
 							<Field
 								component={Fields.AsyncSelect}
 								name="unit_id"
@@ -53,6 +53,16 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								label={t("Ед изм")}
 								className={"mb-24"}
 								optionLabel={"title_ru"}
+							/>
+						</div>
+						<div className="col-lg-3 col-12">
+							<Field
+								component={Fields.AntInput}
+								name="quantity"
+								type="text"
+								placeholder={t("Введите кол-во")}
+								label={t("Количество")}
+								size="large"
 							/>
 						</div>
 					</div>

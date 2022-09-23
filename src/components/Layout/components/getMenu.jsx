@@ -91,6 +91,7 @@ const contentManagerRoutes = [
         submenu: [
             {id: 'expenses', title: "Расходы", link: '/expenses'},
             {id: 'incomes', title: "Приход", link: '/incomes'},
+            {id: 'solved', title: "Снять деньги", link: '/solved'},
             {id: 'clients', title: "Клиенты", link: '/persons?type=clients'},
             {id: 'employees', title: "Сотрудники", link: '/persons?type=employees'},
             {id: 'counter_agents', title: "Контрагенты", link: '/persons?type=counter_agents'},

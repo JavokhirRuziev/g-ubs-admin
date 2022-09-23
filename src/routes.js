@@ -50,6 +50,7 @@ const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
 const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
 
+const Solved = lazy(() => import("./pages/Solved"));
 const Incomes = lazy(() => import("./pages/Incomes"));
 const Expenses = lazy(() => import("./pages/Expenses"));
 const Statistics = lazy(() => import("./pages/Statistics"));
@@ -62,6 +63,7 @@ const routes = [
 	{ path: "/customers/transactions/:id", exact: true, component: PersonsTransactions, access: ["company"] },
 	{ path: "/expenses", exact: true, component: Expenses, access: ["company"] },
 	{ path: "/incomes", exact: true, component: Incomes, access: ["company"] },
+	{ path: "/solved", exact: true, component: Solved, access: ["company"] },
 
 	{ path: "/statistics", exact: true, component: Statistics, access: ["company"] },
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
