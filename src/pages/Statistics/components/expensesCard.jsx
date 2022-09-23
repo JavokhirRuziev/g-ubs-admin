@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import config from "../../../config";
 
-const ExpensesCard = ({params}) => {
+const ExpensesCard = ({params, setTotalExpense}) => {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -28,6 +28,7 @@ const ExpensesCard = ({params}) => {
 
                     setExpensesTransactions(data)
                     setTotalExpenses(total)
+                    setTotalExpense(total)
                 },
                 error: data => {}
             }
