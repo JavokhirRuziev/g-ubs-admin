@@ -5,6 +5,7 @@ import qs from "query-string";
 import ExpensesCard from "./components/expensesCard";
 import IncomesCard from "./components/incomesCard";
 import SalesCard from "./components/salesCard";
+import CashboxCard from "./components/cashboxCard";
 
 const Statistics = ({location}) => {
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -27,6 +28,10 @@ const Statistics = ({location}) => {
 
                 <div className="col-4">
                     <ExpensesCard {...{params}}/>
+                </div>
+
+                <div className="col-4">
+                    <CashboxCard {...{params}}/>
                 </div>
 
                 <div className="col-4">
