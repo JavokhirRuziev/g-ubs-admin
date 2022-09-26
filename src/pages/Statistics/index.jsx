@@ -6,11 +6,15 @@ import ExpensesCard from "./components/expensesCard";
 import IncomesCard from "./components/incomesCard";
 import SalesCard from "./components/salesCard";
 import CashboxCard from "./components/cashboxCard";
+import CreditorCard from "./components/creditorCard";
+import TotalCard from "./components/totalCard";
 
 const Statistics = ({location}) => {
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
     const [totalExpense, setTotalExpense] = useState(0)
     const [totalIncome, setTotalIncome] = useState(0)
+    const [totalSale, setTotalSale] = useState(0)
+    const [totalCreditor, setTotalCreditor] = useState(0)
 
     return (
         <div>
@@ -23,7 +27,11 @@ const Statistics = ({location}) => {
                 </div>
 
                 <div className="col-4">
+                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor}}/>
+                </div>
 
+                <div className="col-4">
+                    <CreditorCard {...{params, setTotalCreditor}}/>
                 </div>
             </div>
             <div className="row">
@@ -37,7 +45,7 @@ const Statistics = ({location}) => {
                 </div>
 
                 <div className="col-4">
-                    <SalesCard {...{params}}/>
+                    <SalesCard {...{params, setTotalSale}}/>
                 </div>
             </div>
         </div>

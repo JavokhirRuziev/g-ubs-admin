@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Radio, Spin } from "antd";
+import {Button, Radio, Spin, Switch} from "antd";
 import EntityForm from "modules/entity/forms";
 import { Field } from "formik";
 import { Fields } from "components";
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 import config from "config";
 
-const AddModal = ({ showExpenseModal, id }) => {
+const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -23,6 +23,7 @@ const AddModal = ({ showExpenseModal, id }) => {
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showExpenseModal(false);
+				setCanUpdate(value => !value)
 			}}
 			params={{ include: "category" }}
 			fields={[
@@ -54,6 +55,11 @@ const AddModal = ({ showExpenseModal, id }) => {
 				{
 					name: 'type',
 					value: 1
+				},
+				{
+					name: 'for_creditor',
+					value: false,
+					onSubmitValue: value => value ? 1 : 0
 				}
 			]}
 		>
@@ -119,6 +125,16 @@ const AddModal = ({ showExpenseModal, id }) => {
 										setFieldValue('added_at', date)
 									}}
 								/>
+							</div>
+
+							<div className="d-flex align-items-center mb-20">
+								<Switch
+									onChange={value => {
+										setFieldValue('for_creditor', value)
+									}}
+									checked={values.for_creditor}
+								/>
+								<div className="ant-label mb-0 ml-10">{t('Возврат долга')}</div>
 							</div>
 
 							<Button

@@ -1,4 +1,5 @@
 import variables from "../../variables";
+import config from "../../config";
 
 const feedbackLabel = (type) => {
 	switch (type) {
@@ -73,6 +74,33 @@ const getOrderType = (status) => {
 			return "На вынос";
 		default:
 			return "Не указон";
+	}
+};
+
+
+const getTransactionType = (status) => {
+	switch (status) {
+		case config.BORROWED_CATEGORY_TYPE:
+			return "За долг";
+		case config.EXPENSE_CATEGORY_TYPE:
+			return "Расход";
+		case config.INCOME_CATEGORY_TYPE:
+			return "Приход";
+		default:
+			return "Не указон";
+	}
+};
+
+const getTransactionTypeColor = (status) => {
+	switch (status) {
+		case config.BORROWED_CATEGORY_TYPE:
+			return "orange";
+		case config.EXPENSE_CATEGORY_TYPE:
+			return "red";
+		case config.INCOME_CATEGORY_TYPE:
+			return "green";
+		default:
+			return "";
 	}
 };
 
@@ -188,5 +216,7 @@ export default {
 	getPaymentTypeExpenses,
 	orderTypes,
 	orderStatus,
-	convertToReadable
+	convertToReadable,
+	getTransactionType,
+	getTransactionTypeColor
 };

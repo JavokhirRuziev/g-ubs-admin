@@ -48,7 +48,7 @@ const ClientsList = ({ searchQuery, type }) => {
 				limit: 50,
 				filter: {type: type},
 				page,
-				extra: { append: 'balance', name: searchQuery },
+				extra: { append: 'balance,creditor', name: searchQuery },
 			}}
 		>
 			{({ items, isFetched, meta }) => {
@@ -113,6 +113,26 @@ const ClientsList = ({ searchQuery, type }) => {
 														</span>
 													) : (
 														<span style={{color: 'red'}}>{value ? helpers.convertToReadable(value) : 0}</span>
+													)}
+
+												</div>
+											);
+										}
+									},
+									{
+										title: t("Кредиторка сум"),
+										dataIndex: "creditor",
+										className: "",
+										render: (value) => {
+											return (
+												<div
+													className="divider-wrapper fw-700">
+													{value >= 0 ? (
+														<span style={{color: 'red'}}>
+															{value ? helpers.convertToReadable(value) : 0}
+														</span>
+													) : (
+														<span style={{color: 'green'}}>{value ? helpers.convertToReadable(value) : 0}</span>
 													)}
 
 												</div>

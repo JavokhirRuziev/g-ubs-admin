@@ -13,6 +13,7 @@ import IncomeModal from "./components/incomeModal";
 
 const ClientTransactions = ({match}) => {
 
+    const [canUpdate, setCanUpdate] = useState(false);
     const [expenseModal, showExpenseModal] = useState(false);
     const [incomeModal, showIncomeModal] = useState(false);
     const [page, setPage] = useState(1);
@@ -25,7 +26,7 @@ const ClientTransactions = ({match}) => {
         dispatch(EntityActions.LoadDefault.request({
             url: `/customers/${id}`,
             params: {
-                extra: {append: 'balance'}
+                extra: {append: 'balance,creditor'}
             },
             cb: {
                 success: data => setCustomer(data)
@@ -35,9 +36,10 @@ const ClientTransactions = ({match}) => {
 
     useEffect(() => {
         loadCustomer();
-    }, []);
+    }, [canUpdate]);
 
     const balance = get(customer, 'balance', 0);
+    const creditor = get(customer, 'creditor', 0);
 
     return (
         <div>
@@ -50,7 +52,7 @@ const ClientTransactions = ({match}) => {
                 width={430}
                 destroyOnClose
             >
-                <ExpenseModal {...{ showExpenseModal, id }} />
+                <ExpenseModal {...{ showExpenseModal, id, setCanUpdate }} />
             </Modal>
             <Modal
                 visible={incomeModal}
@@ -61,16 +63,22 @@ const ClientTransactions = ({match}) => {
                 width={430}
                 destroyOnClose
             >
-                <IncomeModal {...{ showIncomeModal, id }} />
+                <IncomeModal {...{ showIncomeModal, id, setCanUpdate }} />
             </Modal>
 
             <div className="d-flex justify-content-between mb-20">
                 <div>
                     <div className="title-md">{t("Клиент")} - {get(customer, "name")}</div>
                     <div className="fw-500 fs-16">
-                    <span className="mr-10">{t("Салдо")}: {balance >= 0 ?
-                        <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
-                        <span style={{color: 'red'}}>{helpers.convertToReadable(balance)}</span>}</span>
+                        <span className="mr-10">{t("Салдо")}: {balance >= 0 ?
+                            <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
+                            <span style={{color: 'red'}}>{helpers.convertToReadable(balance)}</span>}
+                        </span>
+                        <br/>
+                        <span className="mr-10">{t("Кредиторка")}: {creditor >= 0 ?
+                            <span style={{color: 'red'}}>{helpers.convertToReadable(creditor)}</span> :
+                            <span style={{color: 'green'}}>{helpers.convertToReadable(creditor)}</span>}
+                        </span>
                     </div>
                 </div>
 
@@ -157,9 +165,11 @@ const ClientTransactions = ({match}) => {
                                                 title: t("Тип"),
                                                 dataIndex: "type",
                                                 className: "text-cen",
-                                                render: value => <div className="divider-wrapper">
-                                                    {value === 2 ? <Tag color={"green"}>{t("Приход")}</Tag> :
-                                                        <Tag color={"red"}>{t("Расход")}</Tag>}
+                                                render: (value, values) => <div className="divider-wrapper">
+                                                    <Tag color={helpers.getTransactionTypeColor(value)}>
+                                                        {helpers.getTransactionType(value)}
+                                                        {values.for_creditor === 1 ? ' / Возврат долга' : ''}
+                                                    </Tag>
                                                 </div>
                                             },
                                             {

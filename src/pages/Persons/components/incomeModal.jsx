@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 import config from "config";
 
-const IncomeModal = ({ showIncomeModal, id }) => {
+const IncomeModal = ({ showIncomeModal, id, setCanUpdate }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -22,6 +22,7 @@ const IncomeModal = ({ showIncomeModal, id }) => {
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showIncomeModal(false);
+				setCanUpdate(value => !value)
 			}}
 			params={{ include: "category" }}
 			fields={[

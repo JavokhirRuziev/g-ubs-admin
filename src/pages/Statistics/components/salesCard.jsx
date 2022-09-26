@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
 
-const SalesCard = ({params}) => {
+const SalesCard = ({params, setTotalSale}) => {
     const {t} = useTranslation();
     const dispatch = useDispatch()
 
@@ -26,6 +26,7 @@ const SalesCard = ({params}) => {
 
                     setIncomesSalesTransactions(data)
                     setTotalSales(total)
+                    setTotalSale(total)
                 },
                 error: data => {}
             }
