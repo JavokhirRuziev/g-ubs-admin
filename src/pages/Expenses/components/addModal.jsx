@@ -24,7 +24,7 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 				resetForm();
 				showAddModal(false);
 			}}
-			params={{ include: "category" }}
+			params={{ include: "category,customer" }}
 			fields={[
 				{
 					name: "category_id",
@@ -55,6 +55,10 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 				{
 					name: 'type',
 					value: 1
+				},
+				{
+					name: 'added_at',
+					required: true,
 				}
 			]}
 		>
@@ -103,6 +107,9 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								<Radio value={1}>{t("Наличние")}</Radio>
 								<Radio value={4}>{t("Терминал")}</Radio>
 								<Radio value={7}>{t("Онлайн")}</Radio>
+								<div className='mt-10'>
+									<Radio value={10}>{t("За долг")}</Radio>
+								</div>
 							</Radio.Group>
 
 							<Field
@@ -128,10 +135,13 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 							<div className="mb-24">
 								<div className="ant-label mr-6 mb-3">{t("Дата")}</div>
 								<Field
+									allowClear={false}
 									value={values.added_at}
 									component={DatePicker}
 									name="added_at"
 									size="large"
+									clear
+									format="YYYY-MM-D HH:m:s"
 									placeholder={t("Выберите дату")}
 									onChange={(date) => {
 										setFieldValue('added_at', date)

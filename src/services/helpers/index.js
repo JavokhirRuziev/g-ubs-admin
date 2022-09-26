@@ -130,6 +130,8 @@ const getPaymentType = (status) => {
 			return "VIP";
 		case 7:
 			return "Онлайн";
+		case 10:
+			return "За долг";
 		default:
 			return "Не указон"
 	}
@@ -151,6 +153,8 @@ const getPaymentTypeExpenses = type => {
 			return "VIP";
 		case 7:
 			return "Онлайн";
+		case 10:
+			return "За долг";
 		default:
 			return "Не указон"
 	}

@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import i18next from 'i18next';
 import {withRouter} from "react-router";
+import moment from "moment-timezone";
 
 class App extends Component {
   constructor(props){
@@ -19,6 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    moment.tz.setDefault("Asia/Tashkent");
     const {ChangeLanguage, GetMeRequest} = this.props;
 
     GetMeRequest();
