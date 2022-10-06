@@ -12,6 +12,7 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);
     const [totalCreditor, setTotalCreditors] = useState(0);
+    const [clientCreditor, setClientCreditors] = useState([]);
 
     const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
@@ -24,10 +25,12 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             },
             cb: {
                 success: data => {
+                    const client = data.find(a => a.alias === 'clients')
+                    setClientCreditors(client)
+
                     const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
                     setCreditorTransactions(data)
                     setTotalCreditors(total)
-                    setTotalCreditor(total)
                 },
                 error: data => {}
             }
@@ -75,15 +78,24 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
                     categories.map(item => {
                         const hasSum = creditorTransactions.find(a => a.alias === item.alias)
                         return(
-                            <div className="dashboard-line --red">
-                                <span>{item.title}</span>
-                                <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
-                            </div>
+                            item.alias !== 'vip' ? (
+                                <div className="dashboard-line --red">
+                                    <span>{item.title}</span>
+                                    <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                                </div>
+                            ) : <></>
                         )
                     })
                 ) : (
                     <div>-</div>
                 )}
+
+
+                <div className="dashboard-line --red">
+                    <span>{clientCreditor.title}</span>
+                    <div>{clientCreditor.sum ? helpers.convertToReadable(clientCreditor.sum) : 0} сум</div>
+                </div>
+
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>

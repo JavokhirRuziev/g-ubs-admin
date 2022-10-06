@@ -18,6 +18,7 @@ const ClientTransactions = ({match}) => {
     const [incomeModal, showIncomeModal] = useState(false);
     const [page, setPage] = useState(1);
     const [customer, setCustomer] = useState(null);
+    const [customerCreditor, setCustomerCreditor] = useState([]);
     const {t} = useTranslation();
     const {id} = match.params;
     const dispatch = useDispatch();
@@ -34,8 +35,21 @@ const ClientTransactions = ({match}) => {
         }));
     };
 
+    const loadCustomerCreditor = () => {
+        dispatch(EntityActions.LoadDefault.request({
+            url: `/transactions/borrowed-by-category`,
+            params: {
+                extra: {customer_id: `${id}`}
+            },
+            cb: {
+                success: data => setCustomerCreditor(data)
+            }
+        }));
+    };
+
     useEffect(() => {
         loadCustomer();
+        loadCustomerCreditor();
     }, [canUpdate]);
 
     const balance = get(customer, 'balance', 0);
@@ -74,11 +88,28 @@ const ClientTransactions = ({match}) => {
                             <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
                             <span style={{color: 'red'}}>{helpers.convertToReadable(balance)}</span>}
                         </span>
+
                         <br/>
+
                         <span className="mr-10">{t("Кредиторка")}: {creditor >= 0 ?
                             <span style={{color: 'red'}}>{helpers.convertToReadable(creditor)}</span> :
                             <span style={{color: 'green'}}>{helpers.convertToReadable(creditor)}</span>}
                         </span>
+
+                        {customerCreditor.length > 0 ? (
+                            customerCreditor.map(item => {
+                                return(
+                                    <>
+                                        <span className='ml-5'>
+                                            <span>| {item.title}: </span>
+                                            <span>{helpers.convertToReadable(item.sum)}</span>
+                                        </span>
+                                    </>
+                                )
+                            })
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
 

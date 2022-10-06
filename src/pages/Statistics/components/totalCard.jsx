@@ -36,7 +36,7 @@ const TotalCard = ({params, totalExpense, totalSale, totalCreditor}) => {
                     <div>{totalCreditor ? helpers.convertToReadable(totalCreditor) : 0} сум</div>
                 </div>
             </div>
-            {total > 0 ? (
+            {total >= 0 ? (
                 <div className="dashboard-card-st__footer" style={{backgroundColor:"#2ab942"}}>
                     <span>{t("Выгода")}:</span>
                     <span style={{color: '#ffffff'}}>{helpers.convertToReadable(totalSale-totalExpense-totalCreditor)} сум</span>
