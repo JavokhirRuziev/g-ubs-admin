@@ -5,17 +5,18 @@ import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import config from "config";
 
-const IncomesCard = ({params, setTotalIncome}) => {
+const DebitCard = ({params}) => {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [categories, setCategories] = useState([]);
-    const [incomesTransactions, setIncomesTransactions] = useState([]);
-    const [totalIncomes, setTotalIncomes] = useState(0);
+    const [creditorTransactions, setCreditorTransactions] = useState([]);
+    const [totalCreditor, setTotalCreditors] = useState(0);
+    const [clientCreditor, setClientCreditors] = useState([]);
 
-    const loadTotalsByCategory = () => {
+    const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
-            url: `/transactions/incomes-by-category`,
+            url: `/transactions/debtor-by-category`,
             params: {
                 extra: {
                     start_date: params.start_at && params.start_at,
@@ -24,21 +25,22 @@ const IncomesCard = ({params, setTotalIncome}) => {
             },
             cb: {
                 success: data => {
-                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+                    const client = data.find(a => a.alias === 'clients')
+                    setClientCreditors(client)
 
-                    setIncomesTransactions(data)
-                    setTotalIncomes(total)
-                    setTotalIncome(total)
+                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+                    setCreditorTransactions(data)
+                    setTotalCreditors(total)
                 },
                 error: data => {}
             }
         }))
     }
-    const loadCategories = () => {
+    const loadExpenseCategories = () => {
         dispatch(Actions.LoadDefault.request({
             url: `/expense-categories`,
             params: {
-                filter: {type: config.INCOME_CATEGORY_TYPE}
+                filter: {type: config.EXPENSE_CATEGORY_TYPE}
             },
             cb: {
                 success: data => {
@@ -50,20 +52,20 @@ const IncomesCard = ({params, setTotalIncome}) => {
     }
 
     useEffect(() => {
-        loadCategories()
+        loadExpenseCategories()
     }, [])
     useEffect(() => {
-        loadTotalsByCategory()
+        loadExpensesByCategory()
     }, [params.start_at,params.end_at])
 
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">
-                <div className="--icon --icon-blue">
-                    <img src={require("../icons/icon-2.svg")} alt="" />
+                <div className="--icon --icon-orange">
+                    <img src={require("../icons/icon-3.svg")} alt="" />
                 </div>
                 <div className="--title">
-                    <span>{t("Приход")}</span>
+                    <span>{t("Дебиторка")}</span>
                     {(!params.start_at && !params.end_at) ? (
                         <span>За день</span>
                     ) : (
@@ -74,24 +76,32 @@ const IncomesCard = ({params, setTotalIncome}) => {
             <div className="dashboard-card-st__body">
                 {categories.length > 0 ? (
                     categories.map(item => {
-                        const hasSum = incomesTransactions.find(a => a.alias === item.alias)
+                        const hasSum = creditorTransactions.find(a => a.alias === item.alias)
                         return(
-                            <div className="dashboard-line --purple">
-                                <span>{item.title}</span>
-                                <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
-                            </div>
+                            item.alias !== 'vip' ? (
+                                <div className="dashboard-line --red">
+                                    <span>{item.title}</span>
+                                    <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                                </div>
+                            ) : <></>
                         )
                     })
                 ) : (
                     <div>-</div>
                 )}
+
+                <div className="dashboard-line --red">
+                    <span>{clientCreditor.title}</span>
+                    <div>{clientCreditor.sum ? helpers.convertToReadable(clientCreditor.sum) : 0} сум</div>
+                </div>
+
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalIncomes)} сум</span>
+                <span>{helpers.convertToReadable(totalCreditor)} сум</span>
             </div>
         </div>
     );
 };
 
-export default IncomesCard;
+export default DebitCard;

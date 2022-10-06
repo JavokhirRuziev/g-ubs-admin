@@ -12,7 +12,6 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);
     const [totalCreditor, setTotalCreditors] = useState(0);
-    const [clientCreditor, setClientCreditors] = useState([]);
 
     const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
@@ -25,9 +24,6 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             },
             cb: {
                 success: data => {
-                    const client = data.find(a => a.alias === 'clients')
-                    setClientCreditors(client)
-
                     const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
                     setCreditorTransactions(data)
                     setTotalCreditors(total)
@@ -89,12 +85,6 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
                 ) : (
                     <div>-</div>
                 )}
-
-
-                <div className="dashboard-line --red">
-                    <span>{clientCreditor.title}</span>
-                    <div>{clientCreditor.sum ? helpers.convertToReadable(clientCreditor.sum) : 0} сум</div>
-                </div>
 
             </div>
             <div className="dashboard-card-st__footer">

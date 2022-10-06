@@ -8,6 +8,7 @@ import SalesCard from "./components/salesCard";
 import CashboxCard from "./components/cashboxCard";
 import CreditorCard from "./components/creditorCard";
 import TotalCard from "./components/totalCard";
+import DebitCard from "./components/debitCard";
 
 const Statistics = ({location}) => {
     const params = qs.parse(location.search, {ignoreQueryPrefix: true});
@@ -22,26 +23,32 @@ const Statistics = ({location}) => {
                 <Filter/>
             </Board>
             <div className="row mb-30">
+                <div className="col-4"></div>
+                <div className="col-4">
+                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor}}/>
+                </div>
+                <div className="col-4"></div>
+            </div>
+            <div className="row mb-30">
                 <div className="col-4">
                     <IncomesCard {...{params, setTotalIncome}}/>
                 </div>
 
                 <div className="col-4">
-                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor}}/>
+                    <CreditorCard {...{params, setTotalCreditor}}/>
                 </div>
 
                 <div className="col-4">
-                    <CreditorCard {...{params, setTotalCreditor}}/>
+                    <CashboxCard {...{params, totalExpense, totalIncome}}/>
                 </div>
             </div>
             <div className="row">
-
                 <div className="col-4">
                     <ExpensesCard {...{params, setTotalExpense}}/>
                 </div>
 
                 <div className="col-4">
-                    <CashboxCard {...{params, totalExpense, totalIncome}}/>
+                    <DebitCard {...{params, setTotalCreditor}}/>
                 </div>
 
                 <div className="col-4">
