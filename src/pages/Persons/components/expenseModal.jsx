@@ -3,12 +3,11 @@ import {Button, Radio, Spin, Switch} from "antd";
 import EntityForm from "modules/entity/forms";
 import { Field } from "formik";
 import { Fields } from "components";
-import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 import config from "config";
 
-const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
+const AddModal = ({ showExpenseModal, id, setCanUpdate, isClient }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -60,6 +59,11 @@ const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
 					name: 'for_creditor',
 					value: false,
 					onSubmitValue: value => value ? 1 : 0
+				},
+				{
+					name: 'prepayment',
+					value: false,
+					onSubmitValue: value => value ? 1 : 0
 				}
 			]}
 		>
@@ -78,6 +82,12 @@ const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
 								optionLabel="title"
 								optionValue="id"
 								isSearchable
+								loadOptionsKey={data => {
+									if(isClient){
+										const sale = data.data.find(a => a.alias === 'sale');
+										return [sale]
+									}else return data.data
+								}}
 								loadOptionsParams={search => {
 									return {
 										filter: {type: config.EXPENSE_CATEGORY_TYPE},
@@ -86,11 +96,22 @@ const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
 								}}
 							/>
 
-							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
-								onChange={e => setFieldValue("price_type", e.target.value)}>
+							<Radio.Group className="d-flex flex-wrap mb-20" value={values.price_type}
+										 onChange={e => setFieldValue("price_type", e.target.value)}>
 								<Radio value={1}>{t("Наличние")}</Radio>
 								<Radio value={4}>{t("Терминал")}</Radio>
 								<Radio value={7}>{t("Онлайн")}</Radio>
+								{(!values.for_creditor && !values.prepayment) && (
+									<>
+										<div className='mt-10'>
+											<Radio value={10}>{t("За долг")}</Radio>
+										</div>
+										<div className='mt-10'>
+											<Radio value={11}>{t("От должника")}</Radio>
+										</div>
+									</>
+								)}
+
 							</Radio.Group>
 
 							<Field
@@ -131,10 +152,26 @@ const AddModal = ({ showExpenseModal, id, setCanUpdate }) => {
 								<Switch
 									onChange={value => {
 										setFieldValue('for_creditor', value)
+										if(values.price_type === 10){
+											setFieldValue('price_type', 1)
+										}
 									}}
 									checked={values.for_creditor}
 								/>
-								<div className="ant-label mb-0 ml-10">{t('Возврат долга')}</div>
+								<div className="ant-label mb-0 ml-10">{t('Закрыть кредиторку')}</div>
+							</div>
+
+							<div className="d-flex align-items-center mb-20">
+								<Switch
+									onChange={value => {
+										setFieldValue('prepayment', value)
+										if(values.price_type === 10){
+											setFieldValue('price_type', 1)
+										}
+									}}
+									checked={values.prepayment}
+								/>
+								<div className="ant-label mb-0 ml-10">{t('Передоплата')}</div>
 							</div>
 
 							<Button

@@ -52,9 +52,9 @@ const ClientTransactions = ({match}) => {
         loadCustomerCreditor();
     }, [canUpdate]);
 
-    const balance = get(customer, 'balance', 0);
     const creditor = get(customer, 'creditor', 0);
 
+    const isClient = get(customer, 'type') === 1;
     return (
         <div>
             <Modal
@@ -66,7 +66,7 @@ const ClientTransactions = ({match}) => {
                 width={430}
                 destroyOnClose
             >
-                <ExpenseModal {...{ showExpenseModal, id, setCanUpdate }} />
+                <ExpenseModal {...{showExpenseModal, id, setCanUpdate, isClient}} />
             </Modal>
             <Modal
                 visible={incomeModal}
@@ -77,50 +77,82 @@ const ClientTransactions = ({match}) => {
                 width={430}
                 destroyOnClose
             >
-                <IncomeModal {...{ showIncomeModal, id, setCanUpdate }} />
+                <IncomeModal {...{showIncomeModal, id, setCanUpdate}} />
             </Modal>
 
             <div className="d-flex justify-content-between mb-20">
                 <div>
                     <div className="title-md">{t("Клиент")} - {get(customer, "name")}</div>
-                    <div className="fw-500 fs-16">
-                        <span className="mr-10">{t("Салдо")}: {balance >= 0 ?
-                            <span style={{color: 'green'}}>{helpers.convertToReadable(balance)}</span> :
-                            <span style={{color: 'red'}}>{helpers.convertToReadable(balance)}</span>}
-                        </span>
 
-                        <br/>
 
-                        <span className="mr-10">{t("Кредиторка")}: {creditor >= 0 ?
-                            <span style={{color: 'red'}}>{helpers.convertToReadable(creditor)}</span> :
-                            <span style={{color: 'green'}}>{helpers.convertToReadable(creditor)}</span>}
-                        </span>
+                    {(creditor === 0) && (
+                        <div className='fw-500 fs-16'>
+                            <div className="mr-10" style={{color: 'green'}}>
+                                {t("Дебиторка")}: 0
+                            </div>
+                            <div className="mr-10" style={{color: 'red'}}>
+                                {t("Кредиторка")}: 0
+                            </div>
+                        </div>
+                    )}
+                    {(creditor < 0) && (
+                        <div className='fw-500 fs-16'>
+                                <span className="mr-10" style={{color: 'green'}}>
+                                    {t("Дебиторка")}: <span>{helpers.convertToReadable(creditor * (-1))}</span>
+                                </span>
+                            {customerCreditor.length > 0 ? (
+                                customerCreditor.map(item => {
+                                    return (
+                                        <>
+                                                <span className='ml-5'>
+                                                    <span>| {item.title}: </span>
+                                                    <span>{helpers.convertToReadable(item.sum*(-1))}</span>
+                                                </span>
+                                        </>
+                                    )
+                                })
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                    )}
 
-                        {customerCreditor.length > 0 ? (
-                            customerCreditor.map(item => {
-                                return(
-                                    <>
-                                        <span className='ml-5'>
-                                            <span>| {item.title}: </span>
-                                            <span>{helpers.convertToReadable(item.sum)}</span>
-                                        </span>
-                                    </>
-                                )
-                            })
-                        ) : (
-                            <></>
-                        )}
-                    </div>
+                    {(creditor > 0) && (
+                        <div className='fw-500 fs-16'>
+                                <span className="mr-10" style={{color: 'red'}}>
+                                    {t("Кредиторка")}: <span>{helpers.convertToReadable(creditor)}</span>
+                                </span>
+                            {customerCreditor.length > 0 ? (
+                                customerCreditor.map(item => {
+                                    return (
+                                        <>
+                                                <span className='ml-5'>
+                                                    <span>| {item.title}: </span>
+                                                    <span>{helpers.convertToReadable(item.sum)}</span>
+                                                </span>
+                                        </>
+                                    )
+                                })
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                    )}
+
                 </div>
 
                 <div className='d-flex'>
-                    <Button
-                        type="primary"
-                        size="large"
-                        className="fs-14 fw-300 ml-30"
-                        htmlType="button"
-                        onClick={() => showIncomeModal(true)}
-                    >Приход</Button>
+
+                    {!isClient && (
+                        <Button
+                            type="primary"
+                            size="large"
+                            className="fs-14 fw-300 ml-30"
+                            htmlType="button"
+                            onClick={() => showIncomeModal(true)}
+                        >Приход</Button>
+                    )}
+
                     <Button
                         type="primary"
                         size="large"
@@ -199,7 +231,8 @@ const ClientTransactions = ({match}) => {
                                                 render: (value, values) => <div className="divider-wrapper">
                                                     <Tag color={helpers.getTransactionTypeColor(value)}>
                                                         {helpers.getTransactionType(value)}
-                                                        {values.for_creditor === 1 ? ' / Возврат долга' : ''}
+                                                        {values.for_creditor === 1 ? ' / Закрыть кредиторку' : ''}
+                                                        {values.prepayment === 1 ? ' / Передоплата' : ''}
                                                     </Tag>
                                                 </div>
                                             },

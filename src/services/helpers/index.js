@@ -80,6 +80,8 @@ const getOrderType = (status) => {
 
 const getTransactionType = (status) => {
 	switch (status) {
+		case config.FROM_DEBTOR:
+			return "От должника";
 		case config.BORROWED_CATEGORY_TYPE:
 			return "За долг";
 		case config.EXPENSE_CATEGORY_TYPE:
@@ -93,6 +95,8 @@ const getTransactionType = (status) => {
 
 const getTransactionTypeColor = (status) => {
 	switch (status) {
+		case config.FROM_DEBTOR:
+			return "blue";
 		case config.BORROWED_CATEGORY_TYPE:
 			return "orange";
 		case config.EXPENSE_CATEGORY_TYPE:
@@ -160,6 +164,8 @@ const getPaymentType = (status) => {
 			return "Онлайн";
 		case 10:
 			return "За долг";
+		case 11:
+			return "От должника";
 		default:
 			return "Не указон"
 	}
@@ -183,6 +189,8 @@ const getPaymentTypeExpenses = type => {
 			return "Онлайн";
 		case 10:
 			return "За долг";
+		case 11:
+			return "От должника";
 		default:
 			return "Не указон"
 	}

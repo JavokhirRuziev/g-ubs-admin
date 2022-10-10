@@ -100,39 +100,42 @@ const ClientsList = ({ searchQuery, type }) => {
 										</div>
 									},
 									{
-										title: t("Баланс сум"),
-										dataIndex: "balance",
-										className: "",
-										render: (value) => {
-											return (
-												<div
-													className="divider-wrapper fw-700">
-													{value >= 0 ? (
-														<span style={{color: 'green'}}>
-															{value ? helpers.convertToReadable(value) : 0}
-														</span>
-													) : (
-														<span style={{color: 'red'}}>{value ? helpers.convertToReadable(value) : 0}</span>
-													)}
-
-												</div>
-											);
-										}
-									},
-									{
-										title: t("Кредиторка сум"),
+										title: t("Дебиторка"),
 										dataIndex: "creditor",
 										className: "",
 										render: (value) => {
 											return (
 												<div
 													className="divider-wrapper fw-700">
-													{value >= 0 ? (
-														<span style={{color: 'red'}}>
+													{(value > 0) ? (
+														<span style={{color: 'green'}}>
 															{value ? helpers.convertToReadable(value) : 0}
 														</span>
 													) : (
-														<span style={{color: 'green'}}>{value ? helpers.convertToReadable(value) : 0}</span>
+														<span style={{color: 'green'}}>
+															0
+														</span>
+													)}
+												</div>
+											);
+										}
+									},
+									{
+										title: t("Кредиторка"),
+										dataIndex: "creditor",
+										className: "",
+										render: (value) => {
+											return (
+												<div
+													className="divider-wrapper fw-700">
+													{(value < 0) ? (
+														<span style={{color: 'red'}}>
+															{value ? helpers.convertToReadable(value*(-1)) : 0}
+														</span>
+													) : (
+														<span style={{color: 'red'}}>
+															0
+														</span>
 													)}
 
 												</div>
