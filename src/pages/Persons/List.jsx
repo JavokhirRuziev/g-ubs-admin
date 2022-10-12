@@ -16,7 +16,7 @@ const List = ({ location, history }) => {
 	const [query, setQuery] = useState("");
 	const [searchQuery] = useDebounce(query, 600);
 	const [createModal, setCreateModal] = useState(false);
-	const [filterSelect, setFilterSelect] = useState('debt')
+	const [filterSelect, setFilterSelect] = useState(0)
 	const { t } = useTranslation();
 
 	const params = qs.parse(location.search);
@@ -87,10 +87,10 @@ const List = ({ location, history }) => {
 
 					<div style={{width: '200px',minWidth: '200px'}} className='mr-20'>
 						<Select className={'w-100p'} defaultValue={filterSelect} size={"large"} onChange={value => {
-							console.log(value)
 							setFilterSelect(value)
 							setPage(1)
 						}}>
+							<Option value={0}>Все</Option>
 							<Option value={'debt'}>Дебитор</Option>
 							<Option value={'credit'}>Кредитор</Option>
 						</Select>
