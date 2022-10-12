@@ -3,7 +3,6 @@ import {helpers} from "../../../services";
 import {useTranslation} from "react-i18next";
 import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
-import get from "lodash/get";
 
 const CashboxCard = ({params, totalExpense, totalIncome}) => {
     const {t} = useTranslation();
@@ -53,7 +52,6 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
         loadResidualByPaymentType()
     }, [params.start_at,params.end_at])
 
-    console.log(Object.values(residual))
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">

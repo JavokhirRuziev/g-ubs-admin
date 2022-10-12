@@ -5,13 +5,13 @@ import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import config from "../../../config";
 
-const ExpensesCard = ({params, setTotalCreditor}) => {
+const ExpensesCard = ({params, setTotalDebtor}) => {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);
-    const [totalCreditor, setTotalCreditors] = useState(0);
+    const [totalDebtor, setTotalDebtors] = useState(0);
 
     const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
@@ -24,9 +24,10 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             },
             cb: {
                 success: data => {
-                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+                    const total = data.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? Number(curr.sum) : 0), 0)
                     setCreditorTransactions(data)
-                    setTotalCreditors(total)
+                    setTotalDebtors(total*(-1))
+                    setTotalDebtor(total*(-1))
                 },
                 error: data => {}
             }
@@ -72,14 +73,15 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             <div className="dashboard-card-st__body">
                 {categories.length > 0 ? (
                     categories.map(item => {
-                        const hasSum = creditorTransactions.find(a => a.alias === item.alias)
+
+                        const itemsByCategory = creditorTransactions.filter(a => a.alias === item.alias);
+                        const totalSum = itemsByCategory.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? Number(curr.sum) : 0), 0)
+
                         return(
                             item.alias !== 'vip' ? (
-                                <div className="dashboard-line --red">
+                                <div className="dashboard-line --red" key={item.id}>
                                     <span>{item.title}</span>
-                                    {hasSum && hasSum.sum < 0 ? (
-                                        <div>{helpers.convertToReadable(hasSum.sum*(-1))} сум</div>
-                                    ) : 0}
+                                    <div>{helpers.convertToReadable(totalSum*(-1))} сум</div>
                                 </div>
                             ) : <></>
                         )
@@ -91,7 +93,7 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalCreditor)} сум</span>
+                <span>{helpers.convertToReadable(totalDebtor)} сум</span>
             </div>
         </div>
     );
