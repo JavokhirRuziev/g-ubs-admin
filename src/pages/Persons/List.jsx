@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal } from "antd";
+import {Button, Modal, Select} from "antd";
 import { useDebounce } from "use-debounce";
 import qs from "query-string";
 import { useTranslation } from "react-i18next";
@@ -10,10 +10,13 @@ import ClientsList from "./components/ClientsList";
 import CreateClient from "./components/CreateClient";
 import config from "../../config";
 
+const { Option } = Select;
+
 const List = ({ location, history }) => {
 	const [query, setQuery] = useState("");
 	const [searchQuery] = useDebounce(query, 600);
 	const [createModal, setCreateModal] = useState(false);
+	const [filterSelect, setFilterSelect] = useState('debt')
 	const { t } = useTranslation();
 
 	const params = qs.parse(location.search);
@@ -81,6 +84,18 @@ const List = ({ location, history }) => {
 			<div className="d-flex justify-content-between">
 				<div className="title-md">{getPageTitle()}</div>
 				<div className="d-flex mb-20">
+
+					<div style={{width: '200px',minWidth: '200px'}} className='mr-20'>
+						<Select className={'w-100p'} defaultValue={filterSelect} size={"large"} onChange={value => {
+							console.log(value)
+							setFilterSelect(value)
+							setPage(1)
+						}}>
+							<Option value={'debt'}>Дебитор</Option>
+							<Option value={'credit'}>Кредитор</Option>
+						</Select>
+					</div>
+
 					<Search
 						text={t("Поиск")}
 						className={"br-25  pl-20"}
@@ -103,7 +118,7 @@ const List = ({ location, history }) => {
 			</div>
 
 			<Board>
-				<ClientsList {...{ searchQuery, type }} />
+				<ClientsList {...{ searchQuery, type, filterSelect }} />
 			</Board>
 		</div>
 	);
