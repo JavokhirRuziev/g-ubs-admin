@@ -16,6 +16,7 @@ const Statistics = ({location}) => {
     const [totalIncome, setTotalIncome] = useState(0)
     const [totalSale, setTotalSale] = useState(0)
     const [totalCreditor, setTotalCreditor] = useState(0)
+    const [totalDebtor, setTotalDebtor] = useState(0)
 
     return (
         <div>
@@ -25,7 +26,7 @@ const Statistics = ({location}) => {
             <div className="row mb-30">
                 <div className="col-4"/>
                 <div className="col-4">
-                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor}}/>
+                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor, totalDebtor}}/>
                 </div>
                 <div className="col-4"/>
             </div>
@@ -48,7 +49,7 @@ const Statistics = ({location}) => {
                 </div>
 
                 <div className="col-4">
-                    <DebitCard {...{params, setTotalCreditor}}/>
+                    <DebitCard {...{params, setTotalDebtor}}/>
                 </div>
 
                 <div className="col-4">
