@@ -11,7 +11,7 @@ import {helpers} from "../../../services";
 
 let content = document.querySelector(".m-content");
 
-const ClientsList = ({ searchQuery, type }) => {
+const ClientsList = ({ filterSelect, searchQuery, type }) => {
 
 	const { t } = useTranslation();
 	const location = useLocation();
@@ -48,7 +48,11 @@ const ClientsList = ({ searchQuery, type }) => {
 				limit: 50,
 				filter: {type: type},
 				page,
-				extra: { append: 'balance,creditor', name: searchQuery },
+				extra: {
+					append: 'balance,creditor',
+					name: searchQuery,
+					type: filterSelect
+				},
 			}}
 		>
 			{({ items, isFetched, meta }) => {

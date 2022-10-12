@@ -72,6 +72,9 @@ const IncomeModal = ({ showIncomeModal, id, setCanUpdate }) => {
 								optionLabel="title"
 								optionValue="id"
 								isSearchable
+								loadOptionsKey={data => {
+									return data.data.filter(item => item.alias !== 'sale');
+								}}
 								loadOptionsParams={search => {
 									return {
 										filter: {type: config.INCOME_CATEGORY_TYPE},
