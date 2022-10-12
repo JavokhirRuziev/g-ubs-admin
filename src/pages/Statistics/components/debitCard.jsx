@@ -3,20 +3,19 @@ import {helpers} from "services";
 import Actions from "modules/entity/actions";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
-import config from "config";
+import config from "../../../config";
 
-const DebitCard = ({params}) => {
+const ExpensesCard = ({params, setTotalCreditor}) => {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);
     const [totalCreditor, setTotalCreditors] = useState(0);
-    const [clientCreditor, setClientCreditors] = useState([]);
 
     const loadExpensesByCategory = () => {
         dispatch(Actions.LoadDefault.request({
-            url: `/transactions/debtor-by-category`,
+            url: `/transactions/borrowed-by-category`,
             params: {
                 extra: {
                     start_date: params.start_at && params.start_at,
@@ -25,9 +24,6 @@ const DebitCard = ({params}) => {
             },
             cb: {
                 success: data => {
-                    const client = data.find(a => a.alias === 'clients')
-                    setClientCreditors(client)
-
                     const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
                     setCreditorTransactions(data)
                     setTotalCreditors(total)
@@ -81,7 +77,9 @@ const DebitCard = ({params}) => {
                             item.alias !== 'vip' ? (
                                 <div className="dashboard-line --red">
                                     <span>{item.title}</span>
-                                    <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                                    {hasSum && hasSum.sum < 0 ? (
+                                        <div>{helpers.convertToReadable(hasSum.sum*(-1))} сум</div>
+                                    ) : 0}
                                 </div>
                             ) : <></>
                         )
@@ -89,11 +87,6 @@ const DebitCard = ({params}) => {
                 ) : (
                     <div>-</div>
                 )}
-
-                <div className="dashboard-line --red">
-                    <span>{clientCreditor.title}</span>
-                    <div>{clientCreditor.sum ? helpers.convertToReadable(clientCreditor.sum) : 0} сум</div>
-                </div>
 
             </div>
             <div className="dashboard-card-st__footer">
@@ -104,4 +97,4 @@ const DebitCard = ({params}) => {
     );
 };
 
-export default DebitCard;
+export default ExpensesCard;

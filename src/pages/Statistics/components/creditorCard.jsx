@@ -77,7 +77,9 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
                             item.alias !== 'vip' ? (
                                 <div className="dashboard-line --red">
                                     <span>{item.title}</span>
-                                    <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                                    {hasSum && hasSum.sum > 0 ? (
+                                        <div>{helpers.convertToReadable(hasSum.sum)} сум</div>
+                                    ) : 0}
                                 </div>
                             ) : <></>
                         )
