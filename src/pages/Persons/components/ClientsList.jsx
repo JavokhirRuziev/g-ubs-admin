@@ -111,9 +111,9 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 											return (
 												<div
 													className="divider-wrapper fw-700">
-													{(value > 0) ? (
+													{(value < 0) ? (
 														<span style={{color: 'green'}}>
-															{value ? helpers.convertToReadable(value) : 0}
+															{value ? helpers.convertToReadable(value*(-1)) : 0}
 														</span>
 													) : (
 														<span style={{color: 'green'}}>
@@ -132,9 +132,9 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 											return (
 												<div
 													className="divider-wrapper fw-700">
-													{(value < 0) ? (
+													{(value > 0) ? (
 														<span style={{color: 'red'}}>
-															{value ? helpers.convertToReadable(value*(-1)) : 0}
+															{value ? helpers.convertToReadable(value) : 0}
 														</span>
 													) : (
 														<span style={{color: 'red'}}>
