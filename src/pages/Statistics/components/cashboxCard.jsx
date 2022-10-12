@@ -53,6 +53,7 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
         loadResidualByPaymentType()
     }, [params.start_at,params.end_at])
 
+    console.log(Object.values(residual))
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">
@@ -84,17 +85,24 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
 
                 <div className="mt-20"/>
 
-                {/*{residual.length > 0 ? (*/}
-                {/*    residual.map(item => {*/}
-                {/*        return(*/}
-                {/*            <div className="dashboard-line --red">*/}
-                {/*                <span>{item}</span>*/}
-                {/*            </div>*/}
-                {/*        )*/}
-                {/*    })*/}
-                {/*) : (*/}
-                {/*    <div/>*/}
-                {/*)}*/}
+                {residual && Object.keys(residual).length > 0 ? (
+                    Object.keys(residual).map(item => {
+                        return(
+                            <div className="dashboard-line --green">
+                                <span>
+                                    {item === 'cash' && "Наличные"}
+                                    {item === 'online' && "Онлайн"}
+                                    {item === 'terminal' && "Терминал"}
+                                </span>
+                                <div>
+                                    {residual[item] ? helpers.convertToReadable(residual[item]) : 0} сум
+                                </div>
+                            </div>
+                        )
+                    })
+                ) : (
+                    <div/>
+                )}
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
