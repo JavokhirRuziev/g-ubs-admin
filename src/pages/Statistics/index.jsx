@@ -23,11 +23,11 @@ const Statistics = ({location}) => {
                 <Filter/>
             </Board>
             <div className="row mb-30">
-                <div className="col-4"></div>
+                <div className="col-4"/>
                 <div className="col-4">
                     <TotalCard {...{params, totalExpense, totalSale, totalCreditor}}/>
                 </div>
-                <div className="col-4"></div>
+                <div className="col-4"/>
             </div>
             <div className="row mb-30">
                 <div className="col-4">

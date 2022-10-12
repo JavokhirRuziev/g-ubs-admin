@@ -10,10 +10,11 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
     const dispatch = useDispatch()
 
     const [solves, setSolves] = useState([]);
+    const [residual, setResidual] = useState([]);
 
     const loadSolves = () => {
         dispatch(Actions.LoadDefault.request({
-            url: `/transactions/solves-by-payment-type`,
+            url: `/transactions/solves`,
             params: {
                 extra: {
                     start_date: params.start_at && params.start_at,
@@ -29,16 +30,29 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
         }))
     }
 
+    const loadResidualByPaymentType = () => {
+        dispatch(Actions.LoadDefault.request({
+            url: `/transactions/residual-by-payment-type`,
+            params: {
+                extra: {
+                    start_date: params.start_at && params.start_at,
+                    end_date: params.end_at && params.end_at,
+                }
+            },
+            cb: {
+                success: data => {
+                    setResidual(data)
+                },
+                error: data => {}
+            }
+        }))
+    }
+
     useEffect(() => {
-        loadSolves()
+        loadSolves();
+        loadResidualByPaymentType()
     }, [params.start_at,params.end_at])
 
-
-    const cash = solves.find(s => s.price_type === 1);
-    const terminal = solves.find(s => s.price_type === 4);
-    const online = solves.find(s => s.price_type === 7);
-
-    const totalSolves = Number(get(cash, 'sum', 0)) + Number(get(terminal, 'sum', 0)) + Number(get(online, 'sum', 0))
     return (
         <div className="dashboard-card-st">
             <div className="dashboard-card-st__head">
@@ -65,24 +79,26 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
                 </div>
                 <div className="dashboard-line --purple">
                     <span>Снять денги</span>
-                    <div>{helpers.convertToReadable(totalSolves)} сум</div>
+                    <div>{helpers.convertToReadable(solves)} сум</div>
                 </div>
-                <div className="dashboard-line --purple ml-20">
-                    <span>Наличные</span>
-                    <div>{cash ? helpers.convertToReadable(cash.sum) : 0} сум</div>
-                </div>
-                <div className="dashboard-line --purple ml-20">
-                    <span>Терминал</span>
-                    <div>{terminal ? helpers.convertToReadable(terminal.sum) : 0} сум</div>
-                </div>
-                <div className="dashboard-line --purple ml-20">
-                    <span>Онлайн</span>
-                    <div>{online ? helpers.convertToReadable(online.sum) : 0} сум</div>
-                </div>
+
+                <div className="mt-20"/>
+
+                {/*{residual.length > 0 ? (*/}
+                {/*    residual.map(item => {*/}
+                {/*        return(*/}
+                {/*            <div className="dashboard-line --red">*/}
+                {/*                <span>{item}</span>*/}
+                {/*            </div>*/}
+                {/*        )*/}
+                {/*    })*/}
+                {/*) : (*/}
+                {/*    <div/>*/}
+                {/*)}*/}
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalIncome-totalSolves-totalExpense)} сум</span>
+                <span>{helpers.convertToReadable(totalIncome-solves-totalExpense)} сум</span>
             </div>
         </div>
     );
