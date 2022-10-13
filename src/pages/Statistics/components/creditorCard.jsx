@@ -24,9 +24,10 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             },
             cb: {
                 success: data => {
-                    const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0)
+                    const total = data.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
                     setCreditorTransactions(data)
                     setTotalCreditors(total)
+                    setTotalCreditor(total)
                 },
                 error: data => {}
             }
@@ -72,14 +73,15 @@ const ExpensesCard = ({params, setTotalCreditor}) => {
             <div className="dashboard-card-st__body">
                 {categories.length > 0 ? (
                     categories.map(item => {
-                        const hasSum = creditorTransactions.find(a => a.alias === item.alias)
+
+                        const itemsByCategory = creditorTransactions.filter(a => a.alias === item.alias);
+                        const totalSum = itemsByCategory.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
+
                         return(
                             item.alias !== 'vip' ? (
-                                <div className="dashboard-line --red">
+                                <div className="dashboard-line --red" key={item.id}>
                                     <span>{item.title === 'Сотувдан' ? 'Клиент' : item.title}</span>
-                                    {hasSum && hasSum.sum > 0 ? (
-                                        <div>{helpers.convertToReadable(hasSum.sum)} сум</div>
-                                    ) : 0}
+                                    <div>{helpers.convertToReadable(totalSum)} сум</div>
                                 </div>
                             ) : <></>
                         )

@@ -2,10 +2,10 @@ import React from 'react';
 import {helpers} from "../../../services";
 import {useTranslation} from "react-i18next";
 
-const TotalCard = ({params, totalExpense, totalSale, totalCreditor}) => {
+const TotalCard = ({params, totalExpense, totalSale, totalCreditor, totalDebtor}) => {
     const {t} = useTranslation();
 
-    const total = totalSale-totalExpense-totalCreditor;
+    const total = totalSale-totalExpense-totalCreditor+totalDebtor;
 
     return (
         <div className="dashboard-card-st">
@@ -27,25 +27,29 @@ const TotalCard = ({params, totalExpense, totalSale, totalCreditor}) => {
                     <span>Сумма продаж</span>
                     <div>{totalSale ? helpers.convertToReadable(totalSale) : 0} сум</div>
                 </div>
-                <div className="dashboard-line --purple">
+                <div className="dashboard-line --red">
                     <span>Расход</span>
                     <div>{totalExpense ? helpers.convertToReadable(totalExpense) : 0} сум</div>
                 </div>
-                <div className="dashboard-line --purple">
+                <div className="dashboard-line --red">
                     <span>Кредиторка</span>
                     <div>{totalCreditor ? helpers.convertToReadable(totalCreditor) : 0} сум</div>
+                </div>
+                <div className="dashboard-line --purple">
+                    <span>Дебиторка</span>
+                    <div>{totalDebtor ? helpers.convertToReadable(totalDebtor) : 0} сум</div>
                 </div>
             </div>
             {total >= 0 ? (
                 <div className="dashboard-card-st__footer" style={{backgroundColor:"#2ab942"}}>
                     <span>{t("Выгода")}:</span>
-                    <span style={{color: '#ffffff'}}>{helpers.convertToReadable(totalSale-totalExpense-totalCreditor)} сум</span>
+                    <span style={{color: '#ffffff'}}>{helpers.convertToReadable(total)} сум</span>
                 </div>
 
             ) : (
                 <div className="dashboard-card-st__footer" style={{backgroundColor:"#f53c3c"}}>
                     <span>{t("Вред")}:</span>
-                    <span style={{color: '#ffffff'}}>{helpers.convertToReadable(totalSale-totalExpense-totalCreditor)} сум</span>
+                    <span style={{color: '#ffffff'}}>{helpers.convertToReadable(total)} сум</span>
                 </div>
             )}
         </div>
