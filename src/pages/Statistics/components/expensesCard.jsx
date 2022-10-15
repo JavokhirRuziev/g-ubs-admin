@@ -38,6 +38,9 @@ const ExpensesCard = ({params, setTotalExpense}) => {
         dispatch(Actions.LoadDefault.request({
             url: `/expense-categories`,
             params: {
+                extra: {
+                    not: 'sale'
+                },
                 filter: {type: config.EXPENSE_CATEGORY_TYPE}
             },
             cb: {

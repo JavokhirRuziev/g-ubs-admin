@@ -53,8 +53,8 @@ const ClientTransactions = ({match}) => {
     }, [canUpdate]);
 
     const creditor = get(customer, 'creditor', 0);
-
     const isClient = get(customer, 'type') === 1;
+
     return (
         <div>
             <Modal
@@ -143,7 +143,7 @@ const ClientTransactions = ({match}) => {
 
                 <div className='d-flex'>
 
-                    {!isClient && (
+                    {isClient && (
                         <Button
                             type="primary"
                             size="large"

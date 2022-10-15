@@ -2,10 +2,10 @@ import React from 'react';
 import {helpers} from "../../../services";
 import {useTranslation} from "react-i18next";
 
-const TotalCard = ({params, totalExpense, totalSale, totalCreditor, totalDebtor}) => {
+const TotalCard = ({params, totalExpense, totalIncome, totalCreditor, totalDebtor}) => {
     const {t} = useTranslation();
 
-    const total = totalSale-totalExpense-totalCreditor+totalDebtor;
+    const total = totalIncome-totalExpense-totalCreditor+totalDebtor;
 
     return (
         <div className="dashboard-card-st">
@@ -24,8 +24,8 @@ const TotalCard = ({params, totalExpense, totalSale, totalCreditor, totalDebtor}
             </div>
             <div className="dashboard-card-st__body">
                 <div className="dashboard-line --purple">
-                    <span>Сумма продаж</span>
-                    <div>{totalSale ? helpers.convertToReadable(totalSale) : 0} сум</div>
+                    <span>Приход</span>
+                    <div>{totalIncome ? helpers.convertToReadable(totalIncome) : 0} сум</div>
                 </div>
                 <div className="dashboard-line --red">
                     <span>Расход</span>

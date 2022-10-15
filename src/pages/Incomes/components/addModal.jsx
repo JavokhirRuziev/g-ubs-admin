@@ -76,28 +76,36 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								isDisabled={true}
 								loadOptionsParams={search => {
 									return {
-										filter: {type: config.INCOME_CATEGORY_TYPE},
+										filter: {
+											type: config.INCOME_CATEGORY_TYPE,
+										},
 										extra: { name: search }
 									};
 								}}
 							/>
 
-							<Field
-								component={Fields.AsyncSelect}
-								name="customer_id"
-								placeholder={t("Виберите клинта")}
-								isClearable
-								loadOptionsUrl={`/customers`}
-								className="mb-20"
-								optionLabel="name"
-								optionValue="id"
-								isSearchable
-								loadOptionsParams={search => {
-									return {
-										extra: { name: search }
-									};
-								}}
-							/>
+							{get(selectedCategory, 'alias') !== 'others' && (
+								<Field
+									component={Fields.AsyncSelect}
+									name="customer_id"
+									placeholder={t("Виберите клинта")}
+									isClearable
+									loadOptionsUrl={`/customers`}
+									className="mb-20"
+									optionLabel="name"
+									optionValue="id"
+									isSearchable
+									loadOptionsParams={search => {
+										return {
+											filter: {
+												type: 1,
+											},
+											extra: { name: search }
+										};
+									}}
+								/>
+							)}
+
 
 							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
 										 onChange={e => setFieldValue("price_type", e.target.value)}>

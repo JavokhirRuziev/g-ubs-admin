@@ -73,7 +73,8 @@ const IncomeModal = ({ showIncomeModal, id, setCanUpdate }) => {
 								optionValue="id"
 								isSearchable
 								loadOptionsKey={data => {
-									return data.data.filter(item => item.alias !== 'sale');
+									const debt = data.data.find(a => a.alias === 'debt');
+									return [debt]
 								}}
 								loadOptionsParams={search => {
 									return {

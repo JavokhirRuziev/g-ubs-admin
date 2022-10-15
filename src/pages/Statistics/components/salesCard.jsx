@@ -23,10 +23,11 @@ const SalesCard = ({params, setTotalSale}) => {
             cb: {
                 success: data => {
                     const total = data.reduce((prev,curr) => prev+Number(curr.sum), 0);
+                    const totalA = data.filter(i => i.price_type !== 5).reduce((prev,curr) => prev+Number(curr.sum), 0)
 
                     setIncomesSalesTransactions(data)
                     setTotalSales(total)
-                    setTotalSale(total)
+                    setTotalSale(totalA)
                 },
                 error: data => {}
             }

@@ -26,7 +26,7 @@ const Statistics = ({location}) => {
             <div className="row mb-30">
                 <div className="col-4"/>
                 <div className="col-4">
-                    <TotalCard {...{params, totalExpense, totalSale, totalCreditor, totalDebtor}}/>
+                    <TotalCard {...{params, totalExpense, totalIncome, totalSale, totalCreditor, totalDebtor}}/>
                 </div>
                 <div className="col-4"/>
             </div>
