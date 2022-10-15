@@ -24,6 +24,7 @@ const List = ({ selectedCategory }) => {
 	const [page, setPage] = useState();
 	const [addModal, showAddModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+	const alias = get(selectedCategory, 'alias')
 
 	const onDeleteHandler = id => {
 		Modal.confirm({
@@ -79,13 +80,15 @@ const List = ({ selectedCategory }) => {
 				<div className="title-md">{t("Расходы")}</div>
 				<div className='d-flex'>
 					<Filter {...{filterModal, showFilterModal}}/>
-					<Button
-						type="primary"
-						size="large"
-						className="fs-14 fw-300"
-						htmlType="button"
-						onClick={() => showAddModal(true)}
-					>{t("Добавить")}</Button>
+					{(alias === 'market' || alias === 'work_fee' || alias === 'others') && (
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300"
+							htmlType="button"
+							onClick={() => showAddModal(true)}
+						>{t("Добавить")}</Button>
+					)}
 				</div>
 			</div>
 			<Board calc={160}>

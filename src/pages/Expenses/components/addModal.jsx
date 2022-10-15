@@ -10,6 +10,15 @@ import config from "config";
 
 const AddModal = ({ showAddModal, selectedCategory }) => {
 	const { t } = useTranslation();
+	const alias = get(selectedCategory, 'alias');
+	const getTypeByCategory = (alias) => {
+		switch (alias){
+			case "market":
+				return 3;
+			case "work_fee":
+				return 2
+		}
+	}
 
 	return (
 		<EntityForm.Main
@@ -77,6 +86,7 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								optionLabel="title"
 								optionValue="id"
 								isSearchable
+								isDisabled={!!selectedCategory}
 								loadOptionsParams={search => {
 									return {
 										filter: {type: config.EXPENSE_CATEGORY_TYPE},
@@ -85,22 +95,27 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								}}
 							/>
 
-							<Field
-								component={Fields.AsyncSelect}
-								name="customer_id"
-								placeholder={t("Виберите клинта")}
-								isClearable
-								loadOptionsUrl={`/customers`}
-								className="mb-20"
-								optionLabel="name"
-								optionValue="id"
-								isSearchable
-								loadOptionsParams={search => {
-									return {
-										extra: { name: search }
-									};
-								}}
-							/>
+							{(alias === 'market' || alias === 'work_fee') && (
+								<Field
+									component={Fields.AsyncSelect}
+									name="customer_id"
+									placeholder={t("Виберите клинта")}
+									isClearable
+									loadOptionsUrl={`/customers`}
+									className="mb-20"
+									optionLabel="name"
+									optionValue="id"
+									isSearchable
+									loadOptionsParams={search => {
+										return {
+											filter: {
+												type: getTypeByCategory(alias),
+											},
+											extra: { name: search }
+										};
+									}}
+								/>
+							)}
 
 							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
 								onChange={e => setFieldValue("price_type", e.target.value)}>
