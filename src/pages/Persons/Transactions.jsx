@@ -10,6 +10,7 @@ import get from "lodash/get";
 import {helpers} from "../../services";
 import ExpenseModal from "./components/expenseModal";
 import IncomeModal from "./components/incomeModal";
+import config from "config";
 
 const ClientTransactions = ({match}) => {
 
@@ -53,7 +54,9 @@ const ClientTransactions = ({match}) => {
     }, [canUpdate]);
 
     const creditor = get(customer, 'creditor', 0);
-    const isClient = get(customer, 'type') === 1;
+    const isClient = get(customer, 'type') === config.CUSTOMER_TYPE_CLIENT;
+    const isEmployee = get(customer, 'type') === config.CUSTOMER_TYPE_EMPLOYEE;
+    const isCounterAgent = get(customer, 'type') === config.CUSTOMER_TYPE_COUNTER_AGENT;
 
     return (
         <div>
@@ -66,7 +69,7 @@ const ClientTransactions = ({match}) => {
                 width={430}
                 destroyOnClose
             >
-                <ExpenseModal {...{showExpenseModal, id, setCanUpdate, isClient}} />
+                <ExpenseModal {...{showExpenseModal, id, setCanUpdate, isClient, isEmployee, isCounterAgent}} />
             </Modal>
             <Modal
                 visible={incomeModal}

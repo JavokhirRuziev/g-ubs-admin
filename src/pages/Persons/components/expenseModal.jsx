@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import {DatePicker} from "antd";
 import config from "config";
 
-const AddModal = ({ showExpenseModal, id, setCanUpdate, isClient }) => {
+const AddModal = ({ showExpenseModal, id, setCanUpdate, isClient, isEmployee, isCounterAgent }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -84,8 +84,14 @@ const AddModal = ({ showExpenseModal, id, setCanUpdate, isClient }) => {
 								isSearchable
 								loadOptionsKey={data => {
 									if(isClient){
-										const sale = data.data.find(a => a.alias === 'sale');
-										return [sale]
+										const item = data.data.find(a => a.alias === 'sale');
+										return [item]
+									}else if(isEmployee){
+										const item = data.data.find(a => a.alias === 'work_fee');
+										return [item]
+									}else if(isCounterAgent){
+										const item = data.data.find(a => a.alias === 'market');
+										return [item]
 									}else return data.data
 								}}
 								loadOptionsParams={search => {
