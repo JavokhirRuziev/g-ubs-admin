@@ -24,11 +24,9 @@ const Statistics = ({location}) => {
                 <Filter/>
             </Board>
             <div className="row mb-30">
-                <div className="col-4"/>
-                <div className="col-4">
+                <div className="col-12">
                     <TotalCard {...{params, totalExpense, totalIncome, totalSale, totalCreditor, totalDebtor}}/>
                 </div>
-                <div className="col-4"/>
             </div>
             <div className="row mb-30">
                 <div className="col-4">
