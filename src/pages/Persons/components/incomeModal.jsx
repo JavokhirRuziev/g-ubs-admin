@@ -74,7 +74,8 @@ const IncomeModal = ({ showIncomeModal, id, setCanUpdate }) => {
 								isSearchable
 								loadOptionsKey={data => {
 									const debt = data.data.find(a => a.alias === 'debt');
-									return [debt]
+									const sale = data.data.find(a => a.alias === 'sale');
+									return [debt,sale]
 								}}
 								loadOptionsParams={search => {
 									return {

@@ -27,7 +27,7 @@ const SalesCard = ({params, setTotalSale}) => {
 
                     setIncomesSalesTransactions(data)
                     setTotalSales(total)
-                    setTotalSale(totalA)
+                    setTotalSale(total)
                 },
                 error: data => {}
             }
