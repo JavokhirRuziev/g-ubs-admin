@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 import {Board, Table} from "components";
-import {Button, Modal, Pagination, Spin, Tag} from "antd";
+import {Button, Modal, notification, Pagination, Spin, Tag} from "antd";
 import {useTranslation} from "react-i18next";
 import EntityContainer from "modules/entity/containers";
 import {useDispatch} from "react-redux";
@@ -11,6 +11,7 @@ import {helpers} from "../../services";
 import ExpenseModal from "./components/expenseModal";
 import IncomeModal from "./components/incomeModal";
 import config from "config";
+import Actions from "../../modules/entity/actions";
 
 const ClientTransactions = ({match}) => {
 
@@ -31,7 +32,8 @@ const ClientTransactions = ({match}) => {
                 extra: {append: 'balance,creditor'}
             },
             cb: {
-                success: data => setCustomer(data)
+                success: data => setCustomer(data),
+                error: () => {}
             }
         }));
     };
@@ -43,7 +45,8 @@ const ClientTransactions = ({match}) => {
                 extra: {customer_id: `${id}`}
             },
             cb: {
-                success: data => setCustomerCreditor(data)
+                success: data => setCustomerCreditor(data),
+                error: () => {}
             }
         }));
     };
@@ -52,6 +55,44 @@ const ClientTransactions = ({match}) => {
         loadCustomer();
         loadCustomerCreditor();
     }, [canUpdate]);
+
+
+    const onDeleteHandler = itemId => {
+        Modal.confirm({
+            title: t("Вы действительно хотите удалить?"),
+            okText: t("да"),
+            okType: "danger",
+            cancelText: t("нет"),
+            confirmLoading: true,
+            onOk: () => deleteAction(itemId)
+        });
+    };
+    const deleteAction = itemId => {
+        dispatch(Actions.Form.request({
+            method: "delete",
+            entity: "transaction",
+            name: `customer-${id}`,
+            id: itemId,
+            url: `/transactions/${itemId}`,
+            deleteData: true,
+            primaryKey: "id",
+            cb: {
+                success: () => {
+                    notification["success"]({
+                        message: t("Успешно удалена"),
+                        duration: 2
+                    });
+                },
+                error: () => {
+                    notification["error"]({
+                        message: t("Что-то пошло не так"),
+                        duration: 2
+                    });
+                },
+                finally: () => { }
+            }
+        }));
+    };
 
     const creditor = get(customer, 'creditor', 0);
     const isClient = get(customer, 'type') === config.CUSTOMER_TYPE_CLIENT;
@@ -188,6 +229,8 @@ const ClientTransactions = ({match}) => {
                             <Spin spinning={!isFetched}>
                                 <div className="default-table pad-15">
                                     <Table
+                                        hasDelete={true}
+                                        onDelete={value => onDeleteHandler(value.id)}
                                         rowKey={"id"}
                                         columns={[
                                             {
