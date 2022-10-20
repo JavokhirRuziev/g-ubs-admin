@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Modal, Select} from "antd";
 import { useDebounce } from "use-debounce";
 import qs from "query-string";
@@ -9,6 +9,9 @@ import { Search } from "components/SmallComponents";
 import ClientsList from "./components/ClientsList";
 import CreateClient from "./components/CreateClient";
 import config from "../../config";
+import {useDispatch} from "react-redux";
+import Actions from "modules/entity/actions";
+import {helpers} from "../../services";
 
 const { Option } = Select;
 
@@ -17,7 +20,11 @@ const List = ({ location, history }) => {
 	const [searchQuery] = useDebounce(query, 600);
 	const [createModal, setCreateModal] = useState(false);
 	const [filterSelect, setFilterSelect] = useState(0)
+	const [debtTotal, setDebtTotal] = useState("")
+	const [creditTotal, setCreditTotal] = useState("")
+
 	const { t } = useTranslation();
+	const dispatch = useDispatch();
 
 	const params = qs.parse(location.search);
 
@@ -67,6 +74,31 @@ const List = ({ location, history }) => {
 	}
 
 	const type = getPersonTypeId()
+
+	const loadCredit = () => {
+		dispatch(Actions.LoadDefault.request({
+			url: `/transactions/borrowed-by-category`,
+			params: {
+				extra: {
+					customer_type: getPersonTypeId()
+				}
+			},
+			cb: {
+				success: data => {
+					const totalDebt = data.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? Number(curr.sum*(-1)) : 0), 0)
+					const totalCredit = data.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
+
+					setDebtTotal(totalDebt)
+					setCreditTotal(totalCredit)
+				},
+				error: () => {},
+			}
+		}))
+	}
+
+	useEffect(() => {
+		loadCredit()
+	}, [params.type])
 	return (
 		<div>
 			<Modal
@@ -82,7 +114,18 @@ const List = ({ location, history }) => {
 			</Modal>
 
 			<div className="d-flex justify-content-between">
-				<div className="title-md">{getPageTitle()}</div>
+				<div className="title-md mb-10">
+					<div>{getPageTitle()}</div>
+
+					<div className='fw-500 fs-16'>
+						<div className="mr-10" style={{color: 'green'}}>
+							{t("Дебиторка")}: {debtTotal ? helpers.convertToReadable(debtTotal) : 0}
+						</div>
+						<div className="mr-10" style={{color: 'red'}}>
+							{t("Кредиторка")}: {creditTotal ? helpers.convertToReadable(creditTotal) : 0}
+						</div>
+					</div>
+				</div>
 				<div className="d-flex mb-20">
 
 					<div style={{width: '200px',minWidth: '200px'}} className='mr-20'>
