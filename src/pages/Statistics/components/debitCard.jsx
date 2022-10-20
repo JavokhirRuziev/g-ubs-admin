@@ -24,7 +24,7 @@ const ExpensesCard = ({params, setTotalDebtor}) => {
             },
             cb: {
                 success: data => {
-                    const total = data.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? Number(curr.sum) : 0), 0)
+                    const total = data.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? (Number(curr.sum)*(-1)) : 0), 0)
                     setCreditorTransactions(data)
                     setTotalDebtors(total*(-1))
                     setTotalDebtor(total*(-1))
