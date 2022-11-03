@@ -54,9 +54,9 @@ const SalesCard = ({params, setTotalSale}) => {
                 <div className="--title">
                     <span>{t("Сумма продаж")}</span>
                     {(!params.start_at && !params.end_at) ? (
-                        <span>За день</span>
+                        <span>{t("За день")}</span>
                     ) : (
-                        <span>За выбранный период</span>
+                        <span>{t("За выбранный период")}</span>
                     )}
                 </div>
             </div>
@@ -66,14 +66,14 @@ const SalesCard = ({params, setTotalSale}) => {
                     return(
                         <div className="dashboard-line --purple">
                             <span>{item.title}</span>
-                            <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                            <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} {t("сум")}</div>
                         </div>
                     )
                 })}
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalSales)} сум</span>
+                <span>{helpers.convertToReadable(totalSales)} {t("сум")}</span>
             </div>
         </div>
     );
