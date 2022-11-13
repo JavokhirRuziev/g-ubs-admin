@@ -114,6 +114,11 @@ const Update = ({location, history, match}) => {
                   onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
                 },
                 {
+                  name: "countable",
+                  value: get(item, 'countable') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "status",
                   value: get(item, 'status') === 1,
                   onSubmitValue: value => value ? 1 : 0

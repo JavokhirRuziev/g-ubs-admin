@@ -130,6 +130,40 @@ const List = ({history, location}) => {
     }))
   }
 
+  const quickUpdateCountable = (id, value) => {
+    dispatch(Actions.Form.request({
+      method: 'put',
+      entity: "dishes",
+      name: `all-${tabLang}`,
+      id: id,
+      url: `/dishes/quick-update/${id}`,
+      primaryKey: 'id',
+      updateData: true,
+      normalizeData: data => data,
+      params: {
+        extra: { _l: tabLang }
+      },
+      values: {
+        countable: value === 1 ? 0 : 1
+      },
+      cb: {
+        success: () => {
+          notification["success"]({
+            message: t("Успешно обновлено"),
+            duration: 2
+          });
+        },
+        error: () => {
+          notification["error"]({
+            message: t("Что-то пошло не так"),
+            duration: 2
+          });
+        },
+        finally: () => {}
+      }
+    }))
+  }
+
   const TabPane = Tabs.TabPane;
   return (
     <>
@@ -213,9 +247,19 @@ const List = ({history, location}) => {
                       {
                         title: t("Кол-во"),
                         dataIndex: "quantity",
-                        render: (value, values) => <div>
+                        render: (value, values) => values.countable === 1 ? <div>
                           <Input placeholder={t("Количество")} style={{ width: '120px' }} type={'number'} defaultValue={value} onPressEnter={(e)=>quickUpdate(values.id, e.target.value)} />
-                        </div>
+                        </div> : <></>
+                      },
+                      {
+                        title: t("Исчисляемый"),
+                        dataIndex: "countable",
+                        className: 'text-cen w-82',
+                        render: (value, values) => {
+                          return <div className="divider-wrapper">
+                            <div className="color-view-ellipse m-0-auto cursor-pointer" onClick={() => quickUpdateCountable(values.id, value)} style={{backgroundColor: value === 1 ? '#4caf50' : '#f44336'}}/>
+                          </div>
+                        }
                       },
                       {
                         title: t("Статус"),

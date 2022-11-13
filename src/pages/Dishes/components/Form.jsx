@@ -128,6 +128,15 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 					<div className="d-flex align-items-center mb-24">
 						<Switch
 							onChange={value => {
+								setFieldValue("countable", value);
+							}}
+							checked={values.countable}
+						/>
+						<div className="ant-label mb-0 ml-10">{t("Исчисляемый")}</div>
+					</div>
+					<div className="d-flex align-items-center mb-24">
+						<Switch
+							onChange={value => {
 								setFieldValue("status", value);
 							}}
 							checked={values.status}

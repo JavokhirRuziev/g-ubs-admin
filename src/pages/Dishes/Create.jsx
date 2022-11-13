@@ -72,6 +72,11 @@ const Create = ({location, history}) => {
           onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
         },
         {
+          name: "countable",
+          value: true,
+          onSubmitValue: value => value ? 1 : 0
+        },
+        {
           name: "status",
           value: true,
           onSubmitValue: value => value ? 1 : 0
