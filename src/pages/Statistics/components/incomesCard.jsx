@@ -7,7 +7,7 @@ import config from "config";
 
 const IncomesCard = ({params, setTotalIncome}) => {
     const dispatch = useDispatch();
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
 
     const [categories, setCategories] = useState([]);
     const [incomesTransactions, setIncomesTransactions] = useState([]);

@@ -8,7 +8,7 @@ import get from "lodash/get";
 import { useTranslation } from "react-i18next";
 
 const Create = ({showKillModal}) => {
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 
 	return (
 		<EntityForm.Default

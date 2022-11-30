@@ -6,7 +6,7 @@ import {Button} from "antd";
 import {useTranslation} from 'react-i18next'
 
 const Form = ({isUpdate}) => {
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
     return (
         <div>
             <div className="title-md fs-16 mb-20">{isUpdate ? t('Изменить') : t('Добавить')}</div>

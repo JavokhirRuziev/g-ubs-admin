@@ -10,7 +10,7 @@ const DashboardChart = ({isFetched, chartInfo}) => {
 	const [dataOnTable, setDataOnTable] = useState([]);
 	const [dataTakeaway, setDataTakeaway] = useState([]);
 
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 	const daysOnMonth = moment().endOf('month').format('DD');
 
 	const formatDate = value => {

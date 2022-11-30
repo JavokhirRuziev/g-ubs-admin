@@ -6,7 +6,7 @@ import InputMask from "react-input-mask";
 import {useTranslation} from "react-i18next";
 
 const Text = ({ className, label, placeholder, disabled, type, mask, field, form: { touched, errors }, ...props }) => {
-  const {t} = useTranslation("");
+  const {t} = useTranslation("main");
   const classes = cx(
     'form-field ant-form-item-control',
     touched[field.name] && errors[field.name] && 'has-error',

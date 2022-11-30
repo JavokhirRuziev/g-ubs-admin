@@ -16,7 +16,7 @@ import OrdersModal from "./components/ordersModal";
 import {time} from "../../services";
 
 const Index = ({location, history}) => {
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 	const [selectedOrder, setSelectedOrder] = useState(null);
 	const [selected, setSelected] = useState(null);
 	const [viewModal, showViewModal] = useState(false);

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {useTranslation} from "react-i18next";
 
 const StorageCard = ({className, circleColor, title, count, onClick}) => {
-  const {t} = useTranslation("");
+  const {t} = useTranslation("main");
   return (
     <div className={`storage-card ${className}`} onClick={onClick}>
       <div className={`storage-card__count ${circleColor}`}>

@@ -8,7 +8,7 @@ import {DatePicker} from "antd";
 import config from "config";
 
 const AddModal = ({ showAddModal }) => {
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 
 	return (
 		<EntityForm.Main

@@ -19,7 +19,7 @@ import {
 
 const Form = ({isUpdate, setFieldValue, values}) => {
 
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
 
     return (
         <div>

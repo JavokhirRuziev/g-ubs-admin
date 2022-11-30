@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 
 const Sidebar = ({isCollapsed, setCollapse}) => {
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
     const profile = useSelector(state => state.auth.data)
     const [toggledSubmenu, setToggleSubmenu] = useState(null);
 

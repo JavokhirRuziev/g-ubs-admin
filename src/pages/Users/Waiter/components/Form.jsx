@@ -6,7 +6,7 @@ import {Button, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
     return (
         <div>
             <div

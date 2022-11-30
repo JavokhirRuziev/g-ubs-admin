@@ -23,7 +23,7 @@ import ViewModal from "./components/viewModal"
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 	const [statistic, setStatistic] = useState([]);
 	const [selected, setSelected] = useState(null);
 	const [viewModal, showViewModal] = useState(false);

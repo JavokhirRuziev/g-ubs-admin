@@ -18,7 +18,7 @@ import {
 
 const Form = ({isUpdate, setFieldValue, values}) => {
 
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
 
     return (
         <GridElements.Row gutter={10} className={"mb-30"}>

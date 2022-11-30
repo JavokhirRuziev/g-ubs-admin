@@ -3,7 +3,7 @@ import {helpers} from "../../../services";
 import {useTranslation} from "react-i18next";
 
 const TotalCard = ({params, totalExpense, totalSale,  totalCreditor}) => {
-    const {t} = useTranslation("");
+    const {t} = useTranslation("main");
 
     const total = totalSale-totalExpense-totalCreditor;
 

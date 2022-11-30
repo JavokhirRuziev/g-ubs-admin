@@ -17,7 +17,7 @@ import config from "config"
 import { useSelector } from "react-redux";
 
 const Index = ({location, history}) => {
-	const {t} = useTranslation("");
+	const {t} = useTranslation("main");
 	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 	const windowWidth = useSelector(state => state.system.width);
