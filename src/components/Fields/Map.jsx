@@ -19,7 +19,7 @@ const Index = ({setFieldValue, values}) => {
     const langCode = useSelector(state => state.system.currentLangCode);
     let lat = get(values, 'lat') ? get(values, "lat") : 41.345570;
     let long = get(values, 'long') ? get(values, 'long') : 69.284599;
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
 
     return (
         <div className="map-block">

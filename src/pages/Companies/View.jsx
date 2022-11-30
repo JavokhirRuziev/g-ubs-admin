@@ -20,7 +20,7 @@ import {
 
 const View = ({location, history, match}) => {
     const TabPane = Tabs.TabPane;
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
 
     const query = qs.parse(location.search);
     const {lang} = query;

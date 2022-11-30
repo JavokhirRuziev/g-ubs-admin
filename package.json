@@ -60,6 +60,7 @@
     "build-develop": "cp ./.env.develop .env && cross-env NODE_ENV=production CI=false react-scripts build",
     "build-master": "cp ./.env.master .env && cross-env NODE_ENV=production CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "extract": "i18next --config i18next-parser.config.js",
     "test-coverage": "react-scripts test --env=jsdom --coverage"
   },
   "eslintConfig": {
@@ -72,6 +73,7 @@
     "cross-env": "^5.2.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
+    "i18next-parser": "^6.6.0",
     "prop-types": "^15.7.2",
     "react-progressive-image": "^0.6.0",
     "react-visibility-sensor": "^5.1.1",

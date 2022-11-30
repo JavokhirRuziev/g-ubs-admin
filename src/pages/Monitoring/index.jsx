@@ -17,7 +17,7 @@ import config from "config"
 import { useSelector } from "react-redux";
 
 const Index = ({location, history}) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("");
 	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 	const windowWidth = useSelector(state => state.system.width);
@@ -131,7 +131,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Названия",
+												title: t("Названия"),
 												dataIndex: "name",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -143,7 +143,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Цена",
+												title: t("Цена"),
 												dataIndex: "amount",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -155,7 +155,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Ед. изм.",
+												title: t("Ед изм"),
 												dataIndex: "unit",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -167,7 +167,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Кол-во",
+												title: t("Кол-во"),
 												dataIndex: "quantity",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -179,7 +179,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Сумм",
+												title: t("Сумм"),
 												dataIndex: "price",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -191,7 +191,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Статус",
+												title: t("Статус"),
 												dataIndex: "status",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -217,7 +217,7 @@ const Index = ({location, history}) => {
 											<div className="download-excel-btn" onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
 												<button>
-													Отчёт
+													{t("Отчёт")}
 												</button>
 											</div>
 										</div>

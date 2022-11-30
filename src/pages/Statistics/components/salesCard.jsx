@@ -5,7 +5,7 @@ import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
 
 const SalesCard = ({params, setTotalSale}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
     const dispatch = useDispatch()
 
     const [totalSales, setTotalSales] = useState(0);

@@ -15,7 +15,7 @@ import {useSelector} from "react-redux";
 
 const Update = ({location, history}) => {
   const TabPane = Tabs.TabPane;
-  const {t} = useTranslation();
+  const {t} = useTranslation("");
 
   const query = qs.parse(location.search);
   const {lang} = query;

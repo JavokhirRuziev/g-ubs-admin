@@ -4,7 +4,7 @@ import {Button} from "antd";
 import {useTranslation} from "react-i18next";
 
 const SettingsCard = ({title, count, color, icon, handleClick, cardClick, classNames}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
     return (
         <div className={`setting-card ${classNames}`}>
             <div className="setting-card__wrapper" onClick={cardClick}>

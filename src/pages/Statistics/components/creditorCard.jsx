@@ -7,7 +7,7 @@ import config from "../../../config";
 
 const ExpensesCard = ({params, setTotalCreditor}) => {
     const dispatch = useDispatch();
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
 
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);

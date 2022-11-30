@@ -8,7 +8,7 @@ import { ChromePicker } from "react-color";
 import styled from "styled-components";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
     return (
         <div>
             <div className="title-md fs-16 mb-20">{isUpdate ? t('Изменить') : t('Добавить')}</div>

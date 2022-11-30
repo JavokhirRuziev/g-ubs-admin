@@ -6,7 +6,7 @@ import defaultAvatar from "assets/images/icons/user.svg";
 import {Link} from "react-router-dom";
 
 const Header = () => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
 
     return (
         <div className="m-header">

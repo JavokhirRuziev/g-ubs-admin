@@ -18,7 +18,7 @@ const DropzoneComponent = ({className, title, description, onSuccess, initialVal
   const [items, setItems] = useState(initialValue ? [initialValue] : null);
 
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const {t} = useTranslation("");
 
   const classNames = cx(
     'bb-dropzone',

@@ -14,7 +14,7 @@ import {useLocation} from "react-router";
 import config from "../../../../config";
 
 const List = () => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("");
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const [filterModal, showFilterModal] = useState(false);

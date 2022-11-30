@@ -7,7 +7,7 @@ import { Field } from "formik";
 import { useTranslation } from "react-i18next";
 
 const Index = ({history}) => {
-	const {t} = useTranslation();
+	const {t} = useTranslation("");
 
 	return (
 		<div>

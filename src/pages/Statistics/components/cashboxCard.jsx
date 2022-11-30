@@ -5,7 +5,7 @@ import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
 
 const CashboxCard = ({params, totalExpense, totalIncome}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
     const dispatch = useDispatch()
 
     const [solves, setSolves] = useState([]);

@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 
 
 const Meta = ({selected, showMetaModal, lang='ru'}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("");
     const dispatch = useDispatch();
 
     const meta = get(selected, 'meta');

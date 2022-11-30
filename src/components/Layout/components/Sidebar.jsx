@@ -3,8 +3,10 @@ import {Link, useLocation} from "react-router-dom";
 import getMenu from "./getMenu";
 import get from "lodash/get";
 import {useSelector} from "react-redux";
+import {useTranslation} from "react-i18next";
 
 const Sidebar = ({isCollapsed, setCollapse}) => {
+    const {t} = useTranslation("");
     const profile = useSelector(state => state.auth.data)
     const [toggledSubmenu, setToggleSubmenu] = useState(null);
 
@@ -47,14 +49,14 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
                                         onClick={() => toggleSubmenu(m.id)}>
                                         <div>
                                             <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
-                                            <span>{m.title}</span>
+                                            <span>{t(m.title)}</span>
                                             <span className="toggle-submenu"/>
                                         </div>
                                     </div>
                                     <div className="submenu">
                                         {m.submenu.map((sm, i) => (
                                             <Link key={i} to={sm.link}
-                                                  className={fullPath === sm.link ? 'active' : ''}>{sm.title}</Link>
+                                                  className={fullPath === sm.link ? 'active' : ''}>{t(sm.title)}</Link>
                                         ))}
                                     </div>
                                 </li>
@@ -73,7 +75,7 @@ const Sidebar = ({isCollapsed, setCollapse}) => {
                                           className={`m-menu-link ${('/' + currentPath) === m.link ? 'active-menu' : ''}`}>
                                         <div>
                                             <img src={require(`assets/images/base/${m.icon}.svg`)} alt=""/>
-                                            <span>{m.title}</span>
+                                            <span>{t(m.title)}</span>
                                         </div>
                                     </Link>
                                 </li>

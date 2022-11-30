@@ -6,7 +6,7 @@ import {DatePicker} from 'antd';
 import {useTranslation} from "react-i18next";
 
 const AntDatePicker = ({ className, label, placeholder, onChange, disabled,  field, form: { touched, errors }, ...props }) => {
-  const {t} = useTranslation();
+  const {t} = useTranslation("");
 
   const classes = cx(
     'form-field ant-form-item',

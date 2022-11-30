@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import qs from "query-string";
 
 const Create = ({location, history}) => {
-  const {t} = useTranslation();
+  const {t} = useTranslation("");
 
   const query = qs.parse(location.search);
   const {lang} = query;

@@ -6,7 +6,7 @@ const Text = ({ className, title, placeholder, type, field, form: { touched, err
 
 	const [isVisible, setVisible] = useState(false);
 	const toggleVisible = () => setVisible(!isVisible);
-	const {t} = useTranslation();
+	const {t} = useTranslation("");
 
 	if(isVisible){
 		type = "text"

@@ -18,7 +18,7 @@ const List = ({ location, history }) => {
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
 
-	const { t } = useTranslation();
+	const {t} = useTranslation("");
 	const TabPane = Tabs.TabPane;
 
 	return (
