@@ -55,7 +55,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								optionLabel={"title_ru"}
 							/>
 						</div>
-						<div className="col-lg-3 col-12">
+						{values.countable ? <div className="col-lg-3 col-12">
 							<Field
 								component={Fields.AntInput}
 								name="quantity"
@@ -64,7 +64,8 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								label={t("Количество")}
 								size="large"
 							/>
-						</div>
+						</div> : <></>}
+
 					</div>
 
 					{isUpdate && (
