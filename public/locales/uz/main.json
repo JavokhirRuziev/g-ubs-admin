@@ -247,5 +247,9 @@
   "Отчёт по стол": "Stollar bo'yicha hisobot",
   "Отчёт по блюдам": "Taomlar bo'yicha hisobot",
   "Отчёт по официантом": "Ofitsiantlar bo'yicha hisobot",
-  "Сортировка": "Ketma-ketlik"
+  "Сортировка": "Ketma-ketlik",
+  "Количество заказов": "Buyurtmalar soni",
+  "Количество контрагентов": "Kontragentlar soni",
+  "Количество пользователей": "Foydalanuvchilar soni",
+  "Количество эды": "Taomlar turi"
 }

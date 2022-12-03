@@ -245,5 +245,9 @@
   "Отчёт по стол": "Report by tables",
   "Отчёт по блюдам": "Report by dishes",
   "Отчёт по официантом": "Report by waiters",
-  "Сортировка": "Sort"
+  "Сортировка": "Sort",
+  "Количество заказов": "The number of orders",
+  "Количество контрагентов": "Number of counterparties",
+  "Количество пользователей": "Number of users",
+  "Количество эды": "Amount of eda"
 }
