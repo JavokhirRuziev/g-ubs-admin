@@ -15,7 +15,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="name_ru"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (RU)")}
+                label={t("Название (RU)")}
                 size="large"
             />
             <Field
@@ -23,7 +23,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="name_uz"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (UZ)")}
+                label={t("Название (UZ)")}
                 size="large"
             />
             <Field
@@ -31,15 +31,15 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="name_en"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (EN)")}
+                label={t("Название (EN)")}
                 size="large"
             />
             <Field
                 component={Fields.AntInput}
                 name="sort"
                 type="text"
-                placeholder="Сортировка"
-                label="Сортировка"
+                placeholder={t("Сортировка")}
+                label={t("Сортировка")}
                 size="large"
             />
             <Field

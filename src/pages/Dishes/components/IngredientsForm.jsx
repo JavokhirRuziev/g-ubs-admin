@@ -3,8 +3,10 @@ import React from 'react';
 import {Fields} from "components";
 import {Field} from "formik";
 import {Button} from "antd";
+import {useTranslation} from "react-i18next";
 
 const IngredientsForm = ({isUpdate, submitForm}) => {
+    const {t} = useTranslation("main")
     return (
         <div>
             <div className="title-md fs-16 mb-20">{isUpdate ? "Изменить" : "Добавить"}</div>
@@ -13,28 +15,28 @@ const IngredientsForm = ({isUpdate, submitForm}) => {
                 component={Fields.AntInput}
                 name="title_ru"
                 type="text"
-                placeholder="Названия (RU)"
+                placeholder={t("Название (RU)")}
                 size="large"
             />
             <Field
                 component={Fields.AntInput}
                 name="title_uz"
                 type="text"
-                placeholder="Названия (UZ)"
+                placeholder={t("Название (UZ)")}
                 size="large"
             />
             <Field
                 component={Fields.AntInput}
                 name="title_en"
                 type="text"
-                placeholder="Названия (EN)"
+                placeholder={t("Название (EN)")}
                 size="large"
             />
             <Field
                 component={Fields.AntInput}
                 name="price"
                 type="text"
-                placeholder="Цена"
+                placeholder={t("Цена")}
                 size="large"
             />
 
@@ -46,7 +48,7 @@ const IngredientsForm = ({isUpdate, submitForm}) => {
                 onClick={() => {
                     submitForm()
                 }}
-            >{isUpdate ? "Сохранить" : "Добавить"}</Button>
+            >{isUpdate ? t("Сохранить") : t("Добавить")}</Button>
         </div>
     );
 };

@@ -98,8 +98,8 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 component={Fields.AntInput}
                 name="sort"
                 type="text"
-                placeholder="Сортировка"
-                label="Сортировка"
+                placeholder={t("Сортировка")}
+                label={t("Сортировка")}
                 size="large"
             />
 

@@ -17,7 +17,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="title_ru"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (RU)")}
+                label={t("Название (RU)")}
                 size="large"
             />
             <Field
@@ -25,7 +25,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="title_uz"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (UZ)")}
+                label={t("Название (UZ)")}
                 size="large"
             />
             <Field
@@ -33,7 +33,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 name="title_en"
                 type="text"
                 placeholder={t("Введите название")}
-                label={t("Названия (EN)")}
+                label={t("Название (EN)")}
                 size="large"
             />
             <Field

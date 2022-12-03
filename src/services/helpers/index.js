@@ -1,6 +1,19 @@
 import variables from "../../variables";
 import config from "../../config";
 
+const isEnableLang = (status) => {
+    switch (status) {
+        case 'uz':
+            return true;
+        case 'ru':
+            return true;
+        case 'en':
+            return true;
+        default:
+            return false;
+    }
+};
+
 const feedbackLabel = (type) => {
     switch (type) {
         case 3:
@@ -218,6 +231,7 @@ function convertToReadable(number) {
 }
 
 export default {
+    isEnableLang,
     formatBytes,
     feedbackLabel,
     formatDate,

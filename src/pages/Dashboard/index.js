@@ -6,8 +6,10 @@ import Actions from "modules/entity/actions";
 import get from "lodash/get";
 import "./style.scss";
 import { Spinner } from "../../components";
+import {useTranslation} from "react-i18next";
 
 const Index = () => {
+    const {t} = useTranslation("main")
     const dispatch = useDispatch();
     const [statistic, setStatistic] = useState(null);
     const [chartInfo, setChartInfo] = useState(null);
@@ -59,10 +61,10 @@ const Index = () => {
                 <div className="dashboard-block__right">
                     <div className="dashboard-card">
                         <div>
-                            <div className="dashboard-card__label">Количество заказов</div>
+                            <div className="dashboard-card__label">{t("Количество заказов")}</div>
                             <div className="dashboard-card__num">
                                 <span>{get(statistic, 'orders', 0)}</span>
-                                <span>шт</span>
+                                <span>{t("шт")}</span>
                             </div>
                         </div>
                         <div>
@@ -71,10 +73,10 @@ const Index = () => {
                     </div>
                     <div className="dashboard-card">
                         <div>
-                            <div className="dashboard-card__label">Количество контрагентов</div>
+                            <div className="dashboard-card__label">{t("Количество контрагентов")}</div>
                             <div className="dashboard-card__num">
                                 <span>{get(statistic, 'companies', 0)}</span>
-                                <span>шт</span>
+                                <span>{t("шт")}</span>
                             </div>
                         </div>
                         <div>
@@ -83,10 +85,10 @@ const Index = () => {
                     </div>
                     <div className="dashboard-card">
                         <div>
-                            <div className="dashboard-card__label">Количество пользователей</div>
+                            <div className="dashboard-card__label">{t("Количество пользователей")}</div>
                             <div className="dashboard-card__num">
                                 <span>{get(statistic, 'users', 0)}</span>
-                                <span>шт</span>
+                                <span>{t("шт")}</span>
                             </div>
                         </div>
                         <div>
@@ -95,10 +97,10 @@ const Index = () => {
                     </div>
                     <div className="dashboard-card">
                         <div>
-                            <div className="dashboard-card__label">Количество эды</div>
+                            <div className="dashboard-card__label">{t("Количество эды")}</div>
                             <div className="dashboard-card__num">
                                 <span>{get(statistic, 'dishes', 0)}</span>
-                                <span>шт</span>
+                                <span>{t("шт")}</span>
                             </div>
                         </div>
                         <div>
