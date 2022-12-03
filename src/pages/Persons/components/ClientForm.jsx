@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 
 const Form = ({ isUpdate, type }) => {
-    const { t } = useTranslation();
+    const {t} = useTranslation("main");
 
     const getAddBtnText = () => {
         switch (type){

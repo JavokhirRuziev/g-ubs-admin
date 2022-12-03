@@ -8,7 +8,7 @@ import {DatePicker} from "antd";
 import config from "config";
 
 const IncomeModal = ({ showIncomeModal, id, setCanUpdate }) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 
 	return (
 		<EntityForm.Main

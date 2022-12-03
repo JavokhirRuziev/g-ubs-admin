@@ -10,7 +10,7 @@ import get from "lodash/get";
 
 const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 
 	return (
 		<div className="row">

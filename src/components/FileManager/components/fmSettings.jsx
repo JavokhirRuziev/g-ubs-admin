@@ -13,7 +13,7 @@ const FmSettings = ({size, setSize, selected, filterType, setFilterType}) => {
     setFileTitle(get(selected, 'title'));
   }, [get(selected, 'title')]);
 
-  const {t} = useTranslation();
+  const {t} = useTranslation("main");
   const dispatch = useDispatch();
 
   const changeFileName = () => {

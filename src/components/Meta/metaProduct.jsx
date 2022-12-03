@@ -13,7 +13,7 @@ import {useDispatch} from "react-redux";
 const { TabPane } = Tabs;
 
 const Meta = ({selected, showMetaModal}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const [activeTab, setTab] = useState('ru');
     const dispatch = useDispatch();
 

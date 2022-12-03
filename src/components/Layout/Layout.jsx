@@ -20,8 +20,6 @@ const Layout = (props) => {
         }
     }, []);
 
-    console.log(isCollapsed)
-
     return (
         <div className={`m-layout ${isCollapsed ? 'm-layout--collapsed' : ''}`}>
             <Sidebar {...{isCollapsed, setCollapse}}/>

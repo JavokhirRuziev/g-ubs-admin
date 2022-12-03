@@ -23,7 +23,7 @@ const List = ({ location, history }) => {
 	const [debtTotal, setDebtTotal] = useState("")
 	const [creditTotal, setCreditTotal] = useState("")
 
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const dispatch = useDispatch();
 
 	const params = qs.parse(location.search);

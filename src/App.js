@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {storage} from "services";
+import {helpers, storage} from "services";
 import config from "config";
 import systemActions from "store/actions/system";
 import authActions from "store/actions/auth";
@@ -25,7 +25,7 @@ class App extends Component {
 
     GetMeRequest();
 
-    if (storage.get('language')) {
+    if (helpers.isEnableLang(storage.get('language'))) {
       ChangeLanguage(storage.get('language'));
       i18next.changeLanguage(storage.get('language'));
     } else {

@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next'
 import get from "lodash/get";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     return (
         <div>
             <div className="title-md fs-16 mb-20">{isUpdate ? t('Изменить') : t('Добавить')}</div>

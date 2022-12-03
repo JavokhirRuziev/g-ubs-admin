@@ -17,7 +17,7 @@ const List = () => {
     const [selected, setSelected] = useState(null);
     const [page, setPage] = useState(1);
 
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const dispatch = useDispatch();
 
     const openEditModal = value => {

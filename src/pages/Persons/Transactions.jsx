@@ -21,7 +21,7 @@ const ClientTransactions = ({match}) => {
     const [page, setPage] = useState(1);
     const [customer, setCustomer] = useState(null);
     const [customerCreditor, setCustomerCreditor] = useState([]);
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const {id} = match.params;
     const dispatch = useDispatch();
 

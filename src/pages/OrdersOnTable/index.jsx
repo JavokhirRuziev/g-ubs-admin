@@ -16,7 +16,7 @@ import OrdersModal from "./components/ordersModal";
 import {time} from "../../services";
 
 const Index = ({location, history}) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const [selectedOrder, setSelectedOrder] = useState(null);
 	const [selected, setSelected] = useState(null);
 	const [viewModal, showViewModal] = useState(false);
@@ -90,43 +90,43 @@ const Index = ({location, history}) => {
 										rowKey="closed_at"
 										columns={[
 											{
-												title: "Номер стола",
+												title: t('Номер стола'),
 												dataIndex: "number",
 												className: "w-200",
 												render: value => <div className="divider-wrapper">{value}</div>
 											},
 											{
-												title: "Дата",
+												title: t("Дата"),
 												dataIndex: "closed_at",
 												className: "w-200",
 												render: value => <div className="divider-wrapper">{time.to(value, 'DD.MM.YYYY / HH:mm')}</div>
 											},
 											{
-												title: "Сумма обслуги",
+												title: t("Сумма обслуги"),
 												className: "w-200",
 												dataIndex: "tip_price",
 												render: value => <div className="divider-wrapper">{value ? helpers.convertToReadable(value) : '0'}</div>
 											},
 											{
-												title: "Сумма блюд",
+												title: t("Сумма блюд"),
 												className: "w-200",
 												dataIndex: "total_price",
 												render: value => <div className="divider-wrapper">{value ? helpers.convertToReadable(value) : '0'}</div>
 											},
 											{
-												title: "Сумма",
+												title: t("Сумма"),
 												className: "w-200",
 												dataIndex: "total_sum",
 												render: value => <div className="divider-wrapper">{value ? helpers.convertToReadable(value) : '0'}</div>
 											},
 											{
-												title: 'Заказы',
+												title: t("Заказы"),
 												dataIndex: "orders",
 												render: (value,row) => <div className="divider-wrapper">
 													<div className='cr-blue cursor-pointer' onClick={() => {
 														showOrdersModal(true)
 														setSelected(row)
-													}}>Посмотреть заказы</div>
+													}}>{t("Посмотреть заказы")}</div>
 												</div>
 											},
 										]}

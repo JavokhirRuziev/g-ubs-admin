@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {useTranslation} from "react-i18next";
 
 const Text = ({ className, title, placeholder, type, field, form: { touched, errors }, ...props }) => {
-	const {t} = useTranslation();
+	const {t} = useTranslation("main");
 	return (
 		<div className={`form-field__group ${field.value && field.value.length > 0 ? 'form-field__focused' : ''}`}>
 			{title && (

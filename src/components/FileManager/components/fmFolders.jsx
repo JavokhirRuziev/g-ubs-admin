@@ -19,7 +19,7 @@ const FmFolders = ({setActiveFolder}) => {
   const [updateModal, showUpdateModal] = useState(false);
   const [selected, setSelected] = useState(false);
 
-  const {t} = useTranslation();
+  const {t} = useTranslation("main");
   const dispatch = useDispatch();
 
   const onEnter = (event) => {

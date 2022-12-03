@@ -16,7 +16,7 @@ import qs from "query-string";
 import config from "config";
 
 const Customers = ({selectedCategory, setCategory}) => {
-  const {t} = useTranslation();
+  const {t} = useTranslation("main");
 
   const history = useHistory();
   const location = useLocation();

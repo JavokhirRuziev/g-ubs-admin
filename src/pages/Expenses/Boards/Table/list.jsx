@@ -15,7 +15,7 @@ import qs from "query-string";
 import {useLocation} from "react-router";
 
 const List = ({ selectedCategory }) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const [filterModal, showFilterModal] = useState(false);

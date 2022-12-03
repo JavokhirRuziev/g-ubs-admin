@@ -17,7 +17,7 @@ import config from "config"
 import { useSelector } from "react-redux";
 
 const Index = ({location, history}) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const [filterModal, showFilterModal] = useState(false);
 	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
 	const windowWidth = useSelector(state => state.system.width);
@@ -92,7 +92,7 @@ const Index = ({location, history}) => {
 
 						const total = {
 							uid: '001',
-							name: 'Всего',
+							name: t("Всего"),
 							total_price: items.reduce((prev,curr) => prev+Number(curr.total_price), 0),
 							tip_price: items.reduce((prev,curr) => prev+Number(curr.tip_price), 0),
 							is_total: true,
@@ -118,7 +118,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Названия",
+												title: t("Названия"),
 												dataIndex: "name",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -130,7 +130,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Qilgan savdos",
+												title: t("Qilgan savdosi"),
 												dataIndex: "total_price",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -142,7 +142,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Xizmat haqi",
+												title: t("Xizmat haqi"),
 												dataIndex: "tip_price",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -154,7 +154,7 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Ofitsant haqi",
+												title: t("Ofitsant haqi"),
 												dataIndex: "total_sum",
 												render: (value,row) => {
 													const is_total = get(row, 'is_total');
@@ -176,7 +176,7 @@ const Index = ({location, history}) => {
 											<div className="download-excel-btn" onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
 												<button>
-													Отчёт
+													{t("Отчёт")}
 												</button>
 											</div>
 										</div>

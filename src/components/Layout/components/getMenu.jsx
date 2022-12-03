@@ -61,7 +61,7 @@ const adminMenus = [
     },
     {
         id: 'unit',
-        title: "Ед. изм",
+        title: "Ед изм",
         link: '/units',
         icon: 'menu-i-category'
     },

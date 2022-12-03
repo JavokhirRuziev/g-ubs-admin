@@ -13,7 +13,7 @@ import {Table} from "components";
 import EntityContainer from "modules/entity/containers";
 
 const Ingredients = () => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const params = useParams();
     const dispatch = useDispatch();
 

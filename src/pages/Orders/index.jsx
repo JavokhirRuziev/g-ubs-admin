@@ -23,7 +23,7 @@ import ViewModal from "./components/viewModal"
 
 const Index = ({location, history}) => {
 	const dispatch = useDispatch();
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const [statistic, setStatistic] = useState([]);
 	const [selected, setSelected] = useState(null);
 	const [viewModal, showViewModal] = useState(false);
@@ -179,13 +179,13 @@ const Index = ({location, history}) => {
 												}
 											},
 											{
-												title: "Номер заказа",
+												title: t("Номер заказаa"),
 												dataIndex: "order_number",
 												className: "w-100",
 												render: value => <div className="divider-wrapper">{value}</div>
 											},
 											{
-												title: "Дата",
+												title: t("Дата"),
 												dataIndex: "created_at",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -193,7 +193,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Тип",
+												title: t("Тип"),
 												dataIndex: "type",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -201,7 +201,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Официант",
+												title: t('Официант'),
 												dataIndex: "waiter",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -209,7 +209,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Клиент",
+												title: t("Клиент"),
 												dataIndex: "user",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -217,7 +217,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Цена доставки",
+												title: t("Цена доставки"),
 												dataIndex: "delivery_price",
 												className: "",
 												render: (value,row) => <div className="divider-wrapper">
@@ -225,7 +225,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Цена обслуги",
+												title: t("Цена обслуги"),
 												dataIndex: "tip_price",
 												className: "",
 												render: (value) => <div className="divider-wrapper">
@@ -233,7 +233,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Тип оплаты",
+												title: t("Тип оплаты"),
 												dataIndex: "payments",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -248,7 +248,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Цена",
+												title: t("Цена"),
 												dataIndex: "total_sum",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -256,7 +256,7 @@ const Index = ({location, history}) => {
 												</div>
 											},
 											{
-												title: "Статус",
+												title: t("Статус"),
 												dataIndex: "status",
 												className: "",
 												render: value => <div className="divider-wrapper">
@@ -274,7 +274,7 @@ const Index = ({location, history}) => {
 											<div className="download-excel-btn" onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
 												<button>
-													Отчёт
+													{t("Отчёт")}
 												</button>
 											</div>
 											<div className="download-excel-btn ml-10" style={{backgroundColor: '#ff9800'}} onClick={() => showKillModal(true)}>
@@ -302,10 +302,10 @@ const Index = ({location, history}) => {
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
-							<div className="dashboard-card__label">Наличние</div>
+							<div className="dashboard-card__label">{t("Наличние")}</div>
 							<div className="dashboard-card__num">
 								<span>{cash ? cash.amount.toLocaleString() : 0}</span>
-								<span>сум</span>
+								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
@@ -319,7 +319,7 @@ const Index = ({location, history}) => {
 							<div className="dashboard-card__label">Payme</div>
 							<div className="dashboard-card__num">
 								<span>{payme ? payme.amount.toLocaleString() : 0}</span>
-								<span>сум</span>
+								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
@@ -333,7 +333,7 @@ const Index = ({location, history}) => {
 							<div className="dashboard-card__label">Click</div>
 							<div className="dashboard-card__num">
 								<span>{click ? click.amount.toLocaleString() : 0}</span>
-								<span>сум</span>
+								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
@@ -344,10 +344,10 @@ const Index = ({location, history}) => {
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
-							<div className="dashboard-card__label">Терминал</div>
+							<div className="dashboard-card__label">{t("Терминал")}</div>
 							<div className="dashboard-card__num">
 								<span>{terminal ? terminal.amount.toLocaleString() : 0}</span>
-								<span>сум</span>
+								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>

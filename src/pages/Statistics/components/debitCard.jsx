@@ -7,7 +7,7 @@ import config from "../../../config";
 
 const ExpensesCard = ({params, setTotalDebtor}) => {
     const dispatch = useDispatch();
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
 
     const [categories, setCategories] = useState([]);
     const [creditorTransactions, setCreditorTransactions] = useState([]);
@@ -64,9 +64,9 @@ const ExpensesCard = ({params, setTotalDebtor}) => {
                 <div className="--title">
                     <span>{t("Дебиторка")}</span>
                     {(!params.start_at && !params.end_at) ? (
-                        <span>За день</span>
+                        <span>{t("За день")}</span>
                     ) : (
-                        <span>За выбранный период</span>
+                        <span>{t("За выбранный период")}</span>
                     )}
                 </div>
             </div>
@@ -80,8 +80,8 @@ const ExpensesCard = ({params, setTotalDebtor}) => {
                         return(
                             item.alias !== 'vip' ? (
                                 <div className="dashboard-line --red" key={item.id}>
-                                    <span>{item.title === 'Сотувдан' ? 'Клиент' : item.title}</span>
-                                    <div>{helpers.convertToReadable(totalSum*(-1))} сум</div>
+                                    <span>{item.title === t("Сотувдан") ? t("Клиент") : item.title}</span>
+                                    <div>{helpers.convertToReadable(totalSum*(-1))} {t("сум")}</div>
                                 </div>
                             ) : <></>
                         )
@@ -93,7 +93,7 @@ const ExpensesCard = ({params, setTotalDebtor}) => {
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalDebtor)} сум</span>
+                <span>{helpers.convertToReadable(totalDebtor)} {t("сум")}</span>
             </div>
         </div>
     );

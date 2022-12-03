@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next'
 import config from "config";
 
 const Form = ({isUpdate, setFieldValue, values}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const [lang, setLang] = useState("ru");
     const TabPane = Tabs.TabPane;
 
@@ -98,8 +98,8 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                 component={Fields.AntInput}
                 name="sort"
                 type="text"
-                placeholder="Сортировка"
-                label="Сортировка"
+                placeholder={t("Сортировка")}
+                label={t("Сортировка")}
                 size="large"
             />
 

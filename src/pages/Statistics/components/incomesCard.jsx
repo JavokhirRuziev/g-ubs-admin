@@ -7,7 +7,7 @@ import config from "config";
 
 const IncomesCard = ({params, setTotalIncome}) => {
     const dispatch = useDispatch();
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
 
     const [categories, setCategories] = useState([]);
     const [incomesTransactions, setIncomesTransactions] = useState([]);
@@ -65,9 +65,9 @@ const IncomesCard = ({params, setTotalIncome}) => {
                 <div className="--title">
                     <span>{t("Приход")}</span>
                     {(!params.start_at && !params.end_at) ? (
-                        <span>За день</span>
+                        <span>{t("За день")}</span>
                     ) : (
-                        <span>За выбранный период</span>
+                        <span>{t("За выбранный период")}</span>
                     )}
                 </div>
             </div>
@@ -78,7 +78,7 @@ const IncomesCard = ({params, setTotalIncome}) => {
                         return(
                             <div className="dashboard-line --purple">
                                 <span>{item.title}</span>
-                                <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} сум</div>
+                                <div>{hasSum ? helpers.convertToReadable(hasSum.sum) : 0} {t("сум")}</div>
                             </div>
                         )
                     })
@@ -88,7 +88,7 @@ const IncomesCard = ({params, setTotalIncome}) => {
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalIncomes)} сум</span>
+                <span>{helpers.convertToReadable(totalIncomes)} {t("сум")}</span>
             </div>
         </div>
     );

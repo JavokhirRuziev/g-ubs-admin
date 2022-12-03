@@ -13,7 +13,7 @@ let content = document.querySelector(".m-content");
 
 const ClientsList = ({ filterSelect, searchQuery, type }) => {
 
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const location = useLocation();
 	const history = useHistory();
 	const [updateModal, showUpdateModal] = useState(false);

@@ -18,7 +18,7 @@ const Schedule = ({schedule}) => {
   };
 
   const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-  const {t} = useTranslation();
+  const {t} = useTranslation("main");
 
   const isUpdate = schedule.length > 0
 

@@ -14,7 +14,7 @@ import {useLocation} from "react-router";
 import qs from "query-string";
 
 const List = ({selectedCategory}) => {
-	const { t } = useTranslation();
+	const {t} = useTranslation("main");
 	const location = useLocation();
 	const [page, setPage] = useState();
 	const dispatch = useDispatch();

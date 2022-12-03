@@ -5,7 +5,7 @@ import Actions from "../../../modules/entity/actions";
 import {useDispatch} from "react-redux";
 
 const CashboxCard = ({params, totalExpense, totalIncome}) => {
-    const {t} = useTranslation();
+    const {t} = useTranslation("main");
     const dispatch = useDispatch()
 
     const [solves, setSolves] = useState([]);
@@ -61,24 +61,24 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
                 <div className="--title">
                     <span>{t("Касса")}</span>
                     {(!params.start_at && !params.end_at) ? (
-                        <span>За день</span>
+                        <span>{t("За день")}</span>
                     ) : (
-                        <span>За выбранный период</span>
+                        <span>{t("За выбранный период")}</span>
                     )}
                 </div>
             </div>
             <div className="dashboard-card-st__body">
                 <div className="dashboard-line --purple">
-                    <span>Приход</span>
-                    <div>{totalIncome ? helpers.convertToReadable(totalIncome) : 0} сум</div>
+                    <span>{t("Приход")}</span>
+                    <div>{totalIncome ? helpers.convertToReadable(totalIncome) : 0} {t("сум")}</div>
                 </div>
                 <div className="dashboard-line --purple">
-                    <span>Расход</span>
-                    <div>{totalExpense ? helpers.convertToReadable(totalExpense) : 0} сум</div>
+                    <span>{t("Расход")}</span>
+                    <div>{totalExpense ? helpers.convertToReadable(totalExpense) : 0} {t("сум")}</div>
                 </div>
                 <div className="dashboard-line --purple">
-                    <span>Снять денги</span>
-                    <div>{helpers.convertToReadable(solves)} сум</div>
+                    <span>{t("Снять денги")}</span>
+                    <div>{helpers.convertToReadable(solves)} {t("сум")}</div>
                 </div>
 
                 <div className="mt-20"/>
@@ -87,13 +87,11 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
                     Object.keys(residual).map(item => {
                         return(
                             <div className="dashboard-line --green">
-                                <span>
-                                    {item === 'cash' && "Наличные"}
-                                    {item === 'online' && "Онлайн"}
-                                    {item === 'terminal' && "Терминал"}
-                                </span>
+                                {item === 'cash' && <span>{t("Наличные")}</span>}
+                                {item === 'online' && <span>{t("Онлайн")}</span>}
+                                {item === 'terminal' && <span>{t("Терминал")}</span>}
                                 <div>
-                                    {residual[item] ? helpers.convertToReadable(residual[item]) : 0} сум
+                                    {residual[item] ? helpers.convertToReadable(residual[item]) : 0} {t("сум")}
                                 </div>
                             </div>
                         )
@@ -104,7 +102,7 @@ const CashboxCard = ({params, totalExpense, totalIncome}) => {
             </div>
             <div className="dashboard-card-st__footer">
                 <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalIncome-solves-totalExpense)} сум</span>
+                <span>{helpers.convertToReadable(totalIncome-solves-totalExpense)} {t("сум")}</span>
             </div>
         </div>
     );

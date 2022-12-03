@@ -19,7 +19,7 @@ const List = ({history, location}) => {
   const [tabLang, setTabLang] = useState(lang ? lang : 'ru');
   const [page, setPage] = useState(1);
 
-  const {t} = useTranslation();
+  const {t} = useTranslation("main");
   const dispatch = useDispatch();
 
   const onDeleteHandler = menuId => {
