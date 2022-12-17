@@ -39,7 +39,12 @@ const IngredientsUpdate = ({selected, showUpdateModal, parent_id}) => {
         {
           name: "price",
           value: get(selected, 'price'),
-        }
+        },
+        {
+          name: "status",
+          value: get(selected, 'status') === 1,
+          onSubmitValue: value => value ? 1 : 0
+        },
       ]}
       updateData
     >

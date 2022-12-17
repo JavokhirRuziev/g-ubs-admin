@@ -2,10 +2,10 @@ import React from 'react';
 
 import {Fields} from "components";
 import {Field} from "formik";
-import {Button} from "antd";
+import {Button, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 
-const IngredientsForm = ({isUpdate, submitForm}) => {
+const IngredientsForm = ({isUpdate, setFieldValue, values, submitForm}) => {
     const {t} = useTranslation("main")
     return (
         <div>
@@ -39,6 +39,16 @@ const IngredientsForm = ({isUpdate, submitForm}) => {
                 placeholder={t("Цена")}
                 size="large"
             />
+
+            <div className="d-flex align-items-center mb-24">
+                <Switch
+                    onChange={value => {
+                        setFieldValue("status", value);
+                    }}
+                    checked={values.status}
+                />
+                <div className="ant-label mb-0 ml-10">{t("Активный статус")}</div>
+            </div>
 
             <Button
                 type="primary"

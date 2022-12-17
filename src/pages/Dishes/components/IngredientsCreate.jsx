@@ -39,6 +39,11 @@ const IngredientsCreate = ({showCreateModal, parent_id}) => {
           name: "price",
           required: true
         },
+        {
+          name: "status",
+          value: true,
+          onSubmitValue: value => value ? 1 : 0
+        },
       ]}
     >
       {({isSubmitting, values, setFieldValue, submitForm}) => {
