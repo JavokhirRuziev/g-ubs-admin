@@ -36,7 +36,7 @@ const Update = ({location, history}) => {
       primaryKey="id"
       id={id}
       params={{
-        include: "translate,workingTimes,categories,region,district",
+        include: "translate,workingTimes,categories,region,district,logo",
         extra: {_l: tabLang, append: 'gallery0'}
       }}
     >
@@ -85,6 +85,11 @@ const Update = ({location, history}) => {
                 {
                   name: "file_id",
                   value: get(item, 'file') ? [get(item, 'file')] : [],
+                  onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
+                },
+                {
+                  name: "logo_id",
+                  value: get(item, 'logo') ? [get(item, 'logo')] : [],
                   onSubmitValue: value => value && value.reduce((prev, curr) => [...prev, curr.id], []).join(",")
                 },
                 {

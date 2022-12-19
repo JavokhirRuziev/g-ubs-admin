@@ -141,6 +141,13 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         />
                         <Field
                             component={Fields.UploadImageManager}
+                            name="logo_id"
+                            label={t("Логотип для чека")}
+                            size="large"
+                            className={"mb-14"}
+                        />
+                        <Field
+                            component={Fields.UploadImageManager}
                             name="file_id"
                             label={t("Фото")}
                             size="large"
