@@ -73,6 +73,7 @@ const Customers = ({selectedCategory, setCategory}) => {
                       />
                       {items && items.map(category => (
                           <DefaultCard
+                              modelId={get(category, 'id')}
                               key={get(category, 'id')}
                               model={category}
                               className={`title-bold pt-30 pb-30 mb-10 ${get(selectedCategory, 'id') === get(category, 'id') ? 'active' : ''}`}
@@ -81,6 +82,7 @@ const Customers = ({selectedCategory, setCategory}) => {
                                 setCategory(category);
                                 setCategoryId(category)
                               }}
+                              onDelete={true}
                           />
                       ))}
                       {(isFetched && items.length < 1) && (
