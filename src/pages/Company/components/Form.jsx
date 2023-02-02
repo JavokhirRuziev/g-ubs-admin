@@ -234,6 +234,46 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                             <div className="ant-label mb-0 ml-10">{t('Забронировать')}</div>
                         </div>
 
+                        <div className="d-flex align-items-center mb-24">
+                            <Switch
+                                onChange={value => {
+                                    setFieldValue('qr_delivery', value)
+                                }}
+                                checked={values.qr_delivery}
+                            />
+                            <div className="ant-label mb-0 ml-10">{t('QR (Доставка)')}</div>
+                        </div>
+
+                        <div className="d-flex align-items-center mb-24">
+                            <Switch
+                                onChange={value => {
+                                    setFieldValue('qr_takeaway', value)
+                                }}
+                                checked={values.qr_takeaway}
+                            />
+                            <div className="ant-label mb-0 ml-10">{t('QR (На вынос)')}</div>
+                        </div>
+
+                        <div className="d-flex align-items-center mb-24">
+                            <Switch
+                                onChange={value => {
+                                    setFieldValue('qr_on_table', value)
+                                }}
+                                checked={values.qr_on_table}
+                            />
+                            <div className="ant-label mb-0 ml-10">{t('QR (На стол)')}</div>
+                        </div>
+
+                        <div className="d-flex align-items-center mb-24">
+                            <Switch
+                                onChange={value => {
+                                    setFieldValue('qr_booking', value)
+                                }}
+                                checked={values.qr_booking}
+                            />
+                            <div className="ant-label mb-0 ml-10">{t('QR (Забронировать)')}</div>
+                        </div>
+
                         <Button
                             type="primary"
                             size="large"

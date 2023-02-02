@@ -113,6 +113,26 @@ const Update = ({location, history}) => {
                   onSubmitValue: value => value ? 1 : 0
                 },
                 {
+                  name: "qr_takeaway",
+                  value: get(item, 'qr_takeaway') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                  name: "qr_on_table",
+                  value: get(item, 'qr_on_table') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                  name: "qr_booking",
+                  value: get(item, 'qr_booking') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
+                  name: "qr_delivery",
+                  value: get(item, 'qr_delivery') === 1,
+                  onSubmitValue: value => value ? 1 : 0
+                },
+                {
                   name: "has_delivery",
                   value: get(item, 'has_delivery') === 1,
                   onSubmitValue: value => value ? 1 : 0
