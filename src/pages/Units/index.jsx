@@ -11,13 +11,12 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 
 const Index = () => {
-
 	const [createModal, showCreateModal] = useState(false);
 	const [updateModal, showUpdateModal] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [page, setPage] = useState(1);
 
-	const {t} = useTranslation("main");
+	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 
 	const openEditModal = value => {
@@ -37,30 +36,31 @@ const Index = () => {
 	};
 
 	const deleteAction = id => {
-		dispatch(Actions.Form.request({
-			method: "delete",
-			entity: "unit",
-			name: `all`,
-			id: id,
-			url: `/units/${id}`,
-			deleteData: true,
-			cb: {
-				success: () => {
-					notification["success"]({
-						message: t("Успешно удалена"),
-						duration: 2
-					});
-				},
-				error: () => {
-					notification["error"]({
-						message: t("Что-то пошло не так"),
-						duration: 2
-					});
-				},
-				finally: () => {
+		dispatch(
+			Actions.Form.request({
+				method: "delete",
+				entity: "unit",
+				name: `all`,
+				id: id,
+				url: `/units/${id}`,
+				deleteData: true,
+				cb: {
+					success: () => {
+						notification["success"]({
+							message: t("Успешно удалена"),
+							duration: 2
+						});
+					},
+					error: () => {
+						notification["error"]({
+							message: t("Что-то пошло не так"),
+							duration: 2
+						});
+					},
+					finally: () => {}
 				}
-			}
-		}));
+			})
+		);
 	};
 
 	return (
@@ -72,8 +72,7 @@ const Index = () => {
 				footer={null}
 				centered
 				width={430}
-				destroyOnClose
-			>
+				destroyOnClose>
 				<Create {...{ showCreateModal }} />
 			</Modal>
 			<Modal
@@ -83,8 +82,7 @@ const Index = () => {
 				footer={null}
 				centered
 				width={430}
-				destroyOnClose
-			>
+				destroyOnClose>
 				<Update {...{ selected, showUpdateModal }} />
 			</Modal>
 
@@ -95,8 +93,9 @@ const Index = () => {
 					size="large"
 					className="fs-14 fw-300 ml-10"
 					htmlType="button"
-					onClick={() => showCreateModal(true)}
-				>{t("Добавить")}</Button>
+					onClick={() => showCreateModal(true)}>
+					{t("Добавить")}
+				</Button>
 			</div>
 
 			<Board className="border-none">
@@ -107,8 +106,7 @@ const Index = () => {
 					params={{
 						limit: 50,
 						page
-					}}
-				>
+					}}>
 					{({ items, isFetched, meta }) => {
 						return (
 							<Spin spinning={!isFetched}>
@@ -118,18 +116,28 @@ const Index = () => {
 										hasDelete={true}
 										rowKey="id"
 										onEdit={value => openEditModal(value)}
-										onDelete={value => onDeleteHandler(value.id)}
+										onDelete={value =>
+											onDeleteHandler(value.id)
+										}
 										columns={[
 											{
 												title: t("ID"),
 												dataIndex: "id",
 												className: "w-50",
-												render: value => <div className="divider-wrapper">{value}</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{value}
+													</div>
+												)
 											},
 											{
 												title: t("Название"),
 												dataIndex: "title_ru",
-												render: value => <div className="divider-wrapper">{value}</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{value}
+													</div>
+												)
 											}
 										]}
 										dataSource={items}
@@ -141,7 +149,9 @@ const Index = () => {
 											current={meta.currentPage}
 											pageSize={meta.perPage}
 											total={meta.totalCount}
-											onChange={newPage => setPage(newPage)}
+											onChange={newPage =>
+												setPage(newPage)
+											}
 										/>
 									</div>
 								)}

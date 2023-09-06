@@ -7,10 +7,10 @@ import Ingredients from "./Ingredients";
 
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
+import Recipe from "./Recipe";
 
-const Form = ({ isUpdate, setFieldValue, values, lang }) => {
-
-	const {t} = useTranslation("main");
+const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
+	const { t } = useTranslation("main");
 
 	return (
 		<div className="row">
@@ -55,21 +55,27 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 								optionLabel={"title_ru"}
 							/>
 						</div>
-						{values.countable ? <div className="col-lg-3 col-12">
-							<Field
-								component={Fields.AntInput}
-								name="quantity"
-								type="text"
-								placeholder={t("Введите кол-во")}
-								label={t("Количество")}
-								size="large"
-							/>
-						</div> : <></>}
-
+						{values.countable ? (
+							<div className="col-lg-3 col-12">
+								<Field
+									component={Fields.AntInput}
+									name="quantity"
+									type="text"
+									placeholder={t("Введите кол-во")}
+									label={t("Количество")}
+									size="large"
+								/>
+							</div>
+						) : (
+							<></>
+						)}
 					</div>
 
 					{isUpdate && (
-						<Ingredients />
+						<>
+							{/* <Ingredients /> */}
+							<Recipe {...{ location, lang, id }} />
+						</>
 					)}
 				</Panel>
 			</div>
@@ -96,9 +102,9 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 						className={"mb-24"}
 						optionLabel={"name"}
 						loadOptionsParams={() => {
-							return({
-								filter: {['role.role']: 'kitchener'}
-							})
+							return {
+								filter: { ["role.role"]: "kitchener" }
+							};
 						}}
 					/>
 
@@ -133,7 +139,9 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 							}}
 							checked={values.countable}
 						/>
-						<div className="ant-label mb-0 ml-10">{t("Исчисляемый")}</div>
+						<div className="ant-label mb-0 ml-10">
+							{t("Исчисляемый")}
+						</div>
 					</div>
 					<div className="d-flex align-items-center mb-24">
 						<Switch
@@ -142,15 +150,18 @@ const Form = ({ isUpdate, setFieldValue, values, lang }) => {
 							}}
 							checked={values.status}
 						/>
-						<div className="ant-label mb-0 ml-10">{t("Активный статус")}</div>
+						<div className="ant-label mb-0 ml-10">
+							{t("Активный статус")}
+						</div>
 					</div>
 
 					<Button
 						type="primary"
 						size="large"
 						className="fs-14 fw-300"
-						htmlType="submit"
-					>{isUpdate ? t("Сохранить") : t("Создать")}</Button>
+						htmlType="submit">
+						{isUpdate ? t("Сохранить") : t("Создать")}
+					</Button>
 				</Panel>
 			</div>
 		</div>

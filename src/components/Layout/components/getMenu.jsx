@@ -1,160 +1,203 @@
 const adminMenus = [
-    {
-        id: 'dashboard',
-        title: "Dashboard",
-        link: '/dashboard',
-        icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'category',
-        title: "Категории",
-        link: '/categories',
-        icon: 'menu-i-category'
-    },
-    {
-        id: 'company',
-        title: "Компании",
-        link: '/companies',
-        icon: 'menu-i-embassy'
-    },
-    {
-        id: 'popular-queries',
-        title: "Популярный запросы",
-        link: '/popular-queries',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'banner',
-        title: "Баннеры",
-        link: '/banner',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'reviews',
-        title: "Отзывы",
-        link: '/reviews',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'users',
-        title: "Контрагент",
-        link: '/users/company-admins',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'faq',
-        title: "FAQ",
-        link: '/faq',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'notification',
-        title: "Уведомление",
-        link: '/notification',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'settings',
-        title: "Настройки",
-        link: '/settings',
-        icon: 'menu-i-setting'
-    },
-    {
-        id: 'unit',
-        title: "Ед изм",
-        link: '/units',
-        icon: 'menu-i-category'
-    },
-]
+	{
+		id: "dashboard",
+		title: "Dashboard",
+		link: "/dashboard",
+		icon: "menu-i-dashboard"
+	},
+	{
+		id: "category",
+		title: "Категории",
+		link: "/categories",
+		icon: "menu-i-category"
+	},
+	{
+		id: "company",
+		title: "Компании",
+		link: "/companies",
+		icon: "menu-i-embassy"
+	},
+	{
+		id: "popular-queries",
+		title: "Популярный запросы",
+		link: "/popular-queries",
+		icon: "menu-i-list"
+	},
+	{
+		id: "banner",
+		title: "Баннеры",
+		link: "/banner",
+		icon: "menu-i-list"
+	},
+	{
+		id: "reviews",
+		title: "Отзывы",
+		link: "/reviews",
+		icon: "menu-i-list"
+	},
+	{
+		id: "users",
+		title: "Контрагент",
+		link: "/users/company-admins",
+		icon: "menu-i-list"
+	},
+	{
+		id: "faq",
+		title: "FAQ",
+		link: "/faq",
+		icon: "menu-i-list"
+	},
+	{
+		id: "notification",
+		title: "Уведомление",
+		link: "/notification",
+		icon: "menu-i-list"
+	},
+	{
+		id: "settings",
+		title: "Настройки",
+		link: "/settings",
+		icon: "menu-i-setting"
+	},
+	{
+		id: "unit",
+		title: "Ед изм",
+		link: "/units",
+		icon: "menu-i-category"
+	}
+];
 const contentManagerRoutes = [
-    {
-        id: 'statistics',
-        link: '/statistics',
-        title: 'Главная',
-        icon: 'menu-i-category',
-    },
-    {
-        id: 'report',
-        title: "Отчет",
-        icon: 'menu-i-dashboard',
-        submenu: [
-            {id: 'orders', link: '/orders', title: 'Отчёт по заказом'},
-            {id: 'monitoring', link: '/orders-on-table', title: 'Отчёт по стол'},
-            {id: 'monitoring', link: '/monitoring', title: 'Отчёт по блюдам'},
-            {id: 'monitoringWaiter', link: '/monitoring-waiter', title: 'Отчёт по официантом'}
-        ]
-    },
-    {
-        id: 'accountant',
-        title: 'Бухгалтерия',
-        icon: 'menu-i-dashboard',
-        submenu: [
-            {id: 'expenses', title: "Расходы", link: '/expenses'},
-            {id: 'incomes', title: "Приход", link: '/incomes'},
-            {id: 'solved', title: "Снять деньги", link: '/solved'},
-            {id: 'clients', title: "Клиенты", link: '/persons?type=clients'},
-            {id: 'employees', title: "Сотрудники", link: '/persons?type=employees'},
-            {id: 'counter_agents', title: "Контрагенты", link: '/persons?type=counter_agents'},
-        ]
-    },
-    {
-        id: 'dishes',
-        title: "Еды",
-        link: '/dishes',
-        icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'menus',
-        title: "Меню",
-        link: '/menus',
-        icon: 'menu-i-file'
-    },
-    {
-        id: 'places',
-        title: "Место",
-        link: '/places',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'tables',
-        title: "Столы",
-        link: '/tables',
-        icon: 'menu-i-list'
-    },
-    {
-        id: 'users',
-        title: "Пользователи",
-        icon: 'menu-i-user',
-        submenu: [
-            {id: 'waiter-users', link: '/users/waiter', title: "Официант"},
-            {id: 'kitchener-users', link: '/users/kitchener', title: "Повор"},
-            {id: 'manager-users', link: '/users/manager', title: "Менеджер"}
-        ]
-    },
-    {
-        id: 'profile',
-        title: "Профиль компании",
-        link: '/profile/company',
-        icon: 'menu-i-dashboard'
-    },
-    {
-        id: 'printers',
-        title: "Принтеры",
-        link: '/printers',
-        icon: 'menu-i-dashboard'
-    }
-]
-
+	{
+		id: "statistics",
+		link: "/statistics",
+		title: "Главная",
+		icon: "menu-i-category"
+	},
+	{
+		id: "report",
+		title: "Отчет",
+		icon: "menu-i-dashboard",
+		submenu: [
+			{ id: "orders", link: "/orders", title: "Отчёт по заказом" },
+			{
+				id: "monitoring",
+				link: "/orders-on-table",
+				title: "Отчёт по стол"
+			},
+			{ id: "monitoring", link: "/monitoring", title: "Отчёт по блюдам" },
+			{
+				id: "monitoringWaiter",
+				link: "/monitoring-waiter",
+				title: "Отчёт по официантом"
+			}
+		]
+	},
+	{
+		id: "accountant",
+		title: "Бухгалтерия",
+		icon: "menu-i-dashboard",
+		submenu: [
+			{ id: "expenses", title: "Расходы", link: "/expenses" },
+			{ id: "incomes", title: "Приход", link: "/incomes" },
+			{ id: "solved", title: "Снять деньги", link: "/solved" },
+			{ id: "clients", title: "Клиенты", link: "/persons?type=clients" },
+			{
+				id: "employees",
+				title: "Сотрудники",
+				link: "/persons?type=employees"
+			},
+			{
+				id: "counter_agents",
+				title: "Контрагенты",
+				link: "/persons?type=counter_agents"
+			}
+		]
+	},
+	{
+		id: "dishes",
+		title: "Еды",
+		link: "/dishes",
+		icon: "menu-i-dashboard"
+	},
+	{
+		id: "menus",
+		title: "Меню",
+		link: "/menus",
+		icon: "menu-i-file"
+	},
+	{
+		id: "places",
+		title: "Место",
+		link: "/places",
+		icon: "menu-i-list"
+	},
+	{
+		id: "tables",
+		title: "Столы",
+		link: "/tables",
+		icon: "menu-i-list"
+	},
+	{
+		id: "stock",
+		title: "Склад",
+		icon: "menu-i-stock",
+		submenu: [
+			{ id: "stock-stock", link: "/stock/stock", title: "Склад" },
+			{
+				id: "stock-product-categories",
+				link: "/stock/product-categories",
+				title: "Категория продуктов"
+			},
+			{
+				id: "stock-products",
+				link: "/stock/products",
+				title: "Продукты"
+			},
+			{
+				id: "/stock/stock-brought-products/",
+				link: "/stock/stock-brought-products/",
+				title: "Привезенный товар"
+			},
+			{
+				id: "/stock/stock-distributed-products/",
+				link: "/stock/stock-distributed-products/",
+				title: "Распределенный продукт"
+			}
+		]
+	},
+	{
+		id: "users",
+		title: "Пользователи",
+		icon: "menu-i-user",
+		submenu: [
+			{ id: "waiter-users", link: "/users/waiter", title: "Официант" },
+			{ id: "kitchener-users", link: "/users/kitchener", title: "Повор" },
+			{ id: "manager-users", link: "/users/manager", title: "Менеджер" }
+		]
+	},
+	{
+		id: "profile",
+		title: "Профиль компании",
+		link: "/profile/company",
+		icon: "menu-i-dashboard"
+	},
+	{
+		id: "printers",
+		title: "Принтеры",
+		link: "/printers",
+		icon: "menu-i-dashboard"
+	}
+];
 
 const getMenu = role => {
-    switch (role) {
-        case 'admin':
-            return adminMenus;
-        case 'company':
-            return contentManagerRoutes;
-        default:
-            return []
-    }
+	switch (role) {
+		case "admin":
+			return adminMenus;
+		case "company":
+			return contentManagerRoutes;
+		default:
+			return [];
+	}
 };
 
 export default getMenu;

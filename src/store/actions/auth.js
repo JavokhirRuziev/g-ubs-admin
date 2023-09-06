@@ -5,7 +5,7 @@ const Logout = createRoutine("LOGOUT");
 const GetMe = createRoutine("GET_ME");
 
 export default {
-  Login,
-  Logout,
-  GetMe,
+	Login,
+	Logout,
+	GetMe
 };

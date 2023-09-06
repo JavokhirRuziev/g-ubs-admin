@@ -4,60 +4,66 @@ import { api, queryBuilder, storage } from "services";
 
 import authActions from "../actions/auth";
 
-export function* LoginRequest(action){
+export function* LoginRequest(action) {
+	const {
+		values: { name, password },
+		cb
+	} = action.payload;
 
-  const { values: { name, password }, cb } = action.payload;
+	try {
+		const { data } = yield call(
+			api.request.post,
+			queryBuilder("/user/sign-in", { include: "token" }),
+			{ login: name, password }
+		);
 
-  try {
+		yield call(storage.set, "token", data.success.token);
 
-    const { data } = yield call(api.request.post, queryBuilder("/user/sign-in", {include: 'token'}), { login:name, password });
+		yield put(authActions.Login.success(data));
 
-    yield call(storage.set, "token", data.success.token);
+		yield call(cb.success);
+	} catch (error) {
+		yield put(
+			authActions.Login.failure({
+				error
+			})
+		);
 
-    yield put(authActions.Login.success(data));
-
-    yield call(cb.success);
-
-  } catch(error){
-
-    yield put(authActions.Login.failure({
-      error
-    }));
-
-    yield call(cb.error, get(error, 'response.data'));
-
-  } finally {
-    yield call(cb.finally);
-  }
+		yield call(cb.error, get(error, "response.data"));
+	} finally {
+		yield call(cb.finally);
+	}
 }
 
-export function* GetMeRequest(){
+export function* GetMeRequest() {
+	try {
+		const { data } = yield call(
+			api.request.get,
+			queryBuilder("/user/get-me")
+		);
 
-  try {
-
-    const { data } = yield call(api.request.get, queryBuilder("/user/get-me"));
-
-    yield put(authActions.GetMe.success({
-      data
-    }));
-
-  } catch(error){
-
-    yield put(authActions.GetMe.failure({
-      error
-    }));
-
-  }
+		yield put(
+			authActions.GetMe.success({
+				data
+			})
+		);
+	} catch (error) {
+		yield put(
+			authActions.GetMe.failure({
+				error
+			})
+		);
+	}
 }
 
-export function* LogoutRequest(){
-  yield call(storage.remove, "token");
+export function* LogoutRequest() {
+	yield call(storage.remove, "token");
 }
 
-export default function* root(){
-  yield all([
-    takeEvery(authActions.Login.REQUEST, LoginRequest),
-    takeEvery(authActions.GetMe.TRIGGER, GetMeRequest),
-    takeEvery(authActions.Logout.REQUEST, LogoutRequest),
-  ]);
+export default function* root() {
+	yield all([
+		takeEvery(authActions.Login.REQUEST, LoginRequest),
+		takeEvery(authActions.GetMe.TRIGGER, GetMeRequest),
+		takeEvery(authActions.Logout.REQUEST, LogoutRequest)
+	]);
 }

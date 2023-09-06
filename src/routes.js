@@ -3,8 +3,8 @@ import { Router, Route, Switch } from "react-router-dom";
 import { history } from "store";
 import { Redirect } from "react-router";
 
-import {Layout} from "components";
-import {Spinner} from "components";
+import { Layout } from "components";
+import { Spinner } from "components";
 import App from "./App";
 import get from "lodash/get";
 
@@ -44,6 +44,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 
 const Login = lazy(() => import("./pages/Login"));
 const Logout = lazy(() => import("./pages/Login/Logout"));
+const SignUp = lazy(() => import("./pages/Login/SignUp"));
 
 const UsersKitchener = lazy(() => import("./pages/Users/Kitchener/List"));
 const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
@@ -58,55 +59,225 @@ const Statistics = lazy(() => import("./pages/Statistics"));
 const Persons = lazy(() => import("./pages/Persons/List"));
 const PersonsTransactions = lazy(() => import("./pages/Persons/Transactions"));
 
+const Stock = lazy(() => import("./pages/Stock/Stock"));
+const ProductCategory = lazy(() => import("./pages/Stock/ProductCategory"));
+const Products = lazy(() => import("./pages/Stock/Product"));
+const CrudBroughtProduct = lazy(() =>
+	import("./pages/Stock/CrudBroughtProduct")
+);
+const CrudDistributedProduct = lazy(() =>
+	import("./pages/Stock/CrudDistributedProduct")
+);
+
 const routes = [
+	{
+		path: "/stock/stock/",
+		exact: true,
+		component: Stock,
+		access: ["company"]
+	},
+	{
+		path: "/stock/product-categories/",
+		exact: true,
+		component: ProductCategory,
+		access: ["company"]
+	},
+	{
+		path: "/stock/products/",
+		exact: true,
+		component: Products,
+		access: ["company"]
+	},
+	{
+		path: "/stock/stock-brought-products/",
+		exact: true,
+		component: CrudBroughtProduct,
+		access: ["company"]
+	},
+	{
+		path: "/stock/stock-distributed-products/",
+		exact: true,
+		component: CrudDistributedProduct,
+		access: ["company"]
+	},
 	{ path: "/persons", exact: true, component: Persons, access: ["company"] },
-	{ path: "/customers/transactions/:id", exact: true, component: PersonsTransactions, access: ["company"] },
-	{ path: "/expenses", exact: true, component: Expenses, access: ["company"] },
+	{
+		path: "/customers/transactions/:id",
+		exact: true,
+		component: PersonsTransactions,
+		access: ["company"]
+	},
+	{
+		path: "/expenses",
+		exact: true,
+		component: Expenses,
+		access: ["company"]
+	},
 	{ path: "/incomes", exact: true, component: Incomes, access: ["company"] },
 	{ path: "/solved", exact: true, component: Solved, access: ["company"] },
 
-	{ path: "/statistics", exact: true, component: Statistics, access: ["company"] },
+	{
+		path: "/statistics",
+		exact: true,
+		component: Statistics,
+		access: ["company"]
+	},
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{ path: "/", exact: true, component: Statistics, access: ["company"] },
-	{ path: "/monitoring-waiter", exact: true, component: MonitoringWaiter, access: ["company"] },
-	{ path: "/monitoring", exact: true, component: Monitoring, access: ["company"] },
+	{
+		path: "/monitoring-waiter",
+		exact: true,
+		component: MonitoringWaiter,
+		access: ["company"]
+	},
+	{
+		path: "/monitoring",
+		exact: true,
+		component: Monitoring,
+		access: ["company"]
+	},
 	{ path: "/orders", exact: true, component: Orders, access: ["company"] },
-	{ path: "/orders-on-table", exact: true, component: OrdersOnTable, access: ["company"] },
-	{ path: "/notification", exact: true, component: Notification, access: ["admin"] },
+	{
+		path: "/orders-on-table",
+		exact: true,
+		component: OrdersOnTable,
+		access: ["company"]
+	},
+	{
+		path: "/notification",
+		exact: true,
+		component: Notification,
+		access: ["admin"]
+	},
 	{ path: "/faq", exact: true, component: Faq, access: ["admin"] },
-	{ path: "/categories", exact: true, component: Categories, access: ["admin"] },
+	{
+		path: "/categories",
+		exact: true,
+		component: Categories,
+		access: ["admin"]
+	},
 	{ path: "/units", exact: true, component: Units, access: ["admin"] },
-	{ path: "/popular-queries", exact: true, component: PopularQueries, access: ["admin"] },
+	{
+		path: "/popular-queries",
+		exact: true,
+		component: PopularQueries,
+		access: ["admin"]
+	},
 	{ path: "/reviews", exact: true, component: Reviews, access: ["admin"] },
 	{ path: "/banner", exact: true, component: Banner, access: ["admin"] },
-	{ path: "/printers", exact: true, component: Printers, access: ["company"] },
+	{
+		path: "/printers",
+		exact: true,
+		component: Printers,
+		access: ["company"]
+	},
 	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
 	{ path: "/places", exact: true, component: Places, access: ["company"] },
 	{ path: "/tables", exact: true, component: Tables, access: ["company"] },
-	{ path: "/dashboard", exact: true, component: Dashboard, access: ["company","admin"] },
+	{
+		path: "/dashboard",
+		exact: true,
+		component: Dashboard,
+		access: ["company", "admin"]
+	},
 
-	{ path: "/profile/company", exact: true, component: Company, access: ["company"] },
-	{ path: "/companies", exact: true, component: Companies, access: ["admin"] },
-	{ path: "/companies/create", exact: true, component: CompaniesCreate, access: ["admin"] },
-	{ path: "/companies/update/:id", exact: true, component: CompaniesUpdate, access: ["admin"] },
-	{ path: "/companies/view/:id", exact: true, component: CompaniesView, access: ["admin"] },
+	{
+		path: "/profile/company",
+		exact: true,
+		component: Company,
+		access: ["company"]
+	},
+	{
+		path: "/companies",
+		exact: true,
+		component: Companies,
+		access: ["admin"]
+	},
+	{
+		path: "/companies/create",
+		exact: true,
+		component: CompaniesCreate,
+		access: ["admin"]
+	},
+	{
+		path: "/companies/update/:id",
+		exact: true,
+		component: CompaniesUpdate,
+		access: ["admin"]
+	},
+	{
+		path: "/companies/view/:id",
+		exact: true,
+		component: CompaniesView,
+		access: ["admin"]
+	},
 
 	{ path: "/dishes", exact: true, component: Dishes, access: ["company"] },
-	{ path: "/dishes/create", exact: true, component: DishesCreate, access: ["company"] },
-	{ path: "/dishes/update/:id", exact: true, component: DishesUpdate, access: ["company"] },
+	{
+		path: "/dishes/create",
+		exact: true,
+		component: DishesCreate,
+		access: ["company"]
+	},
+	{
+		path: "/dishes/update/:id",
+		exact: true,
+		component: DishesUpdate,
+		access: ["company"]
+	},
 
 	{ path: "/settings", exact: true, component: Settings, access: ["admin"] },
-	{ path: "/settings/create", exact: true, component: SettingsCreate, access: ["admin"] },
-	{ path: "/settings/update/:id", exact: true, component: SettingsUpdate, access: ["admin"] },
+	{
+		path: "/settings/create",
+		exact: true,
+		component: SettingsCreate,
+		access: ["admin"]
+	},
+	{
+		path: "/settings/update/:id",
+		exact: true,
+		component: SettingsUpdate,
+		access: ["admin"]
+	},
 
-	{ path: "/users/company-admins", exact: true, component: UsersCompany, access: ["admin"] },
+	{
+		path: "/users/company-admins",
+		exact: true,
+		component: UsersCompany,
+		access: ["admin"]
+	},
 
-	{ path: "/users/waiter", exact: true, component: UsersWaiter, access: ["company"] },
-	{ path: "/users/kitchener", exact: true, component: UsersKitchener, access: ["company"] },
-	{ path: "/users/manager", exact: true, component: UsersManager, access: ["company"] },
+	{
+		path: "/users/waiter",
+		exact: true,
+		component: UsersWaiter,
+		access: ["company"]
+	},
+	{
+		path: "/users/kitchener",
+		exact: true,
+		component: UsersKitchener,
+		access: ["company"]
+	},
+	{
+		path: "/users/manager",
+		exact: true,
+		component: UsersManager,
+		access: ["company"]
+	},
 
-	{ path: "/translation", exact: true, component: Translation, access: ["admin"] },
-	{ path: "/profile", exact: true, component: Profile, access: ["admin","manager","company"] },
+	{
+		path: "/translation",
+		exact: true,
+		component: Translation,
+		access: ["admin"]
+	}
+	// {
+	// 	path: "/profile",
+	// 	exact: true,
+	// 	component: Profile,
+	// 	access: ["admin", "manager", "company"]
+	// }
 ];
 
 const adminRoutes = routes.filter(i => i.access.includes("admin"));
@@ -114,51 +285,49 @@ const contentManagerRoutes = routes.filter(i => i.access.includes("company"));
 
 export default () => (
 	<Router {...{ history }}>
-    <App>
-      {({ isFetched, isAuthenticated, data }) => (
-        isFetched && (
-          isAuthenticated ? (
-            <Layout>
-              <Suspense fallback={<Spinner position={"full"}/>}>
-                <Switch>
-					{(get(data, 'success.role') === 'admin') && (
-						adminRoutes.map((route, key) => (
-							<Route
-								key={key}
-								path={route.path}
-								component={route.component}
-								exact
-							/>
-						))
-					)}
-					{(get(data, 'success.role') === 'company') && (
-						contentManagerRoutes.map((route, key) => (
-							<Route
-								key={key}
-								path={route.path}
-								component={route.component}
-								exact
-							/>
-						))
-					)}
-					<Route
-						path="/logout"
-						component={Logout}
-						exact
-					/>
-                </Switch>
-              </Suspense>
-            </Layout>
-          ) : (
-            <Suspense fallback={<Spinner position={"full"}/>}>
-              <Switch>
-                <Route path="/" component={Login} exact/>
-                <Redirect from="*" to="/"/>
-              </Switch>
-            </Suspense>
-          )
-        )
-      )}
-    </App>
+		<App>
+			{({ isFetched, isAuthenticated, data }) =>
+				isFetched &&
+				(isAuthenticated ? (
+					<Layout>
+						<Suspense fallback={<Spinner position={"full"} />}>
+							<Switch>
+								{get(data, "success.role") === "admin" &&
+									adminRoutes.map((route, key) => (
+										<Route
+											key={key}
+											path={route.path}
+											component={route.component}
+											exact
+										/>
+									))}
+								{get(data, "success.role") === "company" &&
+									contentManagerRoutes.map((route, key) => (
+										<Route
+											key={key}
+											path={route.path}
+											component={route.component}
+											exact
+										/>
+									))}
+								<Route
+									path="/logout"
+									component={Logout}
+									exact
+								/>
+							</Switch>
+						</Suspense>
+					</Layout>
+				) : (
+					<Suspense fallback={<Spinner position={"full"} />}>
+						<Switch>
+							<Route path="/" component={Login} exact />
+							<Route path="/signUp" component={SignUp} exact />
+							<Redirect from="*" to="/" />
+						</Switch>
+					</Suspense>
+				))
+			}
+		</App>
 	</Router>
 );

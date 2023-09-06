@@ -11,17 +11,25 @@ import { notification } from "antd";
 import Actions from "../actions";
 
 const Main = ({
-				  children,
-				  handleSubmit,
-				  submitForm,
-				  values,
-				  isSubmitting,
-				  setFieldValue,
-				  setFieldError,
-				  setFieldTouched
-			  }) => (
+	children,
+	handleSubmit,
+	submitForm,
+	values,
+	isSubmitting,
+	setFieldValue,
+	setFieldError,
+	setFieldTouched
+}) => (
 	<form onSubmit={handleSubmit}>
-		{children({ handleSubmit, submitForm, values, isSubmitting, setFieldValue, setFieldError, setFieldTouched })}
+		{children({
+			handleSubmit,
+			submitForm,
+			values,
+			isSubmitting,
+			setFieldValue,
+			setFieldError,
+			setFieldTouched
+		})}
 	</form>
 );
 
@@ -53,16 +61,13 @@ Main.defaultProps = {
 	normalizeData: "",
 	sendAsFormData: true,
 	isMulti: false,
-	onSuccess: () => {
-	},
-	onError: () => {
-	}
+	onSuccess: () => {},
+	onError: () => {}
 };
 
 const EnhacedForm = withFormik({
 	enableReinitialize: true,
 	validationSchema: ({ fields }) => {
-
 		if (!isArray(fields)) {
 			return Yup.object().shape({});
 		}
@@ -74,13 +79,17 @@ const EnhacedForm = withFormik({
 
 			switch (field.type) {
 				case "string":
-					validationField = Yup.string().typeError("Must be a string");
+					validationField = Yup.string().typeError(
+						"Must be a string"
+					);
 					break;
 				case "object":
 					validationField = Yup.object();
 					break;
 				case "number":
-					validationField = Yup.number().typeError("Must be a number");
+					validationField = Yup.number().typeError(
+						"Must be a number"
+					);
 					break;
 				case "array":
 					validationField = Yup.array();
@@ -115,13 +124,22 @@ const EnhacedForm = withFormik({
 		return Yup.object().shape(validationFields);
 	},
 	mapPropsToValues: ({ fields }) => {
-		return isArray(fields) ? fields.reduce((prev, curr) => ({
-			...prev,
-			[curr.name]: curr.isAbsolute ? curr.value : get(curr, "value", "")
-		}), {}) : {};
+		return isArray(fields)
+			? fields.reduce(
+					(prev, curr) => ({
+						...prev,
+						[curr.name]: curr.isAbsolute
+							? curr.value
+							: get(curr, "value", "")
+					}),
+					{}
+			  )
+			: {};
 	},
-	handleSubmit: (values, { props, setFieldError, setSubmitting, resetForm }) => {
-
+	handleSubmit: (
+		values,
+		{ props, setFieldError, setSubmitting, resetForm }
+	) => {
 		let {
 			id,
 			entity,
@@ -138,10 +156,8 @@ const EnhacedForm = withFormik({
 			deleteData,
 			normalizeData,
 			sendAsFormData,
-			onSuccess = () => {
-			},
-			onError = () => {
-			},
+			onSuccess = () => {},
+			onError = () => {},
 			FormAction,
 			selfErrorMessage
 		} = props;
@@ -156,10 +172,16 @@ const EnhacedForm = withFormik({
 			if (field.hasOwnProperty("onSubmitValue")) {
 				if (typeof field.onSubmitValue === "function") {
 					if (field.hasOwnProperty("onSubmitKey")) {
-						values[field.onSubmitKey] = field.onSubmitValue(values[field.name], values);
+						values[field.onSubmitKey] = field.onSubmitValue(
+							values[field.name],
+							values
+						);
 						delete values[field.name];
 					} else {
-						values[field.name] = field.onSubmitValue(values[field.name], values);
+						values[field.name] = field.onSubmitValue(
+							values[field.name],
+							values
+						);
 					}
 				}
 			}
@@ -189,7 +211,7 @@ const EnhacedForm = withFormik({
 			deleteData,
 			normalizeData,
 			cb: {
-				success: (data) => {
+				success: data => {
 					notification["success"]({
 						message: "Успешно",
 						duration: 2
@@ -197,7 +219,6 @@ const EnhacedForm = withFormik({
 					onSuccess(data, resetForm);
 				},
 				error: (errorResponse = []) => {
-
 					const errors = get(errorResponse, "errors");
 
 					if (!selfErrorMessage) {
@@ -208,7 +229,9 @@ const EnhacedForm = withFormik({
 					}
 
 					if (errors instanceof Array) {
-						errors.map(({ field, message }) => setFieldError(field, message));
+						errors.map(({ field, message }) =>
+							setFieldError(field, message)
+						);
 					} else if (errors instanceof Object) {
 						Object.keys(errors).map(field => {
 							const error = errors[field][0];
@@ -223,15 +246,15 @@ const EnhacedForm = withFormik({
 				}
 			}
 		});
-
 	}
 })(Main);
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(
-	{
-		FormAction: Actions.Form.request
-	},
-	dispatch
-);
+const mapDispatchToProps = dispatch =>
+	bindActionCreators(
+		{
+			FormAction: Actions.Form.request
+		},
+		dispatch
+	);
 
 export default connect(null, mapDispatchToProps)(EnhacedForm);

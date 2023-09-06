@@ -1,0 +1,213 @@
+.modal-container {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	background: white;
+	border-radius: 4px;
+	box-shadow: 2px 4px 8px 0 rgba(0, 0, 0, 0.05);
+	transform: translateY(2000%) translateX(-50%);
+	transition: 0.3s;
+	z-index: 36;
+	max-width: 350px;
+	width: 100%;
+	padding: 30px;
+}
+
+.background_decoration {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 35;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.none {
+	transform: translateY(-50%) translateX(-50%);
+}
+
+.modal-wrapper {
+	display: flex;
+	flex-direction: column;
+	row-gap: 15px;
+	position: relative;
+}
+.close {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+.title {
+	white-space: nowrap;
+	color: #41456a;
+	display: flex;
+}
+.selected-payment {
+	opacity: 0.5;
+}
+.payment-method {
+	cursor: pointer;
+	margin-top: 20px;
+}
+
+.modal_form {
+	display: flex;
+	column-gap: 10px;
+	flex-direction: column;
+}
+.login-box {
+	width: 100%;
+	max-width: 470px;
+	position: relative;
+	z-index: 1;
+	overflow: scroll;
+	max-height: 480px;
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none;
+	overflow-x: "hidden";
+
+	.login-box__header {
+		background: linear-gradient(180deg, #ff5c5c 0%, #f10f0f 100%);
+		display: flex;
+		align-items: center;
+		padding: 30px;
+	}
+
+	.login-box__logo {
+		margin-right: 30px;
+
+		img {
+			width: 60px;
+			height: 60px;
+			display: block;
+		}
+	}
+	.login-box__title {
+		font-size: 20px;
+		font-weight: 700;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.25;
+		letter-spacing: normal;
+		color: #ffffff;
+		margin-bottom: 5px;
+	}
+	.login-box__subtitle {
+		font-size: 14px;
+		font-weight: 300;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.29;
+		letter-spacing: -0.2px;
+		color: rgba(255, 255, 255, 0.8);
+	}
+	.login-box__subtitle_register {
+		font-size: 16px;
+		font-weight: 300;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.29;
+		letter-spacing: -0.2px;
+		color: rgba(255, 255, 255, 1);
+		text-decoration: underline;
+	}
+	.login-box__subtitle_register:hover {
+		text-decoration: none;
+	}
+
+	.login-box__form {
+		background: rgba(255, 255, 255, 0.8);
+		padding: 45px 35px;
+
+		.form-field__group {
+			position: relative;
+			margin-bottom: 40px;
+
+			.form-field__label {
+				font-size: 16px;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: 1.28;
+				letter-spacing: normal;
+				color: #000000;
+				opacity: 0.8;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 15px;
+				margin: auto;
+				display: flex;
+				align-items: center;
+				pointer-events: none;
+				transition: all 0.1s ease-in-out;
+			}
+
+			.form-field__input {
+				font-size: 18px;
+				font-weight: 500;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: 1.28;
+				letter-spacing: normal;
+				color: #030852;
+				border: 0;
+				border-bottom: 1px solid #cccddc;
+				padding: 17px 15px;
+				width: 100%;
+				outline: none;
+			}
+
+			.form-field__input[type="password"] {
+				letter-spacing: 5px;
+			}
+
+			.form-field__error {
+				position: absolute;
+				color: red;
+			}
+
+			.form-field__password-show {
+				position: absolute;
+				top: 17px;
+				bottom: 0;
+				right: 17px;
+				width: 24px;
+				height: 24px;
+				// background-image: url("./icons/eye.svg");
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: contain;
+				cursor: pointer;
+			}
+
+			&.form-field__focused {
+				.form-field__label {
+					opacity: 0;
+					font-size: 12px;
+					line-height: 1.25;
+					transform: translateY(-30px);
+				}
+			}
+		}
+
+		.ant-btn {
+			border-radius: 4px;
+			height: 50px;
+			font-size: 14px;
+			font-weight: 500;
+			font-style: normal;
+			font-stretch: normal;
+			line-height: 1.71;
+			letter-spacing: normal;
+			border: none;
+			background: linear-gradient(180deg, #ff5c5c 0%, #f10f0f 100%);
+			&:hover {
+				background: linear-gradient(180deg, #ff5c5c 0%, #f10f0f 100%);
+			}
+		}
+	}
+}
