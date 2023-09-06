@@ -34,14 +34,14 @@ export default function index({ location, history, match }) {
 		showUpdateModal(true);
 	};
 
-	const onDeleteHandler = menuId => {
+	const onDeleteHandler = id => {
 		Modal.confirm({
 			title: t("Вы действительно хотите удалить?"),
 			okText: t("да"),
 			okType: "danger",
 			cancelText: t("нет"),
 			confirmLoading: true,
-			onOk: () => deleteAction(menuId)
+			onOk: () => deleteAction(id)
 		});
 	};
 
