@@ -4,28 +4,20 @@ import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./RecipeForm";
 
-const RecipeCreate = ({ showCreateModal, parent_id, lang, selected }) => {
+const RecipeCreate = ({ setCanUpdate, showCreateModal, parent_id, lang, selected }) => {
 	return (
-		<EntityForm.Main
+		<EntityForm.Default
 			method="post"
-			entity="dish-products"
-			name={`all-${parent_id}`}
 			url={`/${parent_id}/dish-products`}
-			appendData
-			primaryKey="id"
-			normalizeData={data => data}
 			params={{
 				extra: { _l: lang }
 			}}
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showCreateModal(false);
-				console.log(data);
-				window.location.reload();
+				setCanUpdate(prev => !prev)
 			}}
 			onError={data => {
-				console.log(data);
-				window.location.reload();
 			}}
 			fields={[
 				{
@@ -53,7 +45,7 @@ const RecipeCreate = ({ showCreateModal, parent_id, lang, selected }) => {
 					</Spin>
 				);
 			}}
-		</EntityForm.Main>
+		</EntityForm.Default>
 	);
 };
 

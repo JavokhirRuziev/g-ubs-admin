@@ -7,39 +7,25 @@ import get from "lodash/get";
 import axios from "axios";
 import config from "config";
 
-const RecipeUpdate = ({ selected, showUpdateModal, parent_id, lang }) => {
-	console.log(get(selected, "product.translate.name"));
-	console.log(selected);
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/${parent_id}/dish-products/`)
-			.then(res => console.log(res))
-			.catch(err => {
-				console.log(err);
-			});
-	}, []);
+const RecipeUpdate = ({ setCanUpdate,selected, showUpdateModal, parent_id, lang }) => {
+
 	return (
-		<EntityForm.Main
+		<EntityForm.Default
 			method="put"
-			entity="dish-products"
-			name={`all-${parent_id}`}
 			url={`/${parent_id}/dish-products/${get(selected, "id")}`}
-			primaryKey="id"
 			params={{
 				extra: { _l: lang }
 			}}
-			normalizeData={data => data}
-			id={get(selected, "id")}
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showUpdateModal(false);
-				window.location.reload();
+				setCanUpdate(prev => !prev)
 			}}
 			fields={[
 				{
 					name: "product_id",
 					onSubmitValue: value => value.id,
-					value: get(selected, "product.translate.name"),
+					value: get(selected, "product"),
 					required: true
 				},
 				{
@@ -64,7 +50,7 @@ const RecipeUpdate = ({ selected, showUpdateModal, parent_id, lang }) => {
 					</Spin>
 				);
 			}}
-		</EntityForm.Main>
+		</EntityForm.Default>
 	);
 };
 

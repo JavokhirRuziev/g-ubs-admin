@@ -24,6 +24,7 @@ const Recipe = ({ location }) => {
 	const [createModal, showCreateModal] = useState(false);
 	const [updateModal, showUpdateModal] = useState(false);
 	const [selected, setSelected] = useState(null);
+	const [canUpdate, setCanUpdate] = useState(false);
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 
 	const onDeleteHandler = productId => {
@@ -83,7 +84,8 @@ const Recipe = ({ location }) => {
 						showCreateModal,
 						parent_id: id,
 						lang: tabLang,
-						selected
+						selected,
+						setCanUpdate
 					}}
 				/>
 			</Modal>
@@ -101,7 +103,8 @@ const Recipe = ({ location }) => {
 						showUpdateModal,
 						parent_id: id,
 						lang: tabLang,
-						id
+						id,
+						setCanUpdate
 					}}
 				/>
 			</Modal>
@@ -122,7 +125,9 @@ const Recipe = ({ location }) => {
 				entity="dish-products"
 				name={`all-${id}`}
 				url={`${id}/dish-products`}
+				canUpdate={canUpdate}
 				params={{
+					sort: '-id',
 					extra: { _l: tabLang }
 				}}>
 				{({ items, isFetched, meta }) => {
