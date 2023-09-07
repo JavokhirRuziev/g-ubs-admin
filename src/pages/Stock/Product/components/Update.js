@@ -52,7 +52,7 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 								{
 									name: "stock_id",
 									required: true,
-									value: get(item, "count"),
+									value: get(item, "stock"),
 									onSubmitValue: value => value.id
 								},
 								{
@@ -60,21 +60,16 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 									required: true,
 									value: get(item, "order")
 								},
-								{
-									name: "is_active",
-									required: true,
-									value:
-										get(item, "is_active") === true ? 1 : 2
-								},
+
 								{
 									name: "product_category_id",
 									required: true,
-									value: get(item, "product_category_id")
+									value: get(item, "category.translate.name")
 								},
 								{
 									name: "unit_id",
 									required: true,
-									value: get(item, "unit_id"),
+									value: get(item, "unit"),
 									onSubmitValue: value => value.id
 								},
 								{
@@ -86,12 +81,18 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 									name: "average_quantity",
 									required: true,
 									value: get(item, "average_quantity")
+								},
+								{
+									name: "is_active",
+									required: true,
+									value: get(item, "is_active") ? 1 : 0
 								}
 							]}
 							updateData>
 							{({ isSubmitting, values, setFieldValue }) => {
 								return (
 									<Spin spinning={isSubmitting}>
+										{console.log(get(item, "is_active"))}
 										<Form
 											{...{
 												values,

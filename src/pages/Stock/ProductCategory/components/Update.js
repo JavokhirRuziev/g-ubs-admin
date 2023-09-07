@@ -4,23 +4,8 @@ import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./Form";
 import get from "lodash/get";
-import axios from "axios";
-import config from "config";
 
 const Update = ({ tabLang, selected, showUpdateModal }) => {
-	console.log(selected);
-	console.log(get(selected, "stock.translate.name"));
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/stocks?_l=ru&include=translate&_f=json`)
-			.then(res => {
-				const response = res.data.data;
-				console.log(get(response, "id"));
-			})
-			.catch(err => {
-				console.log(err);
-			});
-	}, []);
 	return (
 		<EntityForm.Main
 			method="put"
@@ -53,7 +38,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "stock_id",
 					required: true,
-					value: get(selected, "stock.translate.name"),
+					value: get(selected, "stock"),
 					onSubmitValue: value => value.id
 				},
 				{
@@ -64,7 +49,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "is_active",
 					required: true,
-					value: get(selected, "is_active")
+					value: get(selected, "is_active") ? 1 : 0
 				}
 			]}
 			updateData>
