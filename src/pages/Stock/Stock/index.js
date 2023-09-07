@@ -142,7 +142,6 @@ export default function index({ location, history }) {
 										rowKey="id"
 										onEdit={value => {
 											openEditModal(value);
-											console.log(value);
 										}}
 										onDelete={value =>
 											onDeleteHandler(value.id)

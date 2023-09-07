@@ -23,6 +23,7 @@ const Update = ({ location, history, match }) => {
 
 	const changeTab = value => {
 		history.push(`/dishes/update/${id}?lang=${value}`);
+		window.location.reload();
 	};
 
 	return (

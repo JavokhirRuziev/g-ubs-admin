@@ -2,12 +2,12 @@ import React from "react";
 
 import { Fields } from "components";
 import { Field } from "formik";
-import { Button } from "antd";
+import { Button, Switch } from "antd";
 import { useTranslation } from "react-i18next";
 
 import get from "lodash/get";
 
-const Form = ({ isUpdate, tabLang }) => {
+const Form = ({ isUpdate, tabLang, values, setFieldValue }) => {
 	const { t } = useTranslation("main");
 	const isActiveArr = [
 		{ name: "Неактивный", value: 0 },
@@ -61,14 +61,17 @@ const Form = ({ isUpdate, tabLang }) => {
 				label={t("Порядок")}
 				size="large"
 			/>
-			<Field
-				component={Fields.AntSelect}
-				name="is_active"
-				label={t("Статус")}
-				size="large"
-				allowClear
-				selectOptions={isActiveArr}
-			/>
+			<div className="d-flex align-items-center mb-24">
+				<Switch
+					onChange={value => {
+						setFieldValue("is_active", value);
+					}}
+					checked={values.is_active}
+				/>
+				<div className="ant-label mb-0 ml-10">
+					{t("Активный статус")}
+				</div>
+			</div>
 			<Button
 				type="primary"
 				size="large"

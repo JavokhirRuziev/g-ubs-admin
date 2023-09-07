@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./RecipeForm";
 import get from "lodash/get";
-import axios from "axios";
-import config from "config";
 
-const RecipeUpdate = ({ setCanUpdate,selected, showUpdateModal, parent_id, lang }) => {
-
+const RecipeUpdate = ({
+	setCanUpdate,
+	selected,
+	showUpdateModal,
+	parent_id,
+	lang
+}) => {
 	return (
 		<EntityForm.Default
 			method="put"
@@ -19,7 +22,7 @@ const RecipeUpdate = ({ setCanUpdate,selected, showUpdateModal, parent_id, lang 
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showUpdateModal(false);
-				setCanUpdate(prev => !prev)
+				setCanUpdate(prev => !prev);
 			}}
 			fields={[
 				{

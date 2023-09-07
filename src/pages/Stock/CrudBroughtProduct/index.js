@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Table, Board, Panel } from "components";
 import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
 import EntityContainer from "modules/entity/containers";
@@ -8,7 +8,6 @@ import Actions from "modules/entity/actions";
 
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import config from "config";
 import qs from "query-string";
 
@@ -26,7 +25,7 @@ export default function index({ location, history }) {
 	const dispatch = useDispatch();
 
 	const changeTab = value => {
-		history.push(`/stock/stock-brought-products?lang=${value}`);
+		history.push(`/stock/stock-brought-products/?lang=${value}`);
 	};
 
 	const openEditModal = value => {
@@ -142,7 +141,6 @@ export default function index({ location, history }) {
 										rowKey="id"
 										onEdit={value => {
 											openEditModal(value);
-											console.log(value);
 										}}
 										onDelete={value =>
 											onDeleteHandler(value.id)
@@ -171,7 +169,6 @@ export default function index({ location, history }) {
 												render: value => (
 													<div className="divider-wrapper">
 														{value}
-														{/* {console.log(value)} */}
 													</div>
 												)
 											},
@@ -216,10 +213,15 @@ export default function index({ location, history }) {
 												dataIndex: "",
 												render: value => (
 													<div className="divider-wrapper">
-														{
+														{value &&
+															value.stock &&
 															value.stock
-																.translate.name
-														}
+																.translate &&
+															value.stock
+																.translate
+																.name &&
+															value.stock
+																.translate.name}
 													</div>
 												)
 											},
@@ -228,7 +230,10 @@ export default function index({ location, history }) {
 												dataIndex: "",
 												render: value => (
 													<div className="divider-wrapper">
-														{value.user.name}
+														{value &&
+															value.user &&
+															value.user.name &&
+															value.user.name}
 													</div>
 												)
 											}

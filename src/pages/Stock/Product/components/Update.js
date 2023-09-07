@@ -92,7 +92,6 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 							{({ isSubmitting, values, setFieldValue }) => {
 								return (
 									<Spin spinning={isSubmitting}>
-										{console.log(get(item, "is_active"))}
 										<Form
 											{...{
 												values,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Table, Board, Panel } from "components";
 import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
 import EntityContainer from "modules/entity/containers";

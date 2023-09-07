@@ -144,7 +144,6 @@ export default function Form() {
 						})
 						.catch(err => {
 							setSubmitting(false);
-							console.log(err.response.data.errorMessage);
 							notification["error"]({
 								message:
 									err.response.data.errorMessage &&

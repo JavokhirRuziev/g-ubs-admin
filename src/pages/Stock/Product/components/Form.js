@@ -2,20 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { Fields } from "components";
 import { Field } from "formik";
-import { Button } from "antd";
+import { Button, Switch } from "antd";
 import { useTranslation } from "react-i18next";
 
 import axios from "axios";
 import config from "config";
 import get from "lodash/get";
 
-const Form = ({ isUpdate, tabLang, setFieldValue }) => {
+const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 	const { t } = useTranslation("main");
 	const [categories, setCategories] = useState([]);
-	const isActiveArr = [
-		{ name: "Неактивный", value: 0 },
-		{ name: "Активный", value: 1 }
-	];
 	const [stock, setStock] = useState();
 
 	useEffect(() => {
@@ -127,14 +123,19 @@ const Form = ({ isUpdate, tabLang, setFieldValue }) => {
 				size="large"
 			/>
 
-			<Field
-				component={Fields.AntSelect}
-				name="is_active"
-				label={t("Статус")}
-				size="large"
-				allowClear
-				selectOptions={isActiveArr}
-			/>
+			<div className="d-flex align-items-center mb-24">
+				<Switch
+					onChange={value => {
+						setFieldValue("is_active", value);
+					}}
+					checked={values.is_active}
+				/>
+				<div className="ant-label mb-0 ml-10">
+					{t("Активный статус")}
+				</div>
+			</div>
+
+			{console.log(values)}
 			<Button
 				type="primary"
 				size="large"

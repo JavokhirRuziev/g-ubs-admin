@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Spin, Tabs } from "antd";
 import { Board, Panel } from "components";
@@ -21,7 +21,6 @@ const Update = ({ location, history }) => {
 	const { lang } = query;
 	const profile = useSelector(state => state.auth.data.success);
 	const id = get(profile, "company_id");
-	const time_out = get(profile, "company.time_out");
 	const [tabLang, setTabLang] = useState(lang || "ru");
 
 	const changeTab = value => {
@@ -72,9 +71,7 @@ const Update = ({ location, history }) => {
 							updateData={true}
 							primaryKey="id"
 							normalizeData={data => data}
-							onSuccess={(data, resetForm) => {
-								console.log(data);
-							}}
+							onSuccess={(data, resetForm) => {}}
 							fields={[
 								{
 									name: "time_out",

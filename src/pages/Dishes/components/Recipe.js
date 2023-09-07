@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -110,7 +110,7 @@ const Recipe = ({ location }) => {
 			</Modal>
 
 			<div className="d-flex align-items-center justify-content-between mb-20">
-				<div className="ant-label">{t("Recipe")}</div>
+				<div className="ant-label">{t("Рецепт")}</div>
 				<Button
 					type="primary"
 					size="large"
@@ -127,7 +127,7 @@ const Recipe = ({ location }) => {
 				url={`${id}/dish-products`}
 				canUpdate={canUpdate}
 				params={{
-					sort: '-id',
+					sort: "-id",
 					extra: { _l: tabLang }
 				}}>
 				{({ items, isFetched, meta }) => {
