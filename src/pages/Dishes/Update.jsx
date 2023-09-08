@@ -103,6 +103,10 @@ const Update = ({ location, history, match }) => {
 									onSubmitValue: value => value && value.id
 								},
 								{
+									name: "order",
+									value: get(item, "order")
+								},
+								{
 									name: "file_id",
 									value: get(item, "file")
 										? [get(item, "file")]
@@ -178,6 +182,7 @@ const Update = ({ location, history, match }) => {
 							{({ isSubmitting, values, setFieldValue }) => {
 								return (
 									<Spin spinning={isSubmitting}>
+										{console.log(item)}
 										<Form
 											{...{
 												values,

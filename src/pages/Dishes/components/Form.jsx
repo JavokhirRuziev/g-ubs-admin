@@ -109,6 +109,15 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 					/>
 
 					<Field
+						component={Fields.AntInput}
+						name="order"
+						label={t("Порядок")}
+						size="large"
+						className={"mb-14"}
+						type="number"
+					/>
+
+					<Field
 						component={Fields.UploadImageManager}
 						name="file_id"
 						label={t("Фото")}

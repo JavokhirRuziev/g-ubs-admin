@@ -15,20 +15,27 @@ import Actions from "modules/entity/actions";
 
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
+import { Fields } from "components";
 
 import config from "config";
 import qs from "query-string";
 import get from "lodash/get";
+import { Field } from "formik";
 
 const List = ({ history, location }) => {
 	const query = qs.parse(location.search);
 	const { lang } = query;
+	const [search, setSearch] = useState();
 
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
+
+	const handleChange = e => {
+		setSearch(e.target.value);
+	};
 
 	const onDeleteHandler = menuId => {
 		Modal.confirm({
@@ -185,6 +192,15 @@ const List = ({ history, location }) => {
 		<>
 			<div className="d-flex justify-content-between align-items-center mb-20">
 				<div className="title-md">{t("Еды")}</div>
+				<div>
+					<Input
+						component={Fields.AntInput}
+						type="text"
+						value={search}
+						onChange={handleChange}
+					/>
+				</div>
+
 				<Button
 					type="primary"
 					size="large"
@@ -217,7 +233,7 @@ const List = ({ history, location }) => {
 						sort: "-id",
 						limit: 50,
 						include: "translate,file,unit",
-						extra: { _l: tabLang },
+						extra: { _l: tabLang, search: search },
 						page
 					}}>
 					{({ items, isFetched, meta }) => {

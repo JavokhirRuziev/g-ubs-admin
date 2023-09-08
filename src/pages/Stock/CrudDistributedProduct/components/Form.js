@@ -15,17 +15,28 @@ const Form = ({ isUpdate, tabLang }) => {
 				{isUpdate ? t("Изменить") : t("Добавить")}
 			</div>
 			<Field
-				component={Fields.AntInput}
-				name="count"
-				type="number"
-				placeholder={t("Введите количество")}
-				label={t("Количество")}
-				size="large"
+				component={Fields.AsyncSelect}
+				name="stock_id"
+				placeholder={t("Склад")}
+				label={t("Склад")}
+				isClearable
+				loadOptionsUrl={`/stocks`}
+				className="mb-20"
+				optionValue="id"
+				optionLabel={option => get(option, `translate.name`)}
+				loadOptionsParams={search => {
+					return {
+						extra: {
+							_l: tabLang
+						}
+					};
+				}}
 			/>
 			<Field
 				component={Fields.AsyncSelect}
 				name="product_id"
 				placeholder={t("Продукты")}
+				label={t("Продукты")}
 				isClearable
 				loadOptionsUrl={`/products`}
 				className="mb-20"
@@ -40,21 +51,12 @@ const Form = ({ isUpdate, tabLang }) => {
 				}}
 			/>
 			<Field
-				component={Fields.AsyncSelect}
-				name="stock_id"
-				placeholder={t("Склад")}
-				isClearable
-				loadOptionsUrl={`/stocks`}
-				className="mb-20"
-				optionValue="id"
-				optionLabel={option => get(option, `translate.name`)}
-				loadOptionsParams={search => {
-					return {
-						extra: {
-							_l: tabLang
-						}
-					};
-				}}
+				component={Fields.AntInput}
+				name="count"
+				type="number"
+				placeholder={t("Введите количество")}
+				label={t("Количество")}
+				size="large"
 			/>
 			<Button
 				type="primary"
