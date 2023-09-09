@@ -9,10 +9,6 @@ import get from "lodash/get";
 
 const Form = ({ isUpdate, tabLang, values, setFieldValue }) => {
 	const { t } = useTranslation("main");
-	const isActiveArr = [
-		{ name: "Неактивный", value: 0 },
-		{ name: "Активный", value: 1 }
-	];
 
 	return (
 		<div>

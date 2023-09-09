@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Board, Panel } from "components";
-import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
+import {
+	Button,
+	Pagination,
+	Spin,
+	Modal,
+	notification,
+	Tabs,
+	Input,
+	Select
+} from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/Update";
 import Actions from "modules/entity/actions";
+import { Fields } from "components";
 
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
+import axios from "axios";
+const { Option } = Select;
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
@@ -20,6 +32,23 @@ export default function index({ location, history }) {
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
+	const [search, setSearch] = useState({ category: "", stock: "" });
+	const [stock, setStock] = useState();
+
+	useEffect(() => {
+		axios
+			.get(`${config.API_ROOT}/stocks?_l=${tabLang}`)
+			.then(res => {
+				const categoryData = res.data.data;
+				const newCategories = categoryData.map(stock => ({
+					name: stock.translate && stock.translate.name,
+					value: stock.translate && stock.translate.stock_id
+				}));
+				setStock(newCategories);
+				console.log(categoryData);
+			})
+			.catch(err => console.log(err));
+	}, []);
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
@@ -107,6 +136,41 @@ export default function index({ location, history }) {
 				</Button>
 			</div>
 
+			<div
+				style={{
+					display: "flex",
+					marginBottom: "20px",
+					justifyContent: "center",
+					columnGap: "15px"
+				}}>
+				<div>
+					<Select
+						defaultValue={t("Склад")}
+						onChange={value =>
+							setSearch({ ...search, stock: value })
+						}
+						style={{ width: 200 }}>
+						{stock &&
+							stock.map(option => (
+								<Option key={option.value} value={option.value}>
+									{option.name}
+								</Option>
+							))}
+					</Select>
+				</div>
+				<div>
+					<Input
+						type="text"
+						value={search.category}
+						onChange={e =>
+							setSearch({ ...search, category: e.target.value })
+						}
+						placeholder="search"
+					/>
+				</div>
+				{console.log(search.stock, search.category)}
+			</div>
+
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
 					<Tabs
@@ -130,7 +194,11 @@ export default function index({ location, history }) {
 					url="/product-categories"
 					params={{
 						include: "translate",
-						extra: { _l: tabLang }
+						extra: {
+							_l: tabLang,
+							stock_id: search.stock,
+							search: search.category
+						}
 					}}>
 					{({ items, isFetched, meta }) => {
 						return (
