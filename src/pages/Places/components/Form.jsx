@@ -36,11 +36,29 @@ const Form = ({isUpdate, setFieldValue, values}) => {
             />
             <Field
                 component={Fields.AntInput}
+                name="tip"
+                type="text"
+                placeholder={t("0")}
+                label={t("% Обслуживание в заведении")}
+                size="large"
+            />
+            <Field
+                component={Fields.AntInput}
                 name="sort"
                 type="text"
                 placeholder={t("Сортировка")}
                 label={t("Сортировка")}
                 size="large"
+            />
+
+            <Field
+                component={Fields.UploadImageManager}
+                name="gallery"
+                label={t("Галерея")}
+                size="large"
+                className={"mb-14"}
+                isMulti={true}
+                limit={10}
             />
 
             <div className="d-flex align-items-center mb-20">

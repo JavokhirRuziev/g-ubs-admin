@@ -180,6 +180,14 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 							size="large"
 						/>
 						<Field
+							component={Fields.InputMaskField}
+							name="phone"
+							type="text"
+							mask="+\9\9\899 999-99-99"
+							label={t("Номер телефона")}
+							placeholder={t("Номер телефона")}
+						/>
+						<Field
 							component={Fields.UploadImageManager}
 							name="logo_id"
 							label={t("Логотип для чека")}
@@ -285,6 +293,8 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 							</div>
 						</div>
 
+						<div style={{height: '20px'}} />
+
 						<div className="d-flex align-items-center mb-24">
 							<Switch
 								onChange={value => {
@@ -332,6 +342,29 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 								{t("QR (Забронировать)")}
 							</div>
 						</div>
+
+						<div style={{height: '20px'}} />
+
+						<div className="d-flex align-items-center mb-24">
+							<Switch
+								onChange={value => {
+									setFieldValue('sahara', value)
+								}}
+								checked={values.sahara}
+							/>
+							<div className="ant-label mb-0 ml-10">{t('Saharlik')}</div>
+						</div>
+
+						<div className="d-flex align-items-center mb-24">
+							<Switch
+								onChange={value => {
+									setFieldValue('iftar', value)
+								}}
+								checked={values.iftar}
+							/>
+							<div className="ant-label mb-0 ml-10">{t('Iftar')}</div>
+						</div>
+
 						<div className="mb-24">
 							<div className="ant-label mb-10">
 								{t("Тайм-аут")}

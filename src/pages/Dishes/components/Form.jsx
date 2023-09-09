@@ -83,6 +83,28 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 				<Panel className="mb-20">
 					<Field
 						component={Fields.AsyncSelect}
+						name="recommended"
+						placeholder={t("Рекомендуемые")}
+						isClearable={true}
+						loadOptionsUrl="/dishes"
+						className={"mb-24"}
+						label={t("Рекомендуемый")}
+						isMulti={true}
+						isSearchable={true}
+						optionLabel={option => get(option, `translate.name`)}
+						loadOptionsParams={search => {
+							return {
+								include: 'translate',
+								filter: {status: 1},
+								extra: {
+									_l: lang,
+									search
+								}
+							};
+						}}
+					/>
+					<Field
+						component={Fields.AsyncSelect}
 						name="menus"
 						placeholder={t("Меню")}
 						isClearable={true}

@@ -34,7 +34,7 @@ const Update = ({ location, history, match }) => {
 			primaryKey="id"
 			id={id}
 			params={{
-				include: "translate,file,video,company,menus,kitchener,unit",
+				include: "recommended.translate,translate,file,video,company,menus,kitchener,unit",
 				extra: { _l: tabLang, append: "gallery0" }
 			}}>
 			{({ item, isFetched }) => {
@@ -173,10 +173,15 @@ const Update = ({ location, history, match }) => {
 											(prev, curr) => [...prev, curr.id],
 											[]
 										)
-								}
+								},
+								{
+									name: "recommended",
+									value: get(item, 'recommended'),
+									onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
+								},
 							]}
 							params={{
-								include: "translate,menus,file",
+								include: "translate,menus,file,recommended.translate",
 								extra: { _l: tabLang }
 							}}>
 							{({ isSubmitting, values, setFieldValue }) => {

@@ -23,15 +23,21 @@ const Create = ({showCreateModal}) => {
                     name: "company_id",
                     value: null,
                 },
+                {name: "tip", value: 0, type: 'number'},
                 {name: "title_ru", required: true},
                 {name: "title_uz", required: true},
                 {name: "title_en", required: true},
                 {name: "sort", type: 'number'},
-                {name: "status", value: true, onSubmitValue: value => value ? 1 : 0}
+                {name: "status", value: true, onSubmitValue: value => value ? 1 : 0},
+                {
+                    name: "gallery",
+                    value: [],
+                    onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
+                },
             ]}
             params={{
-                extra: {_l: 'ru'},
-                include: 'company'
+                include: 'company',
+                extra: {_l: 'ru', append: 'gallery0'},
             }}
         >
             {({isSubmitting, values, setFieldValue}) => {

@@ -42,6 +42,11 @@ const Create = ({location, history}) => {
           onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
         },
         {
+          name: "recommended",
+          value: [],
+          onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
+        },
+        {
           name: "kitchener_id",
           onSubmitValue: value => value && value.id
         },
@@ -91,7 +96,7 @@ const Create = ({location, history}) => {
         }
       ]}
       params={{
-        include: 'menus,file',
+        include: 'menus,file,recommended.translate',
         extra: {_l: lang}
       }}
     >

@@ -24,6 +24,7 @@ const Update = ({selected, showUpdateModal}) => {
                     name: "company_id",
                     value: null,
                 },
+                {name: "tip", value: get(selected, 'tip'), type: 'number'},
                 {name: "title_uz", required: true, value: get(selected, 'title_uz')},
                 {name: "title_ru", required: true, value: get(selected, 'title_ru')},
                 {name: "title_en", required: true, value: get(selected, 'title_en')},
@@ -32,10 +33,15 @@ const Update = ({selected, showUpdateModal}) => {
                     name: "status",
                     value: !!get(selected, 'status'),
                     onSubmitValue: value => value ? 1 : 0
-                }
+                },
+                {
+                    name: "gallery",
+                    value: get(selected, 'gallery0') ? get(selected, 'gallery0') : [],
+                    onSubmitValue: value => value.length > 0 ? value.reduce((prev, curr) => [...prev, curr.id], []).join(",") : null
+                },
             ]}
             params={{
-                extra: {_l: 'ru'},
+                extra: {_l: 'ru', append: 'gallery0'},
                 include: 'company'
             }}
             updateData

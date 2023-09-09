@@ -200,6 +200,20 @@ const Update = ({ location, history }) => {
 									onSubmitValue: value => (value ? 1 : 0)
 								},
 								{
+									name: "phone",
+									value: get(item, 'phone')
+								},
+								{
+									name: "sahara",
+									value: get(item, 'sahara') === 1,
+									onSubmitValue: value => value ? 1 : 0
+								},
+								{
+									name: "iftar",
+									value: get(item, 'iftar') === 1,
+									onSubmitValue: value => value ? 1 : 0
+								},
+								{
 									name: "table_order",
 									value: get(item, "table_order") === 1,
 									onSubmitValue: value => (value ? 1 : 0)

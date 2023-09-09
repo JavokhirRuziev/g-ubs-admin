@@ -90,7 +90,7 @@ const Form = ({isUpdate, setFieldValue, values}) => {
                         component={Fields.AntInput}
                         name="tip"
                         type="text"
-                        placeholder={t("Введите названию")}
+                        placeholder="0"
                         label={t("% Обслуживание в заведении")}
                         size="large"
                     />
