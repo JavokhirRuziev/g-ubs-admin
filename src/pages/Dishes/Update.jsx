@@ -34,12 +34,14 @@ const Update = ({ location, history, match }) => {
 			primaryKey="id"
 			id={id}
 			params={{
-				include: "translate,file,video,company,menus,kitchener,unit",
+				include:
+					"translate,file,video,company,menus,kitchener,unit,recommended",
 				extra: { _l: tabLang, append: "gallery0" }
 			}}>
 			{({ item, isFetched }) => {
 				return (
 					<Spin spinning={!isFetched}>
+						{console.log(item)}
 						<div className="title-md mb-20 mt-14">
 							{t("Изменить еду")}
 						</div>
@@ -173,10 +175,14 @@ const Update = ({ location, history, match }) => {
 											(prev, curr) => [...prev, curr.id],
 											[]
 										)
+								},
+								{
+									name: "recommended",
+									value: get(item, `recommended`)
 								}
 							]}
 							params={{
-								include: "translate,menus,file",
+								include: "recommended,translate,menus,file",
 								extra: { _l: tabLang }
 							}}>
 							{({ isSubmitting, values, setFieldValue }) => {
@@ -190,7 +196,8 @@ const Update = ({ location, history, match }) => {
 												setFieldValue,
 												isUpdate: true,
 												id: id,
-												location: location
+												location: location,
+												item
 											}}
 										/>
 									</Spin>

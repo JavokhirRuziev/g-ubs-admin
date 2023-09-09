@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Table, Board, Panel } from "components";
-import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
+import {
+	Button,
+	Pagination,
+	Spin,
+	Modal,
+	notification,
+	Tabs,
+	Input
+} from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/Update";
@@ -20,6 +28,11 @@ export default function index({ location, history }) {
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
+	const [search, setSearch] = useState();
+
+	const handleChange = e => {
+		setSearch(e.target.value);
+	};
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
@@ -106,6 +119,21 @@ export default function index({ location, history }) {
 					{t("Добавить")}
 				</Button>
 			</div>
+			<div
+				style={{
+					display: "flex",
+					marginBottom: "20px",
+					justifyContent: "center"
+				}}>
+				<div>
+					<Input
+						type="text"
+						value={search}
+						onChange={handleChange}
+						placeholder="search"
+					/>
+				</div>
+			</div>
 
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
@@ -130,7 +158,7 @@ export default function index({ location, history }) {
 					url="/stocks"
 					params={{
 						include: "translate",
-						extra: { _l: tabLang }
+						extra: { _l: tabLang, search: search }
 					}}>
 					{({ items, isFetched, meta }) => {
 						return (

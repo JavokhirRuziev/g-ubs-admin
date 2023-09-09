@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Fields, Panel } from "components";
 import { Field } from "formik";
@@ -8,9 +8,20 @@ import Ingredients from "./Ingredients";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import Recipe from "./Recipe";
+import axios from "axios";
+import config from "config";
 
-const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
+const Form = ({
+	isUpdate,
+	setFieldValue,
+	values,
+	lang,
+	id,
+	location,
+	item
+}) => {
 	const { t } = useTranslation("main");
+	const [option_s, setOptions] = useState([]);
 
 	return (
 		<div className="row">
@@ -81,6 +92,26 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 			</div>
 			<div className="col-xl-4 col-md-12">
 				<Panel className="mb-20">
+					<Field
+						component={Fields.AsyncSelect}
+						name="recommended"
+						placeholder={t("Рекомендация")}
+						isClearable={true}
+						loadOptionsUrl="/products"
+						className={"mb-24"}
+						label={t("Рекомендация")}
+						isMulti={true}
+						optionLabel={option => get(option, `translate.name`)}
+						loadOptionsParams={search => {
+							return {
+								extra: {
+									_l: lang,
+									include: "translate"
+								}
+							};
+						}}
+					/>
+
 					<Field
 						component={Fields.AsyncSelect}
 						name="menus"
