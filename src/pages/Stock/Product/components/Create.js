@@ -32,8 +32,7 @@ const Create = ({ tabLang, showCreateModal }) => {
 				},
 				{
 					name: "product_category_id",
-					required: true,
-					onSubmitValue: value => value.id
+					required: true
 				},
 				{
 					name: "unit_id",

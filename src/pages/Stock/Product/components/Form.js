@@ -77,6 +77,9 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 				label={t("Категория")}
 				size={"large"}
 				allowClear
+				onChange={option =>
+					setFieldValue("product_category_id", option)
+				}
 				selectOptions={categories}
 			/>
 			<Field
