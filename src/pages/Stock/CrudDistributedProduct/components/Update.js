@@ -33,8 +33,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "product_id",
 					required: true,
-					value: get(selected, "product"),
-					onSubmitValue: value => value.id
+					value: get(selected, "product")
 				},
 				{
 					name: "stock_id",

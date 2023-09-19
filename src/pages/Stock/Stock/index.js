@@ -107,33 +107,26 @@ export default function index({ location, history }) {
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal, tabLang }} />
 			</Modal>
-
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Ед. изм")}</div>
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() => showCreateModal(true)}>
-					{t("Добавить")}
-				</Button>
-			</div>
-			<div
-				style={{
-					display: "flex",
-					marginBottom: "20px",
-					justifyContent: "center"
-				}}>
-				<div>
-					<Input
-						type="text"
-						value={search}
-						onChange={handleChange}
-						placeholder="search"
-					/>
+			<Board className="mb-40 mt-20">
+				<div className="d-flex justify-content-between align-items-center pad-10">
+					<div>
+						<Input
+							type="text"
+							value={search}
+							onChange={handleChange}
+							placeholder={t("Поиск")}
+						/>
+					</div>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() => showCreateModal(true)}>
+						{t("Добавить")}
+					</Button>
 				</div>
-			</div>
+			</Board>
 
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
@@ -158,9 +151,18 @@ export default function index({ location, history }) {
 					url="/stocks"
 					params={{
 						include: "translate",
-						extra: { _l: tabLang, search: search }
+						extra: {
+							_l: tabLang,
+							search: search
+						}
 					}}>
 					{({ items, isFetched, meta }) => {
+						const filteredItems = search
+							? items.filter(item =>
+									item.translate.name.includes(search)
+							  )
+							: items;
+
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -178,8 +180,7 @@ export default function index({ location, history }) {
 											{
 												title: t("No"),
 												dataIndex: `id`,
-												className:
-													"text-align-left w-82",
+												className: `text-align-left w-82`,
 												render: value => {
 													return (
 														<div className="divider-wrapper">
@@ -212,7 +213,7 @@ export default function index({ location, history }) {
 												)
 											}
 										]}
-										dataSource={items}
+										dataSource={filteredItems}
 									/>
 								</div>
 								{meta && meta.perPage && (

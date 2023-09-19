@@ -27,8 +27,7 @@ const Create = ({ tabLang, showCreateModal }) => {
 				{ name: "price", required: true },
 				{
 					name: "product_id",
-					required: true,
-					onSubmitValue: value => value.id
+					required: true
 				},
 				{
 					name: "stock_id",

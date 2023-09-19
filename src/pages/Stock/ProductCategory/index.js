@@ -37,7 +37,7 @@ export default function index({ location, history }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}`)
+			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData.map(stock => ({
@@ -45,7 +45,6 @@ export default function index({ location, history }) {
 					value: stock.translate && stock.translate.stock_id
 				}));
 				setStock(newCategories);
-				console.log(categoryData);
 			})
 			.catch(err => console.log(err));
 	}, []);
@@ -123,53 +122,56 @@ export default function index({ location, history }) {
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal, tabLang }} />
 			</Modal>
-
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Ед. изм")}</div>
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() => showCreateModal(true)}>
-					{t("Добавить")}
-				</Button>
-			</div>
-
-			<div
-				style={{
-					display: "flex",
-					marginBottom: "20px",
-					justifyContent: "center",
-					columnGap: "15px"
-				}}>
-				<div>
-					<Select
-						defaultValue={t("Склад")}
-						onChange={value =>
-							setSearch({ ...search, stock: value })
-						}
-						style={{ width: 200 }}>
-						{stock &&
-							stock.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
+			<Board className="mb-40 mt-20">
+				<div className="d-flex justify-content-between align-items-center pad-10">
+					<div
+						style={{
+							display: "flex",
+							columnGap: "10px",
+							flexWrap: "wrap"
+						}}>
+						<div>
+							<Select
+								placeholder={t("Склад")}
+								onChange={value =>
+									setSearch({ ...search, stock: value })
+								}
+								allowClear
+								style={{ width: 200 }}>
+								{stock &&
+									stock.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
+						<div>
+							<Input
+								type="text"
+								value={search.category}
+								onChange={e =>
+									setSearch({
+										...search,
+										category: e.target.value
+									})
+								}
+								placeholder={t("Поиск")}
+							/>
+						</div>
+					</div>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() => showCreateModal(true)}>
+						{t("Добавить")}
+					</Button>
 				</div>
-				<div>
-					<Input
-						type="text"
-						value={search.category}
-						onChange={e =>
-							setSearch({ ...search, category: e.target.value })
-						}
-						placeholder="search"
-					/>
-				</div>
-				{console.log(search.stock, search.category)}
-			</div>
+			</Board>
 
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
@@ -193,7 +195,7 @@ export default function index({ location, history }) {
 					name={`all`}
 					url="/product-categories"
 					params={{
-						include: "translate",
+						include: "translate,stock",
 						extra: {
 							_l: tabLang,
 							stock_id: search.stock,
@@ -201,6 +203,23 @@ export default function index({ location, history }) {
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
+						const filteredItems = items.filter(item => {
+							if (search.category) {
+								return item.translate.name.includes(
+									search.category
+								);
+							}
+
+							if (search.stock) {
+								return (
+									Number(item.stock_id) ===
+									Number(search.stock)
+								);
+							}
+
+							return true; // If neither category nor stock filter is provided, include the item.
+						});
+
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -278,7 +297,7 @@ export default function index({ location, history }) {
 												)
 											}
 										]}
-										dataSource={items}
+										dataSource={filteredItems}
 									/>
 								</div>
 								{meta && meta.perPage && (

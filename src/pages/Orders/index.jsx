@@ -13,54 +13,55 @@ import variables from "../../variables";
 import "../Dashboard/style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import Actions from "../../modules/entity/actions";
-import ExcelIcon from "assets/images/icons/excel-icon.svg"
-import DangerSignalIcon from "assets/images/icons/danger-signal.svg"
+import ExcelIcon from "assets/images/icons/excel-icon.svg";
+import DangerSignalIcon from "assets/images/icons/danger-signal.svg";
 import axios from "axios";
-import config from "config"
-import KillModal from "./Kill"
+import config from "config";
+import KillModal from "./Kill";
 import MobFilter from "./MobFilter";
-import ViewModal from "./components/viewModal"
+import ViewModal from "./components/viewModal";
 
-const Index = ({location, history}) => {
+const Index = ({ location, history }) => {
 	const dispatch = useDispatch();
-	const {t} = useTranslation("main");
+	const { t } = useTranslation("main");
 	const [statistic, setStatistic] = useState([]);
 	const [selected, setSelected] = useState(null);
 	const [viewModal, showViewModal] = useState(false);
 	const [killModal, showKillModal] = useState(false);
 	const [filterModal, showFilterModal] = useState(false);
-	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+	const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 	const windowWidth = useSelector(state => state.system.width);
 
 	const page = params.page;
-	const setPage = (page) => {
+	const setPage = page => {
 		history.push({
-			search: qs.stringify({...params, page}, {encode: false})
-		})
-	}
+			search: qs.stringify({ ...params, page }, { encode: false })
+		});
+	};
 
 	useEffect(() => {
-		dispatch(Actions.LoadDefault.request({
-			url: '/dashboard/payment-reports',
-			params: {
-				filter: {
-					'orders.status': params.status && params.status,
-					'orders.type': params.type && params.type,
+		dispatch(
+			Actions.LoadDefault.request({
+				url: "/dashboard/payment-reports",
+				params: {
+					filter: {
+						"orders.status": params.status && params.status,
+						"orders.type": params.type && params.type
+					},
+					extra: {
+						start_date: params.start_at && params.start_at,
+						end_date: params.end_at && params.end_at
+					}
 				},
-				extra: {
-					start_date: params.start_at && params.start_at,
-					end_date: params.end_at && params.end_at
+				cb: {
+					success: data => {
+						setStatistic(data);
+					},
+					error: () => {}
 				}
-			},
-			cb: {
-				success: (data) => {
-					setStatistic(data)
-				},
-				error: () => {},
-			}
-		}))
-	}, [params.type, params.status, params.start_at, params.end_at])
-
+			})
+		);
+	}, [params.type, params.status, params.start_at, params.end_at]);
 
 	const cash = statistic.find(a => a.payment_type === 1);
 	const payme = statistic.find(a => a.payment_type === 2);
@@ -76,25 +77,28 @@ const Index = ({location, history}) => {
 					"orders.status": params.status
 				},
 				extra: {
-					dish_id: params.dish_id && params.dish_id.split('/')[0],
+					dish_id: params.dish_id && params.dish_id.split("/")[0],
 					start_date: params.start_at,
-					end_date: params.end_at,
-
+					end_date: params.end_at
 				}
 			}), //your url
-			method: 'GET',
-			responseType: 'blob', // important
-		}).then((response) => {
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', 'report.xlsx'); //or any other extension
-			document.body.appendChild(link);
-			link.click();
-			// setSubmitting(false);
-		}).catch(function (error) {
-			// setSubmitting(false);
-		});
+			method: "GET",
+			responseType: "blob" // important
+		})
+			.then(response => {
+				const url = window.URL.createObjectURL(
+					new Blob([response.data])
+				);
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", "report.xlsx"); //or any other extension
+				document.body.appendChild(link);
+				link.click();
+				// setSubmitting(false);
+			})
+			.catch(function(error) {
+				// setSubmitting(false);
+			});
 	};
 
 	return (
@@ -110,9 +114,8 @@ const Index = ({location, history}) => {
 				footer={null}
 				centered
 				width={430}
-				destroyOnClose
-			>
-				<KillModal {...{showKillModal}}/>
+				destroyOnClose>
+				<KillModal {...{ showKillModal }} />
 			</Modal>
 
 			<Modal
@@ -121,16 +124,15 @@ const Index = ({location, history}) => {
 				footer={null}
 				centered
 				width={700}
-				destroyOnClose
-			>
-				<ViewModal {...{selected, showViewModal}}/>
+				destroyOnClose>
+				<ViewModal {...{ selected, showViewModal }} />
 			</Modal>
 
 			<Board className="border-none mb-30">
-				{(windowWidth > 1250) ? (
-					<Filter/>
+				{windowWidth > 1250 ? (
+					<Filter />
 				) : (
-					<MobFilter {...{filterModal, showFilterModal}}/>
+					<MobFilter {...{ filterModal, showFilterModal }} />
 				)}
 
 				<EntityContainer.All
@@ -139,130 +141,208 @@ const Index = ({location, history}) => {
 					url="/dashboard/orders"
 					params={{
 						limit: 100,
-						include: "user,waiter,payments,goods",
+						include: "user,waiter,payments,goods,booking",
 						page: page ? page : 1,
 						filter: {
 							status: params.status && params.status,
 							type: params.type && params.type,
-							order_number: params.order_number && params.order_number
+							order_number:
+								params.order_number && params.order_number
 						},
 						extra: {
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
-							dish_id: params.dish_id && params.dish_id.split('/')[0]
+							dish_id:
+								params.dish_id && params.dish_id.split("/")[0]
 						}
-					}}
-				>
+					}}>
 					{({ items, isFetched, meta }) => {
-						const currentPage = get(meta, 'currentPage');
-						const perPage = get(meta, 'perPage');
+						const currentPage = get(meta, "currentPage");
+						const perPage = get(meta, "perPage");
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
 									<Table
 										onRowClick={row => {
 											setSelected(row);
-											showViewModal(true)
+											showViewModal(true);
 										}}
-										rowClassName={'cursor-pointer'}
+										rowClassName={"cursor-pointer"}
 										rowKey="id"
 										columns={[
 											{
 												title: "№",
 												className: "w-100",
-												render: (value,row,index) => {
-													const a = Number(currentPage-1)*Number(perPage);
-													const n = currentPage > 1 ? a+index+1 : index+1
+												render: (value, row, index) => {
+													const a =
+														Number(
+															currentPage - 1
+														) * Number(perPage);
+													const n =
+														currentPage > 1
+															? a + index + 1
+															: index + 1;
 													return (
-														<div className="divider-wrapper">{n}</div>
-													)
+														<div className="divider-wrapper">
+															{n}
+														</div>
+													);
 												}
 											},
 											{
 												title: t("Номер заказаa"),
 												dataIndex: "order_number",
 												className: "w-100",
-												render: value => <div className="divider-wrapper">{value}</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{value}
+													</div>
+												)
 											},
 											{
 												title: t("Дата"),
 												dataIndex: "created_at",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{helpers.formatDate(value, "HH:mm / DD.MM.YYYY")}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{helpers.formatDate(
+															value,
+															"HH:mm / DD.MM.YYYY"
+														)}
+													</div>
+												)
 											},
 											{
 												title: t("Тип"),
 												dataIndex: "type",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{helpers.getOrderType(value)}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{helpers.getOrderType(
+															value
+														)}
+													</div>
+												)
 											},
 											{
-												title: t('Официант'),
+												title: t("Официант"),
 												dataIndex: "waiter",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{value ? get(value, 'to_user.name') : '-'}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{value
+															? get(
+																	value,
+																	"to_user.name"
+															  )
+															: "-"}
+													</div>
+												)
 											},
 											{
 												title: t("Клиент"),
 												dataIndex: "user",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{get(value, "phone")}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{get(value, "phone")}
+													</div>
+												)
 											},
 											{
 												title: t("Цена доставки"),
 												dataIndex: "delivery_price",
 												className: "",
-												render: (value,row) => <div className="divider-wrapper">
-													{row.type === variables.TYPE_DELIVERY ? <span>{value ? value.toLocaleString() : '-'}</span> : '-'}
-												</div>
+												render: (value, row) => (
+													<div className="divider-wrapper">
+														{row.type ===
+														variables.TYPE_DELIVERY ? (
+															<span>
+																{value
+																	? value.toLocaleString()
+																	: "-"}
+															</span>
+														) : (
+															"-"
+														)}
+													</div>
+												)
 											},
 											{
 												title: t("Цена обслуги"),
 												dataIndex: "tip_price",
 												className: "",
-												render: (value) => <div className="divider-wrapper">
-													<span>{value ? value.toLocaleString() : '-'}</span>
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														<span>
+															{value
+																? value.toLocaleString()
+																: "-"}
+														</span>
+													</div>
+												)
 											},
 											{
 												title: t("Тип оплаты"),
 												dataIndex: "payments",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{(Array.isArray(value) && value.length > 0) ? (
-														value.map(v => (
-															<div className="d-flex">
-																<span>{helpers.getPaymentType(v.payment_type)}</span>
-																<span className="ml-10" style={{opacity: '.6'}}>{v.amount.toLocaleString()}</span>
-															</div>
-														))
-													) : '-'}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{Array.isArray(value) &&
+														value.length > 0
+															? value.map(v => (
+																	<div className="d-flex">
+																		<span>
+																			{helpers.getPaymentType(
+																				v.payment_type
+																			)}
+																		</span>
+																		<span
+																			className="ml-10"
+																			style={{
+																				opacity:
+																					".6"
+																			}}>
+																			{v.amount.toLocaleString()}
+																		</span>
+																	</div>
+															  ))
+															: "-"}
+													</div>
+												)
 											},
 											{
 												title: t("Цена"),
 												dataIndex: "total_sum",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													{value ? value.toLocaleString() : "-"}
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														{value
+															? value.toLocaleString()
+															: "-"}
+													</div>
+												)
 											},
 											{
 												title: t("Статус"),
 												dataIndex: "status",
 												className: "",
-												render: value => <div className="divider-wrapper">
-													<Tag
-														color={helpers.getOrderStatus(value).color}>{helpers.getOrderStatus(value).label}</Tag>
-												</div>
+												render: value => (
+													<div className="divider-wrapper">
+														<Tag
+															color={
+																helpers.getOrderStatus(
+																	value
+																).color
+															}>
+															{
+																helpers.getOrderStatus(
+																	value
+																).label
+															}
+														</Tag>
+													</div>
+												)
 											}
 										]}
 										dataSource={items}
@@ -271,14 +351,24 @@ const Index = ({location, history}) => {
 								{meta && meta.perPage && (
 									<div className="pagination-foot-buttons">
 										<div className="d-flex">
-											<div className="download-excel-btn" onClick={downloadReport}>
+											<div
+												className="download-excel-btn"
+												onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
-												<button>
-													{t("Отчёт")}
-												</button>
+												<button>{t("Отчёт")}</button>
 											</div>
-											<div className="download-excel-btn ml-10" style={{backgroundColor: '#ff9800'}} onClick={() => showKillModal(true)}>
-												<img src={DangerSignalIcon} alt="" />
+											<div
+												className="download-excel-btn ml-10"
+												style={{
+													backgroundColor: "#ff9800"
+												}}
+												onClick={() =>
+													showKillModal(true)
+												}>
+												<img
+													src={DangerSignalIcon}
+													alt=""
+												/>
 												<button className="ml-10">
 													#unknown
 												</button>
@@ -288,7 +378,9 @@ const Index = ({location, history}) => {
 											current={meta.currentPage}
 											pageSize={meta.perPage}
 											total={meta.totalCount}
-											onChange={newPage => setPage(newPage)}
+											onChange={newPage =>
+												setPage(newPage)
+											}
 										/>
 									</div>
 								)}
@@ -302,14 +394,21 @@ const Index = ({location, history}) => {
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
-							<div className="dashboard-card__label">{t("Наличние")}</div>
+							<div className="dashboard-card__label">
+								{t("Наличние")}
+							</div>
 							<div className="dashboard-card__num">
-								<span>{cash ? cash.amount.toLocaleString() : 0}</span>
+								<span>
+									{cash ? cash.amount.toLocaleString() : 0}
+								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
-							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+							<img
+								src={require("../Dashboard/dashboard-icon.svg")}
+								alt=""
+							/>
 						</div>
 					</div>
 				</div>
@@ -318,12 +417,17 @@ const Index = ({location, history}) => {
 						<div>
 							<div className="dashboard-card__label">Payme</div>
 							<div className="dashboard-card__num">
-								<span>{payme ? payme.amount.toLocaleString() : 0}</span>
+								<span>
+									{payme ? payme.amount.toLocaleString() : 0}
+								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
-							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+							<img
+								src={require("../Dashboard/dashboard-icon.svg")}
+								alt=""
+							/>
 						</div>
 					</div>
 				</div>
@@ -332,26 +436,40 @@ const Index = ({location, history}) => {
 						<div>
 							<div className="dashboard-card__label">Click</div>
 							<div className="dashboard-card__num">
-								<span>{click ? click.amount.toLocaleString() : 0}</span>
+								<span>
+									{click ? click.amount.toLocaleString() : 0}
+								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
-							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+							<img
+								src={require("../Dashboard/dashboard-icon.svg")}
+								alt=""
+							/>
 						</div>
 					</div>
 				</div>
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
 					<div className="dashboard-card">
 						<div>
-							<div className="dashboard-card__label">{t("Терминал")}</div>
+							<div className="dashboard-card__label">
+								{t("Терминал")}
+							</div>
 							<div className="dashboard-card__num">
-								<span>{terminal ? terminal.amount.toLocaleString() : 0}</span>
+								<span>
+									{terminal
+										? terminal.amount.toLocaleString()
+										: 0}
+								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
 						<div>
-							<img src={require("../Dashboard/dashboard-icon.svg")} alt="" />
+							<img
+								src={require("../Dashboard/dashboard-icon.svg")}
+								alt=""
+							/>
 						</div>
 					</div>
 				</div>

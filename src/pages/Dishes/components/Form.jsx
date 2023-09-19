@@ -33,11 +33,25 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						placeholder={t("Введите описания")}
 					/>
 					<div className="row">
-						<div className="col-lg-6 col-12">
+						{values.cost_price ? (
+							<div className="col-lg-3 col-12">
+								<Field
+									component={Fields.AntInput}
+									name="cost_price"
+									type="number"
+									label={t("Себестоимость")}
+									size="large"
+									disabled={true}
+								/>
+							</div>
+						) : (
+							""
+						)}
+						<div className="col-lg-3 col-12">
 							<Field
 								component={Fields.AntInput}
 								name="price"
-								type="text"
+								type="number"
 								placeholder={t("Введите цену")}
 								label={t("Цена")}
 								size="large"
@@ -94,8 +108,8 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						optionLabel={option => get(option, `translate.name`)}
 						loadOptionsParams={search => {
 							return {
-								include: 'translate',
-								filter: {status: 1},
+								include: "translate",
+								filter: { status: 1 },
 								extra: {
 									_l: lang,
 									search

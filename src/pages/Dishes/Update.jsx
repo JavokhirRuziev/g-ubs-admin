@@ -34,7 +34,8 @@ const Update = ({ location, history, match }) => {
 			primaryKey="id"
 			id={id}
 			params={{
-				include: "recommended.translate,translate,file,video,company,menus,kitchener,unit",
+				include:
+					"recommended.translate,translate,file,video,company,menus,kitchener,unit",
 				extra: { _l: tabLang, append: "gallery0" }
 			}}>
 			{({ item, isFetched }) => {
@@ -78,6 +79,11 @@ const Update = ({ location, history, match }) => {
 								{
 									name: "company_id",
 									value: null
+								},
+								{
+									name: "cost_price",
+									value: get(item, "cost_price"),
+									type: "number"
 								},
 								{
 									name: "price",
@@ -176,12 +182,18 @@ const Update = ({ location, history, match }) => {
 								},
 								{
 									name: "recommended",
-									value: get(item, 'recommended'),
-									onSubmitValue: value => value && value.reduce((prev,curr) => [...prev, curr.id], [])
-								},
+									value: get(item, "recommended"),
+									onSubmitValue: value =>
+										value &&
+										value.reduce(
+											(prev, curr) => [...prev, curr.id],
+											[]
+										)
+								}
 							]}
 							params={{
-								include: "translate,menus,file,recommended.translate",
+								include:
+									"translate,menus,file,recommended.translate",
 								extra: { _l: tabLang }
 							}}>
 							{({ isSubmitting, values, setFieldValue }) => {

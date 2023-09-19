@@ -291,6 +291,16 @@ const List = ({ history, location }) => {
 												)
 											},
 											{
+												title: t("Себестоимость"),
+												dataIndex: "cost_price",
+												className: "min-w-200",
+												render: value => (
+													<div className="divider-wrapper">
+														{value}
+													</div>
+												)
+											},
+											{
 												title: t("Ед изм"),
 												dataIndex: "unit",
 												render: value => (
@@ -317,7 +327,9 @@ const List = ({ history, location }) => {
 												title: t("Кол-во"),
 												dataIndex: "quantity",
 												render: (value, values) =>
-													values.countable === 1 ? (
+													Number.parseFloat(
+														values.countable
+													) === 1 ? (
 														<div>
 															<Input
 																placeholder={t(
@@ -361,10 +373,11 @@ const List = ({ history, location }) => {
 																}
 																style={{
 																	backgroundColor:
-																		value ===
-																		1
-																			? "#4caf50"
-																			: "#f44336"
+																		Number.parseFloat(
+																			value
+																		) === 0
+																			? "#f44336"
+																			: "#4caf50"
 																}}
 															/>
 														</div>

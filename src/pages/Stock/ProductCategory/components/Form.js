@@ -42,6 +42,7 @@ const Form = ({ isUpdate, tabLang, values, setFieldValue }) => {
 				optionLabel={option => get(option, `translate.name`)}
 				loadOptionsParams={search => {
 					return {
+						include: "translate",
 						extra: {
 							_l: tabLang
 						}

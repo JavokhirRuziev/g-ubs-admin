@@ -16,7 +16,9 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/product-categories?_l=${tabLang}`)
+			.get(
+				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate`
+			)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData
@@ -65,6 +67,7 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 				onChange={option => setStock(option.translate.stock_id)}
 				loadOptionsParams={search => {
 					return {
+						include: "translate",
 						extra: {
 							_l: tabLang
 						}

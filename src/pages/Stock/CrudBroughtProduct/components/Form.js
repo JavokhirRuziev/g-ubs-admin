@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Fields } from "components";
 import { Field } from "formik";
 import { Button } from "antd";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
+import axios from "axios";
+import config from "config";
 
-const Form = ({ isUpdate, tabLang }) => {
+const Form = ({ isUpdate, tabLang, setFieldValue }) => {
 	const { t } = useTranslation("main");
+	const [stock_id, setStock_id] = useState();
+	const [product, setProduct] = useState();
+
+	useEffect(() => {
+		axios
+			.get(
+				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category`
+			)
+			.then(res => {
+				const categoryData = res.data.data;
+				const newCategories = categoryData
+					.filter(item => {
+						if (item.stock_id === stock_id) {
+							return item;
+						}
+					})
+					.map(category => ({
+						name: category.translate && category.translate.name,
+						value: category && category.id
+					}));
+				setProduct(newCategories);
+			})
+			.catch(err => console.log(err));
+	}, [stock_id]);
 
 	return (
 		<div>
@@ -24,31 +50,28 @@ const Form = ({ isUpdate, tabLang }) => {
 				className="mb-20"
 				optionValue="id"
 				optionLabel={option => get(option, `translate.name`)}
+				onChange={option => {
+					setFieldValue("stock_id", option);
+					setStock_id(option && option.id);
+				}}
 				loadOptionsParams={search => {
 					return {
+						include: "translate",
 						extra: {
 							_l: tabLang
 						}
 					};
 				}}
 			/>
+
 			<Field
-				component={Fields.AsyncSelect}
+				component={Fields.AntSelect}
 				name="product_id"
-				placeholder={t("Продукты")}
 				label={t("Продукты")}
-				isClearable
-				loadOptionsUrl={`/products`}
-				className="mb-20"
-				optionValue="id"
-				optionLabel={option => get(option, `translate.name`)}
-				loadOptionsParams={search => {
-					return {
-						extra: {
-							_l: tabLang
-						}
-					};
-				}}
+				size={"large"}
+				allowClear
+				onChange={option => setFieldValue("product_id", option)}
+				selectOptions={product}
 			/>
 			<Field
 				component={Fields.AntInput}

@@ -50,7 +50,7 @@ export default function index({ location, history }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}`)
+			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData.map(stock => ({
@@ -77,7 +77,9 @@ export default function index({ location, history }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/product-categories?_l=${tabLang}`)
+			.get(
+				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
+			)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData
@@ -102,7 +104,9 @@ export default function index({ location, history }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/products?_l=${tabLang}`)
+			.get(
+				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category`
+			)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData
@@ -189,84 +193,57 @@ export default function index({ location, history }) {
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal, tabLang }} />
 			</Modal>
+			<Board className="mb-40 mt-20">
+				<div className="d-flex justify-content-between align-items-center pad-10">
+					<div
+						style={{
+							display: "flex",
+							columnGap: "10px",
+							rowGap: "10px",
+							flexWrap: "wrap",
+							width: "80%"
+						}}>
+						<div>
+							<Select
+								placeholder={t("Склад")}
+								onChange={value => {
+									setSearch({ ...search, stock: value });
+								}}
+								allowClear
+								style={{ width: 200 }}>
+								{stock &&
+									stock.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}
+											onClick={() =>
+												setStock_id(option.stock_id)
+											}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
+						<div>
+							<Select
+								placeholder={t("Продукты")}
+								onChange={value =>
+									setSearch({ ...search, product: value })
+								}
+								allowClear
+								style={{ width: 200 }}>
+								{product &&
+									product.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
 
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Ед. изм")}</div>
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() => showCreateModal(true)}>
-					{t("Добавить")}
-				</Button>
-			</div>
-
-			<div
-				style={{
-					display: "flex",
-					marginBottom: "20px",
-					justifyContent: "center",
-					columnGap: "15px"
-				}}>
-				<div>
-					<Select
-						defaultValue={t("Склад")}
-						onChange={value => {
-							setSearch({ ...search, stock: value });
-						}}
-						style={{ width: 200 }}>
-						{stock &&
-							stock.map(option => (
-								<Option
-									key={option.value}
-									value={option.value}
-									onClick={() =>
-										setStock_id(option.stock_id)
-									}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div>
-				<div>
-					<Select
-						defaultValue={t("Категория")}
-						onChange={value =>
-							setSearch({ ...search, category: value })
-						}
-						style={{ width: 200 }}>
-						{category &&
-							category.map(option => (
-								<Option
-									key={option.value}
-									value={option.value}
-									onClick={() =>
-										setProduct_category_id(option.value)
-									}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div>
-
-				<div>
-					<Select
-						defaultValue={t("Продукт")}
-						onChange={value =>
-							setSearch({ ...search, product: value })
-						}
-						style={{ width: 200 }}>
-						{product &&
-							product.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div>
-
-				{/* <div>
+						{/* <div>
 					<Select
 						defaultValue={"unit"}
 						onChange={value => {
@@ -282,72 +259,112 @@ export default function index({ location, history }) {
 					</Select>
 				</div> */}
 
-				<div>
-					<Input
-						type="number"
-						value={search.sum.from}
-						onChange={e =>
-							setSearch({
-								...search,
+						<div>
+							<Input
+								type="number"
+								value={search.sum.from}
+								style={{ width: 200 }}
+								allowClear
+								onChange={e =>
+									setSearch({
+										...search,
 
-								sum: {
-									from: e.target.value,
-									to: search.sum.to
+										sum: {
+											from: e.target.value,
+											to: search.sum.to
+										}
+									})
 								}
-							})
-						}
-						placeholder="от"
-					/>
-				</div>
-				<div>
-					<Input
-						type="number"
-						value={search.sum.to}
-						onChange={e =>
-							setSearch({
-								...search,
-								sum: {
-									from: search.sum.from,
-									to: e.target.value
+								placeholder={t("От")}
+							/>
+						</div>
+						<div>
+							<Input
+								type="number"
+								value={search.sum.to}
+								style={{ width: 200 }}
+								allowClear
+								onChange={e =>
+									setSearch({
+										...search,
+										sum: {
+											from: search.sum.from,
+											to: e.target.value
+										}
+									})
 								}
-							})
-						}
-						placeholder="до"
-					/>
-				</div>
+								placeholder={t("До")}
+							/>
+						</div>
+						<div>
+							<Select
+								placeholder={t("Категория")}
+								onChange={value =>
+									setSearch({ ...search, category: value })
+								}
+								allowClear
+								style={{ width: 200 }}>
+								{category &&
+									category.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}
+											onClick={() =>
+												setProduct_category_id(
+													option.value
+												)
+											}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
+						<div>
+							<Input
+								type="date"
+								value={search.data.from}
+								style={{ width: 200 }}
+								allowClear
+								onChange={e =>
+									setSearch({
+										...search,
 
-				<div>
-					<Input
-						type="date"
-						value={search.data.from}
-						onChange={e =>
-							setSearch({
-								...search,
-
-								data: {
-									from: e.target.value,
-									to: search.data.to
+										data: {
+											from: e.target.value,
+											to: search.data.to
+										}
+									})
 								}
-							})
-						}
-					/>
-				</div>
-				<div>
-					<Input
-						type="date"
-						value={search.data.to}
-						onChange={e =>
-							setSearch({
-								...search,
-								data: {
-									to: e.target.value,
-									from: search.data.from
+							/>
+						</div>
+						<div>
+							<Input
+								allowClear
+								type="date"
+								value={search.data.to}
+								style={{ width: 200 }}
+								onChange={e =>
+									setSearch({
+										...search,
+										data: {
+											to: e.target.value,
+											from: search.data.from
+										}
+									})
 								}
-							})
-						}
-					/>
+							/>
+						</div>
+					</div>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() => showCreateModal(true)}>
+						{t("Добавить")}
+					</Button>
 				</div>
-			</div>
+			</Board>
 
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
@@ -371,7 +388,7 @@ export default function index({ location, history }) {
 					name={`all`}
 					url="/stock-brought-products"
 					params={{
-						include: "translate",
+						include: "stock,product,user",
 						extra: {
 							_l: tabLang,
 							stock_id: search.stock,
@@ -384,6 +401,30 @@ export default function index({ location, history }) {
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
+						const filteredItems = items.filter(item => {
+							const {
+								product,
+								stock,
+								category,
+								sum: { from, to },
+								data: { from: fromDate, to: toDate }
+							} = search;
+
+							return (
+								(!product || product === item.product_id) &&
+								(!stock || item.stock_id === stock) &&
+								(!category ||
+									item.product.product_category_id ===
+										category) &&
+								(!from || item.amount >= from) &&
+								(!to || item.amount <= to) &&
+								(!fromDate || item.created_at >= fromDate) &&
+								(!toDate || item.created_at <= toDate)
+							);
+						});
+
+						console.log(items);
+
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -490,7 +531,7 @@ export default function index({ location, history }) {
 												)
 											}
 										]}
-										dataSource={items}
+										dataSource={filteredItems}
 									/>
 								</div>
 								{meta && meta.perPage && (

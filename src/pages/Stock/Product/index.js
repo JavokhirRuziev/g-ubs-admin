@@ -47,7 +47,7 @@ export default function index({ location, history, match }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}`)
+			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData.map(stock => ({
@@ -60,7 +60,7 @@ export default function index({ location, history, match }) {
 			.catch(err => console.log(err));
 
 		axios
-			.get(`${config.API_ROOT}/units?_l=${tabLang}`)
+			.get(`${config.API_ROOT}/units?_l=${tabLang}&include=translate`)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData.map(stock => ({
@@ -74,7 +74,9 @@ export default function index({ location, history, match }) {
 
 	useEffect(() => {
 		axios
-			.get(`${config.API_ROOT}/product-categories?_l=${tabLang}`)
+			.get(
+				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
+			)
 			.then(res => {
 				const categoryData = res.data.data;
 				const newCategories = categoryData
@@ -93,12 +95,9 @@ export default function index({ location, history, match }) {
 							category.stock.translate.stock_id
 					}));
 				setCategory(newCategories);
-				console.log(categoryData);
 			})
 			.catch(err => console.log(err));
 	}, [stock_id]);
-
-	console.log(search);
 
 	const changeTab = value => {
 		history.push(`/stock/products?lang=${value}`);
@@ -170,63 +169,55 @@ export default function index({ location, history, match }) {
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal, tabLang, id }} />
 			</Modal>
+			<Board className="mb-40 mt-20">
+				<div className="d-flex justify-content-between align-items-center pad-10">
+					<div
+						style={{
+							display: "flex",
+							columnGap: "10px",
+							flexWrap: "wrap"
+						}}>
+						<div>
+							<Select
+								placeholder={t("Склад")}
+								onChange={value => {
+									setSearch({ ...search, stock: value });
+								}}
+								allowClear
+								style={{ width: 200 }}>
+								{stock &&
+									stock.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}
+											onClick={() =>
+												setStock_id(option.stock_id)
+											}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
+						<div>
+							<Select
+								placeholder={t("Категория")}
+								onChange={value =>
+									setSearch({ ...search, category: value })
+								}
+								allowClear
+								style={{ width: 200 }}>
+								{category &&
+									category.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
 
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Ед. изм")}</div>
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() => showCreateModal(true)}>
-					{t("Добавить")}
-				</Button>
-			</div>
-
-			<div
-				style={{
-					display: "flex",
-					marginBottom: "20px",
-					justifyContent: "center",
-					columnGap: "15px"
-				}}>
-				<div>
-					<Select
-						defaultValue={t("Склад")}
-						onChange={value => {
-							setSearch({ ...search, stock: value });
-						}}
-						style={{ width: 200 }}>
-						{stock &&
-							stock.map(option => (
-								<Option
-									key={option.value}
-									value={option.value}
-									onClick={() =>
-										setStock_id(option.stock_id)
-									}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div>
-				<div>
-					<Select
-						defaultValue={t("Категория")}
-						onChange={value =>
-							setSearch({ ...search, category: value })
-						}
-						style={{ width: 200 }}>
-						{category &&
-							category.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div>
-
-				{/* <div>
+						{/* <div>
 					<Select
 						defaultValue={"unit"}
 						onChange={value => {
@@ -242,17 +233,30 @@ export default function index({ location, history, match }) {
 					</Select>
 				</div> */}
 
-				<div>
-					<Input
-						type="text"
-						value={search.product}
-						onChange={e =>
-							setSearch({ ...search, product: e.target.value })
-						}
-						placeholder="search"
-					/>
+						<div>
+							<Input
+								type="text"
+								value={search.product}
+								onChange={e =>
+									setSearch({
+										...search,
+										product: e.target.value
+									})
+								}
+								placeholder={t("Поиск")}
+							/>
+						</div>
+					</div>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() => showCreateModal(true)}>
+						{t("Добавить")}
+					</Button>
 				</div>
-			</div>
+			</Board>
 
 			<Board className="border-none">
 				<Panel className="pad-0 mb-30">
@@ -276,7 +280,7 @@ export default function index({ location, history, match }) {
 					name={`all`}
 					url="/products"
 					params={{
-						include: "translate",
+						include: "translate,stock,category,unit",
 						extra: {
 							_l: tabLang,
 							search: search.product,
@@ -285,6 +289,31 @@ export default function index({ location, history, match }) {
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
+						const filteredItems = items.filter(item => {
+							if (
+								search.product &&
+								!item.translate.name.includes(search.product)
+							) {
+								return false;
+							}
+
+							if (
+								search.stock &&
+								item.stock_id !== search.stock
+							) {
+								return false;
+							}
+
+							if (
+								search.category &&
+								item.product_category_id !== search.category
+							) {
+								return false;
+							}
+
+							return true;
+						});
+
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -326,9 +355,8 @@ export default function index({ location, history, match }) {
 												)
 											},
 											{
-												title: t("Описания"),
-												dataIndex:
-													"translate.description",
+												title: t("Остаток"),
+												dataIndex: "amount",
 												render: value => (
 													<div className="divider-wrapper">
 														{value}
@@ -420,7 +448,7 @@ export default function index({ location, history, match }) {
 												)
 											}
 										]}
-										dataSource={items}
+										dataSource={filteredItems}
 									/>
 								</div>
 								{meta && meta.perPage && (
