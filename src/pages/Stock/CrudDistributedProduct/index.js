@@ -359,25 +359,29 @@ export default function index({ location, history }) {
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
-						const filteredItems = items.filter(item => {
-							const {
-								product,
-								stock,
-								category,
-								sum: { from, to },
-								data: { from: fromDate, to: toDate }
-							} = search;
+						const filteredItems =
+							items &&
+							items.filter(item => {
+								const {
+									product,
+									stock,
+									category,
+									data: { from: fromDate, to: toDate }
+								} = search;
 
-							return (
-								(!product || product === item.product_id) &&
-								(!stock || item.stock_id === stock) &&
-								(!category ||
-									item.product.product_category_id ===
-										category) &&
-								(!fromDate || item.created_at >= fromDate) &&
-								(!toDate || item.created_at <= toDate)
-							);
-						});
+								return (
+									(!product || product === item.product_id) &&
+									(!stock || item.stock_id === stock) &&
+									(!category ||
+										item.product.product_category_id ===
+											category) &&
+									(!fromDate ||
+										item.created_at >= fromDate) &&
+									(!toDate || item.created_at <= toDate)
+								);
+							});
+
+						console.log(items);
 
 						return (
 							<Spin spinning={!isFetched}>

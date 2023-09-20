@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
 import axios from "axios";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 const { Option } = Select;
 
 export default function index({ location, history, match }) {
@@ -36,7 +37,8 @@ export default function index({ location, history, match }) {
 		category: "",
 		stock: "",
 		unit: "",
-		product: ""
+		product: "",
+		color: ""
 	});
 	const [stock, setStock] = useState();
 	const [stock_id, setStock_id] = useState();
@@ -44,6 +46,12 @@ export default function index({ location, history, match }) {
 	const [unit, setUnit] = useState();
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
+	const [total_amount, setTotal_amount] = useState();
+	const colors = [
+		{ name: "Критическое", value: "red" },
+		{ name: "Нормальное", value: "yellow" },
+		{ name: "Достаточное", value: "green" }
+	];
 
 	useEffect(() => {
 		axios
@@ -70,7 +78,7 @@ export default function index({ location, history, match }) {
 				setUnit(newCategories);
 			})
 			.catch(err => console.log(err));
-	}, []);
+	}, [tabLang]);
 
 	useEffect(() => {
 		axios
@@ -216,23 +224,6 @@ export default function index({ location, history, match }) {
 									))}
 							</Select>
 						</div>
-
-						{/* <div>
-					<Select
-						defaultValue={"unit"}
-						onChange={value => {
-							setSearch({ ...search, unit: value });
-						}}
-						style={{ width: 200 }}>
-						{unit &&
-							unit.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div> */}
-
 						<div>
 							<Input
 								type="text"
@@ -245,6 +236,23 @@ export default function index({ location, history, match }) {
 								}
 								placeholder={t("Поиск")}
 							/>
+						</div>
+						<div>
+							<Select
+								placeholder={t("Остаток продуктов")}
+								onChange={value =>
+									setSearch({ ...search, color: value })
+								}
+								allowClear
+								style={{ width: 200 }}>
+								{colors.map(option => (
+									<Option
+										key={option.value}
+										value={option.value}>
+										{option.name}
+									</Option>
+								))}
+							</Select>
 						</div>
 					</div>
 					<Button
@@ -259,59 +267,67 @@ export default function index({ location, history, match }) {
 			</Board>
 
 			<Board className="border-none">
-				<Panel className="pad-0 mb-30">
-					<Tabs
-						activeKey={tabLang}
-						onChange={value => {
-							setTabLang(value);
-							changeTab(value);
-						}}
-						tabBarStyle={{
-							marginBottom: "0"
-						}}>
-						{config.API_LANGUAGES.map(item => (
-							<TabPane key={item.code} tab={t(item.title)} />
-						))}
-					</Tabs>
-				</Panel>
+				<div style={{ position: "relative" }}>
+					<Panel className="pad-0 mb-30">
+						<Tabs
+							activeKey={tabLang}
+							onChange={value => {
+								setTabLang(value);
+								changeTab(value);
+							}}
+							tabBarStyle={{
+								marginBottom: "0"
+							}}>
+							{config.API_LANGUAGES.map(item => (
+								<TabPane key={item.code} tab={t(item.title)} />
+							))}
+						</Tabs>
+						<div
+							style={{
+								position: "absolute",
+								right: "30px",
+								top: 0,
+								fontSize: "30px",
+								fontWeight: "bold"
+							}}>
+							{thousandsDivider(total_amount)}
+						</div>
+					</Panel>
+				</div>
 
 				<EntityContainer.All
 					entity="products"
 					name={`all`}
 					url="/products"
+					onSuccess={data => {
+						setTotal_amount(data.total_amount);
+					}}
 					params={{
 						include: "translate,stock,category,unit",
 						extra: {
 							_l: tabLang,
 							search: search.product,
 							stock_id: search.stock,
-							category_id: search.category
+							category_id: search.category,
+							color: search.color
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems = items.filter(item => {
-							if (
-								search.product &&
-								!item.translate.name.includes(search.product)
-							) {
-								return false;
-							}
+							const productCondition =
+								!search.product ||
+								item.translate.name.includes(search.product);
+							const stockCondition =
+								!search.stock || item.stock_id === search.stock;
+							const categoryCondition =
+								!search.category ||
+								item.product_category_id === search.category;
 
-							if (
-								search.stock &&
-								item.stock_id !== search.stock
-							) {
-								return false;
-							}
-
-							if (
-								search.category &&
-								item.product_category_id !== search.category
-							) {
-								return false;
-							}
-
-							return true;
+							return (
+								productCondition &&
+								stockCondition &&
+								categoryCondition
+							);
 						});
 
 						return (
