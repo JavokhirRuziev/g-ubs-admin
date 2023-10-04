@@ -34,6 +34,19 @@ const CompaniesView = lazy(() => import("./pages/Companies/View"));
 const Dishes = lazy(() => import("./pages/Dishes/List"));
 const DishesCreate = lazy(() => import("./pages/Dishes/Create"));
 const DishesUpdate = lazy(() => import("./pages/Dishes/Update"));
+const FinishedDishes = lazy(() => import("./pages/FinishedDishes/List"));
+const FinishedDishesCreate = lazy(() =>
+	import("./pages/FinishedDishes/Create")
+);
+const FinishedDishesUpdate = lazy(() =>
+	import("./pages/FinishedDishes/Update")
+);
+const FinishedProduct = lazy(() =>
+	import("./pages/Stock/FinishedProduct/index")
+);
+const FinishedProductUpdate = lazy(() =>
+	import("./pages/Stock/FinishedProduct/components/Update")
+);
 
 const Settings = lazy(() => import("./pages/Settings/List"));
 const SettingsCreate = lazy(() => import("./pages/Settings/Create"));
@@ -50,6 +63,7 @@ const UsersKitchener = lazy(() => import("./pages/Users/Kitchener/List"));
 const UsersWaiter = lazy(() => import("./pages/Users/Waiter/List"));
 const UsersManager = lazy(() => import("./pages/Users/Managers/List"));
 const UsersCompany = lazy(() => import("./pages/Users/Company/List"));
+const UsersPurveyor = lazy(() => import("./pages/Users/Purveyor/List"));
 
 const Solved = lazy(() => import("./pages/Solved"));
 const Incomes = lazy(() => import("./pages/Incomes"));
@@ -74,33 +88,44 @@ const routes = [
 		path: "/stock/stock/",
 		exact: true,
 		component: Stock,
-		access: ["company"]
+		access: ["company"],
+		role: "stock"
 	},
 	{
 		path: "/stock/product-categories/",
 		exact: true,
 		component: ProductCategory,
-		access: ["company"]
+		access: ["company"],
+		role: "product_categories"
 	},
 	{
 		path: "/stock/products/",
 		exact: true,
 		component: Products,
-		access: ["company"]
+		access: ["company"],
+		role: "products"
 	},
 	{
 		path: "/stock/stock-brought-products/",
 		exact: true,
 		component: CrudBroughtProduct,
-		access: ["company"]
+		access: ["company"],
+		role: "brought_products"
 	},
 	{
 		path: "/stock/stock-distributed-products/",
 		exact: true,
 		component: CrudDistributedProduct,
-		access: ["company"]
+		access: ["company"],
+		role: "distributed_products"
 	},
-	{ path: "/persons", exact: true, component: Persons, access: ["company"] },
+	{
+		path: "/persons",
+		exact: true,
+		component: Persons,
+		access: ["company"],
+		role: "customers"
+	},
 	{
 		path: "/customers/transactions/:id",
 		exact: true,
@@ -111,11 +136,23 @@ const routes = [
 		path: "/expenses",
 		exact: true,
 		component: Expenses,
-		access: ["company"]
+		access: ["company"],
+		role: "transactions"
 	},
-	{ path: "/incomes", exact: true, component: Incomes, access: ["company"] },
-	{ path: "/solved", exact: true, component: Solved, access: ["company"] },
-
+	{
+		path: "/incomes",
+		exact: true,
+		component: Incomes,
+		access: ["company"],
+		role: "transactions"
+	},
+	{
+		path: "/solved",
+		exact: true,
+		component: Solved,
+		access: ["company"],
+		role: "transactions"
+	},
 	{
 		path: "/statistics",
 		exact: true,
@@ -128,20 +165,29 @@ const routes = [
 		path: "/monitoring-waiter",
 		exact: true,
 		component: MonitoringWaiter,
-		access: ["company"]
+		access: ["company"],
+		role: "monitoring_by_waiters"
 	},
 	{
 		path: "/monitoring",
 		exact: true,
 		component: Monitoring,
-		access: ["company"]
+		access: ["company"],
+		role: "monitoring_by_dishes"
 	},
-	{ path: "/orders", exact: true, component: Orders, access: ["company"] },
+	{
+		path: "/orders",
+		exact: true,
+		component: Orders,
+		access: ["company"],
+		role: "monitoring_by_orders"
+	},
 	{
 		path: "/orders-on-table",
 		exact: true,
 		component: OrdersOnTable,
-		access: ["company"]
+		access: ["company"],
+		role: "monitoring_by_tables"
 	},
 	{
 		path: "/notification",
@@ -169,23 +215,36 @@ const routes = [
 		path: "/printers",
 		exact: true,
 		component: Printers,
-		access: ["company"]
+		access: ["company"],
+		role: "printers"
 	},
 	{ path: "/menus", exact: true, component: Menus, access: ["company"] },
-	{ path: "/places", exact: true, component: Places, access: ["company"] },
-	{ path: "/tables", exact: true, component: Tables, access: ["company"] },
+	{
+		path: "/places",
+		exact: true,
+		component: Places,
+		access: ["company"],
+		role: "places"
+	},
+	{
+		path: "/tables",
+		exact: true,
+		component: Tables,
+		access: ["company"],
+		role: "tables"
+	},
 	{
 		path: "/dashboard",
 		exact: true,
 		component: Dashboard,
 		access: ["company", "admin"]
 	},
-
 	{
 		path: "/profile/company",
 		exact: true,
 		component: Company,
-		access: ["company"]
+		access: ["company"],
+		role: "company_profile"
 	},
 	{
 		path: "/companies",
@@ -212,20 +271,60 @@ const routes = [
 		access: ["admin"]
 	},
 
-	{ path: "/dishes", exact: true, component: Dishes, access: ["company"] },
+	{
+		path: "/finished-product",
+		exact: true,
+		component: FinishedProduct,
+		access: ["company"]
+	},
+	{
+		path: "/finished-product-update/:id",
+		exact: true,
+		component: FinishedProductUpdate,
+		access: ["company"]
+	},
+	{
+		path: "/dishes",
+		exact: true,
+		component: Dishes,
+		access: ["company"],
+		role: "dishes"
+	},
 	{
 		path: "/dishes/create",
 		exact: true,
 		component: DishesCreate,
-		access: ["company"]
+		access: ["company"],
+		role: "dishes"
 	},
 	{
 		path: "/dishes/update/:id",
 		exact: true,
 		component: DishesUpdate,
-		access: ["company"]
+		access: ["company"],
+		role: "dishes"
 	},
-
+	{
+		path: "/finished-dishes",
+		exact: true,
+		component: FinishedDishes,
+		access: ["company"],
+		role: "dishes"
+	},
+	{
+		path: "/finished-dishes/create",
+		exact: true,
+		component: FinishedDishesCreate,
+		access: ["company"],
+		role: "dishes"
+	},
+	{
+		path: "/finished-dishes/update/:id",
+		exact: true,
+		component: FinishedDishesUpdate,
+		access: ["company"],
+		role: "dishes"
+	},
 	{ path: "/settings", exact: true, component: Settings, access: ["admin"] },
 	{
 		path: "/settings/create",
@@ -239,45 +338,52 @@ const routes = [
 		component: SettingsUpdate,
 		access: ["admin"]
 	},
-
 	{
 		path: "/users/company-admins",
 		exact: true,
 		component: UsersCompany,
 		access: ["admin"]
 	},
-
 	{
 		path: "/users/waiter",
 		exact: true,
 		component: UsersWaiter,
-		access: ["company"]
+		access: ["company"],
+		role: "users"
 	},
 	{
 		path: "/users/kitchener",
 		exact: true,
 		component: UsersKitchener,
-		access: ["company"]
+		access: ["company"],
+		role: "users"
 	},
 	{
 		path: "/users/manager",
 		exact: true,
 		component: UsersManager,
-		access: ["company"]
+		access: ["company"],
+		role: "users"
 	},
-
+	{
+		path: "/users/purveyer",
+		exact: true,
+		component: UsersPurveyor,
+		access: ["company"],
+		role: "users"
+	},
 	{
 		path: "/translation",
 		exact: true,
 		component: Translation,
 		access: ["admin"]
+	},
+	{
+		path: "/profile",
+		exact: true,
+		component: Profile,
+		access: ["admin", "manager", "company"]
 	}
-	// {
-	// 	path: "/profile",
-	// 	exact: true,
-	// 	component: Profile,
-	// 	access: ["admin", "manager", "company"]
-	// }
 ];
 
 const adminRoutes = routes.filter(i => i.access.includes("admin"));
@@ -286,48 +392,66 @@ const contentManagerRoutes = routes.filter(i => i.access.includes("company"));
 export default () => (
 	<Router {...{ history }}>
 		<App>
-			{({ isFetched, isAuthenticated, data }) =>
-				isFetched &&
-				(isAuthenticated ? (
-					<Layout>
+			{({ isFetched, isAuthenticated, data }) => {
+				const access = contentManagerRoutes.filter(
+					el =>
+						data &&
+						data.success &&
+						data.success.roles &&
+						data.success.roles.some(e => e.role === el.role)
+				);
+				return (
+					isFetched &&
+					(isAuthenticated ? (
+						<Layout>
+							<Suspense fallback={<Spinner position={"full"} />}>
+								<Switch>
+									{get(data, "success.role") === "admin"
+										? adminRoutes.map((route, key) => (
+												<Route
+													key={key}
+													path={route.path}
+													component={route.component}
+													exact
+												/>
+										  ))
+										: contentManagerRoutes &&
+										  contentManagerRoutes.map(
+												(route, key) => (
+													<Route
+														key={key}
+														path={route.path}
+														component={
+															route.component
+														}
+														exact
+													/>
+												)
+										  )}
+
+									<Route
+										path="/logout"
+										component={Logout}
+										exact
+									/>
+								</Switch>
+							</Suspense>
+						</Layout>
+					) : (
 						<Suspense fallback={<Spinner position={"full"} />}>
 							<Switch>
-								{get(data, "success.role") === "admin" &&
-									adminRoutes.map((route, key) => (
-										<Route
-											key={key}
-											path={route.path}
-											component={route.component}
-											exact
-										/>
-									))}
-								{get(data, "success.role") === "company" &&
-									contentManagerRoutes.map((route, key) => (
-										<Route
-											key={key}
-											path={route.path}
-											component={route.component}
-											exact
-										/>
-									))}
+								<Route path="/" component={Login} exact />
 								<Route
-									path="/logout"
-									component={Logout}
+									path="/signUp"
+									component={SignUp}
 									exact
 								/>
+								<Redirect from="*" to="/" />
 							</Switch>
 						</Suspense>
-					</Layout>
-				) : (
-					<Suspense fallback={<Spinner position={"full"} />}>
-						<Switch>
-							<Route path="/" component={Login} exact />
-							<Route path="/signUp" component={SignUp} exact />
-							<Redirect from="*" to="/" />
-						</Switch>
-					</Suspense>
-				))
-			}
+					))
+				);
+			}}
 		</App>
 	</Router>
 );

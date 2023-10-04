@@ -20,9 +20,12 @@ import { Fields } from "components";
 import config from "config";
 import qs from "query-string";
 import get from "lodash/get";
-import { Field } from "formik";
+import Card from "../../components/Card/Card";
+import useMediaQueries from "../../services/media-queries";
+import { thousandsDivider } from "../../services/thousandsDivider";
 
 const List = ({ history, location }) => {
+	const { mobile } = useMediaQueries();
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [search, setSearch] = useState();
@@ -239,182 +242,413 @@ const List = ({ history, location }) => {
 					{({ items, isFetched, meta }) => {
 						return (
 							<Spin spinning={!isFetched}>
-								<div className="default-table pad-15">
-									<Table
-										hasEdit={true}
-										hasDelete={true}
-										rowKey="id"
-										onEdit={value =>
-											history.push(
-												`/dishes/update/${value.id}?lang=${tabLang}`
-											)
-										}
-										onDelete={value =>
-											onDeleteHandler(value.id)
-										}
-										columns={[
-											{
-												title: t("ID"),
-												dataIndex: "id",
-												className: "w-50",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
+								{!mobile ? (
+									<div className="default-table pad-15">
+										<Table
+											hasEdit={true}
+											hasDelete={true}
+											rowKey="id"
+											onEdit={value =>
+												history.push(
+													`/dishes/update/${value.id}?lang=${tabLang}`
 												)
-											},
-											{
-												title: t("Фото"),
-												dataIndex: "file",
-												className: "w-82 text-cen",
-												render: value => (
-													<div className="divider-wrapper">
-														<Avatar
-															isRectangle
-															isProduct
-															image={get(
-																value,
-																"thumbnails.small.src"
-															)}
-														/>
-													</div>
-												)
-											},
-											{
-												title: t("Загаловок"),
-												dataIndex: "translate.name",
-												className: "min-w-200",
-												render: value => (
-													<div className="divider-wrapper">
-														{value ? value : "-"}
-													</div>
-												)
-											},
-											{
-												title: t("Себестоимость"),
-												dataIndex: "cost_price",
-												className: "min-w-200",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Ед изм"),
-												dataIndex: "unit",
-												render: value => (
-													<div className="divider-wrapper">
-														{value
-															? get(
-																	value,
-																	"title_ru"
-															  )
-															: "-"}
-													</div>
-												)
-											},
-											{
-												title: t("Цена"),
-												dataIndex: "price",
-												render: value => (
-													<div className="divider-wrapper">
-														{value ? value : "-"}
-													</div>
-												)
-											},
-											{
-												title: t("Кол-во"),
-												dataIndex: "quantity",
-												render: (value, values) =>
-													Number.parseFloat(
-														values.countable
-													) === 1 ? (
-														<div>
-															<Input
-																placeholder={t(
-																	"Количество"
-																)}
-																style={{
-																	width:
-																		"120px"
-																}}
-																type={"number"}
-																defaultValue={
-																	value
-																}
-																onPressEnter={e =>
-																	quickUpdate(
-																		values.id,
-																		e.target
-																			.value
-																	)
-																}
-															/>
-														</div>
-													) : (
-														<></>
-													)
-											},
-											{
-												title: t("Исчисляемый"),
-												dataIndex: "countable",
-												className: "text-cen w-82",
-												render: (value, values) => {
-													return (
-														<div className="divider-wrapper">
-															<div
-																className="color-view-ellipse m-0-auto cursor-pointer"
-																onClick={() =>
-																	quickUpdateCountable(
-																		values.id,
-																		value
-																	)
-																}
-																style={{
-																	backgroundColor:
-																		Number.parseFloat(
-																			value
-																		) === 0
-																			? "#f44336"
-																			: "#4caf50"
-																}}
-															/>
-														</div>
-													);
-												}
-											},
-											{
-												title: t("Статус"),
-												dataIndex: "status",
-												className: "text-cen w-82",
-												render: (value, values) => {
-													return (
-														<div className="divider-wrapper">
-															<div
-																className="color-view-ellipse m-0-auto cursor-pointer"
-																onClick={() =>
-																	quickUpdateStatus(
-																		values.id,
-																		value
-																	)
-																}
-																style={{
-																	backgroundColor:
-																		value ===
-																		1
-																			? "#4caf50"
-																			: "#f44336"
-																}}
-															/>
-														</div>
-													);
-												}
 											}
-										]}
-										dataSource={items}
-									/>
-								</div>
+											onDelete={value =>
+												onDeleteHandler(value.id)
+											}
+											columns={[
+												{
+													title: t("No"),
+													dataIndex: `id`,
+													className: `text-align-left w-82`,
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{items.findIndex(
+																	element =>
+																		value ===
+																		element.id
+																) + 1}
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Фото"),
+													dataIndex: "file",
+													className: "w-82 text-cen",
+													render: value => (
+														<div className="divider-wrapper">
+															<Avatar
+																isRectangle
+																isProduct
+																image={get(
+																	value,
+																	"thumbnails.small.src"
+																)}
+															/>
+														</div>
+													)
+												},
+												{
+													title: t("Загаловок"),
+													dataIndex: "translate.name",
+													className: "min-w-200",
+													render: value => (
+														<div className="divider-wrapper">
+															{value
+																? value
+																: "-"}
+														</div>
+													)
+												},
+												{
+													title: t("Себестоимость"),
+													dataIndex: "cost_price",
+													className: "min-w-200",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Ед изм"),
+													dataIndex: "unit",
+													render: value => (
+														<div className="divider-wrapper">
+															{value
+																? get(
+																		value,
+																		"title_ru"
+																  )
+																: "-"}
+														</div>
+													)
+												},
+												{
+													title: t("Цена"),
+													dataIndex: "price",
+													render: value => (
+														<div className="divider-wrapper">
+															{value
+																? value
+																: "-"}
+														</div>
+													)
+												},
+												{
+													title: t("Кол-во"),
+													dataIndex: "quantity",
+													render: (value, values) =>
+														Number.parseFloat(
+															values.countable
+														) === 1 ? (
+															<div>
+																<Input
+																	placeholder={t(
+																		"Количество"
+																	)}
+																	style={{
+																		width:
+																			"120px"
+																	}}
+																	type={
+																		"number"
+																	}
+																	defaultValue={
+																		value
+																	}
+																	onPressEnter={e =>
+																		quickUpdate(
+																			values.id,
+																			e
+																				.target
+																				.value
+																		)
+																	}
+																/>
+															</div>
+														) : (
+															<></>
+														)
+												},
+												{
+													title: t("Исчисляемый"),
+													dataIndex: "countable",
+													className: "text-cen w-82",
+													render: (value, values) => {
+														return (
+															<div className="divider-wrapper">
+																<div
+																	className="color-view-ellipse m-0-auto cursor-pointer"
+																	onClick={() =>
+																		quickUpdateCountable(
+																			values.id,
+																			value
+																		)
+																	}
+																	style={{
+																		backgroundColor:
+																			Number.parseFloat(
+																				value
+																			) ===
+																			0
+																				? "#f44336"
+																				: "#4caf50"
+																	}}
+																/>
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Статус"),
+													dataIndex: "status",
+													className: "text-cen w-82",
+													render: (value, values) => {
+														return (
+															<div className="divider-wrapper">
+																<div
+																	className="color-view-ellipse m-0-auto cursor-pointer"
+																	onClick={() =>
+																		quickUpdateStatus(
+																			values.id,
+																			value
+																		)
+																	}
+																	style={{
+																		backgroundColor:
+																			value ===
+																			1
+																				? "#4caf50"
+																				: "#f44336"
+																	}}
+																/>
+															</div>
+														);
+													}
+												}
+											]}
+											dataSource={items}
+										/>
+									</div>
+								) : (
+									<div
+										style={{
+											display: "flex",
+											flexWrap: "wrap",
+											columnGap: "10px",
+											rowGap: "10px",
+											justifyContent: "center",
+											alignItems: "center",
+											marginTop: "20px"
+										}}>
+										{items &&
+											items.map((item, index) => {
+												return (
+													<Card
+														{...{
+															hasEdit: true,
+															hasDelete: true,
+															onEdit: () =>
+																history.push(
+																	`/dishes/update/${item.id}?lang=${tabLang}`
+																),
+															onDelete: () =>
+																onDeleteHandler(
+																	item.id
+																),
+															imgTiny: get(
+																item,
+																"file.thumbnails.small.src"
+															),
+															img: get(
+																item,
+																"file.thumbnails.small.src"
+															),
+															title: get(
+																item,
+																"translate.name"
+															),
+															content: [
+																{
+																	title: t(
+																		"No"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{items.findIndex(
+																				element =>
+																					item.id ===
+																					element.id
+																			) +
+																				1}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Себестоимость"
+																	),
+																	name: thousandsDivider(
+																		get(
+																			item,
+																			"cost_price"
+																		)
+																	)
+																},
+																{
+																	title: t(
+																		"Ед изм"
+																	),
+																	name: get(
+																		item,
+																		`unit.title_${[
+																			tabLang
+																		]}`
+																	)
+																},
+																{
+																	title: t(
+																		"Цена"
+																	),
+																	name: get(
+																		item,
+																		"price"
+																	)
+																},
+																{
+																	title: t(
+																		"Кол-во"
+																	),
+																	name:
+																		Number.parseFloat(
+																			get(
+																				item,
+																				"countable"
+																			)
+																		) ===
+																		1 ? (
+																			<div>
+																				<Input
+																					placeholder={t(
+																						"Количество"
+																					)}
+																					style={{
+																						width:
+																							"120px"
+																					}}
+																					type={
+																						"number"
+																					}
+																					defaultValue={get(
+																						item,
+																						"countable"
+																					)}
+																					onPressEnter={e =>
+																						quickUpdate(
+																							get(
+																								item,
+																								"id"
+																							),
+																							e
+																								.target
+																								.value
+																						)
+																					}
+																				/>
+																			</div>
+																		) : (
+																			<>
+
+																			</>
+																		)
+																},
+																{
+																	title: t(
+																		"Исчисляемый"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			<div
+																				className="color-view-ellipse m-0-auto cursor-pointer"
+																				onClick={() =>
+																					quickUpdateCountable(
+																						get(
+																							item,
+																							"id"
+																						),
+																						get(
+																							item,
+																							"countable"
+																						)
+																					)
+																				}
+																				style={{
+																					backgroundColor:
+																						Number.parseFloat(
+																							get(
+																								item,
+																								"countable"
+																							)
+																						) ===
+																						0
+																							? "#f44336"
+																							: "#4caf50"
+																				}}
+																			/>
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Статус"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			<div
+																				className="color-view-ellipse m-0-auto cursor-pointer"
+																				onClick={() =>
+																					quickUpdateStatus(
+																						Number(
+																							get(
+																								item,
+																								"id"
+																							)
+																						),
+																						Number(
+																							get(
+																								item,
+																								"status"
+																							)
+																						)
+																					)
+																				}
+																				style={{
+																					backgroundColor:
+																						Number(
+																							get(
+																								item,
+																								"status"
+																							)
+																						) ===
+																						1
+																							? "#4caf50"
+																							: "#f44336"
+																				}}
+																			/>
+																		</div>
+																	)
+																}
+															]
+														}}
+													/>
+												);
+											})}
+									</div>
+								)}
+
 								{meta && meta.perPage && (
 									<div className="pad-15 d-flex justify-content-end">
 										<Pagination

@@ -6,6 +6,7 @@ import Form from "./Form";
 import get from "lodash/get";
 
 const Update = ({ tabLang, selected, showUpdateModal }) => {
+	console.log(selected);
 	return (
 		<EntityForm.Main
 			method="put"
@@ -26,6 +27,17 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 			}}
 			fields={[
 				{
+					name: "stock_id",
+					required: true,
+					value: get(selected, "stock"),
+					onSubmitValue: value => value.id
+				},
+				{
+					name: "product_id",
+					required: true,
+					value: get(selected, "product.translate.name")
+				},
+				{
 					name: "count",
 					required: true,
 					value: get(selected, "count")
@@ -34,17 +46,6 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 					name: "price",
 					required: true,
 					value: get(selected, "price")
-				},
-				{
-					name: "product_id",
-					required: true,
-					value: get(selected, "product")
-				},
-				{
-					name: "stock_id",
-					required: true,
-					value: get(selected, "stock"),
-					onSubmitValue: value => value.id
 				}
 			]}
 			updateData>

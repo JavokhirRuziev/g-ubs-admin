@@ -20,6 +20,9 @@ import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
 import axios from "axios";
+import useMediaQueries from "../../../services/media-queries";
+import Card from "../../../components/Card/Card";
+import get from "lodash/get";
 const { Option } = Select;
 
 export default function index({ location, history }) {
@@ -46,6 +49,7 @@ export default function index({ location, history }) {
 	const [product, setProduct] = useState();
 	const [category, setCategory] = useState();
 	const [unit, setUnit] = useState();
+	const { mobile } = useMediaQueries();
 
 	useEffect(() => {
 		axios
@@ -385,95 +389,220 @@ export default function index({ location, history }) {
 
 						return (
 							<Spin spinning={!isFetched}>
-								<div className="default-table pad-15">
-									<Table
-										hasEdit={true}
-										hasDelete={true}
-										rowKey="id"
-										onEdit={value => {
-											openEditModal(value);
-										}}
-										onDelete={value =>
-											onDeleteHandler(value.id)
-										}
-										columns={[
-											{
-												title: t("No"),
-												dataIndex: `id`,
-												className: "text-align-left",
-												render: value => {
-													return (
-														<div className="divider-wrapper">
-															{items.findIndex(
-																element =>
-																	value ===
-																	element.id
-															) + 1}
-														</div>
-													);
-												}
-											},
-											{
-												title: t("Название"),
-												dataIndex:
-													"product.translate.name",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Количество"),
-												dataIndex: "count",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Дата"),
-												dataIndex: "created_at",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Склад"),
-												dataIndex: "",
-												render: value => (
-													<div className="divider-wrapper">
-														{value &&
-															value.stock &&
-															value.stock
-																.translate &&
-															value.stock
-																.translate
-																.name &&
-															value.stock
-																.translate.name}
-													</div>
-												)
-											},
-											{
-												title: t("Имя пользователя"),
-												dataIndex: "",
-												render: value => (
-													<div className="divider-wrapper">
-														{value &&
-															value.user &&
-															value.user.name &&
-															value.user.name}
-													</div>
-												)
+								{!mobile ? (
+									<div className="default-table pad-15">
+										<Table
+											hasEdit={true}
+											hasDelete={true}
+											rowKey="id"
+											onEdit={value => {
+												openEditModal(value);
+											}}
+											onDelete={value =>
+												onDeleteHandler(value.id)
 											}
-										]}
-										dataSource={filteredItems}
-									/>
-								</div>
+											columns={[
+												{
+													title: t("No"),
+													dataIndex: `id`,
+													className:
+														"text-align-left",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{items.findIndex(
+																	element =>
+																		value ===
+																		element.id
+																) + 1}
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Название"),
+													dataIndex:
+														"product.translate.name",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Количество"),
+													dataIndex: "count",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Дата"),
+													dataIndex: "created_at",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Склад"),
+													dataIndex: "",
+													render: value => (
+														<div className="divider-wrapper">
+															{value &&
+																value.stock &&
+																value.stock
+																	.translate &&
+																value.stock
+																	.translate
+																	.name &&
+																value.stock
+																	.translate
+																	.name}
+														</div>
+													)
+												},
+												{
+													title: t(
+														"Имя пользователя"
+													),
+													dataIndex: "",
+													render: value => (
+														<div className="divider-wrapper">
+															{value &&
+																value.user &&
+																value.user
+																	.name &&
+																value.user.name}
+														</div>
+													)
+												}
+											]}
+											dataSource={filteredItems}
+										/>
+									</div>
+								) : (
+									<div
+										style={{
+											display: "flex",
+											flexWrap: "wrap",
+											columnGap: "10px",
+											rowGap: "10px",
+											justifyContent: "center",
+											alignItems: "center",
+											marginTop: "20px"
+										}}>
+										{filteredItems &&
+											filteredItems.map((item, index) => {
+												return (
+													<Card
+														{...{
+															hasDelete: true,
+															hasEdit: true,
+															onEdit: () => {
+																openEditModal(
+																	item
+																);
+															},
+															onDelete: () =>
+																onDeleteHandler(
+																	item.id
+																),
+															content: [
+																{
+																	title: t(
+																		"No"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{items.findIndex(
+																				element =>
+																					item.id ===
+																					element.id
+																			) +
+																				1}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Название"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"product.translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Количество"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"count"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Дата"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"created_at"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Склад"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"stock.translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Имя пользователя"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{item &&
+																				item.user &&
+																				item
+																					.user
+																					.name &&
+																				item
+																					.user
+																					.name}
+																		</div>
+																	)
+																}
+															]
+														}}
+													/>
+												);
+											})}
+									</div>
+								)}
 								{meta && meta.perPage && (
 									<div className="pad-15 d-flex justify-content-end">
 										<Pagination

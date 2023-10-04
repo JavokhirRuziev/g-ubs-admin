@@ -5,7 +5,7 @@ import get from "lodash/get";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-const Sidebar = ({ isCollapsed, setCollapse }) => {
+const Sidebar = ({ isCollapsed, setCollapse, toggled, setToggle, mobile }) => {
 	const { t } = useTranslation("main");
 	const profile = useSelector(state => state.auth.data);
 	const [toggledSubmenu, setToggleSubmenu] = useState(null);
@@ -29,7 +29,9 @@ const Sidebar = ({ isCollapsed, setCollapse }) => {
 	};
 
 	return (
-		<div className="m-sidebar">
+		<div
+			className="m-sidebar"
+			style={{ left: mobile ? (toggled ? "-240px" : "0px") : "0" }}>
 			<div className="m-sidebar-wrapper">
 				<div className="m-sidebar-head">
 					<a
@@ -44,20 +46,34 @@ const Sidebar = ({ isCollapsed, setCollapse }) => {
 							admin
 						</span>
 					</a>
-					<div className="menu-collapse-btn" onClick={toggle} />
+					{mobile ? (
+						<div
+							className="menu-collapse-btn"
+							onClick={() => setToggle(!toggled)}
+						/>
+					) : (
+						<div className="menu-collapse-btn" onClick={toggle} />
+					)}
 				</div>
 				{get(profile, "success.role") === "company" && (
 					<div className="m-sidebar-head ml-10 mt-10">
-						<span>
-							{get(profile, "success.role") === "company" &&
-								"ID: " +
-									get(profile, "success.company.payment_id")}
-						</span>
+						<div className="m-sidebar-logo">
+							<span>
+								{get(profile, "success.role") === "company" &&
+									"ID: " +
+										get(
+											profile,
+											"success.company.payment_id"
+										)}
+							</span>
+						</div>
 					</div>
 				)}
-
 				<ul className="m-menu">
-					{getMenu(get(profile, "success.role")).map((m, i) => {
+					{getMenu(
+						get(profile, "success.role"),
+						get(profile, "success.roles")
+					).map((m, i) => {
 						if (m.submenu) {
 							return (
 								<li

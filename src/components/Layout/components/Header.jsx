@@ -10,9 +10,9 @@ import config from "config";
 import systemActions from "store/actions/system";
 import { thousandsDivider } from "../../../services/thousandsDivider";
 import ModalForm from "./header-components/ModalForm";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 
-const Header = () => {
+const Header = ({ mobile, setToggle, toggled }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const currentLangCode = useSelector(state => state.system.currentLangCode);
 	const currentLangTitle = config.API_LANGUAGES.find(
@@ -25,6 +25,12 @@ const Header = () => {
 		i18next.changeLanguage(langCode);
 		dispatch(systemActions.ChangeLanguage(langCode));
 	};
+
+	const hasPermission =
+		profile &&
+		profile.success &&
+		profile.success.roles &&
+		profile.success.roles.some(p => p.role === "payments");
 
 	return (
 		<>
@@ -39,22 +45,45 @@ const Header = () => {
 				<ModalForm setIsOpen={setIsOpen} />
 			</Modal>
 
-			<div className="m-header">
-				<div className="m-header-wrapper">
+			<div className={!mobile && "m-header"}>
+				<div
+					className="m-header-wrapper"
+					style={{ padding: mobile ? "6px 12px" : "6px 24px" }}>
 					<div className="d-flex align-items-center">
-						<Breadcrumb className="mb-0 bb-breadcrumb--outline" />
+						{!mobile && (
+							<Breadcrumb className="mb-0 bb-breadcrumb--outline" />
+						)}
+						{mobile && (
+							<div className="btn-wrapper">
+								<div
+									className="menu-collapse-btn"
+									onClick={() => setToggle(!toggled)}
+								/>
+							</div>
+						)}
 					</div>
-					<div className="check">
-						<p className="mb-0">
-							{thousandsDivider(get(profile, "success.balance"))}{" "}
-							{t("сум")}
-						</p>
-						<div
-							onClick={() => setIsOpen(true)}
-							className={"payment_dropdown_label ml-15"}>
-							{t("Оплатить")}
+					{hasPermission && (
+						<div className="check">
+							<p
+								className={`mb-0 ${!mobile && "mr-10"}`}
+								style={{ fontSize: mobile ? 12 : 16 }}>
+								{thousandsDivider(
+									get(profile, "success.balance")
+								)}{" "}
+								{t("сум")}
+							</p>
+							<Button
+								onClick={() => setIsOpen(true)}
+								style={{
+									transform: mobile
+										? "scale(70%)"
+										: "scale(100%)"
+								}}>
+								{t("Оплатить")}
+							</Button>
 						</div>
-					</div>
+					)}
+
 					<div className="d-flex align-items-center">
 						<div className="cm-dropdown">
 							<div className="cm-dropdown-label">

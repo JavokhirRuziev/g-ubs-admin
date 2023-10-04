@@ -141,7 +141,6 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 				</div>
 			</div>
 
-			{console.log(values)}
 			<Button
 				type="primary"
 				size="large"

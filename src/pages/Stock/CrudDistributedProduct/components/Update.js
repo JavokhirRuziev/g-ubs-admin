@@ -33,7 +33,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "product_id",
 					required: true,
-					value: get(selected, "product")
+					value: get(selected, "product.translate.name")
 				},
 				{
 					name: "stock_id",

@@ -18,6 +18,9 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
+import useMediaQueries from "../../../services/media-queries";
+import Card from "../../../components/Card/Card";
+import { get } from "lodash";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
@@ -29,6 +32,7 @@ export default function index({ location, history }) {
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const [search, setSearch] = useState();
+	const { mobile } = useMediaQueries();
 
 	const handleChange = e => {
 		setSearch(e.target.value);
@@ -85,6 +89,7 @@ export default function index({ location, history }) {
 			})
 		);
 	};
+
 	return (
 		<>
 			<Modal
@@ -165,57 +170,134 @@ export default function index({ location, history }) {
 
 						return (
 							<Spin spinning={!isFetched}>
-								<div className="default-table pad-15">
-									<Table
-										hasEdit={true}
-										hasDelete={true}
-										rowKey="id"
-										onEdit={value => {
-											openEditModal(value);
-										}}
-										onDelete={value =>
-											onDeleteHandler(value.id)
-										}
-										columns={[
-											{
-												title: t("No"),
-												dataIndex: `id`,
-												className: `text-align-left w-82`,
-												render: value => {
-													return (
-														<div className="divider-wrapper">
-															{items.findIndex(
-																element =>
-																	value ===
-																	element.id
-															) + 1}
-														</div>
-													);
-												}
-											},
-											{
-												title: t("Название"),
-												dataIndex: "translate.name",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Описания"),
-												dataIndex:
-													"translate.description",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
+								{!mobile ? (
+									<div className="default-table pad-15">
+										<Table
+											hasEdit={true}
+											hasDelete={true}
+											rowKey="id"
+											onEdit={value => {
+												openEditModal(value);
+											}}
+											onDelete={value =>
+												onDeleteHandler(value.id)
 											}
-										]}
-										dataSource={filteredItems}
-									/>
-								</div>
+											columns={[
+												{
+													title: t("No"),
+													dataIndex: `id`,
+													className: `text-align-left w-82`,
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{items.findIndex(
+																	element =>
+																		value ===
+																		element.id
+																) + 1}
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Название"),
+													dataIndex: "translate.name",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Описания"),
+													dataIndex:
+														"translate.description",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												}
+											]}
+											dataSource={filteredItems}
+										/>
+									</div>
+								) : (
+									<div
+										style={{
+											display: "flex",
+											flexWrap: "wrap",
+											columnGap: "10px",
+											rowGap: "10px",
+											justifyContent: "center",
+											alignItems: "center",
+											marginTop: "20px"
+										}}>
+										{filteredItems &&
+											filteredItems.map((item, index) => {
+												return (
+													<Card
+														{...{
+															hasDelete: true,
+															hasEdit: true,
+															onEdit: () => {
+																openEditModal(
+																	item
+																);
+															},
+															onDelete: () =>
+																onDeleteHandler(
+																	item.id
+																),
+															content: [
+																{
+																	title: t(
+																		"No"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{items.findIndex(
+																				element =>
+																					item.id ===
+																					element.id
+																			) +
+																				1}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Название"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Описания"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"translate.name"
+																			)}
+																		</div>
+																	)
+																}
+															]
+														}}
+													/>
+												);
+											})}
+									</div>
+								)}
 								{meta && meta.perPage && (
 									<div className="pad-15 d-flex justify-content-end">
 										<Pagination

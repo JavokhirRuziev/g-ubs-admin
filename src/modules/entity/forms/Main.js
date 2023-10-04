@@ -159,7 +159,9 @@ const EnhacedForm = withFormik({
 			onSuccess = () => {},
 			onError = () => {},
 			FormAction,
-			selfErrorMessage
+			selfErrorMessage,
+			ownSubmitValue,
+			submitValue
 		} = props;
 
 		values = { ...values };
@@ -220,8 +222,16 @@ const EnhacedForm = withFormik({
 				},
 				error: (errorResponse = []) => {
 					const errors = get(errorResponse, "errors");
-
-					if (!selfErrorMessage) {
+					if (
+						errorResponse &&
+						errorResponse.message &&
+						errorResponse.message
+					) {
+						notification["error"]({
+							message: errorResponse.message,
+							duration: 3
+						});
+					} else if (!selfErrorMessage) {
 						notification["error"]({
 							message: "Что-то пошло не так",
 							duration: 3

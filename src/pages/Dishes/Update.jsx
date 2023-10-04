@@ -10,10 +10,12 @@ import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import get from "lodash/get";
 import config from "config";
+import { useSelector } from "react-redux";
 
 const Update = ({ location, history, match }) => {
 	const TabPane = Tabs.TabPane;
 	const { t } = useTranslation("main");
+	const profile = useSelector(state => state.auth.data);
 
 	const query = qs.parse(location.search);
 	const { lang } = query;
@@ -189,6 +191,19 @@ const Update = ({ location, history, match }) => {
 											(prev, curr) => [...prev, curr.id],
 											[]
 										)
+								},
+								{
+									name: "auto_calculation",
+									value: get(item, "status") === 1,
+									onSubmitValue: value => (value ? 1 : 0)
+								},
+								{
+									name: "company_id",
+									value:
+										profile &&
+										profile.success &&
+										profile.success.company_id &&
+										profile.success.company_id
 								}
 							]}
 							params={{
@@ -199,7 +214,6 @@ const Update = ({ location, history, match }) => {
 							{({ isSubmitting, values, setFieldValue }) => {
 								return (
 									<Spin spinning={isSubmitting}>
-										{console.log(item)}
 										<Form
 											{...{
 												values,

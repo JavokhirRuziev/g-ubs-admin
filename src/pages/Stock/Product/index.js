@@ -21,6 +21,9 @@ import config from "config";
 import qs from "query-string";
 import axios from "axios";
 import { thousandsDivider } from "../../../services/thousandsDivider";
+import useMediaQueries from "../../../services/media-queries";
+import { get } from "lodash";
+import Card from "../../../components/Card/Card";
 const { Option } = Select;
 
 export default function index({ location, history, match }) {
@@ -33,6 +36,7 @@ export default function index({ location, history, match }) {
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const { id } = match.params;
+	const { mobile } = useMediaQueries();
 	const [search, setSearch] = useState({
 		category: "",
 		stock: "",
@@ -287,7 +291,7 @@ export default function index({ location, history, match }) {
 								position: "absolute",
 								right: "30px",
 								top: 0,
-								fontSize: "30px",
+								fontSize: mobile ? "20px" : "30px",
 								fontWeight: "bold"
 							}}>
 							{thousandsDivider(total_amount)}
@@ -332,141 +336,357 @@ export default function index({ location, history, match }) {
 
 						return (
 							<Spin spinning={!isFetched}>
-								<div className="default-table pad-15">
-									<Table
-										hasEdit={true}
-										hasDelete={true}
-										rowKey="id"
-										onEdit={value => {
-											openEditModal(value);
-										}}
-										onDelete={value =>
-											onDeleteHandler(value.id)
-										}
-										columns={[
-											{
-												title: t("No"),
-												dataIndex: `id`,
-												className:
-													"text-align-left w-82",
-												render: value => {
-													return (
-														<div className="divider-wrapper">
-															{items.findIndex(
-																element =>
-																	value ===
-																	element.id
-															) + 1}
-														</div>
-													);
-												}
-											},
-											{
-												title: t("Название"),
-												dataIndex: "translate.name",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Остаток"),
-												dataIndex: "amount",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Количество"),
-												dataIndex: "id" && "count",
-												render: (value, item) => (
-													<div className="divider-wrapper">
-														<div
-															style={{
-																background:
-																	Number.parseFloat(
-																		value
-																	) <=
-																	Number.parseFloat(
-																		item.deficit_threshold
-																	)
-																		? "rgba(255,0,0,1.7)"
-																		: Number.parseFloat(
-																				value
-																		  ) >=
-																				Number.parseFloat(
-																					item.deficit_threshold
-																				) &&
-																		  Number.parseFloat(
-																				value
-																		  ) <=
-																				Number.parseFloat(
-																					item.average_quantity
-																				)
-																		? "rgba(255,200,0,1.7)"
-																		: value >=
-																		  Number.parseFloat(
-																				item.average_quantity
-																		  )
-																		? "rgba(0,255,0,1.7)"
-																		: "#fff",
-																color: "black",
-																fontWeight:
-																	"700",
-																padding: "5px",
-																fontSize: "16px"
-															}}>
-															{value}{" "}
-															{
-																item.unit[
-																	`title_${tabLang}`
-																]
-															}
-														</div>
-													</div>
-												)
-											},
-											{
-												title: t("Склад"),
-												dataIndex: `stock.translate.name`,
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Категория"),
-												dataIndex: `category.translate.name`,
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
-													</div>
-												)
-											},
-											{
-												title: t("Статус"),
-												dataIndex: "is_active",
-												render: value => (
-													<div className="divider-wrapper">
-														<div
-															className="color-view-ellipse"
-															style={{
-																backgroundColor: value
-																	? "#4caf50"
-																	: "#f44336"
-															}}
-														/>
-													</div>
-												)
+								{!mobile ? (
+									<div className="default-table pad-15">
+										<Table
+											hasEdit={true}
+											hasDelete={true}
+											rowKey="id"
+											onEdit={value => {
+												openEditModal(value);
+											}}
+											onDelete={value =>
+												onDeleteHandler(value.id)
 											}
-										]}
-										dataSource={filteredItems}
-									/>
-								</div>
+											columns={[
+												{
+													title: t("No"),
+													dataIndex: `id`,
+													className:
+														"text-align-left w-82",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{items.findIndex(
+																	element =>
+																		value ===
+																		element.id
+																) + 1}
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Название"),
+													dataIndex: "translate.name",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Остаток"),
+													dataIndex: "amount",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Количество"),
+													dataIndex: "id" && "count",
+													render: (value, item) => (
+														<div className="divider-wrapper">
+															<div
+																style={{
+																	background:
+																		Number.parseFloat(
+																			value
+																		) <=
+																		Number.parseFloat(
+																			item.deficit_threshold
+																		)
+																			? "rgba(255,0,0,1.7)"
+																			: Number.parseFloat(
+																					value
+																			  ) >=
+																					Number.parseFloat(
+																						item.deficit_threshold
+																					) &&
+																			  Number.parseFloat(
+																					value
+																			  ) <=
+																					Number.parseFloat(
+																						item.average_quantity
+																					)
+																			? "rgba(255,200,0,1.7)"
+																			: value >=
+																			  Number.parseFloat(
+																					item.average_quantity
+																			  )
+																			? "rgba(0,255,0,1.7)"
+																			: "#fff",
+																	color:
+																		"black",
+																	fontWeight:
+																		"700",
+																	padding:
+																		"5px",
+																	fontSize:
+																		"16px"
+																}}>
+																{value}{" "}
+																{
+																	item.unit[
+																		`title_${tabLang}`
+																	]
+																}
+															</div>
+														</div>
+													)
+												},
+												{
+													title: t("Склад"),
+													dataIndex: `stock.translate.name`,
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Категория"),
+													dataIndex: `category.translate.name`,
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Статус"),
+													dataIndex: "is_active",
+													render: value => (
+														<div className="divider-wrapper">
+															<div
+																className="color-view-ellipse"
+																style={{
+																	backgroundColor: value
+																		? "#4caf50"
+																		: "#f44336"
+																}}
+															/>
+														</div>
+													)
+												}
+											]}
+											dataSource={filteredItems}
+										/>
+									</div>
+								) : (
+									<div
+										style={{
+											display: "flex",
+											flexWrap: "wrap",
+											columnGap: "10px",
+											rowGap: "10px",
+											justifyContent: "center",
+											alignItems: "center",
+											marginTop: "20px"
+										}}>
+										{filteredItems &&
+											filteredItems.map((item, index) => {
+												return (
+													<Card
+														{...{
+															hasDelete: true,
+															hasEdit: true,
+															onEdit: () => {
+																openEditModal(
+																	item
+																);
+															},
+															onDelete: () =>
+																onDeleteHandler(
+																	item.id
+																),
+															content: [
+																{
+																	title: t(
+																		"No"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{items.findIndex(
+																				element =>
+																					item.id ===
+																					element.id
+																			) +
+																				1}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Название"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Остаток"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{thousandsDivider(
+																				get(
+																					item,
+																					"amount"
+																				)
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Количество"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			<div
+																				style={{
+																					background:
+																						Number.parseFloat(
+																							get(
+																								item,
+																								"count"
+																							)
+																						) <=
+																						Number.parseFloat(
+																							get(
+																								item,
+																								"deficit_threshold"
+																							)
+																						)
+																							? "rgba(255,0,0,1.7)"
+																							: Number.parseFloat(
+																									get(
+																										item,
+																										"count"
+																									)
+																							  ) >=
+																									Number.parseFloat(
+																										get(
+																											item,
+																											"deficit_threshold"
+																										)
+																									) &&
+																							  Number.parseFloat(
+																									get(
+																										item,
+																										"count"
+																									)
+																							  ) <=
+																									Number.parseFloat(
+																										get(
+																											item,
+																											"average_quantity"
+																										)
+																									)
+																							? "rgba(255,200,0,1.7)"
+																							: get(
+																									item,
+																									"count"
+																							  ) >=
+																							  Number.parseFloat(
+																									get(
+																										item,
+																										"average_quantity"
+																									)
+																							  )
+																							? "rgba(0,255,0,1.7)"
+																							: "#fff",
+																					color:
+																						"black",
+																					fontWeight:
+																						"700",
+																					padding:
+																						"5px",
+																					fontSize:
+																						"16px"
+																				}}>
+																				{thousandsDivider(
+																					get(
+																						item,
+																						"count"
+																					)
+																				)}{" "}
+																				{
+																					get(
+																						item,
+																						`unit`
+																					)[
+																						`title_${tabLang}`
+																					]
+																				}
+																			</div>
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Склад"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"stock.translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Категория"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"category.translate.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Статус"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			<div
+																				className="color-view-ellipse"
+																				style={{
+																					backgroundColor: Boolean(
+																						get(
+																							item,
+																							"is_active"
+																						)
+																					)
+																						? "#4caf50"
+																						: "#f44336"
+																				}}
+																			/>
+																		</div>
+																	)
+																}
+															]
+														}}
+													/>
+												);
+											})}
+									</div>
+								)}
 								{meta && meta.perPage && (
 									<div className="pad-15 d-flex justify-content-end">
 										<Pagination

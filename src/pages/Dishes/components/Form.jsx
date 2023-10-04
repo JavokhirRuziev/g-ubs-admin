@@ -199,6 +199,17 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 							{t("Активный статус")}
 						</div>
 					</div>
+					<div className="d-flex align-items-center mb-24">
+						<Switch
+							onChange={value => {
+								setFieldValue("auto_calculation", value);
+							}}
+							checked={values.auto_calculation}
+						/>
+						<div className="ant-label mb-0 ml-10">
+							{t("Автоматический расчет")}
+						</div>
+					</div>
 
 					<Button
 						type="primary"
