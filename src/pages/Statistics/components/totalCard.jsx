@@ -14,7 +14,7 @@ const TotalCard = ({ params, totalExpense, totalSale, totalCreditor }) => {
 					<img src={require("../icons/icon-4.svg")} alt="" />
 				</div>
 				<div className="--title">
-					<span>{t("Прибыл")}</span>
+					<span>{t("Прибыль Убыток")}</span>
 					{!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (
@@ -35,15 +35,6 @@ const TotalCard = ({ params, totalExpense, totalSale, totalCreditor }) => {
 					<div>
 						{totalExpense
 							? helpers.convertToReadable(totalExpense)
-							: 0}{" "}
-						{t("сум")}
-					</div>
-				</div>
-				<div className="dashboard-line --red">
-					<span>Кредиторка</span>
-					<div>
-						{totalCreditor
-							? helpers.convertToReadable(totalCreditor)
 							: 0}{" "}
 						{t("сум")}
 					</div>

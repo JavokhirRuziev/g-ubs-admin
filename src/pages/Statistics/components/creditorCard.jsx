@@ -1,102 +1,95 @@
-import React, {useEffect, useState} from 'react';
-import {helpers} from "services";
+import React, { useEffect, useState } from "react";
+import { helpers } from "services";
 import Actions from "modules/entity/actions";
-import {useDispatch} from "react-redux";
-import {useTranslation} from "react-i18next";
-import config from "../../../config";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { thousandsDivider } from "../../../services/thousandsDivider";
+import qs from "query-string";
 
-const ExpensesCard = ({params, setTotalCreditor}) => {
-    const dispatch = useDispatch();
-    const {t} = useTranslation("main");
+const ExpensesCard = ({ location, params, setTotalCreditor, history }) => {
+	const dispatch = useDispatch();
+	const { t } = useTranslation("main");
+	const query = qs.parse(location.search);
+	const { lang } = query;
 
-    const [categories, setCategories] = useState([]);
-    const [creditorTransactions, setCreditorTransactions] = useState([]);
-    const [totalCreditor, setTotalCreditors] = useState(0);
+	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 
-    const loadExpensesByCategory = () => {
-        dispatch(Actions.LoadDefault.request({
-            url: `/transactions/borrowed-by-category`,
-            params: {
-                extra: {
-                    start_date: params.start_at && params.start_at,
-                    end_date: params.end_at && params.end_at,
-                }
-            },
-            cb: {
-                success: data => {
-                    const total = data.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
-                    setCreditorTransactions(data)
-                    setTotalCreditors(total)
-                    setTotalCreditor(total)
-                },
-                error: data => {}
-            }
-        }))
-    }
-    const loadExpenseCategories = () => {
-        dispatch(Actions.LoadDefault.request({
-            url: `/expense-categories`,
-            params: {
-                filter: {type: config.EXPENSE_CATEGORY_TYPE}
-            },
-            cb: {
-                success: data => {
-                    setCategories(data.data)
-                },
-                error: data => {}
-            }
-        }))
-    }
+	const [categories, setCategories] = useState([]);
+	const [totalCreditor, setTotalCreditors] = useState(0);
 
-    useEffect(() => {
-        loadExpenseCategories()
-    }, [])
-    useEffect(() => {
-        loadExpensesByCategory()
-    }, [params.start_at,params.end_at])
+	const loadExpenseCategories = () => {
+		dispatch(
+			Actions.LoadDefault.request({
+				url: `/dashboard/available-products`,
+				params: {
+					extra: {
+						start_date: params.start_at && params.start_at,
+						end_date: params.end_at && params.end_at,
+						_l: tabLang
+					},
+					include: "translate"
+				},
+				cb: {
+					success: data => {
+						setCategories(data.data);
+						setTotalCreditors(data.amount);
+					},
+					error: data => {}
+				}
+			})
+		);
+	};
 
-    return (
-        <div className="dashboard-card-st">
-            <div className="dashboard-card-st__head">
-                <div className="--icon --icon-orange">
-                    <img src={require("../icons/icon-3.svg")} alt="" />
-                </div>
-                <div className="--title">
-                    <span>{t("Кредиторка")}</span>
-                    {(!params.start_at && !params.end_at) ? (
-                        <span>{t("За день")}</span>
-                    ) : (
-                        <span>{t("За выбранный период")}</span>
-                    )}
-                </div>
-            </div>
-            <div className="dashboard-card-st__body">
-                {categories.length > 0 ? (
-                    categories.map(item => {
+	useEffect(() => {
+		loadExpenseCategories();
+	}, [params.start_at, params.end_at]);
 
-                        const itemsByCategory = creditorTransactions.filter(a => a.alias === item.alias);
-                        const totalSum = itemsByCategory.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
-
-                        return(
-                            item.alias !== 'vip' ? (
-                                <div className="dashboard-line --red" key={item.id}>
-                                    <span>{item.title === t("Сотувдан") ? t("Клиент") : item.title}</span>
-                                    <div>{helpers.convertToReadable(totalSum)} {t("сум")}</div>
-                                </div>
-                            ) : <></>
-                        )
-                    })
-                ) : (
-                    <div>-</div>
-                )}
-
-            </div>
-            <div className="dashboard-card-st__footer">
-                <span>{t("Oбщая сумма")}:</span>
-                <span>{helpers.convertToReadable(totalCreditor)} {t("сум")}</span>
-            </div>
-        </div>
-    );
+	return (
+		<div className="dashboard-card-st">
+			<div className="dashboard-card-st__head">
+				<div className="--icon --icon-orange">
+					<img src={require("../icons/icon-3.svg")} alt="" />
+				</div>
+				<div className="--title">
+					<span>{t("Остаток товаров")}</span>
+					{!params.start_at && !params.end_at ? (
+						<span>{t("За день")}</span>
+					) : (
+						<span>{t("За выбранный период")}</span>
+					)}
+				</div>
+			</div>
+			<div className="dashboard-card-st__body">
+				{categories.length > 0 ? (
+					categories.map(item => {
+						return (
+							<div
+								className="dashboard-line --red cursor-pointer"
+								key={item.id}
+								onClick={() =>
+									history.push(
+										`/stock/products?category=${item.category_id}`
+									)
+								}>
+								<span>{item.name}</span>
+								<div>
+									{item.amount} {t("сум")}
+								</div>
+							</div>
+						);
+					})
+				) : (
+					<div>-</div>
+				)}
+			</div>
+			<div className="dashboard-card-st__footer">
+				<span>{t("Oбщая сумма")}:</span>
+				<span>
+					{thousandsDivider(totalCreditor)} {t("сум")}
+				</span>
+			</div>
+		</div>
+	);
 };
 
 export default ExpensesCard;

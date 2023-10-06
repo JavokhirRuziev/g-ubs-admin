@@ -36,12 +36,29 @@ export default function index({ location, history }) {
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
+	const timestamp_start = query.start_at;
+	const date_start = new Date(timestamp_start * 1000);
+	const year_start = date_start.getFullYear();
+	const month_start = String(date_start.getMonth() + 1).padStart(2, "0");
+	const day_start = String(date_start.getDate()).padStart(2, "0");
+
+	const timestamp_end = query.end_at;
+	const date_end = new Date(timestamp_end * 1000);
+	const year_end = date_end.getFullYear();
+	const month_end = String(date_end.getMonth() + 1).padStart(2, "0");
+	const day_end = String(date_end.getDate()).padStart(2, "0");
+
+	const start_at = `${year_start}-${month_start}-${day_start}`;
+	const end_at = `${year_end}-${month_end}-${day_end}`;
 	const [search, setSearch] = useState({
-		category: "",
+		category: Number(query.category),
 		stock: "",
 		unit: "",
 		product: "",
-		data: { from: "", to: "" }
+		data: {
+			from: query.start_at ? start_at : "",
+			to: query.end_at ? end_at : ""
+		}
 	});
 	const [stock, setStock] = useState();
 	const [stock_id, setStock_id] = useState();
@@ -203,6 +220,7 @@ export default function index({ location, history }) {
 						style={{
 							display: "flex",
 							columnGap: "10px",
+							rowGap: "10px",
 							flexWrap: "wrap"
 						}}>
 						<div>
@@ -249,7 +267,6 @@ export default function index({ location, history }) {
 									))}
 							</Select>
 						</div>
-
 						<div>
 							<Select
 								placeholder={t("Продукт")}
@@ -268,23 +285,6 @@ export default function index({ location, history }) {
 									))}
 							</Select>
 						</div>
-						{/* 
-				<div>
-					<Select
-						defaultValue={"unit"}
-						onChange={value => {
-							setSearch({ ...search, unit: value });
-						}}
-						style={{ width: 200 }}>
-						{unit &&
-							unit.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.name}
-								</Option>
-							))}
-					</Select>
-				</div> */}
-
 						<div>
 							<Input
 								type="date"
@@ -384,8 +384,6 @@ export default function index({ location, history }) {
 									(!toDate || item.created_at <= toDate)
 								);
 							});
-
-						console.log(items);
 
 						return (
 							<Spin spinning={!isFetched}>

@@ -210,12 +210,12 @@ const contentManagerRoutes = [
 				title: "Распределенный продукт",
 				role: "distributed_products"
 			},
-			{
-				id: "/finished-product/",
-				link: "/finished-product",
-				title: "Готовый продукт",
-				role: "dishes"
-			},
+			// {
+			// 	id: "/finished-product/",
+			// 	link: "/finished-product",
+			// 	title: "Готовый продукт",
+			// 	role: "dishes"
+			// },
 			{
 				id: "finished-dishes",
 				title: "Готовое блюдо",

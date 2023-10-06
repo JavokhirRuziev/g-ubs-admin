@@ -36,10 +36,12 @@ const Update = ({ location, history, match }) => {
 			primaryKey="id"
 			id={id}
 			params={{
-				include: "recommended.translate,translate,video,kitchener,unit",
+				include:
+					"recommended.translate,translate,video,kitchener,unit,file",
 				extra: { _l: tabLang, append: "gallery0" }
 			}}>
 			{({ item, isFetched }) => {
+				console.log(get(item, "countable"));
 				return (
 					<Spin spinning={!isFetched}>
 						<div className="title-md mb-20 mt-14">
@@ -151,8 +153,8 @@ const Update = ({ location, history, match }) => {
 								},
 								{
 									name: "countable",
-									value: get(item, "countable") === 1,
-									onSubmitValue: value => (value ? 1 : 0)
+									value: get(item, "countable"),
+									onSubmitValue: value => 1
 								},
 								{
 									name: "status",

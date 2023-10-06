@@ -322,6 +322,7 @@ const Update = ({ location, match }) => {
 					setIsSubmitting(false);
 				})
 				.catch(err => {
+					setIsSubmitting(false);
 					if (
 						err &&
 						err.response &&

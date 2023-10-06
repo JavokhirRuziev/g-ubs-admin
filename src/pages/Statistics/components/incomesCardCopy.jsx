@@ -3,25 +3,20 @@ import { helpers } from "services";
 import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import config from "config";
 
-const IncomesCard = ({ params, setTotalIncome }) => {
+const IncomesCardCopy = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation("main");
-	const history = useHistory();
 
+	const [categories, setCategories] = useState([]);
 	const [incomesTransactions, setIncomesTransactions] = useState([]);
-	const ordersArr = [
-		{ title: "Отчёт по заказом", link: "/orders" },
-		{ title: "Отчёт по стол", link: "/orders-on-table" },
-		{ title: "Отчёт по блюдам", link: "/monitoring" },
-		{ title: "Отчёт по официантом", link: "/monitoring-waiter" }
-	];
+	const [totalIncomes, setTotalIncomes] = useState(0);
 
 	const loadTotalsByCategory = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/dashboard/report-data`,
+				url: `/transactions/incomes-by-category`,
 				params: {
 					extra: {
 						start_date: params.start_at && params.start_at,
@@ -30,7 +25,30 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 				},
 				cb: {
 					success: data => {
+						const total = data.reduce(
+							(prev, curr) => prev + Number(curr.sum),
+							0
+						);
+
 						setIncomesTransactions(data);
+						setTotalIncomes(total);
+						setTotalIncome(total);
+					},
+					error: data => {}
+				}
+			})
+		);
+	};
+	const loadCategories = () => {
+		dispatch(
+			Actions.LoadDefault.request({
+				url: `/expense-categories`,
+				params: {
+					filter: { type: config.INCOME_CATEGORY_TYPE }
+				},
+				cb: {
+					success: data => {
+						setCategories(data.data);
 					},
 					error: data => {}
 				}
@@ -39,7 +57,7 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 	};
 
 	useEffect(() => {
-		loadTotalsByCategory();
+		loadCategories();
 	}, []);
 	useEffect(() => {
 		loadTotalsByCategory();
@@ -52,7 +70,7 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 					<img src={require("../icons/icon-2.svg")} alt="" />
 				</div>
 				<div className="--title">
-					<span>{t("Заказы")}</span>
+					<span>{t("Приходы")}</span>
 					{!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (
@@ -61,27 +79,35 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">
-				{incomesTransactions.map(el => (
-					<div
-						className="dashboard-line --purple cursor-pointer"
-						onClick={() =>
-							history.push(`/orders?${[el.filter_by]}=${el.id}`)
-						}>
-						<span>{t(el.key)}</span>
-						<div>
-							{el.value} {t("сум")}
-						</div>
-					</div>
-				))}
+				{categories.length > 0 ? (
+					categories.map(item => {
+						const hasSum = incomesTransactions.find(
+							a => a.alias === item.alias
+						);
+						return (
+							<div className="dashboard-line --purple">
+								<span>{item.title}</span>
+								<div>
+									{hasSum
+										? helpers.convertToReadable(hasSum.sum)
+										: 0}{" "}
+									{t("сум")}
+								</div>
+							</div>
+						);
+					})
+				) : (
+					<div>-</div>
+				)}
 			</div>
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{helpers.convertToReadable(0)} {t("сум")}
+					{helpers.convertToReadable(totalIncomes)} {t("сум")}
 				</span>
 			</div>
 		</div>
 	);
 };
 
-export default IncomesCard;
+export default IncomesCardCopy;

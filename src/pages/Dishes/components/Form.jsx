@@ -8,6 +8,7 @@ import Ingredients from "./Ingredients";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import Recipe from "./Recipe";
+import FinishedProduct from "./FinishedProduct";
 
 const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 	const { t } = useTranslation("main");
@@ -89,6 +90,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						<>
 							{/* <Ingredients /> */}
 							<Recipe {...{ location, lang, id }} />
+							<FinishedProduct {...{ location, lang, id }} />
 						</>
 					)}
 				</Panel>

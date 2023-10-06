@@ -144,7 +144,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						isMulti={true}
 						limit={10}
 					/>
-					<div className="d-flex align-items-center mb-24">
+					{/* <div className="d-flex align-items-center mb-24">
 						<Switch
 							onChange={value => {
 								setFieldValue("countable", value);
@@ -154,7 +154,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						<div className="ant-label mb-0 ml-10">
 							{t("Исчисляемый")}
 						</div>
-					</div>
+					</div> */}
 					<div className="d-flex align-items-center mb-24">
 						<Switch
 							onChange={value => {
@@ -166,7 +166,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 							{t("Активный статус")}
 						</div>
 					</div>
-					<div className="d-flex align-items-center mb-24">
+					{/* <div className="d-flex align-items-center mb-24">
 						<Switch
 							onChange={value => {
 								setFieldValue("auto_calculation", value);
@@ -176,7 +176,7 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						<div className="ant-label mb-0 ml-10">
 							{t("Автоматический расчет")}
 						</div>
-					</div>
+					</div> */}
 
 					<Button
 						type="primary"

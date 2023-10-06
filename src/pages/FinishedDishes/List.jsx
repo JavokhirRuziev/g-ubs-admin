@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Table, Board, Avatar } from "components";
 import {
@@ -8,7 +8,8 @@ import {
 	Spin,
 	Tabs,
 	Modal,
-	notification
+	notification,
+	Select
 } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Actions from "modules/entity/actions";
@@ -23,12 +24,15 @@ import get from "lodash/get";
 import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
 import { thousandsDivider } from "../../services/thousandsDivider";
+import axios from "axios";
+const { Option } = Select;
 
 const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();
 	const query = qs.parse(location.search);
 	const { lang } = query;
-	const [search, setSearch] = useState();
+	const [search, setSearch] = useState({ search: "", kitchener_id: "" });
+	const [kitcheners, setKitcheners] = useState();
 
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
@@ -37,7 +41,7 @@ const List = ({ history, location }) => {
 	const dispatch = useDispatch();
 
 	const handleChange = e => {
-		setSearch(e.target.value);
+		setSearch({ ...search, search: e.target.value });
 	};
 
 	const onDeleteHandler = menuId => {
@@ -190,32 +194,74 @@ const List = ({ history, location }) => {
 		);
 	};
 
+	useEffect(() => {
+		axios
+			.get(
+				`${config.API_ROOT}/user?_l=${tabLang}&filter[role.role]=kitchener&_f=json`
+			)
+			.then(res => {
+				const kitcheners = res.data.data;
+				const mutatedKitchener = kitcheners.map(kitchener => ({
+					name: kitchener.name,
+					value: kitchener.id
+				}));
+				setKitcheners(mutatedKitchener);
+			})
+			.catch(err => console.log(err));
+	}, [tabLang]);
+
 	const TabPane = Tabs.TabPane;
 	return (
 		<>
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Готовое блюдо")}</div>
-				<div>
-					<Input
-						component={Fields.AntInput}
-						type="text"
-						value={search}
-						onChange={handleChange}
-					/>
+			<div className="title-md">{t("Готовое блюдо")}</div>
+			<Board className="mb-40 mt-20">
+				<div className="d-flex justify-content-between align-items-center pad-10">
+					<div style={{ display: "flex", columnGap: "10px" }}>
+						<div>
+							<Input
+								component={Fields.AntInput}
+								type="text"
+								value={search.search}
+								onChange={handleChange}
+							/>
+						</div>
+						<div>
+							<Select
+								placeholder={t("Повар")}
+								onChange={value => {
+									setSearch({
+										...search,
+										kitchener_id: value
+									});
+								}}
+								allowClear
+								style={{ width: 200 }}>
+								{kitcheners &&
+									kitcheners.map(option => (
+										<Option
+											key={option.value}
+											value={option.value}>
+											{option.name}
+										</Option>
+									))}
+							</Select>
+						</div>
+					</div>
+
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() =>
+							history.push(
+								`/finished-dishes/create?lang=${tabLang}`
+							)
+						}>
+						{t("Добавить")}
+					</Button>
 				</div>
-
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() =>
-						history.push(`/finished-dishes/create?lang=${tabLang}`)
-					}>
-					{t("Добавить")}
-				</Button>
-			</div>
-
+			</Board>
 			<Board className="border-none">
 				<div>
 					<Tabs
@@ -236,7 +282,11 @@ const List = ({ history, location }) => {
 						sort: "-id",
 						limit: 50,
 						include: "translate,file,unit",
-						extra: { _l: tabLang },
+						extra: {
+							_l: tabLang,
+							search: search.search,
+							kitchener_id: search.kitchener_id
+						},
 						page
 					}}>
 					{({ items, isFetched, meta }) => {
@@ -248,6 +298,12 @@ const List = ({ history, location }) => {
 											hasEdit={true}
 											hasDelete={true}
 											rowKey="id"
+											hasDishesProduct={true}
+											onReadyProd={value =>
+												history.push(
+													`/finished-product-update/${value.id}?lang=${tabLang}&quantity=${value.quantity}`
+												)
+											}
 											onEdit={value =>
 												history.push(
 													`/finished-dishes/update/${value.id}?lang=${tabLang}`
@@ -454,6 +510,11 @@ const List = ({ history, location }) => {
 														{...{
 															hasEdit: true,
 															hasDelete: true,
+															hasDishesProduct: true,
+															onReadyProd: () =>
+																history.push(
+																	`/finished-product-update/${item.id}?lang=${tabLang}&quantity=${item.quantity}`
+																),
 															onEdit: () =>
 																history.push(
 																	`/finished-dishes/update/${item.id}?lang=${tabLang}`

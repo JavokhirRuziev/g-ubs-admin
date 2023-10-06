@@ -181,8 +181,6 @@ const EnhacedForm = withFormik({
 					onSuccess(data, resetForm);
 				},
 				error: (errors = []) => {
-					console.log(errors);
-
 					if (!selfErrorMessage) {
 						notification["error"]({
 							message: "Что-то пошло не так",

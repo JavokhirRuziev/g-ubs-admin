@@ -3,15 +3,20 @@ import Filter from "./Filter";
 import { Board } from "../../components";
 import qs from "query-string";
 import ExpensesCard from "./components/expensesCard";
+import ExpensesCardCopy from "./components/expensesCardCopy";
 import IncomesCard from "./components/incomesCard";
 import SalesCard from "./components/salesCard";
 import CashboxCard from "./components/cashboxCard";
+import CashboxCardCopy from "./components/cashboxCardCopy";
 import CreditorCard from "./components/creditorCard";
+import CreditorCardCopy from "./components/creditorCardCopy";
 import TotalCard from "./components/totalCard";
 import DebitCard from "./components/debitCard";
+import DebitCardCopy from "./components/debitCardCopy";
 import useMediaQueries from "../../services/media-queries";
+import IncomesCardCopy from "./components/incomesCardCopy";
 
-const Statistics = ({ location }) => {
+const Statistics = ({ location, history }) => {
 	const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 	const [totalExpense, setTotalExpense] = useState(0);
 	const [totalIncome, setTotalIncome] = useState(0);
@@ -41,26 +46,65 @@ const Statistics = ({ location }) => {
 			</div>
 			<div className="row mb-30">
 				<div className={`${mobile ? "col-12 mb-30" : "col-6 mb-30"}`}>
-					<IncomesCard {...{ params, setTotalIncome }} />
+					<IncomesCard
+						{...{ history, location, params, setTotalIncome }}
+					/>
 				</div>
 
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<CreditorCard {...{ params, setTotalCreditor }} />
+					<SalesCard
+						{...{ history, location, params, setTotalSale }}
+					/>
 				</div>
 
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<CashboxCard {...{ params, totalExpense, totalIncome }} />
-				</div>
-				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<ExpensesCard {...{ params, setTotalExpense }} />
-				</div>
-
-				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<DebitCard {...{ params, setTotalDebtor }} />
+					<CreditorCard
+						{...{ history, location, params, setTotalCreditor }}
+					/>
 				</div>
 
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<SalesCard {...{ params, setTotalSale }} />
+					<CashboxCard
+						{...{
+							history,
+							location,
+							params,
+							totalExpense,
+							totalIncome
+						}}
+					/>
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<ExpensesCard {...{ params, setTotalExpense, location }} />
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<DebitCard {...{ params, setTotalDebtor, location }} />
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<IncomesCardCopy
+						{...{ params, setTotalExpense, location }}
+					/>
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<ExpensesCardCopy
+						{...{ params, setTotalExpense, location }}
+					/>
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<CreditorCardCopy
+						{...{ params, setTotalExpense, location }}
+					/>
+				</div>
+				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
+					<CashboxCardCopy
+						{...{
+							params,
+							setTotalExpense,
+							location,
+							setTotalDebtor,
+							setTotalCreditor
+						}}
+					/>
 				</div>
 			</div>
 		</div>

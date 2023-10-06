@@ -37,13 +37,6 @@ export default function index({ location, history, match }) {
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const { id } = match.params;
 	const { mobile } = useMediaQueries();
-	const [search, setSearch] = useState({
-		category: "",
-		stock: "",
-		unit: "",
-		product: "",
-		color: ""
-	});
 	const [stock, setStock] = useState();
 	const [stock_id, setStock_id] = useState();
 	const [category, setCategory] = useState();
@@ -56,6 +49,13 @@ export default function index({ location, history, match }) {
 		{ name: "Нормальное", value: "yellow" },
 		{ name: "Достаточное", value: "green" }
 	];
+	const [search, setSearch] = useState({
+		category: Number(query.category),
+		stock: "",
+		unit: "",
+		product: "",
+		color: ""
+	});
 
 	useEffect(() => {
 		axios
@@ -159,6 +159,7 @@ export default function index({ location, history, match }) {
 			})
 		);
 	};
+
 	return (
 		<>
 			<Modal
