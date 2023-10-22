@@ -14,7 +14,6 @@ import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/Update";
 import Actions from "modules/entity/actions";
-import { Fields } from "components";
 
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -38,6 +37,7 @@ export default function index({ location, history }) {
 	const [search, setSearch] = useState({ category: "", stock: "" });
 	const [stock, setStock] = useState();
 	const { mobile } = useMediaQueries();
+	const [filteredOptions, setFilteredOptions] = useState();
 
 	useEffect(() => {
 		axios
@@ -141,15 +141,39 @@ export default function index({ location, history }) {
 									setSearch({ ...search, stock: value })
 								}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = stock.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions(filteredOptions);
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{stock &&
-									stock.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions
+									? stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))
+									: stock &&
+									  stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -204,7 +228,8 @@ export default function index({ location, history }) {
 							_l: tabLang,
 							stock_id: search.stock,
 							search: search.category
-						}
+						},
+						page
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems = items.filter(item => {

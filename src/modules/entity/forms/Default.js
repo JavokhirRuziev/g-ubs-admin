@@ -183,7 +183,7 @@ const EnhacedForm = withFormik({
 				error: (errors = []) => {
 					if (!selfErrorMessage) {
 						notification["error"]({
-							message: "Что-то пошло не так",
+							message: errors && errors.message && errors.message,
 							duration: 3
 						});
 					}

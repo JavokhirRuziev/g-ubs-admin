@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./Form";
 import get from "lodash/get";
 
 const Update = ({ selected, showUpdateModal }) => {
+	const [send_roles, setSend_roles] = useState();
 	return (
 		<EntityForm.Main
 			method="put"
@@ -50,6 +51,11 @@ const Update = ({ selected, showUpdateModal }) => {
 					name: "companyStatus",
 					value: get(selected, "company.status") === 1,
 					onSubmitValue: value => (value ? 1 : 0)
+				},
+				{
+					name: "roles",
+					onSubmitValue: () => send_roles,
+					value: get(selected, "roles")
 				}
 			]}
 			updateData
@@ -59,7 +65,15 @@ const Update = ({ selected, showUpdateModal }) => {
 			{({ isSubmitting, values, setFieldValue }) => {
 				return (
 					<Spin spinning={isSubmitting}>
-						<Form {...{ values, setFieldValue, isUpdate: true }} />
+						<Form
+							{...{
+								values,
+								setFieldValue,
+								isUpdate: true,
+								send_roles,
+								setSend_roles
+							}}
+						/>
 					</Spin>
 				);
 			}}

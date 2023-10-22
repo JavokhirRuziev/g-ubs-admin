@@ -1,11 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Fields } from "components";
 import { Field } from "formik";
 import { Button, Switch } from "antd";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
+import config from "config";
 
-const Form = ({ isUpdate, setFieldValue, values }) => {
+const Form = ({
+	isUpdate,
+	setFieldValue,
+	values,
+	send_roles,
+	setSend_roles
+}) => {
+	const [roles, setRoles] = useState();
+	const [permissions, setPermissions] = useState();
+
+	useEffect(() => {
+		if (isUpdate) {
+			setSend_roles(values.roles);
+		}
+		axios
+			.get(`${config.API_ROOT}/user/roles/permissions`)
+			.then(res => {
+				setRoles(res.data.roles);
+				setPermissions(res.data.permissions);
+			})
+			.catch(err => console.log(err));
+	}, []);
 	const { t } = useTranslation("main");
+
+	const handleRoleChange = (value, role) => {
+		send_roles
+			? setSend_roles(prevRoles => {
+					if (value) {
+						return [
+							...prevRoles,
+							{
+								role: role.value
+							}
+						];
+					} else {
+						return prevRoles.filter(r => r.role !== role.value);
+					}
+			  })
+			: setSend_roles([
+					{
+						role: role.value,
+						permissions: null
+					}
+			  ]);
+	};
+
+	const handlePermissionChange = (value, role, permission) => {
+		setSend_roles(prevRoles => {
+			if (value) {
+				return prevRoles.map(r =>
+					r.role === role.value
+						? r && r.permissions && r.permissions.length
+							? {
+									...r,
+									permissions: [...r.permissions, permission]
+							  }
+							: {
+									...r,
+									permissions: [permission]
+							  }
+						: r
+				);
+			} else {
+				return prevRoles.map(r =>
+					r.role === role.value
+						? {
+								...r,
+								permissions: r.permissions.filter(
+									p => p !== permission
+								)
+						  }
+						: r
+				);
+			}
+		});
+	};
+
 	return (
 		<div>
 			<div className="title-md fs-16 mb-20">
@@ -83,6 +160,102 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 					</div>
 				</div>
 			)}
+			<div
+				style={{
+					rowGap: "5px",
+					display: "flex",
+					flexDirection: "column"
+				}}>
+				{roles &&
+					roles.map(role => {
+						return (
+							<div key={role.title} className="mb-20">
+								<div
+									style={{
+										display: "flex",
+										marginBottom: "10px"
+									}}>
+									<Switch
+										name="roles"
+										onChange={value =>
+											handleRoleChange(value, role)
+										}
+										checked={
+											send_roles &&
+											send_roles.some(
+												r => r.role === role.value
+											)
+										}
+									/>
+									<div className="ant-label mb-0">
+										{t(role.title)}
+									</div>
+								</div>
+								<div
+									style={{
+										display: "flex",
+										columnGap: "5px"
+									}}>
+									{permissions &&
+										permissions.map(permission => {
+											return (
+												<div
+													key={permission}
+													style={{
+														display: "flex",
+														columnGap: "5px",
+														flexWrap: "wrap",
+														rowGap: "5px"
+													}}>
+													<Switch
+														name="roles"
+														disabled={
+															send_roles
+																? !send_roles.some(
+																		r =>
+																			r.role ===
+																			role.value
+																  )
+																: true
+														}
+														onChange={value =>
+															handlePermissionChange(
+																value,
+																role,
+																permission
+															)
+														}
+														checked={
+															send_roles &&
+															send_roles.some(
+																r => {
+																	if (
+																		r.value ||
+																		r.permissions
+																	) {
+																		return (
+																			r.role ===
+																				role.value &&
+																			r.permissions.includes(
+																				permission
+																			)
+																		);
+																	}
+																}
+															)
+														}
+													/>
+													<div className="ant-label mb-0">
+														{t(permission)}
+													</div>
+												</div>
+											);
+										})}
+								</div>
+							</div>
+						);
+					})}
+			</div>
 
 			<Button
 				type="primary"

@@ -22,6 +22,7 @@ const Update = ({ location, match }) => {
 	const { lang, quantity } = query;
 	const [tabLang, setTabLang] = useState(lang);
 	const { id } = match.params;
+	const [dish_count, setDish_count] = useState();
 
 	useEffect(() => {
 		if (id) {
@@ -135,6 +136,7 @@ const Update = ({ location, match }) => {
 						message: res.data.message,
 						duration: 10
 					});
+					setDish_count(res.data.dish_count);
 					res.data.data.forEach(item => {
 						setCount(prevCount => {
 							return {
@@ -189,7 +191,7 @@ const Update = ({ location, match }) => {
 			axios
 				.post(`${config.API_ROOT}/dish/${id}/get`, {
 					products: created,
-					dish_count: quantity
+					dish_count: dish_count
 				})
 				.then(res => {
 					notification["success"]({
@@ -230,6 +232,16 @@ const Update = ({ location, match }) => {
 							duration: 10
 						});
 					}
+					if (err.response.status === 500) {
+						setStep({
+							...step,
+							post: false,
+							get: false,
+							calc_put: true,
+							put: false
+						});
+					}
+					setIsSubmitting(false);
 				});
 		}
 		if (step.calc_put) {
@@ -244,6 +256,7 @@ const Update = ({ location, match }) => {
 						message: res.data.message,
 						duration: 10
 					});
+					setDish_count(res.data.dish_count);
 					res.data.data.forEach(item => {
 						setCount(prevCount => {
 							return {
@@ -304,7 +317,7 @@ const Update = ({ location, match }) => {
 			axios
 				.put(`${config.API_ROOT}/dish/${id}/get`, {
 					products: updated,
-					dish_count: quantity
+					dish_count: dish_count
 				})
 				.then(res => {
 					notification["success"]({
@@ -318,7 +331,7 @@ const Update = ({ location, match }) => {
 						calc_put: true,
 						put: false
 					});
-					window.location.reload();
+					// window.location.reload();
 					setIsSubmitting(false);
 				})
 				.catch(err => {

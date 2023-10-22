@@ -4,6 +4,7 @@ import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "config";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const IncomesCardCopy = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();
@@ -89,7 +90,9 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 								<span>{item.title}</span>
 								<div>
 									{hasSum
-										? helpers.convertToReadable(hasSum.sum)
+										? helpers.convertToReadable(
+												thousandsDivider(hasSum.sum)
+										  )
 										: 0}{" "}
 									{t("сум")}
 								</div>
@@ -103,7 +106,8 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{helpers.convertToReadable(totalIncomes)} {t("сум")}
+					{helpers.convertToReadable(thousandsDivider(totalIncomes))}{" "}
+					{t("сум")}
 				</span>
 			</div>
 		</div>

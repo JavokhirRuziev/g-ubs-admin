@@ -1,28 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Board, Panel } from "components";
-import {
-	Button,
-	Pagination,
-	Spin,
-	Modal,
-	notification,
-	Tabs,
-	Input
-} from "antd";
+import { Pagination, Spin, Modal, Tabs, Input, Button } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
-import Update from "./components/Update";
+import Update from "./components/UpdateCreate";
 
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
 import useMediaQueries from "../../../services/media-queries/index";
 import Card from "../../../components/Card/Card";
 import { get } from "lodash";
 import { Avatar } from "../../../components";
-import Actions from "modules/entity/actions";
 import { thousandsDivider } from "../../../services/thousandsDivider";
+import axios from "axios";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
@@ -34,6 +25,7 @@ export default function index({ location, history }) {
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const [search, setSearch] = useState();
+	const [isDisabled, setIsDisabled] = useState();
 	const { mobile } = useMediaQueries();
 
 	const handleChange = e => {
@@ -71,21 +63,32 @@ export default function index({ location, history }) {
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
 					<div>
-						<Input
+						{/* <Input
 							type="text"
 							value={search}
 							onChange={handleChange}
 							placeholder={t("Поиск")}
-						/>
+						/> */}
 					</div>
-					{/* <Button
-						type="primary"
-						size="large"
-						className="fs-14 fw-300 ml-10"
-						htmlType="button"
-						onClick={() => showCreateModal(true)}>
-						{t("Добавить")}
-					</Button> */}
+					<div>
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300 ml-10"
+							htmlType="button"
+							onClick={() => showUpdateModal(true)}>
+							{t("Изменить")}
+						</Button>
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300 ml-10"
+							htmlType="button"
+							// disabled={!isDisabled}
+							onClick={() => showCreateModal(true)}>
+							{t("Добавить")}
+						</Button>
+					</div>
 				</div>
 			</Board>
 
@@ -109,13 +112,14 @@ export default function index({ location, history }) {
 				<EntityContainer.All
 					entity="stocks"
 					name={`all`}
-					url="/finished-dishes"
+					url="/recalculation-finished-dishes"
 					params={{
-						include: "translate,file,unit",
+						include: "finished_dish,kitchener",
 						extra: {
 							_l: tabLang,
 							search: search
-						}
+						},
+						page
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems = search
@@ -129,12 +133,6 @@ export default function index({ location, history }) {
 									<div className="default-table pad-15">
 										<Table
 											rowKey="id"
-											hasDishesProduct={true}
-											onReadyProd={value =>
-												history.push(
-													`/finished-product-update/${value.id}?lang=${tabLang}&quantity=${value.quantity}`
-												)
-											}
 											columns={[
 												{
 													title: t("No"),
@@ -154,7 +152,8 @@ export default function index({ location, history }) {
 												},
 												{
 													title: t("Фото"),
-													dataIndex: "file",
+													dataIndex:
+														"finished_dish.file",
 													className: "w-82 text-cen",
 													render: value => (
 														<div className="divider-wrapper">
@@ -171,17 +170,8 @@ export default function index({ location, history }) {
 												},
 												{
 													title: t("Название"),
-													dataIndex: "translate.name",
-													render: value => (
-														<div className="divider-wrapper">
-															{value}
-														</div>
-													)
-												},
-												{
-													title: t("Описания"),
 													dataIndex:
-														"translate.description",
+														"finished_dish.translate.name",
 													render: value => (
 														<div className="divider-wrapper">
 															{value}
@@ -189,37 +179,67 @@ export default function index({ location, history }) {
 													)
 												},
 												{
-													title: t("Кол-во"),
-													dataIndex: "quantity",
+													title: t("Повар"),
+													dataIndex: "kitchener.name",
+													render: value => (
+														<div className="divider-wrapper">
+															{value}
+														</div>
+													)
+												},
+												{
+													title: t("Кол-во старое"),
+													dataIndex: "",
 													render: value => (
 														<div className="divider-wrapper">
 															{thousandsDivider(
 																Number.parseFloat(
-																	value
+																	value.old_count
 																)
-															)}
+															)}{" "}
+															{value &&
+																value.finished_dish &&
+																value
+																	.finished_dish
+																	.unit[
+																	`title_${tabLang}`
+																]}
 														</div>
 													)
 												},
 												{
-													title: t("Исчисляемый"),
-													dataIndex: "countable",
-													className: "text-cen w-82",
+													title: t("Кол-во новое"),
+													dataIndex: "",
 													render: value => {
 														return (
 															<div className="divider-wrapper">
-																<div
-																	className="color-view-ellipse m-0-auto cursor-pointer"
-																	style={{
-																		backgroundColor:
-																			Number.parseFloat(
-																				value
-																			) ===
-																			0
-																				? "#f44336"
-																				: "#4caf50"
-																	}}
-																/>
+																{thousandsDivider(
+																	Number.parseFloat(
+																		value.new_count
+																	)
+																)}{" "}
+																{
+																	value
+																		.finished_dish
+																		.unit[
+																		`title_${tabLang}`
+																	]
+																}
+															</div>
+														);
+													}
+												},
+												{
+													title: t("Сумма"),
+													dataIndex: "amount",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{thousandsDivider(
+																	Number.parseFloat(
+																		value
+																	)
+																)}
 															</div>
 														);
 													}
@@ -244,11 +264,14 @@ export default function index({ location, history }) {
 												return (
 													<Card
 														{...{
-															onReadyProd: () =>
-																history.push(
-																	`/finished-product-update/${item.id}?lang=${tabLang}&quantity=${item.quantity}`
-																),
-															hasDishesProduct: true,
+															imgTiny: get(
+																item,
+																"finished_dish.file.thumbnails.small.src"
+															),
+															img: get(
+																item,
+																"finished_dish.file.thumbnails.small.src"
+															),
 															content: [
 																{
 																	title: t(
@@ -269,24 +292,85 @@ export default function index({ location, history }) {
 																	title: t(
 																		"Название"
 																	),
+
 																	name: (
 																		<div className="divider-wrapper">
 																			{get(
 																				item,
-																				"translate.name"
+																				"finished_dish.translate.name"
 																			)}
 																		</div>
 																	)
 																},
 																{
 																	title: t(
-																		"Описания"
+																		"Повар"
 																	),
 																	name: (
 																		<div className="divider-wrapper">
 																			{get(
 																				item,
-																				"translate.name"
+																				"kitchener.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Кол-во старое"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{thousandsDivider(
+																				Number.parseFloat(
+																					item.old_count
+																				)
+																			)}{" "}
+																			{item &&
+																				item.finished_dish &&
+																				item
+																					.finished_dish
+																					.unit[
+																					`title_${tabLang}`
+																				]}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Кол-во новое"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{thousandsDivider(
+																				Number.parseFloat(
+																					item.new_count
+																				)
+																			)}{" "}
+																			{
+																				item
+																					.finished_dish
+																					.unit[
+																					`title_${tabLang}`
+																				]
+																			}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Сумма"
+																	),
+
+																	name: (
+																		<div className="divider-wrapper">
+																			{thousandsDivider(
+																				Number.parseFloat(
+																					get(
+																						item,
+																						"amount"
+																					)
+																				)
 																			)}
 																		</div>
 																	)

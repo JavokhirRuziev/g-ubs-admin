@@ -31,14 +31,21 @@ const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();
 	const query = qs.parse(location.search);
 	const { lang } = query;
-	const [search, setSearch] = useState({ search: "", kitchener_id: "" });
+
+	const [search, setSearch] = useState({
+		search: "",
+		kitchener_id: query.kitchener_id || ""
+	});
 	const [kitcheners, setKitcheners] = useState();
+	const kitchener_from_prop =
+		kitcheners && kitcheners.find(el => el.value === query.kitchener_id);
 
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
+	const [filteredOptions, setFilteredOptions] = useState();
 
 	const handleChange = e => {
 		setSearch({ ...search, search: e.target.value });
@@ -216,13 +223,20 @@ const List = ({ history, location }) => {
 			<div className="title-md">{t("Готовое блюдо")}</div>
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
-					<div style={{ display: "flex", columnGap: "10px" }}>
+					<div
+						style={{
+							display: "flex",
+							columnGap: "10px",
+							rowGap: "10px",
+							flexWrap: "wrap"
+						}}>
 						<div>
 							<Input
 								component={Fields.AntInput}
 								type="text"
 								value={search.search}
 								onChange={handleChange}
+								placeholder={t("Поиск")}
 							/>
 						</div>
 						<div>
@@ -234,32 +248,81 @@ const List = ({ history, location }) => {
 										kitchener_id: value
 									});
 								}}
+								defaultValue={
+									(kitchener_from_prop &&
+										kitchener_from_prop.name) ||
+									""
+								}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = kitcheners.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										kitcheners: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{kitcheners &&
-									kitcheners.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.kitcheners
+									? filteredOptions.kitcheners.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))
+									: kitcheners &&
+									  kitcheners.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 					</div>
-
-					<Button
-						type="primary"
-						size="large"
-						className="fs-14 fw-300 ml-10"
-						htmlType="button"
-						onClick={() =>
-							history.push(
-								`/finished-dishes/create?lang=${tabLang}`
-							)
-						}>
-						{t("Добавить")}
-					</Button>
+					<div
+						style={{
+							display: "flex",
+							flexWrap: "wrap",
+							columnGap: "10px",
+							rowGap: "10px"
+						}}>
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300 ml-10"
+							htmlType="button"
+							onClick={() =>
+								history.push(`/recalculation-finished-dishes`)
+							}>
+							{t("Перерасчет")}
+						</Button>
+						<Button
+							type="primary"
+							size="large"
+							className="fs-14 fw-300 ml-10"
+							htmlType="button"
+							onClick={() =>
+								history.push(
+									`/finished-dishes/create?lang=${tabLang}`
+								)
+							}>
+							{t("Добавить")}
+						</Button>
+					</div>
 				</div>
 			</Board>
 			<Board className="border-none">
@@ -349,35 +412,10 @@ const List = ({ history, location }) => {
 												{
 													title: t("Загаловок"),
 													dataIndex: "translate.name",
-													className: "min-w-200",
 													render: value => (
 														<div className="divider-wrapper">
 															{value
 																? value
-																: "-"}
-														</div>
-													)
-												},
-												{
-													title: t("Себестоимость"),
-													dataIndex: "cost_price",
-													className: "min-w-200",
-													render: value => (
-														<div className="divider-wrapper">
-															{value}
-														</div>
-													)
-												},
-												{
-													title: t("Ед изм"),
-													dataIndex: "unit",
-													render: value => (
-														<div className="divider-wrapper">
-															{value
-																? get(
-																		value,
-																		"title_ru"
-																  )
 																: "-"}
 														</div>
 													)
@@ -387,77 +425,62 @@ const List = ({ history, location }) => {
 													dataIndex: "price",
 													render: value => (
 														<div className="divider-wrapper">
-															{value
-																? value
-																: "-"}
+															{value &&
+																thousandsDivider(
+																	value
+																)}
+														</div>
+													)
+												},
+												{
+													title: t("Себестоимость"),
+													dataIndex: "cost_price",
+													render: value => (
+														<div className="divider-wrapper">
+															{thousandsDivider(
+																value
+															)}
 														</div>
 													)
 												},
 												{
 													title: t("Кол-во"),
-													dataIndex: "quantity",
-													render: (value, values) =>
-														Number.parseFloat(
-															values.countable
-														) === 1 ? (
-															<div>
-																<Input
-																	placeholder={t(
-																		"Количество"
-																	)}
-																	style={{
-																		width:
-																			"120px"
-																	}}
-																	type={
-																		"number"
-																	}
-																	defaultValue={
-																		value
-																	}
-																	onPressEnter={e =>
-																		quickUpdate(
-																			values.id,
-																			e
-																				.target
-																				.value
-																		)
-																	}
-																/>
-															</div>
-														) : (
-															<></>
-														)
+													dataIndex: "",
+													render: value => (
+														<div className="divider-wrapper">
+															{value &&
+																value.quantity}{" "}
+															{
+																value.unit[
+																	`title_${tabLang}`
+																]
+															}
+														</div>
+													)
 												},
 												{
-													title: t("Исчисляемый"),
-													dataIndex: "countable",
-													className: "text-cen w-82",
-													render: (value, values) => {
-														return (
-															<div className="divider-wrapper">
-																<div
-																	className="color-view-ellipse m-0-auto cursor-pointer"
-																	onClick={() =>
-																		quickUpdateCountable(
-																			values.id,
-																			value
+													title: t("Сумма"),
+													dataIndex: "",
+													render: value => (
+														<div className="divider-wrapper">
+															{value &&
+																value.cost_price &&
+																value &&
+																value.quantity &&
+																thousandsDivider(
+																	Number(
+																		value.cost_price
+																	) *
+																		Number(
+																			value.quantity
 																		)
-																	}
-																	style={{
-																		backgroundColor:
-																			Number.parseFloat(
-																				value
-																			) ===
-																			0
-																				? "#f44336"
-																				: "#4caf50"
-																	}}
-																/>
-															</div>
-														);
-													}
+																)}{" "}
+															{t("сум")}
+															{}
+														</div>
+													)
 												},
+
 												{
 													title: t("Статус"),
 													dataIndex: "status",
@@ -502,9 +525,6 @@ const List = ({ history, location }) => {
 										}}>
 										{items &&
 											items.map((item, index) => {
-												console.log(
-													get(item, "translate.name")
-												);
 												return (
 													<Card
 														{...{
@@ -586,48 +606,24 @@ const List = ({ history, location }) => {
 																	title: t(
 																		"Кол-во"
 																	),
-																	name:
-																		Number.parseFloat(
-																			get(
+																	name: (
+																		<div>
+																			{get(
 																				item,
-																				"countable"
-																			)
-																		) ===
-																		1 ? (
-																			<div>
-																				<Input
-																					placeholder={t(
-																						"Количество"
-																					)}
-																					style={{
-																						width:
-																							"120px"
-																					}}
-																					type={
-																						"number"
-																					}
-																					defaultValue={get(
-																						item,
-																						"countable"
-																					)}
-																					onPressEnter={e =>
-																						quickUpdate(
-																							get(
-																								item,
-																								"id"
-																							),
-																							e
-																								.target
-																								.value
-																						)
-																					}
-																				/>
-																			</div>
-																		) : (
-																			<>
-
-																			</>
-																		)
+																				"quantity"
+																			) &&
+																				get(
+																					item,
+																					"quantity"
+																				)}{" "}
+																			{
+																				item
+																					.unit[
+																					`title_${tabLang}`
+																				]
+																			}
+																		</div>
+																	)
 																},
 																{
 																	title: t(

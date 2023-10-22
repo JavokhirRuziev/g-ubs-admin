@@ -1,9 +1,9 @@
 import React from "react";
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
-import Form from "./FormCreate";
+import Form from "./FormUpdate";
 
-const Create = ({ tabLang, showCreateModal }) => {
+const Update = ({ tabLang, showUpdateModal }) => {
 	return (
 		<EntityForm.Main
 			method="post"
@@ -15,7 +15,7 @@ const Create = ({ tabLang, showCreateModal }) => {
 			normalizeData={data => data}
 			onSuccess={(data, resetForm) => {
 				resetForm();
-				showCreateModal(false);
+				showUpdateModal(false);
 				window.location.reload();
 			}}
 			params={{
@@ -34,7 +34,8 @@ const Create = ({ tabLang, showCreateModal }) => {
 							{...{
 								values,
 								setFieldValue,
-								tabLang
+								tabLang,
+								isUpdate: true
 							}}
 						/>
 					</Spin>
@@ -44,4 +45,4 @@ const Create = ({ tabLang, showCreateModal }) => {
 	);
 };
 
-export default Create;
+export default Update;

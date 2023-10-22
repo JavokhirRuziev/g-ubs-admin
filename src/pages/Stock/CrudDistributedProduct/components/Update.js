@@ -33,7 +33,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "product_id",
 					required: true,
-					value: get(selected, "product.translate.name")
+					value: get(selected, "product.translate.id")
 				},
 				{
 					name: "stock_id",
@@ -51,7 +51,8 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 								values,
 								setFieldValue,
 								isUpdate: true,
-								tabLang
+								tabLang,
+								selected
 							}}
 						/>
 					</Spin>

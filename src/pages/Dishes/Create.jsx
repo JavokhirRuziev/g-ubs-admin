@@ -111,7 +111,8 @@ const Create = ({ location, history }) => {
 					required: true
 				},
 				{
-					name: "auto_calculation"
+					name: "auto_calculation",
+					onSubmitValue: value => (value ? value : false)
 				},
 				{
 					name: "company_id",

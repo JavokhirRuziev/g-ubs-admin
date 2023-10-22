@@ -1,24 +1,24 @@
 import React from "react";
-import { Button, Radio, Spin } from "antd";
+import { Button, Radio, Spin, Switch } from "antd";
 import EntityForm from "modules/entity/forms";
 import { Field } from "formik";
 import { Fields } from "components";
 import get from "lodash/get";
 import { useTranslation } from "react-i18next";
-import {DatePicker} from "antd";
+import { DatePicker } from "antd";
 import config from "config";
 
 const AddModal = ({ showAddModal, selectedCategory }) => {
-	const {t} = useTranslation("main");
-	const alias = get(selectedCategory, 'alias');
-	const getTypeByCategory = (alias) => {
-		switch (alias){
+	const { t } = useTranslation("main");
+	const alias = get(selectedCategory, "alias");
+	const getTypeByCategory = alias => {
+		switch (alias) {
 			case "market":
 				return 3;
 			case "work_fee":
-				return 2
+				return 2;
 		}
-	}
+	};
 
 	return (
 		<EntityForm.Main
@@ -38,16 +38,16 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 				{
 					name: "category_id",
 					value: selectedCategory ? selectedCategory : null,
-					onSubmitValue: value => value ? value.id : "",
+					onSubmitValue: value => (value ? value.id : ""),
 					required: true
 				},
 				{
 					name: "customer_id",
-					onSubmitValue: value => value ? value.id : ""
+					onSubmitValue: value => (value ? value.id : "")
 				},
 				{
 					name: "company_id",
-					value: null,
+					value: null
 				},
 				{
 					name: "value",
@@ -59,23 +59,28 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 					value: 1
 				},
 				{
+					name: "is_cash_register",
+					required: true
+				},
+				{
 					name: "comment"
 				},
 				{
-					name: 'type',
+					name: "type",
 					value: 1
 				},
 				{
-					name: 'added_at',
-					required: true,
+					name: "added_at",
+					required: true
 				}
-			]}
-		>
+			]}>
 			{({ isSubmitting, values, setFieldValue }) => {
 				return (
 					<Spin spinning={isSubmitting}>
 						<div>
-							<div className="title-md fs-16 mb-20">{t("Добавление расходов")}</div>
+							<div className="title-md fs-16 mb-20">
+								{t("Добавление расходов")}
+							</div>
 							<Field
 								component={Fields.AsyncSelect}
 								name="category_id"
@@ -89,13 +94,15 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								isDisabled={!!selectedCategory}
 								loadOptionsParams={search => {
 									return {
-										filter: {type: config.EXPENSE_CATEGORY_TYPE},
+										filter: {
+											type: config.EXPENSE_CATEGORY_TYPE
+										},
 										extra: { name: search }
 									};
 								}}
 							/>
 
-							{(alias === 'market' || alias === 'work_fee') && (
+							{(alias === "market" || alias === "work_fee") && (
 								<Field
 									component={Fields.AsyncSelect}
 									name="customer_id"
@@ -109,7 +116,7 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 									loadOptionsParams={search => {
 										return {
 											filter: {
-												type: getTypeByCategory(alias),
+												type: getTypeByCategory(alias)
 											},
 											extra: { name: search }
 										};
@@ -117,24 +124,51 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								/>
 							)}
 
-							<Radio.Group className="d-flex flex-wrap mb-20" defaultValue={values.price_type}
-								onChange={e => setFieldValue("price_type", e.target.value)}>
+							<Radio.Group
+								className="d-flex flex-wrap mb-20"
+								defaultValue={values.price_type}
+								onChange={e =>
+									setFieldValue("price_type", e.target.value)
+								}>
 								<Radio value={1}>{t("Наличние")}</Radio>
 								<Radio value={4}>{t("Терминал")}</Radio>
 								<Radio value={7}>{t("Онлайн")}</Radio>
-								<div className='mt-10'>
+								<div className="mt-10">
 									<Radio value={10}>{t("За долг")}</Radio>
 								</div>
 							</Radio.Group>
+
+							<div className="d-flex align-items-center mb-20">
+								<Switch
+									onChange={value => {
+										setFieldValue(
+											"is_cash_register",
+											value
+										);
+									}}
+									checked={values.is_cash_register}
+								/>
+								<div className="ant-label mb-0 ml-10">
+									{t("Касса")}
+								</div>
+							</div>
 
 							<Field
 								component={Fields.AntInput}
 								name="value"
 								type="text"
 								onChange={event => {
-									setFieldValue("value", event.target.value.replace(/\$\s?|(,*)/g, ""));
+									setFieldValue(
+										"value",
+										event.target.value.replace(
+											/\$\s?|(,*)/g,
+											""
+										)
+									);
 								}}
-								value={values.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+								value={values.value
+									.toString()
+									.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 								placeholder={t("Введите сумму")}
 								size="large"
 							/>
@@ -148,7 +182,9 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 							/>
 
 							<div className="mb-24">
-								<div className="ant-label mr-6 mb-3">{t("Дата")}</div>
+								<div className="ant-label mr-6 mb-3">
+									{t("Дата")}
+								</div>
 								<Field
 									allowClear={false}
 									value={values.added_at}
@@ -158,8 +194,8 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 									clear
 									format="YYYY-MM-D HH:m:s"
 									placeholder={t("Выберите дату")}
-									onChange={(date) => {
-										setFieldValue('added_at', date)
+									onChange={date => {
+										setFieldValue("added_at", date);
 									}}
 								/>
 							</div>
@@ -168,10 +204,10 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								type="primary"
 								size="large"
 								className="fs-14 fw-300"
-								htmlType="submit"
-							>{t("Добавить")}</Button>
+								htmlType="submit">
+								{t("Добавить")}
+							</Button>
 						</div>
-
 					</Spin>
 				);
 			}}

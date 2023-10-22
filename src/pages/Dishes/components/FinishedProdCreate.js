@@ -3,14 +3,14 @@ import React from "react";
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./FinishedProdForm";
-import { get } from "lodash";
 
 const FinishedProdCreate = ({
 	setCanUpdate,
 	showCreateModal,
 	parent_id,
 	lang,
-	selected
+	selected,
+	values
 }) => {
 	return (
 		<EntityForm.Default
@@ -36,16 +36,16 @@ const FinishedProdCreate = ({
 					required: true
 				}
 			]}>
-			{({ isSubmitting, values, setFieldValue, submitForm }) => {
+			{({ isSubmitting, setFieldValue, submitForm }) => {
 				return (
 					<Spin spinning={isSubmitting}>
 						<Form
 							{...{
-								values,
 								setFieldValue,
 								submitForm,
 								lang,
-								selected
+								selected,
+								values
 							}}
 						/>
 					</Spin>

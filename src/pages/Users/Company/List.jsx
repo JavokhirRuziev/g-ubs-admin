@@ -70,7 +70,7 @@ const List = () => {
 				onCancel={() => showCreateModal(false)}
 				footer={null}
 				centered
-				width={430}
+				width={510}
 				destroyOnClose>
 				<Create {...{ showCreateModal }} />
 			</Modal>
@@ -80,7 +80,7 @@ const List = () => {
 				onCancel={() => showUpdateModal(false)}
 				footer={null}
 				centered
-				width={430}
+				width={510}
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal }} />
 			</Modal>

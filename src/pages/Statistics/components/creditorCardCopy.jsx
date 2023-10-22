@@ -4,6 +4,7 @@ import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 	const dispatch = useDispatch();
@@ -165,7 +166,7 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 										</span>
 										<div>
 											{helpers.convertToReadable(
-												totalSum
+												thousandsDivider(totalSum)
 											)}{" "}
 											{/* {t("сум")} */}
 										</div>
@@ -220,7 +221,7 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 										</span>
 										<div>
 											{helpers.convertToReadable(
-												totalSum * -1
+												thousandsDivider(totalSum * -1)
 											)}{" "}
 											{/* {t("сум")} */}
 										</div>

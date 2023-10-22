@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./Form";
 
 const Create = ({ showCreateModal }) => {
+	const [send_roles, setSend_roles] = useState();
 	return (
 		<EntityForm.Main
 			method="post"
@@ -22,7 +23,11 @@ const Create = ({ showCreateModal }) => {
 				{ name: "name", required: true },
 				{ name: "login", required: true },
 				{ name: "password", required: true },
-				{ name: "companyName", required: true }
+				{ name: "companyName", required: true },
+				{
+					name: "roles",
+					onSubmitValue: () => send_roles
+				}
 			]}
 			params={{
 				include: "company"
@@ -30,7 +35,14 @@ const Create = ({ showCreateModal }) => {
 			{({ isSubmitting, values, setFieldValue }) => {
 				return (
 					<Spin spinning={isSubmitting}>
-						<Form {...{ values, setFieldValue }} />
+						<Form
+							{...{
+								values,
+								setFieldValue,
+								send_roles,
+								setSend_roles
+							}}
+						/>
 					</Spin>
 				);
 			}}

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 	const dispatch = useDispatch();
@@ -108,26 +109,24 @@ const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 			</div>
 			<div className="dashboard-card-st__body">
 				{categories.length > 0 ? (
-					categories
-						.filter(el => el.title !== "Бозорлик")
-						.map(item => {
-							const hasSum = expensesTransactions.find(
-								a => a.alias === item.alias
-							);
-							return (
-								<div className="dashboard-line --red">
-									<span>{item.title}</span>
-									<div>
-										{hasSum
-											? helpers.convertToReadable(
-													hasSum.sum
-											  )
-											: 0}{" "}
-										{t("сум")}
-									</div>
+					categories.map(item => {
+						const hasSum = expensesTransactions.find(
+							a => a.alias === item.alias
+						);
+						return (
+							<div className="dashboard-line --red">
+								<span>{item.title}</span>
+								<div>
+									{hasSum
+										? helpers.convertToReadable(
+												thousandsDivider(hasSum.sum)
+										  )
+										: 0}{" "}
+									{t("сум")}
 								</div>
-							);
-						})
+							</div>
+						);
+					})
 				) : (
 					<div>-</div>
 				)}
@@ -135,7 +134,8 @@ const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{helpers.convertToReadable(totalExpenses)} {t("сум")}
+					{helpers.convertToReadable(thousandsDivider(totalExpenses))}{" "}
+					{t("сум")}
 				</span>
 			</div>
 		</div>

@@ -7,6 +7,7 @@ import get from "lodash/get";
 
 const Update = ({ selected, showUpdateModal }) => {
 	const [send_roles, setSend_roles] = useState();
+	console.log(get(selected, "roles"));
 	return (
 		<EntityForm.Main
 			method="put"

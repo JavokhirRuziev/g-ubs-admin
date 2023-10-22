@@ -57,6 +57,8 @@ export default function index({ location, history, match }) {
 		color: ""
 	});
 
+	const [filteredOptions, setFilteredOptions] = useState();
+
 	useEffect(() => {
 		axios
 			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
@@ -188,6 +190,7 @@ export default function index({ location, history, match }) {
 						style={{
 							display: "flex",
 							columnGap: "10px",
+							rowGap: "10px",
 							flexWrap: "wrap"
 						}}>
 						<div>
@@ -197,18 +200,48 @@ export default function index({ location, history, match }) {
 									setSearch({ ...search, stock: value });
 								}}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = stock.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										stock: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{stock &&
-									stock.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}
-											onClick={() =>
-												setStock_id(option.stock_id)
-											}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.stock
+									? filteredOptions.stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}
+												onClick={() =>
+													setStock_id(option.stock_id)
+												}>
+												{option.name}
+											</Option>
+									  ))
+									: stock &&
+									  stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}
+												onClick={() =>
+													setStock_id(option.stock_id)
+												}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -218,15 +251,42 @@ export default function index({ location, history, match }) {
 									setSearch({ ...search, category: value })
 								}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = category.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										category: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{category &&
-									category.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.category
+									? filteredOptions.category.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))
+									: category &&
+									  category.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -315,7 +375,8 @@ export default function index({ location, history, match }) {
 							stock_id: search.stock,
 							category_id: search.category,
 							color: search.color
-						}
+						},
+						page
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems = items.filter(item => {

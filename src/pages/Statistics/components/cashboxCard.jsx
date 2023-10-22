@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import Actions from "../../../modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { thousandsDivider } from "../../../services/thousandsDivider";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 	const [total, setTotal] = useState();
 	const [body, setBody] = useState();
+	const history = useHistory();
 
 	const loadSolves = () => {
 		dispatch(
@@ -54,20 +55,21 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">
-				<Link to={"/finished-product"}>
-					<>
-						{body &&
-							body.map(el => (
-								<div className="dashboard-line --purple">
-									<span>{t(el.translate.name)}</span>
-									<div>
-										{thousandsDivider(el.cost_price)}{" "}
-										{t("сум")}
-									</div>
-								</div>
-							))}
-					</>
-				</Link>
+				{body &&
+					body.map(el => (
+						<div
+							className="dashboard-line --purple cursor-pointer"
+							onClick={() =>
+								history.push(
+									`/finished-dishes?kitchener_id=${el.kitchener_id}`
+								)
+							}>
+							<span>{t(el.name)}</span>
+							<div>
+								{thousandsDivider(el.amount)} {t("сум")}
+							</div>
+						</div>
+					))}
 			</div>
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>

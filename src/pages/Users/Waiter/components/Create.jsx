@@ -5,7 +5,13 @@ import EntityForm from "modules/entity/forms";
 import Form from "./Form";
 
 const Create = ({ showCreateModal }) => {
-	const [send_roles, setSend_roles] = useState();
+	const [send_roles, setSend_roles] = useState([
+		{ role: "dishes", permissions: ["read"] },
+		{ role: "menus", permissions: ["read"] },
+		{ role: "places", permissions: ["read"] },
+		{ role: "tables", permissions: ["read"] }
+	]);
+
 	return (
 		<EntityForm.Main
 			method="post"
@@ -18,6 +24,7 @@ const Create = ({ showCreateModal }) => {
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showCreateModal(false);
+				console.log(data);
 			}}
 			fields={[
 				{ name: "role", required: true, value: "waiter" },
@@ -27,7 +34,8 @@ const Create = ({ showCreateModal }) => {
 				{ name: "company_id", value: null },
 				{
 					name: "roles",
-					onSubmitValue: () => send_roles
+					onSubmitValue: () => send_roles,
+					value: send_roles
 				},
 				{
 					name: "status",

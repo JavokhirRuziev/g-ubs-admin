@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import qs from "query-string";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const ExpensesCard = ({ params, location }) => {
 	const dispatch = useDispatch();
@@ -76,7 +77,7 @@ const ExpensesCard = ({ params, location }) => {
 								}>
 								<span>{item.name}</span>
 								<div>
-									{item.amount} {t("сум")}
+									{thousandsDivider(item.amount)} {t("сум")}
 								</div>
 							</div>
 						);
@@ -85,7 +86,7 @@ const ExpensesCard = ({ params, location }) => {
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{totalExpenses} {t("сум")}
+					{thousandsDivider(totalExpenses)} {t("сум")}
 				</span>
 			</div>
 		</div>

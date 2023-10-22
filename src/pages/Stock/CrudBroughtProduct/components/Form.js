@@ -8,15 +8,17 @@ import get from "lodash/get";
 import axios from "axios";
 import config from "config";
 
-const Form = ({ isUpdate, tabLang, setFieldValue }) => {
+const Form = ({ isUpdate, tabLang, setFieldValue, selected }) => {
 	const { t } = useTranslation("main");
-	const [stock_id, setStock_id] = useState();
+	const [stock_id, setStock_id] = useState(get(selected, "stock.id"));
 	const [product, setProduct] = useState();
+	const [filteredOptions, setFilteredOptions] = useState();
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		axios
 			.get(
-				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category`
+				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category&search=${search}`
 			)
 			.then(res => {
 				const categoryData = res.data.data;
@@ -31,9 +33,10 @@ const Form = ({ isUpdate, tabLang, setFieldValue }) => {
 						value: category && category.id
 					}));
 				setProduct(newCategories);
+				setFilteredOptions(newCategories);
 			})
 			.catch(err => console.log(err));
-	}, [stock_id]);
+	}, [stock_id, search]);
 
 	return (
 		<div>
@@ -59,7 +62,8 @@ const Form = ({ isUpdate, tabLang, setFieldValue }) => {
 						include: "translate",
 						extra: {
 							_l: tabLang
-						}
+						},
+						search
 					};
 				}}
 			/>
@@ -71,7 +75,28 @@ const Form = ({ isUpdate, tabLang, setFieldValue }) => {
 				size={"large"}
 				allowClear
 				onChange={option => setFieldValue("product_id", option)}
-				selectOptions={product}
+				selectOptions={
+					filteredOptions && filteredOptions.product
+						? filteredOptions.product
+						: product
+				}
+				showSearch
+				optionFilterProp="children"
+				onSearch={value => {
+					setSearch(value);
+					const filteredOptions = product.filter(option =>
+						option.name.toLowerCase().includes(value.toLowerCase())
+					);
+					setFilteredOptions({
+						...filteredOptions,
+						product: filteredOptions
+					});
+				}}
+				filterOption={(input, option) =>
+					option.props.children
+						.toLowerCase()
+						.indexOf(input.toLowerCase()) >= 0
+				}
 			/>
 			<Field
 				component={Fields.AntInput}

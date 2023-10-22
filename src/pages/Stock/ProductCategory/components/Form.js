@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import get from "lodash/get";
 
-const Form = ({ isUpdate, tabLang, values, setFieldValue }) => {
+const Form = ({ isUpdate, tabLang, values, setFieldValue, selected }) => {
 	const { t } = useTranslation("main");
 
 	return (
@@ -40,11 +40,14 @@ const Form = ({ isUpdate, tabLang, values, setFieldValue }) => {
 				loadOptionsUrl={`/stocks`}
 				className="mb-20"
 				optionLabel={option => get(option, `translate.name`)}
+				isSearchable={true}
+				value={get(selected, "stock")}
 				loadOptionsParams={search => {
 					return {
 						include: "translate",
 						extra: {
-							_l: tabLang
+							_l: tabLang,
+							search
 						}
 					};
 				}}

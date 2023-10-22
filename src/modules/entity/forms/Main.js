@@ -159,9 +159,7 @@ const EnhacedForm = withFormik({
 			onSuccess = () => {},
 			onError = () => {},
 			FormAction,
-			selfErrorMessage,
-			ownSubmitValue,
-			submitValue
+			selfErrorMessage
 		} = props;
 
 		values = { ...values };

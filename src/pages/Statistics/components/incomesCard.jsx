@@ -4,6 +4,7 @@ import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const IncomesCard = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();
@@ -11,12 +12,7 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 	const history = useHistory();
 
 	const [incomesTransactions, setIncomesTransactions] = useState([]);
-	const ordersArr = [
-		{ title: "Отчёт по заказом", link: "/orders" },
-		{ title: "Отчёт по стол", link: "/orders-on-table" },
-		{ title: "Отчёт по блюдам", link: "/monitoring" },
-		{ title: "Отчёт по официантом", link: "/monitoring-waiter" }
-	];
+	const [total, setTotal] = useState();
 
 	const loadTotalsByCategory = () => {
 		dispatch(
@@ -31,6 +27,12 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 				cb: {
 					success: data => {
 						setIncomesTransactions(data);
+						const sum = data.reduce(
+							(total, item) => item.value + total,
+							0
+						);
+						setTotal(sum);
+						setTotalIncome(sum);
 					},
 					error: data => {}
 				}
@@ -69,7 +71,7 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 						}>
 						<span>{t(el.key)}</span>
 						<div>
-							{el.value} {t("сум")}
+							{thousandsDivider(el.value)} {t("сум")}
 						</div>
 					</div>
 				))}
@@ -77,7 +79,8 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{helpers.convertToReadable(0)} {t("сум")}
+					{helpers.convertToReadable(thousandsDivider(total))}{" "}
+					{t("сум")}
 				</span>
 			</div>
 		</div>

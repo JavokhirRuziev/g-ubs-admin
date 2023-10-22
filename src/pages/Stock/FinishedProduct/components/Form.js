@@ -3,7 +3,7 @@ import { Button, Input } from "antd";
 import { useTranslation } from "react-i18next";
 import { Panel } from "../../../../components";
 
-const Form = ({ isUpdate, selected, count, setCount, getCreated, step }) => {
+const Form = ({ selected, count, setCount, getCreated, step }) => {
 	const { t } = useTranslation("main");
 	const handleChange = (e, count) => {
 		setCount({ ...count, [count]: e.target.value, id: count });

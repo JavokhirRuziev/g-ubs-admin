@@ -194,8 +194,9 @@ const Update = ({ location, history, match }) => {
 								},
 								{
 									name: "auto_calculation",
-									value: get(item, "status") === 1,
-									onSubmitValue: value => (value ? 1 : 0)
+									value: get(item, "auto_calculation"),
+									onSubmitValue: value =>
+										value ? value : false
 								},
 								{
 									name: "company_id",
@@ -221,7 +222,8 @@ const Update = ({ location, history, match }) => {
 												setFieldValue,
 												isUpdate: true,
 												id: id,
-												location: location
+												location: location,
+												item
 											}}
 										/>
 									</Spin>

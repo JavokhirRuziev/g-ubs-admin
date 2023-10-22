@@ -21,7 +21,7 @@ const subscribe = store => {
 	// request.defaults.params['_l'] = state.system.currentLangCode;
 
 	if (state.auth.token) token = get(state, "auth.token");
-
+	// console.log(get(state, "auth.token"));
 	if (token) {
 		request.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 	}

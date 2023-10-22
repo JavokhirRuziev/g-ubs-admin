@@ -40,7 +40,7 @@ const Create = ({ tabLang, showCreateModal }) => {
 					onSubmitValue: value => value.id
 				},
 				{ name: "order", required: true },
-				{ name: "is_active", required: true },
+				{ name: "is_active" },
 				{ name: "deficit_threshold", required: true },
 				{ name: "average_quantity", required: true }
 			]}>

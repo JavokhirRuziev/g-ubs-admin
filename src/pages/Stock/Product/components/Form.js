@@ -9,15 +9,17 @@ import axios from "axios";
 import config from "config";
 import get from "lodash/get";
 
-const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
+const Form = ({ values, isUpdate, tabLang, setFieldValue, item }) => {
 	const { t } = useTranslation("main");
 	const [categories, setCategories] = useState([]);
-	const [stock, setStock] = useState();
+	const [stock, setStock] = useState(get(item, "stock.id"));
+	const [filteredOptions, setFilteredOptions] = useState();
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		axios
 			.get(
-				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate`
+				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate&search=${search}`
 			)
 			.then(res => {
 				const categoryData = res.data.data;
@@ -30,10 +32,10 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 							category.translate.product_category_id
 					}));
 				setCategories(newCategories);
+				setFilteredOptions(newCategories);
 			})
 			.catch(err => console.log(err));
 	}, [stock]);
-
 	return (
 		<div>
 			<div className="title-md fs-16 mb-20">
@@ -65,11 +67,13 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 				optionValue="id"
 				optionLabel={option => get(option, `translate.name`)}
 				onChange={option => setStock(option.translate.stock_id)}
+				isSearchable={true}
 				loadOptionsParams={search => {
 					return {
 						include: "translate",
 						extra: {
-							_l: tabLang
+							_l: tabLang,
+							search
 						}
 					};
 				}}
@@ -83,7 +87,28 @@ const Form = ({ values, isUpdate, tabLang, setFieldValue }) => {
 				onChange={option =>
 					setFieldValue("product_category_id", option)
 				}
-				selectOptions={categories}
+				selectOptions={
+					filteredOptions && filteredOptions.category
+						? filteredOptions.category
+						: categories
+				}
+				showSearch
+				optionFilterProp="children"
+				onSearch={value => {
+					setSearch(value);
+					const filteredOptions = categories.filter(option =>
+						option.name.toLowerCase().includes(value.toLowerCase())
+					);
+					setFilteredOptions({
+						...filteredOptions,
+						category: filteredOptions
+					});
+				}}
+				filterOption={(input, option) =>
+					option.props.children
+						.toLowerCase()
+						.indexOf(input.toLowerCase()) >= 0
+				}
 			/>
 			<Field
 				component={Fields.AsyncSelect}

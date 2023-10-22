@@ -73,7 +73,7 @@ const ExpensesCard = ({ location, params, setTotalCreditor, history }) => {
 								}>
 								<span>{item.name}</span>
 								<div>
-									{item.amount} {t("сум")}
+									{thousandsDivider(item.amount)} {t("сум")}
 								</div>
 							</div>
 						);

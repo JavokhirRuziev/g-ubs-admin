@@ -72,7 +72,7 @@ const contentManagerRoutes = [
 		link: "/statistics",
 		title: "Главная",
 		icon: "menu-i-category",
-		role: "statistics"
+		role: "dashboard"
 	},
 	{
 		id: "report",
@@ -102,6 +102,12 @@ const contentManagerRoutes = [
 				link: "/monitoring-waiter",
 				title: "Отчёт по официантом",
 				role: "monitoring_by_waiters"
+			},
+			{
+				id: "monitoring-deleted-dishes",
+				link: "/deleted-dishes",
+				title: "Отчёт по удалёным блюдам",
+				role: "deleted_dishes"
 			}
 		]
 	},
@@ -137,7 +143,8 @@ const contentManagerRoutes = [
 			{
 				id: "employees",
 				title: "Сотрудники",
-				link: "/persons?type=employees"
+				link: "/persons?type=employees",
+				role: "employees"
 			},
 			{
 				id: "counter_agents",
@@ -151,6 +158,13 @@ const contentManagerRoutes = [
 		id: "dishes",
 		title: "Еды",
 		link: "/dishes",
+		icon: "menu-i-dashboard",
+		role: "dishes"
+	},
+	{
+		id: "finished-dishes",
+		title: "Готовое блюдо",
+		link: "/finished-dishes",
 		icon: "menu-i-dashboard",
 		role: "dishes"
 	},
@@ -209,20 +223,13 @@ const contentManagerRoutes = [
 				link: "/stock/stock-distributed-products/",
 				title: "Распределенный продукт",
 				role: "distributed_products"
-			},
+			}
 			// {
 			// 	id: "/finished-product/",
 			// 	link: "/finished-product",
 			// 	title: "Готовый продукт",
 			// 	role: "dishes"
 			// },
-			{
-				id: "finished-dishes",
-				title: "Готовое блюдо",
-				link: "/finished-dishes",
-				icon: "menu-i-dashboard",
-				role: "dishes"
-			}
 		]
 	},
 	{
@@ -273,7 +280,6 @@ const contentManagerRoutes = [
 ];
 
 const getMenu = (role, profile) => {
-	// console.log(profile);
 	if (profile) {
 		const filteredArr = contentManagerRoutes.filter(el => {
 			if (el.submenu && Array.isArray(el.submenu)) {
@@ -282,25 +288,21 @@ const getMenu = (role, profile) => {
 				});
 				return el.submenu.length > 0;
 			} else {
-				return (
-					profile &&
-					profile.some(
-						p => el.role === "statistics" || p.role === el.role
-					)
-				);
+				return profile && profile.some(p => p.role === el.role);
 			}
 		});
 		if (role !== "admin") {
 			return filteredArr;
 		}
-	} else {
 		if (profile === null) {
 			return [];
-		} else {
+		}
+		if (role === "admin") {
 			return adminMenus;
 		}
+	} else {
+		return [];
 	}
-	// return contentManagerRoutes;
 };
 
 export default getMenu;

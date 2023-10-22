@@ -10,7 +10,8 @@ const RecipeUpdate = ({
 	selected,
 	showUpdateModal,
 	parent_id,
-	lang
+	lang,
+	values
 }) => {
 	return (
 		<EntityForm.Default
@@ -37,7 +38,7 @@ const RecipeUpdate = ({
 				}
 			]}
 			updateData>
-			{({ isSubmitting, values, setFieldValue, submitForm }) => {
+			{({ isSubmitting, setFieldValue, submitForm }) => {
 				return (
 					<Spin spinning={isSubmitting}>
 						<Form

@@ -64,7 +64,10 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 								{
 									name: "product_category_id",
 									required: true,
-									value: get(item, "category.translate.name")
+									value: get(
+										item,
+										"category.translate.product_category_id"
+									)
 								},
 								{
 									name: "unit_id",
@@ -84,7 +87,6 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 								},
 								{
 									name: "is_active",
-									required: true,
 									value: get(item, "is_active") ? 1 : 0
 								}
 							]}
@@ -97,7 +99,8 @@ const Update = ({ tabLang, selected, showUpdateModal, id }) => {
 												values,
 												setFieldValue,
 												isUpdate: true,
-												tabLang
+												tabLang,
+												item
 											}}
 										/>
 									</Spin>

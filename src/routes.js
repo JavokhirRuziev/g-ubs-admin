@@ -9,6 +9,7 @@ import App from "./App";
 import get from "lodash/get";
 
 const MonitoringWaiter = lazy(() => import("./pages/MonitoringWaiter"));
+const DeletedDishes = lazy(() => import("./pages/DeletedDishes"));
 const Monitoring = lazy(() => import("./pages/Monitoring"));
 const Orders = lazy(() => import("./pages/Orders"));
 const OrdersOnTable = lazy(() => import("./pages/OrdersOnTable"));
@@ -160,13 +161,26 @@ const routes = [
 		access: ["company"]
 	},
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
-	{ path: "/", exact: true, component: Statistics, access: ["company"] },
+	{
+		path: "/",
+		exact: true,
+		component: Statistics,
+		access: ["company"],
+		role: "dashboard"
+	},
 	{
 		path: "/monitoring-waiter",
 		exact: true,
 		component: MonitoringWaiter,
 		access: ["company"],
 		role: "monitoring_by_waiters"
+	},
+	{
+		path: "/deleted-dishes",
+		exact: true,
+		component: DeletedDishes,
+		access: ["company"],
+		role: "deleted_dishes"
 	},
 	{
 		path: "/monitoring",
@@ -272,7 +286,7 @@ const routes = [
 	},
 
 	{
-		path: "/finished-product",
+		path: "/recalculation-finished-dishes",
 		exact: true,
 		component: FinishedProduct,
 		access: ["company"]
@@ -393,13 +407,18 @@ export default () => (
 	<Router {...{ history }}>
 		<App>
 			{({ isFetched, isAuthenticated, data }) => {
-				const access = contentManagerRoutes.filter(
-					el =>
+				const access = contentManagerRoutes.filter(el => {
+					if (
 						data &&
 						data.success &&
 						data.success.roles &&
-						data.success.roles.some(e => e.role === el.role)
-				);
+						data.success.roles.some(e => "dashboard" === e.role)
+					) {
+						return true;
+					} else {
+						return el.role !== "dashboard";
+					}
+				});
 				return (
 					isFetched &&
 					(isAuthenticated ? (
@@ -415,19 +434,15 @@ export default () => (
 													exact
 												/>
 										  ))
-										: contentManagerRoutes &&
-										  contentManagerRoutes.map(
-												(route, key) => (
-													<Route
-														key={key}
-														path={route.path}
-														component={
-															route.component
-														}
-														exact
-													/>
-												)
-										  )}
+										: access &&
+										  access.map((route, key) => (
+												<Route
+													key={key}
+													path={route.path}
+													component={route.component}
+													exact
+												/>
+										  ))}
 
 									<Route
 										path="/logout"

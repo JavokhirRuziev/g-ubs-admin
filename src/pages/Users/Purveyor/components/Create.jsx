@@ -5,7 +5,21 @@ import EntityForm from "modules/entity/forms";
 import Form from "./Form";
 
 const Create = ({ showCreateModal }) => {
-	const [send_roles, setSend_roles] = useState();
+	const [send_roles, setSend_roles] = useState([
+		{ role: "stocks", permissions: ["read", "create", "update", "delete"] },
+		{
+			role: "product_categories",
+			permissions: ["read", "create", "update", "delete"]
+		},
+		{
+			role: "products",
+			permissions: ["read", "create", "update", "delete"]
+		},
+		{
+			role: "brought_products",
+			permissions: ["read", "create", "update", "delete"]
+		}
+	]);
 	return (
 		<EntityForm.Main
 			method="post"

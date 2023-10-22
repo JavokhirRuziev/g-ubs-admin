@@ -159,7 +159,8 @@ export default function index({ location, history }) {
 						extra: {
 							_l: tabLang,
 							search: search
-						}
+						},
+						page
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems = search

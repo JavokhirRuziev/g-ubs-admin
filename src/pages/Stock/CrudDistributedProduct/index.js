@@ -67,6 +67,7 @@ export default function index({ location, history }) {
 	const [category, setCategory] = useState();
 	const [unit, setUnit] = useState();
 	const { mobile } = useMediaQueries();
+	const [filteredOptions, setFilteredOptions] = useState();
 
 	useEffect(() => {
 		axios
@@ -230,18 +231,48 @@ export default function index({ location, history }) {
 									setSearch({ ...search, stock: value });
 								}}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = stock.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										stock: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{stock &&
-									stock.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}
-											onClick={() =>
-												setStock_id(option.stock_id)
-											}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.stock
+									? filteredOptions.stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}
+												onClick={() =>
+													setStock_id(option.stock_id)
+												}>
+												{option.name}
+											</Option>
+									  ))
+									: stock &&
+									  stock.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}
+												onClick={() =>
+													setStock_id(option.stock_id)
+												}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -251,20 +282,47 @@ export default function index({ location, history }) {
 									setSearch({ ...search, category: value })
 								}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = category.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										category: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{category &&
-									category.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}
-											onClick={() =>
-												setProduct_category_id(
-													option.value
-												)
-											}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.category
+									? filteredOptions.category.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))
+									: category &&
+									  category.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}
+												onClick={() =>
+													setProduct_category_id(
+														option.value
+													)
+												}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -274,15 +332,42 @@ export default function index({ location, history }) {
 									setSearch({ ...search, product: value })
 								}
 								allowClear
+								showSearch
+								optionFilterProp="children"
+								onSearch={value => {
+									const filteredOptions = product.filter(
+										option =>
+											option.name
+												.toLowerCase()
+												.includes(value.toLowerCase())
+									);
+									setFilteredOptions({
+										...filteredOptions,
+										product: filteredOptions
+									});
+								}}
+								filterOption={(input, option) =>
+									option.props.children
+										.toLowerCase()
+										.indexOf(input.toLowerCase()) >= 0
+								}
 								style={{ width: 200 }}>
-								{product &&
-									product.map(option => (
-										<Option
-											key={option.value}
-											value={option.value}>
-											{option.name}
-										</Option>
-									))}
+								{filteredOptions && filteredOptions.product
+									? filteredOptions.product.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))
+									: product &&
+									  product.map(option => (
+											<Option
+												key={option.value}
+												value={option.value}>
+												{option.name}
+											</Option>
+									  ))}
 							</Select>
 						</div>
 						<div>
@@ -360,7 +445,8 @@ export default function index({ location, history }) {
 							product_id: search.product,
 							date_from: search.data.from,
 							date_to: search.data.to
-						}
+						},
+						page
 					}}>
 					{({ items, isFetched, meta }) => {
 						const filteredItems =

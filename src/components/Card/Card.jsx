@@ -51,7 +51,7 @@ const Card = ({
 					</div>
 				)}
 				{hasDishesProduct && (
-					<td style={{ width: 10 }}>
+					<td style={{ width: 16 }}>
 						<div
 							className="action-btn confirm-btn"
 							style={{ marginBottom: "5px" }}

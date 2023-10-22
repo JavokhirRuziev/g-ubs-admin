@@ -13,7 +13,7 @@ import { Table } from "components";
 import EntityContainer from "modules/entity/containers";
 import qs from "query-string";
 
-const FinishedProduct = ({ location }) => {
+const FinishedProduct = ({ location, values }) => {
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const { t } = useTranslation("main");
@@ -85,7 +85,8 @@ const FinishedProduct = ({ location }) => {
 						parent_id: id,
 						lang: tabLang,
 						selected,
-						setCanUpdate
+						setCanUpdate,
+						values
 					}}
 				/>
 			</Modal>
@@ -104,7 +105,8 @@ const FinishedProduct = ({ location }) => {
 						parent_id: id,
 						lang: tabLang,
 						id,
-						setCanUpdate
+						setCanUpdate,
+						values
 					}}
 				/>
 			</Modal>

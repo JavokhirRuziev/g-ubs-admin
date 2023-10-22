@@ -10,7 +10,15 @@ import get from "lodash/get";
 import Recipe from "./Recipe";
 import FinishedProduct from "./FinishedProduct";
 
-const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
+const Form = ({
+	isUpdate,
+	setFieldValue,
+	values,
+	lang,
+	id,
+	location,
+	item
+}) => {
 	const { t } = useTranslation("main");
 
 	return (
@@ -90,7 +98,15 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						<>
 							{/* <Ingredients /> */}
 							<Recipe {...{ location, lang, id }} />
-							<FinishedProduct {...{ location, lang, id }} />
+							<div
+								style={{
+									opacity: !values.auto_calculation ? 1 : 0.5,
+									transition: "0.3s"
+								}}>
+								<FinishedProduct
+									{...{ location, lang, id, values }}
+								/>
+							</div>
 						</>
 					)}
 				</Panel>
@@ -106,8 +122,8 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 						className={"mb-24"}
 						label={t("Рекомендуемый")}
 						isMulti={true}
-						isSearchable={true}
 						optionLabel={option => get(option, `translate.name`)}
+						isSearchable={true}
 						loadOptionsParams={search => {
 							return {
 								include: "translate",
@@ -204,7 +220,10 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 					<div className="d-flex align-items-center mb-24">
 						<Switch
 							onChange={value => {
-								setFieldValue("auto_calculation", value);
+								setFieldValue(
+									"auto_calculation",
+									value ? value : false
+								);
 							}}
 							checked={values.auto_calculation}
 						/>

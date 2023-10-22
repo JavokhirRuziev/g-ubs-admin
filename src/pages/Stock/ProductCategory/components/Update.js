@@ -61,7 +61,8 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 								values,
 								setFieldValue,
 								isUpdate: true,
-								tabLang
+								tabLang,
+								selected
 							}}
 						/>
 					</Spin>

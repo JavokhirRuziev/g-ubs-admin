@@ -6,7 +6,7 @@ import { Button } from "antd";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 
-const IngredientsForm = ({ isUpdate, submitForm, lang, selected }) => {
+const IngredientsForm = ({ isUpdate, submitForm, lang, selected, values }) => {
 	const { t } = useTranslation("main");
 
 	return (
@@ -18,7 +18,7 @@ const IngredientsForm = ({ isUpdate, submitForm, lang, selected }) => {
 			<Field
 				component={Fields.AsyncSelect}
 				name="finished_dish_id"
-				placeholder={t("Продукты")}
+				placeholder={t("Готовое блюдо")}
 				isClearable
 				loadOptionsUrl={`/search/finished-dishes`}
 				className="mb-20"
@@ -52,7 +52,8 @@ const IngredientsForm = ({ isUpdate, submitForm, lang, selected }) => {
 				htmlType="button"
 				onClick={() => {
 					submitForm();
-				}}>
+				}}
+				disabled={values.auto_calculation}>
 				{isUpdate ? t("Сохранить") : t("Добавить")}
 			</Button>
 		</div>

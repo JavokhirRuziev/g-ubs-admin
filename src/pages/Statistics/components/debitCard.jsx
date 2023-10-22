@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { thousandsDivider } from "../../../services/thousandsDivider";
 
 const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 	const dispatch = useDispatch();
@@ -74,7 +75,7 @@ const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 								}>
 								<span>{item.name}</span>
 								<div>
-									{item.amount} {t("сум")}
+									{thousandsDivider(item.amount)} {t("сум")}
 								</div>
 							</div>
 						);
@@ -86,7 +87,7 @@ const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
-					{total} {t("сум")}
+					{thousandsDivider(total)} {t("сум")}
 				</span>
 			</div>
 		</div>

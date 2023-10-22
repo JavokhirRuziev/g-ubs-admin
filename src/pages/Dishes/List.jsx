@@ -193,28 +193,33 @@ const List = ({ history, location }) => {
 	const TabPane = Tabs.TabPane;
 	return (
 		<>
-			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Еды")}</div>
-				<div>
-					<Input
-						component={Fields.AntInput}
-						type="text"
-						value={search}
-						onChange={handleChange}
-					/>
-				</div>
+			<div className="title-md mb-20">{t("Еды")}</div>
+			<Board className="mb-20">
+				<div
+					className="d-flex justify-content-between align-items-center "
+					style={{ padding: "10px" }}>
+					<div>
+						<Input
+							component={Fields.AntInput}
+							type="text"
+							value={search}
+							onChange={handleChange}
+							placeholder={t("Поиск")}
+						/>
+					</div>
 
-				<Button
-					type="primary"
-					size="large"
-					className="fs-14 fw-300 ml-10"
-					htmlType="button"
-					onClick={() =>
-						history.push(`/dishes/create?lang=${tabLang}`)
-					}>
-					{t("Добавить")}
-				</Button>
-			</div>
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() =>
+							history.push(`/dishes/create?lang=${tabLang}`)
+						}>
+						{t("Добавить")}
+					</Button>
+				</div>
+			</Board>
 
 			<Board className="border-none">
 				<div>
