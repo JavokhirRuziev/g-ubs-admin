@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Button, Modal, Select} from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Modal, Select } from "antd";
 import { useDebounce } from "use-debounce";
 import qs from "query-string";
 import { useTranslation } from "react-i18next";
@@ -9,9 +9,9 @@ import { Search } from "components/SmallComponents";
 import ClientsList from "./components/ClientsList";
 import CreateClient from "./components/CreateClient";
 import config from "../../config";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import Actions from "modules/entity/actions";
-import {helpers} from "../../services";
+import { helpers } from "../../services";
 
 const { Option } = Select;
 
@@ -19,11 +19,11 @@ const List = ({ location, history }) => {
 	const [query, setQuery] = useState("");
 	const [searchQuery] = useDebounce(query, 600);
 	const [createModal, setCreateModal] = useState(false);
-	const [filterSelect, setFilterSelect] = useState(0)
-	const [debtTotal, setDebtTotal] = useState("")
-	const [creditTotal, setCreditTotal] = useState("")
+	const [filterSelect, setFilterSelect] = useState(0);
+	const [debtTotal, setDebtTotal] = useState("");
+	const [creditTotal, setCreditTotal] = useState("");
 
-	const {t} = useTranslation("main");
+	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 
 	const params = qs.parse(location.search);
@@ -36,32 +36,32 @@ const List = ({ location, history }) => {
 	};
 
 	const getAddBtnText = () => {
-		switch (params.type){
+		switch (params.type) {
 			case "clients":
-				return 'Добавить клиент';
+				return "Добавить клиент";
 			case "employees":
-				return 'Добавить сотрудник';
+				return "Добавить сотрудник";
 			case "counter_agents":
-				return 'Добавить контрагент';
+				return "Добавить контрагент";
 			default:
-				return ""
+				return "";
 		}
-	}
+	};
 	const getPageTitle = () => {
-		switch (params.type){
+		switch (params.type) {
 			case "clients":
-				return 'Клиенты';
+				return "Клиенты";
 			case "employees":
-				return 'Сотрудники';
+				return "Сотрудники";
 			case "counter_agents":
-				return 'Контрагенты';
+				return "Контрагенты";
 			default:
-				return ""
+				return "";
 		}
-	}
+	};
 
 	const getPersonTypeId = () => {
-		switch (params.type){
+		switch (params.type) {
 			case "clients":
 				return config.CUSTOMER_TYPE_CLIENT;
 			case "employees":
@@ -69,36 +69,50 @@ const List = ({ location, history }) => {
 			case "counter_agents":
 				return config.CUSTOMER_TYPE_COUNTER_AGENT;
 			default:
-				return ""
+				return "";
 		}
-	}
+	};
 
-	const type = getPersonTypeId()
+	const type = getPersonTypeId();
 
 	const loadCredit = () => {
-		dispatch(Actions.LoadDefault.request({
-			url: `/transactions/borrowed-by-category`,
-			params: {
-				extra: {
-					customer_type: getPersonTypeId()
-				}
-			},
-			cb: {
-				success: data => {
-					const totalDebt = data.reduce((prev,curr) => prev + (Number(curr.sum) < 0 ? Number(curr.sum*(-1)) : 0), 0)
-					const totalCredit = data.reduce((prev,curr) => prev + (Number(curr.sum) > 0 ? Number(curr.sum) : 0), 0)
-
-					setDebtTotal(totalDebt)
-					setCreditTotal(totalCredit)
+		dispatch(
+			Actions.LoadDefault.request({
+				url: `/transactions/borrowed-by-category`,
+				params: {
+					extra: {
+						customer_type: getPersonTypeId()
+					}
 				},
-				error: () => {},
-			}
-		}))
-	}
+				cb: {
+					success: data => {
+						const totalDebt = data.reduce(
+							(prev, curr) =>
+								prev +
+								(Number(curr.sum) < 0
+									? Number(curr.sum * -1)
+									: 0),
+							0
+						);
+						const totalCredit = data.reduce(
+							(prev, curr) =>
+								prev +
+								(Number(curr.sum) > 0 ? Number(curr.sum) : 0),
+							0
+						);
+
+						setDebtTotal(totalDebt);
+						setCreditTotal(totalCredit);
+					},
+					error: () => {}
+				}
+			})
+		);
+	};
 
 	useEffect(() => {
-		loadCredit()
-	}, [params.type])
+		loadCredit();
+	}, [params.type]);
 	return (
 		<div>
 			<Modal
@@ -108,34 +122,44 @@ const List = ({ location, history }) => {
 				footer={null}
 				centered
 				width={500}
-				destroyOnClose
-			>
-				<CreateClient {...{setCreateModal,type}}  />
+				destroyOnClose>
+				<CreateClient {...{ setCreateModal, type }} />
 			</Modal>
 
 			<div className="d-flex justify-content-between">
 				<div className="title-md mb-10">
 					<div>{getPageTitle()}</div>
 
-					<div className='fw-500 fs-16'>
-						<div className="mr-10" style={{color: 'green'}}>
-							{t("Дебиторка")}: {debtTotal ? helpers.convertToReadable(debtTotal) : 0}
+					<div className="fw-500 fs-16">
+						<div className="mr-10" style={{ color: "green" }}>
+							{t("Дебиторка")}:{" "}
+							{debtTotal
+								? helpers.convertToReadable(debtTotal)
+								: 0}
 						</div>
-						<div className="mr-10" style={{color: 'red'}}>
-							{t("Кредиторка")}: {creditTotal ? helpers.convertToReadable(creditTotal) : 0}
+						<div className="mr-10" style={{ color: "red" }}>
+							{t("Кредиторка")}:{" "}
+							{creditTotal
+								? helpers.convertToReadable(creditTotal)
+								: 0}
 						</div>
 					</div>
 				</div>
 				<div className="d-flex mb-20">
-
-					<div style={{width: '200px',minWidth: '200px'}} className='mr-20'>
-						<Select className={'w-100p'} defaultValue={filterSelect} size={"large"} onChange={value => {
-							setFilterSelect(value)
-							setPage(1)
-						}}>
+					<div
+						style={{ width: "200px", minWidth: "200px" }}
+						className="mr-20">
+						<Select
+							className={"w-100p"}
+							defaultValue={filterSelect}
+							size={"large"}
+							onChange={value => {
+								setFilterSelect(value);
+								setPage(1);
+							}}>
 							<Option value={0}>Все</Option>
-							<Option value={'debt'}>Дебитор</Option>
-							<Option value={'credit'}>Кредитор</Option>
+							<Option value={"debt"}>Дебитор</Option>
+							<Option value={"credit"}>Кредитор</Option>
 						</Select>
 					</div>
 
@@ -153,10 +177,10 @@ const List = ({ location, history }) => {
 							size="large"
 							className="fs-14 fw-300 ml-30"
 							htmlType="button"
-							onClick={() => setCreateModal(true)}
-						>{getAddBtnText()}</Button>
+							onClick={() => setCreateModal(true)}>
+							{getAddBtnText()}
+						</Button>
 					)}
-
 				</div>
 			</div>
 

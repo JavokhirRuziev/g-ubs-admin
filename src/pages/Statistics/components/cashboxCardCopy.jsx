@@ -155,7 +155,7 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 				<span>{t("Oбщая сумма")}:</span>
 				<span>
 					{helpers.convertToReadable(
-						thousandsDivider(totalIncome - solves - totalExpense)
+						thousandsDivider(totalIncome - expenses - solves)
 					)}{" "}
 					{t("сум")}
 				</span>

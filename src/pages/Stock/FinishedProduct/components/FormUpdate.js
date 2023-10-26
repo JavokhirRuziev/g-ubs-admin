@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Fields } from "components";
 import { Field } from "formik";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import { useTranslation } from "react-i18next";
 
 import axios from "axios";
@@ -36,7 +36,7 @@ const FormUpdate = ({ tabLang, setFieldValue }) => {
 	return (
 		<div>
 			<div className="title-md fs-16 mb-20">{t("Изменить")}</div>
-			{finishedDishes &&
+			{finishedDishes && finishedDishes.length ? (
 				finishedDishes.map(dish => (
 					<div
 						style={{
@@ -113,7 +113,10 @@ const FormUpdate = ({ tabLang, setFieldValue }) => {
 							<DeleteIcon height={16} width={16} />
 						</div>
 					</div>
-				))}
+				))
+			) : (
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+			)}
 
 			<div style={{ display: "flex", justifyContent: "flex-end" }}>
 				{save ? (

@@ -9,6 +9,8 @@ import { ReactComponent as DeleteIcon } from "./icons/delete.svg";
 import { ReactComponent as EditIcon } from "./icons/edit.svg";
 import { ReactComponent as ConfirmIcon } from "./icons/confirm.svg";
 import { ReactComponent as TakeProductReady } from "./icons/ready-product.svg";
+import { ReactComponent as DebtIcon } from "./icons/debt.svg";
+import { ReactComponent as EyeIcon } from "./icons/eye.svg";
 
 import "./style.scss";
 
@@ -17,11 +19,15 @@ const propTypes = {
 	hasEdit: PropTypes.bool,
 	hasDelete: PropTypes.bool,
 	hasDishesProduct: PropTypes.bool,
+	hasDebt: PropTypes.bool,
+	hasView: PropTypes.bool,
 
 	onConfirm: PropTypes.func,
 	onEdit: PropTypes.func,
 	onDelete: PropTypes.func,
 	onReadyProd: PropTypes.func,
+	onDebt: PropTypes.func,
+	onView: PropTypes.func,
 
 	onChange: PropTypes.func,
 	pagination: PropTypes.bool,
@@ -33,6 +39,9 @@ const defaultProps = {
 	hasConfirm: false,
 	hasEdit: false,
 	hasDelete: false,
+	hasDebt: false,
+	hasView: false,
+	hasDishesProduct: false,
 
 	onConfirm: () => {},
 	onEdit: () => {},
@@ -51,11 +60,15 @@ function TableWithActions(props) {
 		hasEdit,
 		hasDelete,
 		hasDishesProduct,
+		hasDebt,
+		hasView,
 
 		onConfirm,
 		onEdit,
 		onDelete,
 		onReadyProd,
+		onDebt,
+		onView,
 
 		onChange,
 		pagination,
@@ -74,6 +87,18 @@ function TableWithActions(props) {
 					<tr {...props}>
 						{props.children}
 						{hasDishesProduct && (
+							<th
+								className={props.children[0].className}
+								style={{ width: 10 }}
+							/>
+						)}
+						{hasDebt && (
+							<th
+								className={props.children[0].className}
+								style={{ width: 10 }}
+							/>
+						)}
+						{hasView && (
 							<th
 								className={props.children[0].className}
 								style={{ width: 10 }}
@@ -117,6 +142,28 @@ function TableWithActions(props) {
 										className="action-btn confirm-btn"
 										onClick={() => onConfirm(item)}>
 										<ConfirmIcon height={16} width={16} />
+									</div>
+								</Tooltip>
+							</td>
+						)}
+						{hasDebt && (
+							<td style={{ width: 10 }}>
+								<Tooltip title={t("Перейти")}>
+									<div
+										className="action-btn confirm-btn"
+										onClick={() => onDebt(item)}>
+										<DebtIcon height={16} width={16} />
+									</div>
+								</Tooltip>
+							</td>
+						)}
+						{hasView && (
+							<td style={{ width: 10 }}>
+								<Tooltip title={t("Посмотреть")}>
+									<div
+										className="action-btn confirm-btn"
+										onClick={() => onView(item)}>
+										<EyeIcon height={16} width={16} />
 									</div>
 								</Tooltip>
 							</td>

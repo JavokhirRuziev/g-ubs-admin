@@ -143,7 +143,7 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 					<div className="dashboard-card-st__body">
 						{categories.length > 0 ? (
 							categories.map(item => {
-								const itemsByCategory = creditorTransactions.filter(
+								const itemsByCategory = debitorTransactions.filter(
 									a => a.alias === item.alias
 								);
 								const totalSum = itemsByCategory.reduce(
@@ -198,7 +198,7 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 					<div className="dashboard-card-st__body">
 						{categoriesDebit.length > 0 ? (
 							categoriesDebit.map(item => {
-								const itemsByCategory = debitorTransactions.filter(
+								const itemsByCategory = creditorTransactions.filter(
 									a => a.alias === item.alias
 								);
 								const totalSum = itemsByCategory.reduce(

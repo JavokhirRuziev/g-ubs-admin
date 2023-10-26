@@ -50,7 +50,8 @@ const Index = ({ location, history }) => {
 					},
 					extra: {
 						start_date: params.start_at && params.start_at,
-						end_date: params.end_at && params.end_at
+						end_date: params.end_at && params.end_at,
+						status: params.proccessing && params.proccessing
 					}
 				},
 				cb: {
@@ -61,7 +62,14 @@ const Index = ({ location, history }) => {
 				}
 			})
 		);
-	}, [params.type, params.status, params.start_at, params.end_at]);
+		console.log(params);
+	}, [
+		params.type,
+		params.status,
+		params.start_at,
+		params.end_at,
+		params.proccessing
+	]);
 
 	const cash = statistic.find(a => a.payment_type === 1);
 	const payme = statistic.find(a => a.payment_type === 2);
@@ -69,7 +77,6 @@ const Index = ({ location, history }) => {
 	const terminal = statistic.find(a => a.payment_type === 4);
 
 	const downloadReport = () => {
-		// setSubmitting(true);
 		axios({
 			url: queryBuilder(config.API_ROOT + `/dashboard/report`, {
 				filter: {
@@ -79,11 +86,12 @@ const Index = ({ location, history }) => {
 				extra: {
 					dish_id: params.dish_id && params.dish_id.split("/")[0],
 					start_date: params.start_at,
-					end_date: params.end_at
+					end_date: params.end_at,
+					status: params.proccessing && params.proccessing
 				}
-			}), //your url
+			}),
 			method: "GET",
-			responseType: "blob" // important
+			responseType: "blob"
 		})
 			.then(response => {
 				const url = window.URL.createObjectURL(
@@ -91,7 +99,7 @@ const Index = ({ location, history }) => {
 				);
 				const link = document.createElement("a");
 				link.href = url;
-				link.setAttribute("download", "report.xlsx"); //or any other extension
+				link.setAttribute("download", "report.xlsx");
 				document.body.appendChild(link);
 				link.click();
 				// setSubmitting(false);

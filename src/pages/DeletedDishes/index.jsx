@@ -30,12 +30,6 @@ const Index = ({ location, history }) => {
 			search: qs.stringify({ ...params, page }, { encode: false })
 		});
 	};
-	// useEffect(() => {
-	// 	axios
-	// 		.get(`${config.API_ROOT}/deleted-dishes?include=dish&_l=ru`)
-	// 		.then(res => console.log(res.request))
-	// 		.catch(err => console.log(err.response));
-	// }, []);
 
 	const downloadReport = () => {
 		// setSubmitting(true);
@@ -113,37 +107,38 @@ const Index = ({ location, history }) => {
 										columns={[
 											{
 												title: t("No"),
-												dataIndex: `id`,
-												className: `text-align-left w-82`,
+												dataIndex: ``,
+												className: `text-align-left`,
 												render: value => {
 													return (
 														<div className="divider-wrapper">
-															{items.findIndex(
+															{/* {items.findIndex(
 																element =>
 																	value ===
 																	element.id
-															) + 1}
+															) + 1} */}
+															{console.log(value)}
 														</div>
 													);
 												}
 											},
-											{
-												title: t("Фото"),
-												dataIndex: "dish.file",
-												className: "w-82 text-cen",
-												render: value => (
-													<div className="divider-wrapper">
-														<Avatar
-															isRectangle
-															isProduct
-															image={get(
-																value,
-																"thumbnails.small.src"
-															)}
-														/>
-													</div>
-												)
-											},
+											// {
+											// 	title: t("Фото"),
+											// 	dataIndex: "dish.file",
+											// 	className: "w-82 text-cen",
+											// 	render: value => (
+											// 		<div className="divider-wrapper">
+											// 			<Avatar
+											// 				isRectangle
+											// 				isProduct
+											// 				image={get(
+											// 					value,
+											// 					"thumbnails.small.src"
+											// 				)}
+											// 			/>
+											// 		</div>
+											// 	)
+											// },
 											{
 												title: t("Загаловок"),
 												dataIndex:
@@ -151,15 +146,6 @@ const Index = ({ location, history }) => {
 												render: value => (
 													<div className="divider-wrapper">
 														{value ? value : "-"}
-													</div>
-												)
-											},
-											{
-												title: t("Себестоимость"),
-												dataIndex: "dish.cost_price",
-												render: value => (
-													<div className="divider-wrapper">
-														{value}
 													</div>
 												)
 											},

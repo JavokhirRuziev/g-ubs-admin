@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EntityContainer from "modules/entity/containers";
 import { Pagination, Spin, Modal } from "antd";
 import { Table } from "components";
@@ -7,13 +7,14 @@ import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import UpdateClient from "./UpdateClient";
 import { Link } from "react-router-dom";
-import {helpers} from "../../../services";
+import { helpers } from "../../../services";
+import axios from "axios";
+import config from "config";
 
 let content = document.querySelector(".m-content");
 
 const ClientsList = ({ filterSelect, searchQuery, type }) => {
-
-	const {t} = useTranslation("main");
+	const { t } = useTranslation("main");
 	const location = useLocation();
 	const history = useHistory();
 	const [updateModal, showUpdateModal] = useState(false);
@@ -34,7 +35,7 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 				behavior: "smooth",
 				top: 0,
 				left: 0
-			})
+			});
 		}
 	};
 
@@ -46,15 +47,14 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 			primaryKey="id"
 			params={{
 				limit: 50,
-				filter: {type: type},
+				filter: { type: type },
 				page,
 				extra: {
-					append: 'balance,creditor',
+					append: "balance,creditor",
 					name: searchQuery,
 					type: filterSelect
-				},
-			}}
-		>
+				}
+			}}>
 			{({ items, isFetched, meta }) => {
 				return (
 					<Spin spinning={!isFetched}>
@@ -65,58 +65,89 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 							footer={null}
 							centered
 							width={500}
-							destroyOnClose
-						>
-							<UpdateClient {...{
-								showUpdateModal,
-								selected
-							}} />
+							destroyOnClose>
+							<UpdateClient
+								{...{
+									showUpdateModal,
+									selected
+								}}
+							/>
 						</Modal>
 
 						<div className="default-table pad-15">
 							<Table
 								hasEdit={true}
-								onEdit={(value) => {
+								hasDebt={true}
+								onEdit={value => {
 									setSelected(value);
 									showUpdateModal(true);
 								}}
+								onDebt={value =>
+									history.push(
+										`/persons/client-view?id=${value.id}`
+									)
+								}
 								rowKey={"id"}
 								columns={[
 									{
 										title: t("ID"),
 										dataIndex: "id",
 										className: "w-50 text-cen",
-										render: value => <div className="divider-wrapper">{value}</div>
+										render: value => (
+											<div className="divider-wrapper">
+												{value}
+											</div>
+										)
 									},
 									{
 										title: t("Имя"),
 										dataIndex: "name",
-										render: (value, row) => <div className="divider-wrapper fw-700">
-											<Link className={'cr-blue'} to={`/customers/transactions/${row.id}`}>{value ? value : '-'}</Link>
-										</div>
+										render: (value, row) => (
+											<div className="divider-wrapper fw-700">
+												<Link
+													className={"cr-blue"}
+													to={`/customers/transactions/${row.id}`}>
+													{value ? value : "-"}
+												</Link>
+											</div>
+										)
 									},
 									{
 										title: t("Тел. номер"),
 										dataIndex: "phone",
 										className: "text-cen",
-										render: value => <div className="divider-wrapper">
-											{value ? value : t("нет номера")}
-										</div>
+										render: value => (
+											<div className="divider-wrapper">
+												{value
+													? value
+													: t("нет номера")}
+											</div>
+										)
 									},
 									{
 										title: t("Дебиторка"),
 										dataIndex: "creditor",
 										className: "",
-										render: (value) => {
+										render: value => {
 											return (
-												<div
-													className="divider-wrapper fw-700">
-													{(value < 0) ? (
-														<span style={{color: 'green'}}>
-															{value ? helpers.convertToReadable(value*(-1)) : 0}
+												<div className="divider-wrapper fw-700">
+													{value < 0 ? (
+														<span
+															style={{
+																color: "green"
+															}}>
+															{value
+																? helpers.convertToReadable(
+																		value *
+																			-1
+																  )
+																: 0}
 														</span>
 													) : (
-														<span style={{color: 'green'}}>
+														<span
+															style={{
+																color: "green"
+															}}>
 															0
 														</span>
 													)}
@@ -128,24 +159,32 @@ const ClientsList = ({ filterSelect, searchQuery, type }) => {
 										title: t("Кредиторка"),
 										dataIndex: "creditor",
 										className: "",
-										render: (value) => {
+										render: value => {
 											return (
-												<div
-													className="divider-wrapper fw-700">
-													{(value > 0) ? (
-														<span style={{color: 'red'}}>
-															{value ? helpers.convertToReadable(value) : 0}
+												<div className="divider-wrapper fw-700">
+													{value > 0 ? (
+														<span
+															style={{
+																color: "red"
+															}}>
+															{value
+																? helpers.convertToReadable(
+																		value
+																  )
+																: 0}
 														</span>
 													) : (
-														<span style={{color: 'red'}}>
+														<span
+															style={{
+																color: "red"
+															}}>
 															0
 														</span>
 													)}
-
 												</div>
 											);
 										}
-									},
+									}
 								]}
 								dataSource={items}
 							/>

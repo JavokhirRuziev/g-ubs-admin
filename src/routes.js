@@ -72,6 +72,7 @@ const Expenses = lazy(() => import("./pages/Expenses"));
 const Statistics = lazy(() => import("./pages/Statistics"));
 
 const Persons = lazy(() => import("./pages/Persons/List"));
+const ClientView = lazy(() => import("./pages/Persons/components/ClientView"));
 const PersonsTransactions = lazy(() => import("./pages/Persons/Transactions"));
 
 const Stock = lazy(() => import("./pages/Stock/Stock"));
@@ -284,7 +285,6 @@ const routes = [
 		component: CompaniesView,
 		access: ["admin"]
 	},
-
 	{
 		path: "/recalculation-finished-dishes",
 		exact: true,
@@ -396,6 +396,12 @@ const routes = [
 		path: "/profile",
 		exact: true,
 		component: Profile,
+		access: ["admin", "manager", "company"]
+	},
+	{
+		path: "/persons/client-view",
+		exact: true,
+		component: ClientView,
 		access: ["admin", "manager", "company"]
 	}
 ];

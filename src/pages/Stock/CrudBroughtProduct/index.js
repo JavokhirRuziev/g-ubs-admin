@@ -23,6 +23,7 @@ import axios from "axios";
 import useMediaQueries from "../../../services/media-queries";
 import Card from "../../../components/Card/Card";
 import { get } from "lodash";
+import { dateFormatter } from "../../../services/dateFormatter";
 const { Option } = Select;
 
 export default function index({ location, history }) {
@@ -587,7 +588,9 @@ export default function index({ location, history }) {
 													dataIndex: "created_at",
 													render: value => (
 														<div className="divider-wrapper">
-															{value}
+															{dateFormatter(
+																value
+															)}
 														</div>
 													)
 												},
@@ -729,9 +732,11 @@ export default function index({ location, history }) {
 																	),
 																	name: (
 																		<div className="divider-wrapper">
-																			{get(
-																				item,
-																				"created_at"
+																			{dateFormatter(
+																				get(
+																					item,
+																					"created_at"
+																				)
 																			)}
 																		</div>
 																	)

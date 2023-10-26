@@ -31,8 +31,11 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 							(total, item) => item.value + total,
 							0
 						);
+						const setTotalCash = data
+							.filter(el => el.key !== "opened")
+							.reduce((total, item) => item.value + total, 0);
 						setTotal(sum);
-						setTotalIncome(sum);
+						setTotalIncome(setTotalCash);
 					},
 					error: data => {}
 				}
@@ -63,18 +66,26 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">
-				{incomesTransactions.map(el => (
-					<div
-						className="dashboard-line --purple cursor-pointer"
-						onClick={() =>
-							history.push(`/orders?${[el.filter_by]}=${el.id}`)
-						}>
-						<span>{t(el.key)}</span>
-						<div>
-							{thousandsDivider(el.value)} {t("сум")}
+				{incomesTransactions.map(el => {
+					const filter_by =
+						el.filter_by === "status"
+							? "proccessing"
+							: el.filter_by;
+					const el_id =
+						filter_by === "proccessing" ? "processing" : el.id;
+					return (
+						<div
+							className="dashboard-line --purple cursor-pointer"
+							onClick={() =>
+								history.push(`/orders?${[filter_by]}=${el_id}`)
+							}>
+							<span>{t(el.key)}</span>
+							<div>
+								{thousandsDivider(el.value)} {t("сум")}
+							</div>
 						</div>
-					</div>
-				))}
+					);
+				})}
 			</div>
 			<div className="dashboard-card-st__footer">
 				<span>{t("Oбщая сумма")}:</span>
