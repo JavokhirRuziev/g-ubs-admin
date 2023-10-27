@@ -22,7 +22,7 @@ import qs from "query-string";
 import get from "lodash/get";
 import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
-import { thousandsDivider } from "../../services/thousandsDivider";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 
 const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { thousandsDivider } from "../../../services/thousandsDivider";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 	const dispatch = useDispatch();

@@ -12,8 +12,7 @@ import useMediaQueries from "../../../services/media-queries/index";
 import Card from "../../../components/Card/Card";
 import { get } from "lodash";
 import { Avatar } from "../../../components";
-import { thousandsDivider } from "../../../services/thousandsDivider";
-import axios from "axios";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;

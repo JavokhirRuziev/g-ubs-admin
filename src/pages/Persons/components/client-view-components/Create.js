@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Empty, Spin, notification } from "antd";
-import { Avatar, Table } from "components";
+import { Avatar } from "components";
 import { useTranslation } from "react-i18next";
-import { dateFormatter } from "../../../../services/dateFormatter";
-import { thousandsDivider } from "../../../../services/thousandsDivider";
 import { useDispatch } from "react-redux";
 import Actions from "modules/entity/actions";
 import { get } from "lodash";
+import thousandsDivider from "../../../../services/thousandsDivider/thousandsDivider";
 
 const Create = ({ tabLang, showCreateModal, selected }) => {
 	const [isFetched, setIsFetched] = useState(false);
@@ -44,7 +43,6 @@ const Create = ({ tabLang, showCreateModal, selected }) => {
 	useEffect(() => {
 		getOrder();
 	}, []);
-
 	return Boolean(selected) ? (
 		<div>
 			<Spin spinning={isFetched}>

@@ -4,7 +4,7 @@ import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { thousandsDivider } from "../../../services/thousandsDivider";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const IncomesCard = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();

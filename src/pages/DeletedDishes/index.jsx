@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Table, Board } from "components";
 import { Pagination, Spin, Tag } from "antd";
-import { Avatar } from "components";
 import EntityContainer from "modules/entity/containers";
-import { helpers, queryBuilder } from "services";
+import { queryBuilder } from "services";
 import Filter from "./Filter";
 import MobFilter from "./MobFilter";
 import qs from "query-string";
 
 import { useTranslation } from "react-i18next";
-import get from "lodash/get";
 import "../Dashboard/style.scss";
-import ExcelIcon from "assets/images/icons/excel-icon.svg";
 import axios from "axios";
 import config from "config";
 import { useSelector } from "react-redux";
 import { dateFormatter } from "../../services/dateFormatter";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 
 const Index = ({ location, history }) => {
 	const { t } = useTranslation("main");
 	const [filterModal, showFilterModal] = useState(false);
+	const [amount, setAmount] = useState();
 	const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 	const windowWidth = useSelector(state => state.system.width);
 
@@ -78,24 +77,47 @@ const Index = ({ location, history }) => {
 				) : (
 					<MobFilter {...{ filterModal, showFilterModal }} />
 				)}
-
+				<div style={{ position: "relative" }}>
+					<p
+						style={{
+							position: "absolute",
+							top: -20,
+							right: 20,
+							fontSize: "32px",
+							fontWeight: "bold"
+						}}>
+						{thousandsDivider(amount)} {t("сум")}
+					</p>
+				</div>
 				<EntityContainer.All
 					entity="deleted-dishes"
 					name={`all`}
 					url="/deleted-dishes"
 					primaryKey={"id"}
+					onSuccess={data => {
+						const sum = data.data.reduce(
+							(total, el) => el.price + total,
+							0
+						);
+						setAmount(sum);
+					}}
 					params={{
 						limit: 300,
 						page: page ? page : 1,
 						extra: {
-							percent: params.percent && params.percent,
+							kitchener_id:
+								params.kitchener &&
+								params.kitchener.split("/")[0],
+							manager_id:
+								params.cashier && params.cashier.split("/")[0],
 							status: params.status && params.status,
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
 							waiter_id:
 								params.waiter_id &&
 								params.waiter_id.split("/")[0],
-							include: "dish.kitchener,manager"
+							include:
+								"dish.kitchener,manager,order,order.booking.table"
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
@@ -107,38 +129,41 @@ const Index = ({ location, history }) => {
 										columns={[
 											{
 												title: t("No"),
-												dataIndex: ``,
-												className: `text-align-left`,
+												dataIndex: `id`,
+												className: `text-align-left w-82`,
 												render: value => {
 													return (
 														<div className="divider-wrapper">
-															{/* {items.findIndex(
+															{items.findIndex(
 																element =>
 																	value ===
 																	element.id
-															) + 1} */}
-															{console.log(value)}
+															) + 1}
 														</div>
 													);
 												}
 											},
-											// {
-											// 	title: t("Фото"),
-											// 	dataIndex: "dish.file",
-											// 	className: "w-82 text-cen",
-											// 	render: value => (
-											// 		<div className="divider-wrapper">
-											// 			<Avatar
-											// 				isRectangle
-											// 				isProduct
-											// 				image={get(
-											// 					value,
-											// 					"thumbnails.small.src"
-											// 				)}
-											// 			/>
-											// 		</div>
-											// 	)
-											// },
+											{
+												title: t("Номер заказа"),
+												dataIndex: "order.order_number",
+												className: "w-82",
+												render: value => (
+													<div className="divider-wrapper">
+														{value ? value : "-"}
+													</div>
+												)
+											},
+											{
+												title: t("Номер стола"),
+												dataIndex:
+													"order.booking.table.number",
+												className: "w-82",
+												render: value => (
+													<div className="divider-wrapper">
+														{value ? value : "-"}
+													</div>
+												)
+											},
 											{
 												title: t("Загаловок"),
 												dataIndex:
@@ -191,15 +216,15 @@ const Index = ({ location, history }) => {
 													</div>
 												)
 											},
-											{
-												title: t("Order Id"),
-												dataIndex: "order_id",
-												render: value => (
-													<div className="divider-wrapper">
-														{value && value}
-													</div>
-												)
-											},
+											// {
+											// 	title: t("Order Id"),
+											// 	dataIndex: "order_id",
+											// 	render: value => (
+											// 		<div className="divider-wrapper">
+											// 			{value && value}
+											// 		</div>
+											// 	)
+											// },
 											{
 												title: t("Дата"),
 												dataIndex: "created_at",

@@ -20,10 +20,10 @@ import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
 import axios from "axios";
-import { thousandsDivider } from "../../../services/thousandsDivider";
 import useMediaQueries from "../../../services/media-queries";
 import { get } from "lodash";
 import Card from "../../../components/Card/Card";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 const { Option } = Select;
 
 export default function index({ location, history, match }) {
@@ -355,7 +355,7 @@ export default function index({ location, history, match }) {
 								fontSize: mobile ? "20px" : "30px",
 								fontWeight: "bold"
 							}}>
-							{thousandsDivider(total_amount)}
+							{thousandsDivider(total_amount)} {t("сум")}
 						</div>
 					</Panel>
 				</div>

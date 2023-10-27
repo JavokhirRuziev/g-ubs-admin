@@ -3,8 +3,8 @@ import { helpers } from "../../../services";
 import { useTranslation } from "react-i18next";
 import Actions from "../../../modules/entity/actions";
 import { useDispatch } from "react-redux";
-import { thousandsDivider } from "../../../services/thousandsDivider";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 	const { t } = useTranslation("main");

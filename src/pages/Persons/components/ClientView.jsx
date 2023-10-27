@@ -8,9 +8,9 @@ import { useTranslation } from "react-i18next";
 import config from "config";
 import qs from "query-string";
 import axios from "axios";
-import { thousandsDivider } from "../../../services/thousandsDivider";
 import { get } from "lodash";
 import { dateFormatter } from "../../../services/dateFormatter";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
