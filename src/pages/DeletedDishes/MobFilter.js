@@ -89,7 +89,7 @@ class Filter extends Component {
 							loadOptionsParams={search => {
 								return {
 									filter: {
-										["role.role"]: "kitchener"
+										["role.role"]: "manager"
 									},
 									extra: {
 										search
@@ -188,8 +188,18 @@ Filter = withFormik({
 						name: params.waiter_id.split("/")[1]
 				  }
 				: null,
-			kitchener: params.kitchener ? params.kitchener : "",
-			cashier: params.cashier ? params.cashier : ""
+			kitchener: params.kitchener
+				? {
+						id: params.kitchener.split("/")[0],
+						name: params.kitchener.split("/")[1]
+				  }
+				: null,
+			cashier: params.cashier
+				? {
+						id: params.cashier.split("/")[0],
+						name: params.cashier.split("/")[1]
+				  }
+				: null
 		};
 	},
 	handleSubmit: (
@@ -202,6 +212,12 @@ Filter = withFormik({
 			end_at: values.end_at ? moment(values.end_at).unix() : "",
 			waiter_id: values.waiter_id
 				? values.waiter_id.id + "/" + get(values, "waiter_id.name")
+				: "",
+			kitchener: values.kitchener
+				? values.kitchener.id + "/" + get(values, "kitchener.name")
+				: "",
+			cashier: values.cashier
+				? values.cashier.id + "/" + get(values, "cashier.name")
 				: ""
 		};
 
