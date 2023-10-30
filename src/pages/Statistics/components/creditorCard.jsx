@@ -3,8 +3,8 @@ import { helpers } from "services";
 import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { thousandsDivider } from "../../../services/thousandsDivider";
 import qs from "query-string";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const ExpensesCard = ({ location, params, setTotalCreditor, history }) => {
 	const dispatch = useDispatch();

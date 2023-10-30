@@ -14,7 +14,7 @@ import axios from "axios";
 import config from "config";
 import { useSelector } from "react-redux";
 import { dateFormatter } from "../../services/dateFormatter";
-import thousandsDivider from "../../services/thousandsDivider/index";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 
 const Index = ({ location, history }) => {
 	const { t } = useTranslation("main");

@@ -4,7 +4,7 @@ import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "config";
-import { thousandsDivider } from "../../../services/thousandsDivider";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const IncomesCardCopy = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();

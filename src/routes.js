@@ -78,6 +78,9 @@ const PersonsTransactions = lazy(() => import("./pages/Persons/Transactions"));
 const Stock = lazy(() => import("./pages/Stock/Stock"));
 const ProductCategory = lazy(() => import("./pages/Stock/ProductCategory"));
 const Products = lazy(() => import("./pages/Stock/Product"));
+const RecalculationProducts = lazy(() =>
+	import("./pages/Stock/Product/Recalculation/index")
+);
 const CrudBroughtProduct = lazy(() =>
 	import("./pages/Stock/CrudBroughtProduct")
 );
@@ -104,6 +107,13 @@ const routes = [
 		path: "/stock/products/",
 		exact: true,
 		component: Products,
+		access: ["company"],
+		role: "products"
+	},
+	{
+		path: "/recalculation-products",
+		exact: true,
+		component: RecalculationProducts,
 		access: ["company"],
 		role: "products"
 	},

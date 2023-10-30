@@ -88,25 +88,25 @@ const contentManagerRoutes = [
 			{
 				id: "monitoring",
 				link: "/orders-on-table",
-				title: "Отчёт по стол",
+				title: "Отчёт по районам",
 				role: "monitoring_by_tables"
 			},
 			{
 				id: "monitoring",
 				link: "/monitoring",
-				title: "Отчёт по блюдам",
+				title: "Отчёт по товаром",
 				role: "monitoring_by_dishes"
 			},
 			{
 				id: "monitoringWaiter",
 				link: "/monitoring-waiter",
-				title: "Отчёт по официантом",
+				title: "Отчёт по агентам",
 				role: "monitoring_by_waiters"
 			},
 			{
 				id: "monitoring-deleted-dishes",
 				link: "/deleted-dishes",
-				title: "Отчёт по удалёным блюдам",
+				title: "Удалёные",
 				role: "deleted_dishes"
 			}
 		]
@@ -156,35 +156,35 @@ const contentManagerRoutes = [
 	},
 	{
 		id: "dishes",
-		title: "Еды",
+		title: "Продукт",
 		link: "/dishes",
 		icon: "menu-i-dashboard",
 		role: "dishes"
 	},
 	{
 		id: "finished-dishes",
-		title: "Готовое блюдо",
+		title: "Готовый продукт",
 		link: "/finished-dishes",
 		icon: "menu-i-dashboard",
 		role: "dishes"
 	},
 	{
 		id: "menus",
-		title: "Меню",
+		title: "Каталог",
 		link: "/menus",
 		icon: "menu-i-file",
 		role: "menus"
 	},
 	{
 		id: "places",
-		title: "Место",
+		title: "Область",
 		link: "/places",
 		icon: "menu-i-list",
 		role: "places"
 	},
 	{
 		id: "tables",
-		title: "Столы",
+		title: "Район",
 		link: "/tables",
 		icon: "menu-i-list",
 		role: "tables"
@@ -240,13 +240,13 @@ const contentManagerRoutes = [
 			{
 				id: "waiter-users",
 				link: "/users/waiter",
-				title: "Официант",
+				title: "Агент",
 				role: "users"
 			},
 			{
 				id: "kitchener-users",
 				link: "/users/kitchener",
-				title: "Повор",
+				title: "Инструктор",
 				role: "users"
 			},
 			{

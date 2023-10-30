@@ -8,6 +8,9 @@ import { Link } from "react-router-dom";
 import { ReactComponent as DeleteIcon } from "./icons/delete.svg";
 import { ReactComponent as EditIcon } from "./icons/edit.svg";
 import { ReactComponent as TakeProductReady } from "./icons/ready-product.svg";
+import { ReactComponent as DebtIcon } from "./icons/debt.svg";
+import { ReactComponent as EyeIcon } from "./icons/eye.svg";
+import { ReactComponent as ConfirmIcon } from "./icons/confirm.svg";
 
 import "./style.scss";
 
@@ -18,15 +21,30 @@ const Card = ({
 	img,
 	imgTiny,
 	className,
-	onDelete,
-	onEdit,
 	content,
 	hasEdit,
 	hasDelete,
 	hasDishesProduct,
-	onReadyProd
+	hasView,
+	hasDebt,
+	hasConfirm,
+	onReadyProd,
+	onDelete,
+	onEdit,
+	onConfirm,
+	onDebt,
+	onView
 }) => {
 	const classNames = cx("card", className);
+	const ifNoButton = Boolean(
+		hasEdit ||
+			hasDelete ||
+			hasDishesProduct ||
+			hasView ||
+			hasDebt ||
+			hasConfirm
+	);
+
 	return (
 		<div className={classNames}>
 			<div
@@ -42,23 +60,36 @@ const Card = ({
 				}}>
 				{hasEdit && (
 					<div className="action-btn edit-btn" onClick={onEdit}>
-						<EditIcon height={16} width={16} />
+						<EditIcon height={26} width={26} />
 					</div>
 				)}
 				{hasDelete && (
 					<div className="action-btn delete-btn" onClick={onDelete}>
-						<DeleteIcon height={16} width={16} />
+						<DeleteIcon height={26} width={26} />
 					</div>
 				)}
 				{hasDishesProduct && (
-					<td style={{ width: 16 }}>
-						<div
-							className="action-btn confirm-btn"
-							style={{ marginBottom: "5px" }}
-							onClick={onReadyProd}>
-							<TakeProductReady />
-						</div>
-					</td>
+					<div
+						className="action-btn confirm-btn"
+						style={{ marginBottom: "5px" }}
+						onClick={onReadyProd}>
+						<TakeProductReady />
+					</div>
+				)}
+				{hasConfirm && (
+					<div className="action-btn confirm-btn" onClick={onConfirm}>
+						<ConfirmIcon height={26} width={26} />
+					</div>
+				)}
+				{hasDebt && (
+					<div className="action-btn confirm-btn" onClick={onDebt}>
+						<DebtIcon height={26} width={26} />
+					</div>
+				)}
+				{hasView && (
+					<div className="action-btn confirm-btn" onClick={onView}>
+						<EyeIcon height={26} width={26} />
+					</div>
 				)}
 			</div>
 			{img && (
@@ -79,7 +110,12 @@ const Card = ({
 					</ProgressiveImage>
 				</Link>
 			)}
-			<div className="card__body" style={{ marginTop: !img && "10%" }}>
+			<div
+				className="card__body"
+				style={{
+					marginTop: !ifNoButton ? "10%" : !img ? "15%" : "0px"
+				}}>
+				{console.log(!ifNoButton)}
 				<Link to={link} className="card__title">
 					{title}
 				</Link>

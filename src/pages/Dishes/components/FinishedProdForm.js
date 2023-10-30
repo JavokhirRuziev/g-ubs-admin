@@ -18,7 +18,7 @@ const IngredientsForm = ({ isUpdate, submitForm, lang, selected, values }) => {
 			<Field
 				component={Fields.AsyncSelect}
 				name="finished_dish_id"
-				placeholder={t("Готовое блюдо")}
+				placeholder={t("Готовый продукт")}
 				isClearable
 				loadOptionsUrl={`/search/finished-dishes`}
 				className="mb-20"

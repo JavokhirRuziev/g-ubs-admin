@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import get from "lodash/get";
 import config from "config";
 import systemActions from "store/actions/system";
-import { thousandsDivider } from "../../../services/thousandsDivider";
 import ModalForm from "./header-components/ModalForm";
 import { Button, Modal } from "antd";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const Header = ({ mobile, setToggle, toggled }) => {
 	const [isOpen, setIsOpen] = useState(false);

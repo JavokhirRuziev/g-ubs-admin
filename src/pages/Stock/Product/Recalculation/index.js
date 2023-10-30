@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Board, Panel } from "components";
+import { Table, Board, Panel, Avatar } from "components";
 import {
 	Button,
 	Pagination,
@@ -11,8 +11,6 @@ import {
 	Input
 } from "antd";
 import EntityContainer from "modules/entity/containers";
-import Create from "./components/Create";
-import Update from "./components/Update";
 import Actions from "modules/entity/actions";
 
 import { useTranslation } from "react-i18next";
@@ -20,17 +18,15 @@ import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
 import axios from "axios";
-import useMediaQueries from "../../../services/media-queries";
+import useMediaQueries from "../../../../services/media-queries";
 import { get } from "lodash";
-import Card from "../../../components/Card/Card";
-import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
-import Calculate from "./components/Calculate";
+import thousandsDivider from "../../../../services/thousandsDivider/thousandsDivider";
+import Card from "../../../../components/Card/Card";
 const { Option } = Select;
 
 export default function index({ location, history, match }) {
 	const TabPane = Tabs.TabPane;
 	const [createModal, showCreateModal] = useState(false);
-	const [recalculation, showRecalculation] = useState(false);
 	const [updateModal, showUpdateModal] = useState(false);
 	const [selected, setSelected] = useState(null);
 	const [page, setPage] = useState(1);
@@ -163,40 +159,10 @@ export default function index({ location, history, match }) {
 			})
 		);
 	};
-	console.log(selected);
+
 	return (
 		<>
-			<Modal
-				visible={recalculation}
-				onOk={() => showRecalculation(true)}
-				onCancel={() => showRecalculation(false)}
-				footer={null}
-				centered
-				width={430}
-				destroyOnClose>
-				<Calculate {...{ showRecalculation, tabLang, selected }} />
-			</Modal>
-			<Modal
-				visible={createModal}
-				onOk={() => showCreateModal(true)}
-				onCancel={() => showCreateModal(false)}
-				footer={null}
-				centered
-				width={430}
-				destroyOnClose>
-				<Create {...{ showCreateModal, tabLang }} />
-			</Modal>
-			<Modal
-				visible={updateModal}
-				onOk={() => showUpdateModal(true)}
-				onCancel={() => showUpdateModal(false)}
-				footer={null}
-				centered
-				width={430}
-				destroyOnClose>
-				<Update {...{ selected, showUpdateModal, tabLang, id }} />
-			</Modal>
-			<Board className="mb-40 mt-20">
+			{/* <Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
 					<div
 						style={{
@@ -332,30 +298,19 @@ export default function index({ location, history, match }) {
 							</Select>
 						</div>
 					</div>
-					<div>
-						<Button
-							type="primary"
-							size="large"
-							className="fs-14 fw-300 ml-10 mb-10"
-							htmlType="button"
-							onClick={() =>
-								history.push("/recalculation-products")
-							}>
-							{t("Перерасчет")}
-						</Button>
-						<Button
-							type="primary"
-							size="large"
-							className="fs-14 fw-300 ml-10"
-							htmlType="button"
-							onClick={() => showCreateModal(true)}>
-							{t("Добавить")}
-						</Button>
-					</div>
+					<div />
+					<Button
+						type="primary"
+						size="large"
+						className="fs-14 fw-300 ml-10"
+						htmlType="button"
+						onClick={() => showCreateModal(true)}>
+						{t("Добавить")}
+					</Button>
 				</div>
-			</Board>
+			</Board> */}
 
-			<Board className="border-none">
+			<Board className="border-none mt-90">
 				<div style={{ position: "relative" }}>
 					<Panel className="pad-0 mb-30">
 						<Tabs
@@ -371,28 +326,18 @@ export default function index({ location, history, match }) {
 								<TabPane key={item.code} tab={t(item.title)} />
 							))}
 						</Tabs>
-						<div
-							style={{
-								position: "absolute",
-								right: "30px",
-								top: 0,
-								fontSize: mobile ? "20px" : "30px",
-								fontWeight: "bold"
-							}}>
-							{thousandsDivider(total_amount)} {t("сум")}
-						</div>
 					</Panel>
 				</div>
 
 				<EntityContainer.All
-					entity="products"
+					entity="recalculation-products"
 					name={`all`}
-					url="/products"
+					url="/recalculation-products"
 					onSuccess={data => {
 						setTotal_amount(data.total_amount);
 					}}
 					params={{
-						include: "translate,stock,category,unit",
+						include: "product.translate,product.unit,user",
 						extra: {
 							_l: tabLang,
 							search: search.product,
@@ -425,26 +370,12 @@ export default function index({ location, history, match }) {
 								{!mobile ? (
 									<div className="default-table pad-15">
 										<Table
-											hasEdit={true}
-											hasDelete={true}
-											hasDishesProduct={true}
-											onReadyProd={value => {
-												setSelected(value);
-												showRecalculation(true);
-											}}
 											rowKey="id"
-											onEdit={value => {
-												openEditModal(value);
-											}}
-											onDelete={value =>
-												onDeleteHandler(value.id)
-											}
 											columns={[
 												{
 													title: t("No"),
 													dataIndex: `id`,
-													className:
-														"text-align-left w-82",
+													className: `text-align-left w-82`,
 													render: value => {
 														return (
 															<div className="divider-wrapper">
@@ -457,9 +388,11 @@ export default function index({ location, history, match }) {
 														);
 													}
 												},
+
 												{
 													title: t("Название"),
-													dataIndex: "translate.name",
+													dataIndex:
+														"product.translate.name",
 													render: value => (
 														<div className="divider-wrapper">
 															{value}
@@ -467,104 +400,69 @@ export default function index({ location, history, match }) {
 													)
 												},
 												{
-													title: t("Остаток"),
-													dataIndex: "amount",
+													title: t("Ползователь"),
+													dataIndex: "user.name",
 													render: value => (
 														<div className="divider-wrapper">
-															{thousandsDivider(
-																value
-															)}
+															{value}
 														</div>
 													)
 												},
 												{
-													title: t("Количество"),
-													dataIndex: "id" && "count",
-													render: (value, item) => (
+													title: t("Кол-во старое"),
+													dataIndex: "",
+													render: value => (
 														<div className="divider-wrapper">
-															<div
-																style={{
-																	background:
-																		Number.parseFloat(
-																			value
-																		) <=
-																		Number.parseFloat(
-																			item.deficit_threshold
-																		)
-																			? "rgba(255,0,0,1.7)"
-																			: Number.parseFloat(
-																					value
-																			  ) >=
-																					Number.parseFloat(
-																						item.deficit_threshold
-																					) &&
-																			  Number.parseFloat(
-																					value
-																			  ) <=
-																					Number.parseFloat(
-																						item.average_quantity
-																					)
-																			? "rgba(255,200,0,1.7)"
-																			: value >=
-																			  Number.parseFloat(
-																					item.average_quantity
-																			  )
-																			? "rgba(0,255,0,1.7)"
-																			: "#fff",
-																	color:
-																		"black",
-																	fontWeight:
-																		"700",
-																	padding:
-																		"5px",
-																	fontSize:
-																		"16px"
-																}}>
+															{thousandsDivider(
+																Number.parseFloat(
+																	value.old_count
+																)
+															)}{" "}
+															{value &&
+																value.product &&
+																value.product
+																	.unit[
+																	`title_${tabLang}`
+																]}
+														</div>
+													)
+												},
+												{
+													title: t("Кол-во новое"),
+													dataIndex: "",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
 																{thousandsDivider(
-																	value
+																	Number.parseFloat(
+																		value.new_count
+																	)
 																)}{" "}
 																{
-																	item.unit[
+																	value
+																		.product
+																		.unit[
 																		`title_${tabLang}`
 																	]
 																}
 															</div>
-														</div>
-													)
+														);
+													}
 												},
 												{
-													title: t("Склад"),
-													dataIndex: `stock.translate.name`,
-													render: value => (
-														<div className="divider-wrapper">
-															{value}
-														</div>
-													)
-												},
-												{
-													title: t("Категория"),
-													dataIndex: `category.translate.name`,
-													render: value => (
-														<div className="divider-wrapper">
-															{value}
-														</div>
-													)
-												},
-												{
-													title: t("Статус"),
-													dataIndex: "is_active",
-													render: value => (
-														<div className="divider-wrapper">
-															<div
-																className="color-view-ellipse"
-																style={{
-																	backgroundColor: value
-																		? "#4caf50"
-																		: "#f44336"
-																}}
-															/>
-														</div>
-													)
+													title: t("Сумма"),
+													dataIndex: "amount",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{thousandsDivider(
+																	Number.parseFloat(
+																		value
+																	)
+																)}
+															</div>
+														);
+													}
 												}
 											]}
 											dataSource={filteredItems}
@@ -586,26 +484,6 @@ export default function index({ location, history, match }) {
 												return (
 													<Card
 														{...{
-															hasDelete: true,
-															hasEdit: true,
-															hasDishesProduct: true,
-															onReadyProd: () => {
-																setSelected(
-																	item
-																);
-																showRecalculation(
-																	true
-																);
-															},
-															onEdit: () => {
-																openEditModal(
-																	item
-																);
-															},
-															onDelete: () =>
-																onDeleteHandler(
-																	item.id
-																),
 															content: [
 																{
 																	title: t(
@@ -622,165 +500,93 @@ export default function index({ location, history, match }) {
 																		</div>
 																	)
 																},
+
 																{
 																	title: t(
 																		"Название"
 																	),
+
 																	name: (
 																		<div className="divider-wrapper">
 																			{get(
 																				item,
-																				"translate.name"
+																				"product.translate.name"
 																			)}
 																		</div>
 																	)
 																},
 																{
 																	title: t(
-																		"Остаток"
+																		"Ползователь"
 																	),
+
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"user.name"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Кол-во старое"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{item &&
+																				thousandsDivider(
+																					Number.parseFloat(
+																						item.old_count
+																					)
+																				)}{" "}
+																			{item &&
+																				item.product &&
+																				item
+																					.product
+																					.unit[
+																					`title_${tabLang}`
+																				]}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Кол-во новое"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{item &&
+																				thousandsDivider(
+																					Number.parseFloat(
+																						item.new_count
+																					)
+																				)}{" "}
+																			{item &&
+																				item
+																					.product
+																					.unit[
+																					`title_${tabLang}`
+																				]}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"Сумма"
+																	),
+
 																	name: (
 																		<div className="divider-wrapper">
 																			{thousandsDivider(
-																				get(
-																					item,
-																					"amount"
+																				Number.parseFloat(
+																					get(
+																						item,
+																						"amount"
+																					)
 																				)
 																			)}
-																		</div>
-																	)
-																},
-																{
-																	title: t(
-																		"Количество"
-																	),
-																	name: (
-																		<div className="divider-wrapper">
-																			<div
-																				style={{
-																					background:
-																						Number.parseFloat(
-																							get(
-																								item,
-																								"count"
-																							)
-																						) <=
-																						Number.parseFloat(
-																							get(
-																								item,
-																								"deficit_threshold"
-																							)
-																						)
-																							? "rgba(255,0,0,1.7)"
-																							: Number.parseFloat(
-																									get(
-																										item,
-																										"count"
-																									)
-																							  ) >=
-																									Number.parseFloat(
-																										get(
-																											item,
-																											"deficit_threshold"
-																										)
-																									) &&
-																							  Number.parseFloat(
-																									get(
-																										item,
-																										"count"
-																									)
-																							  ) <=
-																									Number.parseFloat(
-																										get(
-																											item,
-																											"average_quantity"
-																										)
-																									)
-																							? "rgba(255,200,0,1.7)"
-																							: get(
-																									item,
-																									"count"
-																							  ) >=
-																							  Number.parseFloat(
-																									get(
-																										item,
-																										"average_quantity"
-																									)
-																							  )
-																							? "rgba(0,255,0,1.7)"
-																							: "#fff",
-																					color:
-																						"black",
-																					fontWeight:
-																						"700",
-																					padding:
-																						"5px",
-																					fontSize:
-																						"16px"
-																				}}>
-																				{thousandsDivider(
-																					get(
-																						item,
-																						"count"
-																					)
-																				)}{" "}
-																				{
-																					get(
-																						item,
-																						`unit`
-																					)[
-																						`title_${tabLang}`
-																					]
-																				}
-																			</div>
-																		</div>
-																	)
-																},
-																{
-																	title: t(
-																		"Склад"
-																	),
-																	name: (
-																		<div className="divider-wrapper">
-																			{get(
-																				item,
-																				"stock.translate.name"
-																			)}
-																		</div>
-																	)
-																},
-																{
-																	title: t(
-																		"Категория"
-																	),
-																	name: (
-																		<div className="divider-wrapper">
-																			{get(
-																				item,
-																				"category.translate.name"
-																			)}
-																		</div>
-																	)
-																},
-																{
-																	title: t(
-																		"Статус"
-																	),
-																	name: (
-																		<div className="divider-wrapper">
-																			<div
-																				className="color-view-ellipse"
-																				style={{
-																					backgroundColor: Boolean(
-																						get(
-																							item,
-																							"is_active"
-																						)
-																					)
-																						? "#4caf50"
-																						: "#f44336"
-																				}}
-																			/>
 																		</div>
 																	)
 																}

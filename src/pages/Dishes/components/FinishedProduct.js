@@ -112,7 +112,7 @@ const FinishedProduct = ({ location, values }) => {
 			</Modal>
 
 			<div className="d-flex align-items-center justify-content-between mb-20">
-				<div className="ant-label">{t("Готовое блюдо")}</div>
+				<div className="ant-label">{t("Готовый продукт")}</div>
 				<Button
 					type="primary"
 					size="large"

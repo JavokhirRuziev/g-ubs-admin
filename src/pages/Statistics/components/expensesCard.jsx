@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import qs from "query-string";
-import { thousandsDivider } from "../../../services/thousandsDivider";
+import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
 const ExpensesCard = ({ params, location }) => {
 	const dispatch = useDispatch();

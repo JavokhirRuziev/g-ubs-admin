@@ -22,7 +22,7 @@ import qs from "query-string";
 import get from "lodash/get";
 import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
-import { thousandsDivider } from "../../services/thousandsDivider";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 
 const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();
@@ -193,7 +193,7 @@ const List = ({ history, location }) => {
 	const TabPane = Tabs.TabPane;
 	return (
 		<>
-			<div className="title-md mb-20">{t("Еды")}</div>
+			<div className="title-md mb-20">{t("Продукт")}</div>
 			<Board className="mb-20">
 				<div
 					className="d-flex justify-content-between align-items-center "

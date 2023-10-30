@@ -116,7 +116,7 @@ const Create = ({ location, history }) => {
 				return (
 					<Spin spinning={isSubmitting}>
 						<div className="title-md mb-20 mt-14">
-							{t("Добавить еда")}
+							{t("Добавить продукт")}
 						</div>
 
 						<Form {...{ values, lang, setFieldValue }} />

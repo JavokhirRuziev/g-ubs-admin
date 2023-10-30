@@ -42,7 +42,7 @@ const Sidebar = ({ isCollapsed, setCollapse, toggled, setToggle, mobile }) => {
 						<span>
 							{get(profile, "success.name") !== "admin"
 								? get(profile, "success.name")
-								: "Zim-Zim"}{" "}
+								: "G-UBS"}{" "}
 							admin
 						</span>
 					</a>

@@ -23,8 +23,8 @@ import qs from "query-string";
 import get from "lodash/get";
 import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
-import { thousandsDivider } from "../../services/thousandsDivider";
 import axios from "axios";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 const { Option } = Select;
 
 const List = ({ history, location }) => {
@@ -220,7 +220,7 @@ const List = ({ history, location }) => {
 	const TabPane = Tabs.TabPane;
 	return (
 		<>
-			<div className="title-md">{t("Готовое блюдо")}</div>
+			<div className="title-md">{t("Готовый продукт")}</div>
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
 					<div
@@ -480,7 +480,6 @@ const List = ({ history, location }) => {
 														</div>
 													)
 												},
-
 												{
 													title: t("Статус"),
 													dataIndex: "status",

@@ -45,7 +45,7 @@ const Update = ({ location, history, match }) => {
 				return (
 					<Spin spinning={!isFetched}>
 						<div className="title-md mb-20 mt-14">
-							{t("Изменить еду")}
+							{t("Изменить продукт")}
 						</div>
 						<Panel className="pad-0 mb-30">
 							<Tabs
