@@ -163,7 +163,7 @@ export default function index({ location, history, match }) {
 			})
 		);
 	};
-	console.log(selected);
+
 	return (
 		<>
 			<Modal
@@ -265,6 +265,11 @@ export default function index({ location, history, match }) {
 								allowClear
 								showSearch
 								optionFilterProp="children"
+								{...{
+									defaultValue:
+										query.category_name &&
+										query.category_name
+								}}
 								onSearch={value => {
 									const filteredOptions = category.filter(
 										option =>

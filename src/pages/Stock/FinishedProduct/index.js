@@ -34,7 +34,7 @@ export default function index({ location, history }) {
 	const { t } = useTranslation("main");
 
 	const changeTab = value => {
-		history.push(`/finished-product?lang=${value}`);
+		history.push(`/recalculation-finished-dishes?lang=${value}`);
 	};
 
 	return (

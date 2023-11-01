@@ -68,7 +68,7 @@ const ExpensesCard = ({ location, params, setTotalCreditor, history }) => {
 								key={item.id}
 								onClick={() =>
 									history.push(
-										`/stock/products?category=${item.category_id}`
+										`/stock/products?category=${item.category_id}&category_name=${item.name}`
 									)
 								}>
 								<span>{item.name}</span>

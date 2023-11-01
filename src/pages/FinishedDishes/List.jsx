@@ -37,9 +37,6 @@ const List = ({ history, location }) => {
 		kitchener_id: query.kitchener_id || ""
 	});
 	const [kitcheners, setKitcheners] = useState();
-	const kitchener_from_prop =
-		kitcheners && kitcheners.find(el => el.value === query.kitchener_id);
-
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
 
@@ -78,42 +75,6 @@ const List = ({ history, location }) => {
 					success: () => {
 						notification["success"]({
 							message: t("Успешно удалена"),
-							duration: 2
-						});
-					},
-					error: () => {
-						notification["error"]({
-							message: t("Что-то пошло не так"),
-							duration: 2
-						});
-					},
-					finally: () => {}
-				}
-			})
-		);
-	};
-
-	const quickUpdate = (id, value) => {
-		dispatch(
-			Actions.Form.request({
-				method: "put",
-				entity: "finished-dishes",
-				name: `all-${tabLang}`,
-				id: id,
-				url: `/finished-dishes/quick-update/${id}`,
-				primaryKey: "id",
-				updateData: true,
-				normalizeData: data => data,
-				params: {
-					extra: { _l: tabLang }
-				},
-				values: {
-					quantity: value
-				},
-				cb: {
-					success: () => {
-						notification["success"]({
-							message: t("Успешно обновлено"),
 							duration: 2
 						});
 					},
@@ -249,9 +210,7 @@ const List = ({ history, location }) => {
 									});
 								}}
 								defaultValue={
-									(kitchener_from_prop &&
-										kitchener_from_prop.name) ||
-									""
+									query.kitchener_name && query.kitchener_name
 								}
 								allowClear
 								showSearch

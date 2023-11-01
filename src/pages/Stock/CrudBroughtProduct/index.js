@@ -58,8 +58,11 @@ export default function index({ location, history }) {
 		unit: "",
 		product: "",
 		data: {
-			from: query.start_at ? start_at : "",
-			to: query.end_at ? end_at : ""
+			from:
+				query.start_at && query.start_at !== "undefined"
+					? start_at
+					: "",
+			to: query.end_at && query.end_at !== "undefined" ? end_at : ""
 		},
 		sum: { from: "", to: "" }
 	});

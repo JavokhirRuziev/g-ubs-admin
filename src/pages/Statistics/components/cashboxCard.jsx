@@ -61,7 +61,7 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 							className="dashboard-line --purple cursor-pointer"
 							onClick={() =>
 								history.push(
-									`/finished-dishes?kitchener_id=${el.kitchener_id}`
+									`/finished-dishes?kitchener_id=${el.kitchener_id}&kitchener_name=${el.name}`
 								)
 							}>
 							<span>{t(el.name)}</span>
