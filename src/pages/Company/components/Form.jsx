@@ -230,7 +230,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 								checked={values.random_waiter}
 							/>
 							<div className="ant-label mb-0 ml-10">
-								{t("Рандом официант")}
+								{t("Рандом Агент")}
 							</div>
 						</div>
 
@@ -293,7 +293,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 							</div>
 						</div>
 
-						<div style={{height: '20px'}} />
+						<div style={{ height: "20px" }} />
 
 						<div className="d-flex align-items-center mb-24">
 							<Switch
@@ -343,26 +343,30 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 							</div>
 						</div>
 
-						<div style={{height: '20px'}} />
+						<div style={{ height: "20px" }} />
 
 						<div className="d-flex align-items-center mb-24">
 							<Switch
 								onChange={value => {
-									setFieldValue('sahara', value)
+									setFieldValue("sahara", value);
 								}}
 								checked={values.sahara}
 							/>
-							<div className="ant-label mb-0 ml-10">{t('Saharlik')}</div>
+							<div className="ant-label mb-0 ml-10">
+								{t("Saharlik")}
+							</div>
 						</div>
 
 						<div className="d-flex align-items-center mb-24">
 							<Switch
 								onChange={value => {
-									setFieldValue('iftar', value)
+									setFieldValue("iftar", value);
 								}}
 								checked={values.iftar}
 							/>
-							<div className="ant-label mb-0 ml-10">{t('Iftar')}</div>
+							<div className="ant-label mb-0 ml-10">
+								{t("Iftar")}
+							</div>
 						</div>
 
 						<div className="mb-24">

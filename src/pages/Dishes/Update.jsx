@@ -112,7 +112,8 @@ const Update = ({ location, history, match }) => {
 								},
 								{
 									name: "order",
-									value: get(item, "order")
+									value: get(item, "order"),
+									required: true
 								},
 								{
 									name: "file_id",

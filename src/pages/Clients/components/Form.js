@@ -14,48 +14,23 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 			</div>
 			<Field
 				component={Fields.AntInput}
-				name="name"
+				name="tin"
 				type="text"
-				placeholder={t("Введите название")}
-				label={t("Названия")}
+				placeholder={t("Введите ИНН")}
+				label={t("ИНН")}
 				size="large"
 			/>
-			<Field
-				component={Fields.AntInput}
-				name="dns"
-				type="text"
-				placeholder={t("Введите DNS")}
-				label={t("DNS")}
-				size="large"
-			/>
-			<Field
-				component={Fields.AsyncSelect}
-				name="kitchener_id"
-				placeholder={t("Инструктор")}
-				isClearable={true}
-				loadOptionsUrl="/user"
-				label={t("Инструктор")}
-				className={"mb-24"}
-				optionLabel={"name"}
-				loadOptionsParams={() => {
-					return {
-						filter: { ["role.role"]: "kitchener" }
-					};
-				}}
-			/>
-
-			<div className="d-flex align-items-center mb-20">
+			<div className="d-flex align-items-center mb-24">
 				<Switch
 					onChange={value => {
-						setFieldValue("status", value);
+						setFieldValue("is_active", value);
 					}}
-					checked={values.status}
+					checked={values.is_active}
 				/>
 				<div className="ant-label mb-0 ml-10">
 					{t("Активный статус")}
 				</div>
 			</div>
-
 			<Button
 				type="primary"
 				size="large"

@@ -138,21 +138,21 @@ const Form = ({
 					<Field
 						component={Fields.AsyncSelect}
 						name="menus"
-						placeholder={t("Меню")}
+						placeholder={t("Каталог")}
 						isClearable={true}
 						loadOptionsUrl="/menus"
 						className={"mb-24"}
-						label={t("Меню")}
+						label={t("Каталог")}
 						isMulti={true}
 						optionLabel={option => get(option, `title_${lang}`)}
 					/>
 					<Field
 						component={Fields.AsyncSelect}
 						name="kitchener_id"
-						placeholder={t("Повор")}
+						placeholder={t("Инструктор")}
 						isClearable={true}
 						loadOptionsUrl="/user"
-						label={t("Повор")}
+						label={t("Инструктор")}
 						className={"mb-24"}
 						optionLabel={"name"}
 						loadOptionsParams={() => {
@@ -166,6 +166,7 @@ const Form = ({
 						component={Fields.AntInput}
 						name="order"
 						label={t("Порядок")}
+						placeholder={t("Порядок")}
 						size="large"
 						className={"mb-14"}
 						type="number"

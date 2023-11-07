@@ -18,9 +18,9 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
-import useMediaQueries from "../../../services/media-queries";
+import useMediaQueries from "../../services/media-queries";
+import Card from "../../components/Card/Card";
 import { get } from "lodash";
-import Card from "components/Card/Card";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
@@ -42,7 +42,7 @@ export default function index({ location, history }) {
 	const dispatch = useDispatch();
 
 	const changeTab = value => {
-		history.push(`/stock/stock?lang=${value}`);
+		history.push(`/clients?lang=${value}`);
 	};
 
 	const openEditModal = value => {
@@ -65,10 +65,10 @@ export default function index({ location, history }) {
 		dispatch(
 			Actions.Form.request({
 				method: "delete",
-				entity: "stocks",
+				entity: "clients",
 				name: `all`,
 				id: id,
-				url: `/stocks/${id}`,
+				url: `/clients/${id}`,
 				deleteData: true,
 				cb: {
 					success: () => {
@@ -115,12 +115,12 @@ export default function index({ location, history }) {
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
 					<div>
-						<Input
+						{/* <Input
 							type="text"
 							value={search}
 							onChange={handleChange}
 							placeholder={t("Поиск")}
-						/>
+						/> */}
 					</div>
 					<Button
 						type="primary"
@@ -151,11 +151,10 @@ export default function index({ location, history }) {
 				</Panel>
 
 				<EntityContainer.All
-					entity="stocks"
+					entity="clients"
 					name={`all`}
-					url="/stocks"
+					url="/clients"
 					params={{
-						include: "translate",
 						extra: {
 							_l: tabLang,
 							search: search
@@ -191,31 +190,40 @@ export default function index({ location, history }) {
 													render: value => {
 														return (
 															<div className="divider-wrapper">
-																{items.findIndex(
-																	element =>
-																		value ===
-																		element.id
-																) + 1}
+																{items &&
+																	items.findIndex(
+																		element =>
+																			value ===
+																			element.id
+																	) + 1}
 															</div>
 														);
 													}
 												},
 												{
 													title: t("Название"),
-													dataIndex: "translate.name",
+													dataIndex: "name",
 													render: value => (
 														<div className="divider-wrapper">
-															{value}
+															{value && value}
 														</div>
 													)
 												},
 												{
-													title: t("Описания"),
-													dataIndex:
-														"translate.description",
+													title: t("Направление"),
+													dataIndex: "direction",
 													render: value => (
 														<div className="divider-wrapper">
-															{value}
+															{value && value}
+														</div>
+													)
+												},
+												{
+													title: t("ИНН"),
+													dataIndex: "tin",
+													render: value => (
+														<div className="divider-wrapper">
+															{value && value}
 														</div>
 													)
 												}
@@ -274,20 +282,33 @@ export default function index({ location, history }) {
 																		<div className="divider-wrapper">
 																			{get(
 																				item,
-																				"translate.name"
+																				"name"
 																			)}
 																		</div>
 																	)
 																},
 																{
 																	title: t(
-																		"Описания"
+																		"Направление"
 																	),
 																	name: (
 																		<div className="divider-wrapper">
 																			{get(
 																				item,
-																				"translate.name"
+																				"direction"
+																			)}
+																		</div>
+																	)
+																},
+																{
+																	title: t(
+																		"ИНН"
+																	),
+																	name: (
+																		<div className="divider-wrapper">
+																			{get(
+																				item,
+																				"tin"
 																			)}
 																		</div>
 																	)

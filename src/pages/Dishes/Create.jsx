@@ -121,6 +121,10 @@ const Create = ({ location, history }) => {
 						profile.success &&
 						profile.success.company_id &&
 						profile.success.company_id
+				},
+				{
+					name: "order",
+					required: true
 				}
 			]}
 			params={{

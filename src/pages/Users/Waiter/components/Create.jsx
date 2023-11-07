@@ -16,7 +16,7 @@ const Create = ({ showCreateModal }) => {
 		<EntityForm.Main
 			method="post"
 			entity="user"
-			name="waiter"
+			name="Agent"
 			url="/user"
 			appendData
 			primaryKey="id"

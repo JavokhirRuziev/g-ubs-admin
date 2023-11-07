@@ -87,7 +87,7 @@ const List = () => {
 			</Modal>
 
 			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Список официантов")}</div>
+				<div className="title-md">{t("Список Агентов")}</div>
 				<Button
 					type="primary"
 					size="large"

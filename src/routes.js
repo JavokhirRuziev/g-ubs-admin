@@ -87,6 +87,7 @@ const CrudBroughtProduct = lazy(() =>
 const CrudDistributedProduct = lazy(() =>
 	import("./pages/Stock/CrudDistributedProduct")
 );
+const Clients = lazy(() => import("./pages/Clients"));
 
 const routes = [
 	{
@@ -95,6 +96,13 @@ const routes = [
 		component: Stock,
 		access: ["company"],
 		role: "stock"
+	},
+	{
+		path: "/clients",
+		exact: true,
+		component: Clients,
+		access: ["company"],
+		role: "clients"
 	},
 	{
 		path: "/stock/product-categories/",

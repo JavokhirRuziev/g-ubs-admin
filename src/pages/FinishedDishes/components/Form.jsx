@@ -98,10 +98,10 @@ const Form = ({ isUpdate, setFieldValue, values, lang, id, location }) => {
 					<Field
 						component={Fields.AsyncSelect}
 						name="kitchener_id"
-						placeholder={t("Повор")}
+						placeholder={t("Инструктор")}
 						isClearable={true}
 						loadOptionsUrl="/user"
-						label={t("Повор")}
+						label={t("Инструктор")}
 						className={"mb-24"}
 						optionLabel={"name"}
 						loadOptionsParams={() => {

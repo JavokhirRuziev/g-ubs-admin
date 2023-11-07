@@ -17,7 +17,7 @@ const SignUp = () => {
 									{t("Регистрация")}
 								</div>
 								<div className="login-box__subtitle mb-10">
-									{t("Панель управления Zim-Zim")}
+									{t("Панель управления G-UBS")}
 								</div>
 								<Link
 									to={"/"}

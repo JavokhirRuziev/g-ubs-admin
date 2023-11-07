@@ -71,7 +71,7 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 					<img src={require("../icons/icon-2.svg")} alt="" />
 				</div>
 				<div className="--title">
-					<span>{t("Приходы")}</span>
+					<span>{t("Приход")}</span>
 					{!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (

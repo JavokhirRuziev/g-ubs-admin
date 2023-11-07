@@ -16,8 +16,9 @@ const Index = () => {
 	const [selected, setSelected] = useState(null);
 	const [page, setPage] = useState(1);
 
-	const { t } = useTranslation("main");
+	const { t, i18n } = useTranslation("main");
 	const dispatch = useDispatch();
+	const lang = i18n.language;
 
 	const openEditModal = value => {
 		setSelected(value);
@@ -73,7 +74,7 @@ const Index = () => {
 				centered
 				width={430}
 				destroyOnClose>
-				<Create {...{ showCreateModal }} />
+				<Create {...{ showCreateModal, lang }} />
 			</Modal>
 			<Modal
 				visible={updateModal}
@@ -83,7 +84,7 @@ const Index = () => {
 				centered
 				width={430}
 				destroyOnClose>
-				<Update {...{ selected, showUpdateModal }} />
+				<Update {...{ selected, showUpdateModal, lang }} />
 			</Modal>
 
 			<div className="d-flex justify-content-between align-items-center mb-20">
@@ -132,30 +133,27 @@ const Index = () => {
 												)
 											},
 											{
-												title: t("Номер столика"),
-												dataIndex: "number",
+												title: t("Название"),
+												dataIndex: "",
 												render: value => (
 													<div className="divider-wrapper">
-														{value ? value : "-"}
+														{value
+															? value[
+																	`title_${lang}`
+															  ]
+															: "-"}
 													</div>
 												)
 											},
 											{
-												title: t("Емкость"),
-												dataIndex: "capacity",
-												render: value => (
-													<div className="divider-wrapper">
-														{value ? value : "-"}
-													</div>
-												)
-											},
-											{
-												title: t("Место"),
+												title: t("Область"),
 												dataIndex: "place",
 												render: value => (
 													<div className="divider-wrapper">
 														{value
-															? value.title_ru
+															? value[
+																	`title_${lang}`
+															  ]
 															: "-"}
 													</div>
 												)

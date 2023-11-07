@@ -198,7 +198,7 @@ const Index = ({ location, history }) => {
 												}
 											},
 											{
-												title: t("Номер заказаa"),
+												title: t("Номер заказа"),
 												dataIndex: "order_number",
 												className: "w-100",
 												render: value => (

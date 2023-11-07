@@ -156,7 +156,7 @@ const contentManagerRoutes = [
 	},
 	{
 		id: "dishes",
-		title: "Продукт",
+		title: "Продукты",
 		link: "/dishes",
 		icon: "menu-i-dashboard",
 		role: "dishes"
@@ -262,6 +262,13 @@ const contentManagerRoutes = [
 				role: "users"
 			}
 		]
+	},
+	{
+		id: "clients",
+		title: "Клиенты",
+		link: "/clients",
+		icon: "menu-i-user",
+		role: "clients"
 	},
 	{
 		id: "profile",

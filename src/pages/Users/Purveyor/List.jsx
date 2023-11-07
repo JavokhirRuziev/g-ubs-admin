@@ -40,7 +40,7 @@ const List = () => {
 			Actions.Form.request({
 				method: "delete",
 				entity: "user",
-				name: `waiter`,
+				name: `Agent`,
 				id: id,
 				url: `/user/${id}`,
 				deleteData: true,

@@ -24,7 +24,7 @@ const Login = ({ isSubmitting }) => {
 									{t("Добро пожаловать")}
 								</div>
 								<div className="login-box__subtitle mb-10">
-									{t("Панель управления Zim-Zim")}
+									{t("Панель управления G-UBS")}
 								</div>
 								<Link
 									to={"/signUp"}

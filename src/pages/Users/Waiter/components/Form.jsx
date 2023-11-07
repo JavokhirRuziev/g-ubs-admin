@@ -34,9 +34,7 @@ const Form = ({
 	return (
 		<div>
 			<div className="title-md fs-16 mb-20">
-				{isUpdate
-					? t("Изменение официанта")
-					: t("Добавление официанта")}
+				{isUpdate ? t("Изменение Агента") : t("Добавление Агента")}
 			</div>
 
 			<div className="fake-inputs">

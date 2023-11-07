@@ -11,49 +11,57 @@ import qs from "query-string";
 import { useTranslation } from "react-i18next";
 import get from "lodash/get";
 import "../Dashboard/style.scss";
-import ExcelIcon from "assets/images/icons/excel-icon.svg"
+import ExcelIcon from "assets/images/icons/excel-icon.svg";
 import axios from "axios";
-import config from "config"
+import config from "config";
 import { useSelector } from "react-redux";
 
-const Index = ({location, history}) => {
-	const {t} = useTranslation("main");
+const Index = ({ location, history }) => {
+	const { t } = useTranslation("main");
 	const [filterModal, showFilterModal] = useState(false);
-	const params = qs.parse(location.search, {ignoreQueryPrefix: true});
+	const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 	const windowWidth = useSelector(state => state.system.width);
 
 	const page = params.page;
-	const setPage = (page) => {
+	const setPage = page => {
 		history.push({
-			search: qs.stringify({...params, page}, {encode: false})
-		})
-	}
+			search: qs.stringify({ ...params, page }, { encode: false })
+		});
+	};
 
 	const downloadReport = () => {
 		// setSubmitting(true);
 		axios({
-			url: queryBuilder(config.API_ROOT + `/dashboard/report-waiter-monitoring`, {
-				extra: {
-					percent: params.percent && params.percent,
-					status: params.status && params.status,
-					start_date: params.start_at && params.start_at,
-					end_date: params.end_at && params.end_at,
-					waiter_id: params.waiter_id && params.waiter_id.split('/')[0]
+			url: queryBuilder(
+				config.API_ROOT + `/dashboard/report-waiter-monitoring`,
+				{
+					extra: {
+						percent: params.percent && params.percent,
+						status: params.status && params.status,
+						start_date: params.start_at && params.start_at,
+						end_date: params.end_at && params.end_at,
+						waiter_id:
+							params.waiter_id && params.waiter_id.split("/")[0]
+					}
 				}
-			}), //your url
-			method: 'GET',
-			responseType: 'blob', // important
-		}).then((response) => {
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', 'report.xlsx'); //or any other extension
-			document.body.appendChild(link);
-			link.click();
-			// setSubmitting(false);
-		}).catch(function (error) {
-			// setSubmitting(false);
-		});
+			), //your url
+			method: "GET",
+			responseType: "blob" // important
+		})
+			.then(response => {
+				const url = window.URL.createObjectURL(
+					new Blob([response.data])
+				);
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", "report.xlsx"); //or any other extension
+				document.body.appendChild(link);
+				link.click();
+				// setSubmitting(false);
+			})
+			.catch(function(error) {
+				// setSubmitting(false);
+			});
 	};
 
 	return (
@@ -63,10 +71,10 @@ const Index = ({location, history}) => {
 			</div>
 
 			<Board className="border-none mb-30">
-				{(windowWidth > 1250) ? (
-					<Filter/>
+				{windowWidth > 1250 ? (
+					<Filter />
 				) : (
-					<MobFilter {...{filterModal, showFilterModal}}/>
+					<MobFilter {...{ filterModal, showFilterModal }} />
 				)}
 
 				<EntityContainer.All
@@ -82,23 +90,31 @@ const Index = ({location, history}) => {
 							status: params.status && params.status,
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
-							waiter_id: params.waiter_id && params.waiter_id.split('/')[0]
+							waiter_id:
+								params.waiter_id &&
+								params.waiter_id.split("/")[0]
 						}
-					}}
-				>
+					}}>
 					{({ items, isFetched, meta }) => {
-						const currentPage = get(meta, 'currentPage');
-						const perPage = get(meta, 'perPage');
+						const currentPage = get(meta, "currentPage");
+						const perPage = get(meta, "perPage");
 
 						const total = {
-							uid: '001',
+							uid: "001",
 							name: t("Всего"),
-							total_price: items.reduce((prev,curr) => prev+Number(curr.total_price), 0),
-							tip_price: items.reduce((prev,curr) => prev+Number(curr.tip_price), 0),
-							is_total: true,
-						}
+							total_price: items.reduce(
+								(prev, curr) => prev + Number(curr.total_price),
+								0
+							),
+							tip_price: items.reduce(
+								(prev, curr) => prev + Number(curr.tip_price),
+								0
+							),
+							is_total: true
+						};
 
-						const newArr = items.length > 0 ? [...items, total] : [];
+						const newArr =
+							items.length > 0 ? [...items, total] : [];
 						return (
 							<Spin spinning={!isFetched}>
 								<div className="default-table pad-15">
@@ -108,62 +124,124 @@ const Index = ({location, history}) => {
 											{
 												title: "№",
 												className: "w-100",
-												render: (value,row,index) => {
-													const a = Number(currentPage-1)*Number(perPage);
-													const n = currentPage > 1 ? a+index+1 : index+1;
-													const is_total = get(row, 'is_total');
+												render: (value, row, index) => {
+													const a =
+														Number(
+															currentPage - 1
+														) * Number(perPage);
+													const n =
+														currentPage > 1
+															? a + index + 1
+															: index + 1;
+													const is_total = get(
+														row,
+														"is_total"
+													);
 													return (
-														<div className="divider-wrapper">{is_total ? "" : n}</div>
-													)
+														<div className="divider-wrapper">
+															{is_total ? "" : n}
+														</div>
+													);
 												}
 											},
 											{
 												title: t("Названия"),
 												dataIndex: "name",
-												render: (value,row) => {
-													const is_total = get(row, 'is_total');
-													return(
-														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{value ? value : "-"}
+												render: (value, row) => {
+													const is_total = get(
+														row,
+														"is_total"
+													);
+													return (
+														<div
+															className={
+																is_total
+																	? "fw-700 fs-18 divider-wrapper"
+																	: "divider-wrapper"
+															}>
+															{value
+																? value
+																: "-"}
 														</div>
-													)
+													);
 												}
 											},
 											{
 												title: t("Qilgan savdosi"),
 												dataIndex: "total_price",
-												render: (value,row) => {
-													const is_total = get(row, 'is_total');
-													return(
-														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{value ? value.toLocaleString() : "-"}
+												render: (value, row) => {
+													const is_total = get(
+														row,
+														"is_total"
+													);
+													return (
+														<div
+															className={
+																is_total
+																	? "fw-700 fs-18 divider-wrapper"
+																	: "divider-wrapper"
+															}>
+															{value
+																? value.toLocaleString()
+																: "-"}
 														</div>
-													)
+													);
 												}
 											},
 											{
 												title: t("Xizmat haqi"),
 												dataIndex: "tip_price",
-												render: (value,row) => {
-													const is_total = get(row, 'is_total');
-													return(
-														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{value ? value.toLocaleString() : "-"}
+												render: (value, row) => {
+													const is_total = get(
+														row,
+														"is_total"
+													);
+													return (
+														<div
+															className={
+																is_total
+																	? "fw-700 fs-18 divider-wrapper"
+																	: "divider-wrapper"
+															}>
+															{value
+																? value.toLocaleString()
+																: "-"}
 														</div>
-													)
+													);
 												}
 											},
 											{
 												title: t("Ofitsant haqi"),
 												dataIndex: "total_sum",
-												render: (value,row) => {
-													const is_total = get(row, 'is_total');
-													const sum = row.total_price*params.percent/100
-													return(
-														<div className={is_total ? 'fw-700 fs-18 divider-wrapper' : 'divider-wrapper'}>
-															{params.percent ? <div>{sum ? Number(sum).toLocaleString() : '-'}</div> : '-'}
+												render: (value, row) => {
+													const is_total = get(
+														row,
+														"is_total"
+													);
+													const sum =
+														(row.total_price *
+															params.percent) /
+														100;
+													return (
+														<div
+															className={
+																is_total
+																	? "fw-700 fs-18 divider-wrapper"
+																	: "divider-wrapper"
+															}>
+															{params.percent ? (
+																<div>
+																	{sum
+																		? Number(
+																				sum
+																		  ).toLocaleString()
+																		: "-"}
+																</div>
+															) : (
+																"-"
+															)}
 														</div>
-													)
+													);
 												}
 											}
 										]}
@@ -173,18 +251,20 @@ const Index = ({location, history}) => {
 								{meta && meta.perPage && (
 									<div className="pagination-foot-buttons">
 										<div className="d-flex">
-											<div className="download-excel-btn" onClick={downloadReport}>
+											<div
+												className="download-excel-btn"
+												onClick={downloadReport}>
 												<img src={ExcelIcon} alt="" />
-												<button>
-													{t("Отчёт")}
-												</button>
+												<button>{t("Отчёт")}</button>
 											</div>
 										</div>
 										<Pagination
 											current={meta.currentPage}
 											pageSize={meta.perPage}
 											total={meta.totalCount}
-											onChange={newPage => setPage(newPage)}
+											onChange={newPage =>
+												setPage(newPage)
+											}
 										/>
 									</div>
 								)}

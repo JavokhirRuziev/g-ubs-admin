@@ -11,7 +11,7 @@ const Update = ({ selected, showUpdateModal }) => {
 		<EntityForm.Main
 			method="put"
 			entity="user"
-			name={`waiter`}
+			name={`Agent`}
 			url={`/user/${get(selected, "id")}`}
 			primaryKey="id"
 			normalizeData={data => data}
