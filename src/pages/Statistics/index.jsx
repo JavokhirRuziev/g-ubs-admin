@@ -12,7 +12,6 @@ import CreditorCard from "./components/creditorCard";
 import CreditorCardCopy from "./components/creditorCardCopy";
 import TotalCard from "./components/totalCard";
 import DebitCard from "./components/debitCard";
-import DebitCardCopy from "./components/debitCardCopy";
 import useMediaQueries from "../../services/media-queries";
 import IncomesCardCopy from "./components/incomesCardCopy";
 
@@ -95,12 +94,8 @@ const Statistics = ({ location, history }) => {
 					<CashboxCardCopy
 						{...{
 							params,
-							setTotalExpense,
-							location,
-							setTotalDebtor,
-							setTotalCreditor,
-							totalIncome,
-							totalExpense
+							totalExpense,
+							history
 						}}
 					/>
 				</div>

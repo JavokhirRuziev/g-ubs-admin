@@ -52,11 +52,12 @@ const ExpensesCard = ({ location, params, setTotalCreditor, history }) => {
 				</div>
 				<div className="--title">
 					<span>{t("Остаток товаров")}</span>
-					{!params.start_at && !params.end_at ? (
+					{/* {!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (
 						<span>{t("За выбранный период")}</span>
-					)}
+					)} */}
+					<span />
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">

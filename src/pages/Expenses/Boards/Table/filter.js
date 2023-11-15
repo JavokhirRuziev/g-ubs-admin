@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Fields } from "components";
-import { Button, Modal } from "antd";
+import { Button, Modal, Switch } from "antd";
 
 import qs from "qs";
 import { Field, withFormik } from "formik";
@@ -19,7 +19,8 @@ class Filter extends Component {
 			t,
 			history,
 			filterModal,
-			showFilterModal
+			showFilterModal,
+			values
 		} = this.props;
 
 		const clearForm = () => {
@@ -99,6 +100,18 @@ class Filter extends Component {
 							}}
 						/>
 
+						<div className="d-flex align-items-center mb-24">
+							<Switch
+								onChange={value => {
+									setFieldValue("is_cash_register", value);
+								}}
+								checked={values.is_cash_register}
+							/>
+							<div className="ant-label mb-0 ml-10">
+								{t("Касса")}?
+							</div>
+						</div>
+
 						<div className="d-flex justify-content-between">
 							<Button
 								type="danger"
@@ -155,7 +168,8 @@ Filter = withFormik({
 						id: params.category_id.split("/")[0],
 						title: params.category_id.split("/")[1]
 				  }
-				: null
+				: null,
+			is_cash_register: params.is_cash_register === "true"
 		};
 	},
 	handleSubmit: (

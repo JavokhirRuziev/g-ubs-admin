@@ -6,14 +6,39 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import config from "config";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
-const CashboxCard = ({ params, totalExpense, totalIncome }) => {
+const CashboxCard = ({ params, totalExpense, history }) => {
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 
 	const [solves, setSolves] = useState([]);
 	const [residual, setResidual] = useState([]);
 	const [expenses, setExpenses] = useState();
+	const [totalIncome, setTotalIncome] = useState();
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
+
+	const loadIncome = () => {
+		dispatch(
+			Actions.LoadDefault.request({
+				url: `/dashboard/cash-register-income`,
+				params: {
+					extra: {
+						start_date: params.start_at && params.start_at,
+						end_date: params.end_at && params.end_at
+					}
+				},
+				cb: {
+					success: data => {
+						setTotalIncome(data.value);
+						console.log();
+					},
+					error: data => {}
+				}
+			})
+		);
+	};
 
 	const loadSolves = () => {
 		dispatch(
@@ -71,8 +96,25 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 	}, []);
 
 	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	useEffect(() => {
 		loadSolves();
 		loadResidualByPaymentType();
+		loadIncome();
 	}, [params.start_at, params.end_at]);
 
 	return (
@@ -91,7 +133,13 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">
-				<div className="dashboard-line --purple">
+				<div
+					className="dashboard-line --purple cursor-pointer"
+					onClick={() =>
+						history.push(
+							`/incomes?is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+						)
+					}>
 					<span>{t("Приход")}</span>
 					<div>
 						{totalIncome
@@ -102,7 +150,13 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 						{t("сум")}
 					</div>
 				</div>
-				<div className="dashboard-line --purple">
+				<div
+					className="dashboard-line --purple cursor-pointer"
+					onClick={() =>
+						history.push(
+							`/expenses?is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+						)
+					}>
 					<span>{t("Расход")}</span>
 					<div>
 						{totalExpense
@@ -113,7 +167,13 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 						{t("сум")}
 					</div>
 				</div>
-				<div className="dashboard-line --purple">
+				<div
+					className="dashboard-line --purple cursor-pointer"
+					onClick={() =>
+						history.push(
+							`/solved?is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+						)
+					}>
 					<span>{t("Снять денги")}</span>
 					<div>
 						{helpers.convertToReadable(thousandsDivider(solves))}{" "}
@@ -128,18 +188,44 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 						return (
 							<div className="dashboard-line --green">
 								{item === "cash" && (
-									<span>{t("Наличные")}</span>
+									<span
+										className="cursor-pointer"
+										onClick={() =>
+											history.push(
+												`/incomes?price_type=${residual["cash"].key}&is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+											)
+										}>
+										{t("Наличные")}
+									</span>
 								)}
 								{item === "online" && (
-									<span>{t("Онлайн")}</span>
+									<span
+										className="cursor-pointer"
+										onClick={() =>
+											history.push(
+												`/incomes?price_type=${residual["online"].key}&is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+											)
+										}>
+										{t("Онлайн")}
+									</span>
 								)}
 								{item === "terminal" && (
-									<span>{t("Терминал")}</span>
+									<span
+										className="cursor-pointer"
+										onClick={() =>
+											history.push(
+												`/incomes?price_type=${residual["terminal"].key}&is_cash_register=true&start_at=${start_at}&end_at=${end_at}`
+											)
+										}>
+										{t("Терминал")}
+									</span>
 								)}
 								<div>
 									{residual[item]
 										? helpers.convertToReadable(
-												thousandsDivider(residual[item])
+												thousandsDivider(
+													residual[item].value
+												)
 										  )
 										: 0}{" "}
 									{t("сум")}

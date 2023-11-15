@@ -47,11 +47,12 @@ const CashboxCard = ({ params, totalExpense, totalIncome }) => {
 				</div>
 				<div className="--title">
 					<span>{t("Готовый продукт")}</span>
-					{!params.start_at && !params.end_at ? (
+					{/* {!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (
 						<span>{t("За выбранный период")}</span>
-					)}
+					)} */}
+					<span />
 				</div>
 			</div>
 			<div className="dashboard-card-st__body">

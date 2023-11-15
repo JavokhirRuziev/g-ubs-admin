@@ -126,7 +126,9 @@ const List = ({ selectedCategory }) => {
 							end_date: params.end_at
 								? params.end_at !== "undefined"
 								: "",
-							name: searchQuery
+							name: searchQuery,
+							is_cash_register:
+								params.is_cash_register === "true" ? 1 : 0
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
