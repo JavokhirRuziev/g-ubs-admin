@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import config from "../../../config";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
 const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 	const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 	const [expensesTransactions, setExpensesTransactions] = useState([]);
 	const [totalExpenses, setTotalExpenses] = useState(0);
 	const [shopping, setShopping] = useState();
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
 
 	const loadExpensesByCategory = () => {
 		dispatch(
@@ -84,6 +87,22 @@ const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 	};
 
 	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	useEffect(() => {
 		loadExpenseCategories();
 		getShopping();
 	}, []);
@@ -114,7 +133,13 @@ const ExpensesCardCopy = ({ params, setTotalExpense }) => {
 							a => a.alias === item.alias
 						);
 						return (
-							<div className="dashboard-line --red">
+							<div
+								className="dashboard-line --red cursor-pointer"
+								onClick={() =>
+									history.push(
+										`/expenses?category=${item.id}&start_at=${start_at}&end_at=${end_at}`
+									)
+								}>
 								<span>{item.title}</span>
 								<div>
 									{hasSum

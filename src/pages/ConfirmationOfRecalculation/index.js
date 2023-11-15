@@ -10,8 +10,8 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
-import useMediaQueries from "../../../services/media-queries";
-import Card from "../../../components/Card/Card";
+import useMediaQueries from "../../services/media-queries";
+import Card from "../../components/Card/Card";
 import { get } from "lodash";
 import { Field, Formik } from "formik";
 import { Fields } from "components";
@@ -35,39 +35,84 @@ export default function index({ location, history }) {
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 
-	const changeTab = value => {
-		history.push(`/stock/stock?lang=${value}`);
-	};
-
-	const openEditModal = value => {
-		setSelected(value);
-		showUpdateModal(true);
-	};
-
-	const onDeleteHandler = menuId => {
+	const onConfirmHandler = item => {
 		Modal.confirm({
-			title: t("Вы действительно хотите удалить?"),
+			title: t("Вы действительно хотите подтвердить?"),
+			okText: t("да"),
+			okType: "success",
+			cancelText: t("нет"),
+			confirmLoading: true,
+			onOk: () => confirmAction(item)
+		});
+	};
+
+	const confirmAction = value => {
+		dispatch(
+			Actions.Form.request({
+				method: "post",
+				entity: "recalculation-requests",
+				name: `all`,
+				url: `/recalculation-requests`,
+				values: {
+					item_id: value.item_id,
+					count: value.query.count,
+					request_id: value.id,
+					status: "completed",
+					type: value.type
+				},
+				normalizeData: data => data,
+				prependData: true,
+				cb: {
+					success: () => {
+						notification["success"]({
+							message: t("Успешно подтверждено"),
+							duration: 2
+						});
+						window.location.reload();
+					},
+					error: () => {
+						notification["error"]({
+							message: t("Что-то пошло не так"),
+							duration: 2
+						});
+					},
+					finally: () => {}
+				}
+			})
+		);
+	};
+
+	const onRejectHandler = item => {
+		Modal.confirm({
+			title: t("Вы действительно хотите отклонить?"),
 			okText: t("да"),
 			okType: "danger",
 			cancelText: t("нет"),
 			confirmLoading: true,
-			onOk: () => deleteAction(menuId)
+			onOk: () => rejectAction(item)
 		});
 	};
 
-	const deleteAction = id => {
+	const rejectAction = value => {
 		dispatch(
 			Actions.Form.request({
-				method: "delete",
-				entity: "stocks",
+				method: "post",
+				entity: "recalculation-requests",
 				name: `all`,
-				id: id,
-				url: `/stocks/${id}`,
-				deleteData: true,
+				url: `/recalculation-requests`,
+				values: {
+					item_id: value.item_id,
+					count: value.query.count,
+					request_id: value.id,
+					status: "rejected",
+					type: value.type
+				},
+				normalizeData: data => data,
+				prependData: true,
 				cb: {
 					success: () => {
 						notification["success"]({
-							message: t("Успешно удалена"),
+							message: t("Успешно отклонено"),
 							duration: 2
 						});
 						window.location.reload();
@@ -87,7 +132,7 @@ export default function index({ location, history }) {
 	return (
 		<>
 			<div className="d-flex justify-content-between align-items-center mb-20">
-				<div className="title-md">{t("Склад")}</div>
+				<div className="title-md">{t("Подтверждение перерасчета")}</div>
 			</div>
 			<Modal
 				visible={createModal}
@@ -109,7 +154,7 @@ export default function index({ location, history }) {
 				destroyOnClose>
 				<Update {...{ selected, showUpdateModal, tabLang }} />
 			</Modal>
-			<Board className="mb-40 mt-20">
+			{/* <Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
 					<div>
 						<Formik>
@@ -136,31 +181,14 @@ export default function index({ location, history }) {
 						{t("Добавить")}
 					</Button>
 				</div>
-			</Board>
+			</Board> */}
 
 			<Board className="border-none">
-				<Panel className="pad-0 mb-30">
-					<Tabs
-						activeKey={tabLang}
-						onChange={value => {
-							setTabLang(value);
-							changeTab(value);
-						}}
-						tabBarStyle={{
-							marginBottom: "0"
-						}}>
-						{config.API_LANGUAGES.map(item => (
-							<TabPane key={item.code} tab={t(item.title)} />
-						))}
-					</Tabs>
-				</Panel>
-
 				<EntityContainer.All
 					entity="stocks"
 					name={`all`}
-					url="/stocks"
+					url="/recalculation-requests"
 					params={{
-						include: "translate",
 						extra: {
 							_l: tabLang,
 							search: search
@@ -179,15 +207,15 @@ export default function index({ location, history }) {
 								{!mobile ? (
 									<div className="default-table pad-15">
 										<Table
-											hasEdit={true}
-											hasDelete={true}
-											rowKey="id"
-											onEdit={value => {
-												openEditModal(value);
-											}}
-											onDelete={value =>
-												onDeleteHandler(value.id)
+											hasConfirm={true}
+											hasReject={true}
+											onConfirm={value =>
+												onConfirmHandler(value)
 											}
+											onReject={value =>
+												onRejectHandler(value)
+											}
+											rowKey="id"
 											columns={[
 												{
 													title: t("No"),
@@ -207,17 +235,7 @@ export default function index({ location, history }) {
 												},
 												{
 													title: t("Название"),
-													dataIndex: "translate.name",
-													render: value => (
-														<div className="divider-wrapper">
-															{value}
-														</div>
-													)
-												},
-												{
-													title: t("Описания"),
-													dataIndex:
-														"translate.description",
+													dataIndex: "message",
 													render: value => (
 														<div className="divider-wrapper">
 															{value}
@@ -244,17 +262,6 @@ export default function index({ location, history }) {
 												return (
 													<Card
 														{...{
-															hasDelete: true,
-															hasEdit: true,
-															onEdit: () => {
-																openEditModal(
-																	item
-																);
-															},
-															onDelete: () =>
-																onDeleteHandler(
-																	item.id
-																),
 															content: [
 																{
 																	title: t(

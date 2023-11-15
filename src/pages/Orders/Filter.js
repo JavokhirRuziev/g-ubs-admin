@@ -19,6 +19,13 @@ class Filter extends Component {
 				search: qs.stringify({}, { encode: false })
 			});
 		};
+		const paymentTypes = [
+			{ value: 1, name: "Наличные" },
+			{ value: 4, name: "Терминал" },
+			{ value: 7, name: "Онлайн" },
+			{ value: 5, name: "Долг" },
+			{ value: 6, name: "VIP" }
+		];
 
 		return (
 			<div className="filter-row pt-20 pl-15 pr-15">
@@ -132,6 +139,21 @@ class Filter extends Component {
 										style={{ marginBottom: 0 }}
 									/>
 								</GridElements.Column>
+								<GridElements.Column xs={3} gutter={10}>
+									<Field
+										component={Fields.AntSelect}
+										name="payment_type"
+										placeholder={t("тип оплаты")}
+										size={"large"}
+										allowClear
+										selectOptions={paymentTypes}
+										className={"mb-0"}
+										style={{ marginBottom: 0 }}
+										onChange={value =>
+											setFieldValue("payment_type", value)
+										}
+									/>
+								</GridElements.Column>
 							</GridElements.Row>
 						</GridElements.Column>
 						<GridElements.Column xs={110} gutter={10} customSize>
@@ -177,7 +199,9 @@ Filter = withFormik({
 						translate: { name: params.dish_id.split("/")[1] }
 				  }
 				: null,
-			proccessing: params.proccessing && params.proccessing
+			proccessing: params.proccessing && params.proccessing,
+			payment_type:
+				params.payment_type && params.payment_type.split("/")[1]
 		};
 	},
 	handleSubmit: (values, { props: { lang, location, history } }) => {
@@ -190,6 +214,11 @@ Filter = withFormik({
 				? values.dish_id.id +
 				  "/" +
 				  get(values, "dish_id.translate.name")
+				: "",
+			payment_type: values.payment_type
+				? values.payment_type +
+				  "/" +
+				  helpers.getPaymentTypeExpenses(values.payment_type)
 				: ""
 		};
 

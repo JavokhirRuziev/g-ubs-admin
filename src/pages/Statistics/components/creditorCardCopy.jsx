@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { helpers } from "services";
-import Actions from "modules/entity/actions";
-import { useDispatch } from "react-redux";
+import { helpers } from "../../../services";
 import { useTranslation } from "react-i18next";
-import config from "../../../config";
+import Actions from "../../../modules/entity/actions";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import config from "config";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
-const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
-	const dispatch = useDispatch();
+const CashboxCard = ({ params, totalExpense }) => {
 	const { t } = useTranslation("main");
+	const dispatch = useDispatch();
 
-	const [categories, setCategories] = useState([]);
-	const [creditorTransactions, setCreditorTransactions] = useState([]);
-	const [totalCreditor, setTotalCreditors] = useState(0);
+	const [solves, setSolves] = useState([]);
+	const [residual, setResidual] = useState([]);
+	const [expenses, setExpenses] = useState();
+	const [totalIncome, setTotalIncome] = useState();
 
-	const [categoriesDebit, setCategoriesDebit] = useState([]);
-	const [debitorTransactions, setDebitorTransactions] = useState([]);
-	const [totalDebtor, setTotalDebtors] = useState(0);
-
-	const loadExpensesByCategory = () => {
+	const loadIncome = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/transactions/borrowed-by-category`,
+				url: `/dashboard/cash-register-income`,
 				params: {
 					extra: {
 						start_date: params.start_at && params.start_at,
@@ -30,31 +28,8 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 				},
 				cb: {
 					success: data => {
-						const total = data.reduce(
-							(prev, curr) =>
-								prev +
-								(Number(curr.sum) > 0 ? Number(curr.sum) : 0),
-							0
-						);
-						setCreditorTransactions(data);
-						setTotalCreditors(total);
-						setTotalCreditor(total);
-					},
-					error: data => {}
-				}
-			})
-		);
-	};
-	const loadExpenseCategories = () => {
-		dispatch(
-			Actions.LoadDefault.request({
-				url: `/expense-categories`,
-				params: {
-					filter: { type: config.EXPENSE_CATEGORY_TYPE }
-				},
-				cb: {
-					success: data => {
-						setCategories(data.data);
+						setTotalIncome(data.value);
+						console.log();
 					},
 					error: data => {}
 				}
@@ -62,10 +37,10 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 		);
 	};
 
-	const loadeDebitByCateg = () => {
+	const loadSolves = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/transactions/borrowed-by-category`,
+				url: `/transactions/solves`,
 				params: {
 					extra: {
 						start_date: params.start_at && params.start_at,
@@ -74,33 +49,27 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 				},
 				cb: {
 					success: data => {
-						const total = data.reduce(
-							(prev, curr) =>
-								prev +
-								(Number(curr.sum) < 0
-									? Number(curr.sum) * -1
-									: 0),
-							0
-						);
-						setDebitorTransactions(data);
-						setTotalDebtors(total * -1);
-						setTotalDebtor(total * -1);
+						setSolves(data);
 					},
 					error: data => {}
 				}
 			})
 		);
 	};
-	const loadDebitCategories = () => {
+
+	const loadResidualByPaymentType = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/expense-categories`,
+				url: `/transactions/residual-by-payment-type`,
 				params: {
-					filter: { type: config.EXPENSE_CATEGORY_TYPE }
+					extra: {
+						start_date: params.start_at && params.start_at,
+						end_date: params.end_at && params.end_at
+					}
 				},
 				cb: {
 					success: data => {
-						setCategoriesDebit(data.data);
+						setResidual(data);
 					},
 					error: data => {}
 				}
@@ -109,149 +78,113 @@ const ExpensesCardCopy = ({ params, setTotalCreditor, setTotalDebtor }) => {
 	};
 
 	useEffect(() => {
-		loadExpenseCategories();
-		loadDebitCategories();
+		axios
+			.get(
+				`${config.API_ROOT}/transactions/expenses-by-category-cash-register`
+			)
+			.then(res => {
+				const expensesTotal = res.data.reduce(
+					(total, el) => Number(el.sum) + total,
+					0
+				);
+				setExpenses(expensesTotal);
+			})
+			.catch(err => console.log(err));
 	}, []);
+
 	useEffect(() => {
-		loadExpensesByCategory();
-		loadeDebitByCateg();
+		loadSolves();
+		loadResidualByPaymentType();
+		loadIncome();
 	}, [params.start_at, params.end_at]);
 
 	return (
 		<div className="dashboard-card-st">
-			<div
-				style={{
-					display: "flex",
-					height: "100%",
-					justifyContent: "space-between",
-					columnGap: "20px"
-				}}>
-				<div style={{ width: "100%" }}>
-					<div className="dashboard-card-st__head">
-						<div className="--icon --icon-orange">
-							<img src={require("../icons/icon-3.svg")} alt="" />
-						</div>
-						<div className="--title">
-							<span>{t("Дебиторка")}</span>
-							{!params.start_at && !params.end_at ? (
-								<span>{t("За день")}</span>
-							) : (
-								<span>{t("За выбранный период")}</span>
-							)}
-						</div>
-					</div>
-					<div className="dashboard-card-st__body">
-						{categories.length > 0 ? (
-							categories.map(item => {
-								const itemsByCategory = debitorTransactions.filter(
-									a => a.alias === item.alias
-								);
-								const totalSum = itemsByCategory.reduce(
-									(prev, curr) =>
-										prev +
-										(Number(curr.sum) > 0
-											? Number(curr.sum)
-											: 0),
-									0
-								);
-
-								return item.alias !== "vip" ? (
-									<div
-										className="dashboard-line --purple"
-										key={item.id}>
-										<span>
-											{item.title === t("Сотувдан")
-												? t("Клиент")
-												: item.title}
-										</span>
-										<div>
-											{helpers.convertToReadable(
-												thousandsDivider(totalSum)
-											)}{" "}
-											{/* {t("сум")} */}
-										</div>
-									</div>
-								) : (
-									<></>
-								);
-							})
-						) : (
-							<div>-</div>
-						)}
-					</div>
+			<div className="dashboard-card-st__head">
+				<div className="--icon --icon-purple">
+					<img src={require("../icons/icon-4.svg")} alt="" />
 				</div>
-
-				<div style={{ width: "100%" }}>
-					<div className="dashboard-card-st__head">
-						<div className="--icon --icon-orange">
-							<img src={require("../icons/icon-3.svg")} alt="" />
-						</div>
-						<div className="--title">
-							<span>{t("Кредиторка")}</span>
-							{!params.start_at && !params.end_at ? (
-								<span>{t("За день")}</span>
-							) : (
-								<span>{t("За выбранный период")}</span>
-							)}
-						</div>
-					</div>
-					<div className="dashboard-card-st__body">
-						{categoriesDebit.length > 0 ? (
-							categoriesDebit.map(item => {
-								const itemsByCategory = creditorTransactions.filter(
-									a => a.alias === item.alias
-								);
-								const totalSum = itemsByCategory.reduce(
-									(prev, curr) =>
-										prev +
-										(Number(curr.sum) < 0
-											? Number(curr.sum)
-											: 0),
-									0
-								);
-
-								return item.alias !== "vip" ? (
-									<div
-										className="dashboard-line --red"
-										key={item.id}>
-										<span>
-											{item.title === t("Сотувдан")
-												? t("Клиент")
-												: item.title}
-										</span>
-										<div>
-											{helpers.convertToReadable(
-												thousandsDivider(totalSum * -1)
-											)}{" "}
-											{/* {t("сум")} */}
-										</div>
-									</div>
-								) : (
-									<></>
-								);
-							})
-						) : (
-							<div>-</div>
-						)}
-					</div>
+				<div className="--title">
+					<span>{t("Касса")}</span>
+					{!params.start_at && !params.end_at ? (
+						<span>{t("За день")}</span>
+					) : (
+						<span>{t("За выбранный период")}</span>
+					)}
 				</div>
 			</div>
-			<div
-				className="dashboard-card-st__footer"
-				style={{ columnGap: "20px", justifyContent: "space-between" }}>
-				<div style={{ width: "100%" }}>
-					<span>{t("Oбщая сумма")}: </span>
-					<span>{helpers.convertToReadable(totalDebtor)}</span>
+			<div className="dashboard-card-st__body">
+				<div className="dashboard-line --purple">
+					<span>{t("Приход")}</span>
+					<div>
+						{totalIncome
+							? helpers.convertToReadable(
+									thousandsDivider(totalIncome)
+							  )
+							: 0}{" "}
+						{t("сум")}
+					</div>
 				</div>
-				<div style={{ width: "100%" }}>
-					<span>{t("Oбщая сумма")}: </span>
-					<span style={{ color: "#ff0003" }}>
-						{helpers.convertToReadable(totalCreditor)}
-					</span>
+				<div className="dashboard-line --purple">
+					<span>{t("Расход")}</span>
+					<div>
+						{totalExpense
+							? helpers.convertToReadable(
+									thousandsDivider(expenses)
+							  )
+							: 0}{" "}
+						{t("сум")}
+					</div>
 				</div>
+				<div className="dashboard-line --purple">
+					<span>{t("Снять денги")}</span>
+					<div>
+						{helpers.convertToReadable(thousandsDivider(solves))}{" "}
+						{t("сум")}
+					</div>
+				</div>
+
+				<div className="mt-20" />
+
+				{residual && Object.keys(residual).length > 0 ? (
+					Object.keys(residual).map(item => {
+						return (
+							<div className="dashboard-line --green">
+								{item === "cash" && (
+									<span>{t("Наличные")}</span>
+								)}
+								{item === "online" && (
+									<span>{t("Онлайн")}</span>
+								)}
+								{item === "terminal" && (
+									<span>{t("Терминал")}</span>
+								)}
+								<div>
+									{residual[item]
+										? helpers.convertToReadable(
+												thousandsDivider(residual[item])
+										  )
+										: 0}{" "}
+									{t("сум")}
+								</div>
+							</div>
+						);
+					})
+				) : (
+					<div />
+				)}
+			</div>
+			<div className="dashboard-card-st__footer">
+				<span>{t("Oбщая сумма")}:</span>
+				<span>
+					{helpers.convertToReadable(
+						thousandsDivider(totalIncome - expenses - solves)
+					)}{" "}
+					{t("сум")}
+				</span>
 			</div>
 		</div>
 	);
 };
 
-export default ExpensesCardCopy;
+export default CashboxCard;

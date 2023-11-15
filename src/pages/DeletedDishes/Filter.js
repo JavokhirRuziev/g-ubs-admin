@@ -69,7 +69,6 @@ class Filter extends Component {
 										}}
 									/>
 								</GridElements.Column>
-
 								<GridElements.Column xs={3} gutter={10}>
 									<Field
 										component={Fields.AntDatePicker}
@@ -107,7 +106,7 @@ class Filter extends Component {
 									/>
 								</GridElements.Column>
 							</GridElements.Row>
-							<GridElements.Row gutter={10}>
+							<GridElements.Row gutter={10} className="mb-0">
 								<GridElements.Column xs={3} gutter={10}>
 									<Field
 										component={Fields.AsyncSelect}
@@ -132,24 +131,59 @@ class Filter extends Component {
 								</GridElements.Column>
 								<GridElements.Column xs={3} gutter={10}>
 									<Field
-										component={Fields.AntSelect}
-										name="status"
-										placeholder={t("Филтр по статус")}
+										component={Fields.AntInput}
+										name="table_number"
+										placeholder={t("Филтр по столам")}
 										size={"large"}
 										allowClear
-										selectOptions={[
-											{
-												value: "20",
-												name: "Завершенные"
-											},
-											{
-												value: "processing",
-												name: "В процессе"
-											},
-											{ value: "30", name: "Отклоненные" }
-										]}
 										className={"mb-0"}
-										style={{ marginBottom: 0 }}
+										type="number"
+									/>
+								</GridElements.Column>
+								<GridElements.Column xs={3} gutter={10}>
+									<Field
+										component={Fields.AntInput}
+										name="order_number"
+										placeholder={t("Филтр по заказам")}
+										size={"large"}
+										allowClear
+										className={"mb-0"}
+										type="number"
+									/>
+								</GridElements.Column>
+								<GridElements.Column xs={3} gutter={10}>
+									<Field
+										component={Fields.AsyncSelect}
+										name="dish_id"
+										placeholder={t("Еды")}
+										isClearable={true}
+										isSearchable={true}
+										loadOptionsUrl="/dishes"
+										className={"mb-0"}
+										optionLabel={value =>
+											get(value, "translate.name")
+										}
+										loadOptionsParams={search => {
+											return {
+												extra: {
+													include: "translate",
+													search
+												}
+											};
+										}}
+									/>
+								</GridElements.Column>
+							</GridElements.Row>
+							<GridElements.Row gutter={10}>
+								<GridElements.Column xs={3} gutter={10}>
+									<Field
+										component={Fields.AntInput}
+										name="quantity"
+										placeholder={t("Количество")}
+										size={"large"}
+										allowClear
+										className={"mb-0"}
+										type="number"
 									/>
 								</GridElements.Column>
 							</GridElements.Row>
@@ -187,7 +221,6 @@ Filter = withFormik({
 		const params = qs.parse(location.search, { ignoreQueryPrefix: true });
 
 		return {
-			status: params.status ? params.status : undefined,
 			start_at: params.start_at ? moment.unix(params.start_at) : "",
 			end_at: params.end_at ? moment.unix(params.end_at) : "",
 			waiter_id: params.waiter_id
@@ -207,7 +240,16 @@ Filter = withFormik({
 						id: params.cashier.split("/")[0],
 						name: params.cashier.split("/")[1]
 				  }
-				: null
+				: null,
+			table_number: params.table_number && params.table_number,
+			order_number: params.order_number && params.order_number,
+			dish_id: params.dish_id
+				? {
+						id: params.dish_id.split("/")[0],
+						translate: { name: params.dish_id.split("/")[1] }
+				  }
+				: null,
+			quantity: params.quantity && params.quantity
 		};
 	},
 	handleSubmit: (values, { props: { lang, location, history } }) => {
@@ -223,7 +265,12 @@ Filter = withFormik({
 				: "",
 			cashier: values.cashier
 				? values.cashier.id + "/" + get(values, "cashier.name")
-				: ""
+				: "",
+			dish_id:
+				values.dish_id &&
+				values.dish_id.translate.dish_id +
+					"/" +
+					get(values, "dish_id.translate.name")
 		};
 
 		const query = qs.parse(location.search);

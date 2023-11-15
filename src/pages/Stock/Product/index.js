@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Board, Panel } from "components";
-import {
-	Button,
-	Pagination,
-	Spin,
-	Modal,
-	notification,
-	Tabs,
-	Select,
-	Input
-} from "antd";
+import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/Update";
@@ -18,14 +9,21 @@ import Actions from "modules/entity/actions";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
-import qs from "query-string";
 import axios from "axios";
+import qs from "query-string";
 import useMediaQueries from "../../../services/media-queries";
 import { get } from "lodash";
 import Card from "../../../components/Card/Card";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 import Calculate from "./components/Calculate";
-const { Option } = Select;
+import { Field, Formik } from "formik";
+import { Fields } from "components";
+
+const colors = [
+	{ name: "Критическое", value: "red" },
+	{ name: "Нормальное", value: "yellow" },
+	{ name: "Достаточное", value: "green" }
+];
 
 export default function index({ location, history, match }) {
 	const TabPane = Tabs.TabPane;
@@ -39,18 +37,12 @@ export default function index({ location, history, match }) {
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const { id } = match.params;
 	const { mobile } = useMediaQueries();
-	const [stock, setStock] = useState();
 	const [stock_id, setStock_id] = useState();
-	const [category, setCategory] = useState();
-	const [unit, setUnit] = useState();
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
 	const [total_amount, setTotal_amount] = useState();
-	const colors = [
-		{ name: "Критическое", value: "red" },
-		{ name: "Нормальное", value: "yellow" },
-		{ name: "Достаточное", value: "green" }
-	];
+	const [category, setCategory] = useState();
+	const [filteredOptions, setFilteredOptions] = useState();
 	const [search, setSearch] = useState({
 		category: Number(query.category),
 		stock: "",
@@ -58,63 +50,6 @@ export default function index({ location, history, match }) {
 		product: "",
 		color: ""
 	});
-
-	const [filteredOptions, setFilteredOptions] = useState();
-
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock.translate && stock.translate.name,
-					value: stock.translate && stock.translate.stock_id,
-					stock_id: stock.translate && stock.translate.stock_id
-				}));
-				setStock(newCategories);
-			})
-			.catch(err => console.log(err));
-
-		axios
-			.get(`${config.API_ROOT}/units?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock && stock[`title_${tabLang}`],
-					value: stock && stock.id
-				}));
-				setUnit(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [tabLang]);
-
-	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
-			)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData
-					.filter(item => {
-						if (item.stock.translate.stock_id === stock_id) {
-							return item;
-						}
-					})
-					.map(category => ({
-						name: category.translate && category.translate.name,
-						value:
-							category.translate &&
-							category.translate.product_category_id,
-						stock_id:
-							category.stock.translate &&
-							category.stock.translate.stock_id
-					}));
-				setCategory(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [stock_id]);
-
 	const changeTab = value => {
 		history.push(`/stock/products?lang=${value}`);
 	};
@@ -164,8 +99,38 @@ export default function index({ location, history, match }) {
 		);
 	};
 
+	useEffect(() => {
+		axios
+			.get(
+				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
+			)
+			.then(res => {
+				const categoryData = res.data.data;
+				const newCategories = categoryData
+					.filter(item => {
+						if (item.stock.translate.stock_id === stock_id) {
+							return item;
+						}
+					})
+					.map(category => ({
+						name: category.translate && category.translate.name,
+						value:
+							category.translate &&
+							category.translate.product_category_id,
+						stock_id:
+							category.stock.translate &&
+							category.stock.translate.stock_id
+					}));
+				setCategory(newCategories);
+			})
+			.catch(err => console.log(err));
+	}, [stock_id]);
+
 	return (
 		<>
+			<div className="d-flex justify-content-between align-items-center mb-20">
+				<div className="title-md">{t("Продукты")}</div>
+			</div>
 			<Modal
 				visible={recalculation}
 				onOk={() => showRecalculation(true)}
@@ -203,145 +168,160 @@ export default function index({ location, history, match }) {
 							display: "flex",
 							columnGap: "10px",
 							rowGap: "10px",
-							flexWrap: "wrap"
+							flexWrap: "wrap",
+							alignItems: "center"
 						}}>
-						<div>
-							<Select
-								placeholder={t("Склад")}
-								onChange={value => {
-									setSearch({ ...search, stock: value });
-								}}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = stock.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										stock: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.stock
-									? filteredOptions.stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}
-												onClick={() =>
-													setStock_id(option.stock_id)
-												}>
-												{option.name}
-											</Option>
-									  ))
-									: stock &&
-									  stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}
-												onClick={() =>
-													setStock_id(option.stock_id)
-												}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
-						<div>
-							<Select
-								placeholder={t("Категория")}
-								onChange={value =>
-									setSearch({ ...search, category: value })
-								}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								{...{
-									defaultValue:
-										query.category_name &&
-										query.category_name
-								}}
-								onSearch={value => {
-									const filteredOptions = category.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										category: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.category
-									? filteredOptions.category.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))
-									: category &&
-									  category.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
-						<div>
-							<Input
-								type="text"
-								value={search.product}
-								onChange={e =>
-									setSearch({
-										...search,
-										product: e.target.value
-									})
-								}
-								placeholder={t("Поиск")}
-							/>
-						</div>
-						<div>
-							<Select
-								placeholder={t("Остаток продуктов")}
-								onChange={value =>
-									setSearch({ ...search, color: value })
-								}
-								allowClear
-								style={{ width: 200 }}>
-								{colors.map(option => (
-									<Option
-										key={option.value}
-										value={option.value}>
-										{option.name}
-									</Option>
-								))}
-							</Select>
-						</div>
+						<Formik
+							initialValues={{
+								category:
+									query.category_name && query.category_name
+							}}>
+							{({ setFieldValue, values }) => (
+								<>
+									<div style={{ width: "190px" }}>
+										<Field
+											component={Fields.AsyncSelect}
+											name="stock_id"
+											placeholder={t("Склад")}
+											isClearable
+											loadOptionsUrl={`/stocks`}
+											className="mb-0 w-190"
+											optionLabel={option =>
+												get(option, `translate.name`)
+											}
+											style={{ marginBottom: "0px" }}
+											isSearchable={true}
+											onChange={option => {
+												if (option) {
+													setSearch({
+														...search,
+														stock:
+															option &&
+															option.translate
+																.stock_id
+													});
+													setStock_id(
+														option.translate
+															.stock_id
+													);
+												}
+											}}
+											loadOptionsParams={search => {
+												return {
+													include: "translate",
+													extra: {
+														_l: tabLang,
+														search
+													}
+												};
+											}}
+										/>
+									</div>
+									<div style={{ width: "190px" }}>
+										<Field
+											component={Fields.AntSelect}
+											name="category"
+											placeholder={t("Категория")}
+											size={"large"}
+											style={{
+												marginBottom: "0px"
+											}}
+											inputStyles={{ width: "100%" }}
+											allowClear
+											value={values.category}
+											onChange={value => {
+												setSearch({
+													...search,
+													category: value
+												});
+												setFieldValue(
+													"category",
+													value
+												);
+											}}
+											selectOptions={
+												filteredOptions &&
+												filteredOptions.category &&
+												filteredOptions.category
+													? filteredOptions.category
+													: category
+											}
+											showSearch
+											optionFilterProp="children"
+											onSearch={value => {
+												const filteredOptions = category.filter(
+													option =>
+														option.name
+															.toLowerCase()
+															.includes(
+																value.toLowerCase()
+															)
+												);
+												setFilteredOptions({
+													...filteredOptions,
+													category: filteredOptions
+												});
+											}}
+											filterOption={(input, option) =>
+												option.props.children
+													.toLowerCase()
+													.indexOf(
+														input.toLowerCase()
+													) >= 0
+											}
+										/>
+									</div>
+									<div>
+										<Field
+											component={Fields.AntInput}
+											name="name"
+											type="text"
+											placeholder={t("Поиск")}
+											value={search.product}
+											onChange={e =>
+												setSearch({
+													...search,
+													product: e.target.value
+												})
+											}
+											size="large"
+											style={{ marginBottom: "0px" }}
+										/>
+									</div>
+									<div
+										style={{
+											display: "block",
+											width: "190px"
+										}}>
+										<Field
+											component={Fields.AntSelect}
+											name="left"
+											placeholder={t("Остаток продуктов")}
+											size={"large"}
+											style={{
+												marginBottom: "0px"
+											}}
+											inputStyles={{ width: "100%" }}
+											allowClear
+											onChange={value => {
+												setSearch({
+													...search,
+													color: value
+												});
+												setFieldValue("left", value);
+											}}
+											selectOptions={colors}
+										/>
+									</div>
+								</>
+							)}
+						</Formik>
 					</div>
 					<div>
 						<Button
 							type="primary"
 							size="large"
-							className="fs-14 fw-300 ml-10 mb-10"
+							className="fs-14 fw-300 "
 							htmlType="button"
 							onClick={() =>
 								history.push("/recalculation-products")

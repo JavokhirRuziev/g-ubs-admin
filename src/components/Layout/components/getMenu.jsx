@@ -169,6 +169,13 @@ const contentManagerRoutes = [
 		role: "dishes"
 	},
 	{
+		id: "confirmation-of-recalculation",
+		title: "Подтверждение перерасчета",
+		link: "/confirmation-of-recalculation",
+		icon: "menu-i-dashboard",
+		role: "dishes"
+	},
+	{
 		id: "menus",
 		title: "Каталог",
 		link: "/menus",

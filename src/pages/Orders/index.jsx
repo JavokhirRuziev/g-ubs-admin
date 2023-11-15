@@ -20,6 +20,7 @@ import config from "config";
 import KillModal from "./Kill";
 import MobFilter from "./MobFilter";
 import ViewModal from "./components/viewModal";
+import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
 
 const Index = ({ location, history }) => {
 	const dispatch = useDispatch();
@@ -62,7 +63,6 @@ const Index = ({ location, history }) => {
 				}
 			})
 		);
-		console.log(params);
 	}, [
 		params.type,
 		params.status,
@@ -135,7 +135,6 @@ const Index = ({ location, history }) => {
 				destroyOnClose>
 				<ViewModal {...{ selected, showViewModal }} />
 			</Modal>
-
 			<Board className="border-none mb-30">
 				{windowWidth > 1250 ? (
 					<Filter />
@@ -161,7 +160,11 @@ const Index = ({ location, history }) => {
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
 							dish_id:
-								params.dish_id && params.dish_id.split("/")[0]
+								params.dish_id && params.dish_id.split("/")[0],
+							status: params.proccessing && params.proccessing,
+							price_type:
+								params.payment_type &&
+								params.payment_type.split("/")[0]
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
@@ -406,18 +409,22 @@ const Index = ({ location, history }) => {
 								{t("Наличние")}
 							</div>
 							<div className="dashboard-card__num">
-								<span>
-									{cash ? cash.amount.toLocaleString() : 0}
+								<span style={{ whiteSpace: "nowrap" }}>
+									{cash
+										? thousandsDivider(
+												cash.amount.toLocaleString()
+										  )
+										: 0}
 								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
-						<div>
+						{/* <div>
 							<img
 								src={require("../Dashboard/dashboard-icon.svg")}
 								alt=""
 							/>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
@@ -425,18 +432,22 @@ const Index = ({ location, history }) => {
 						<div>
 							<div className="dashboard-card__label">Payme</div>
 							<div className="dashboard-card__num">
-								<span>
-									{payme ? payme.amount.toLocaleString() : 0}
+								<span style={{ whiteSpace: "nowrap" }}>
+									{payme
+										? thousandsDivider(
+												payme.amount.toLocaleString()
+										  )
+										: 0}
 								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
-						<div>
+						{/* <div>
 							<img
 								src={require("../Dashboard/dashboard-icon.svg")}
 								alt=""
 							/>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
@@ -444,18 +455,22 @@ const Index = ({ location, history }) => {
 						<div>
 							<div className="dashboard-card__label">Click</div>
 							<div className="dashboard-card__num">
-								<span>
-									{click ? click.amount.toLocaleString() : 0}
+								<span style={{ whiteSpace: "nowrap" }}>
+									{click
+										? thousandsDivider(
+												click.amount.toLocaleString()
+										  )
+										: 0}
 								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
-						<div>
+						{/* <div>
 							<img
 								src={require("../Dashboard/dashboard-icon.svg")}
 								alt=""
 							/>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div className="col-xl-3 col-md-6 col-12 mb-20">
@@ -465,20 +480,22 @@ const Index = ({ location, history }) => {
 								{t("Терминал")}
 							</div>
 							<div className="dashboard-card__num">
-								<span>
+								<span style={{ whiteSpace: "nowrap" }}>
 									{terminal
-										? terminal.amount.toLocaleString()
+										? thousandsDivider(
+												terminal.amount.toLocaleString()
+										  )
 										: 0}
 								</span>
 								<span>{t("сум")}</span>
 							</div>
 						</div>
-						<div>
+						{/* <div>
 							<img
 								src={require("../Dashboard/dashboard-icon.svg")}
 								alt=""
 							/>
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</div>

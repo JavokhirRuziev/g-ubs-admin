@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
 const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 	const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const history = useHistory();
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
 
 	const loadExpenseCategories = () => {
 		dispatch(
@@ -42,6 +45,23 @@ const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 	useEffect(() => {
 		loadExpenseCategories();
 	}, []);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
 	useEffect(() => {
 		loadExpenseCategories();
 	}, [params.start_at, params.end_at]);
@@ -68,10 +88,16 @@ const ExpensesCard = ({ params, setTotalDebtor, location }) => {
 							<div
 								className="dashboard-line --red cursor-pointer"
 								key={item.category_id}
-								onClick={() =>
-									history.push(
-										`/stock/stock-distributed-products?category=${item.category_id}&start_at=${params.start_at}&end_at=${params.end_at}`
-									)
+								onClick={
+									item.name !== "Перерасчет"
+										? () =>
+												history.push(
+													`/stock/stock-distributed-products?category_name=${item.name}&category=${item.category_id}&start_at=${start_at}&end_at=${end_at}`
+												)
+										: () =>
+												history.push(
+													`/recalculation-products?start_at=${start_at}&end_at=${end_at}`
+												)
 								}>
 								<span>{item.name}</span>
 								<div>

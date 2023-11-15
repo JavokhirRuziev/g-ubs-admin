@@ -7,6 +7,7 @@ import config from "../../../config";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import qs from "query-string";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
 const ExpensesCard = ({ params, location }) => {
 	const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const ExpensesCard = ({ params, location }) => {
 
 	const [categories, setCategories] = useState([]);
 	const [totalExpenses, setTotalExpenses] = useState(0);
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
 
 	const loadExpensesByCategory = () => {
 		dispatch(
@@ -43,6 +46,22 @@ const ExpensesCard = ({ params, location }) => {
 
 	useEffect(() => {
 		loadExpensesByCategory();
+	}, []);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
 	}, []);
 
 	useEffect(() => {
@@ -72,7 +91,7 @@ const ExpensesCard = ({ params, location }) => {
 								className="dashboard-line --red cursor-pointer"
 								onClick={() =>
 									history.push(
-										`/stock/stock-brought-products?category=${item.category_id}&start_at=${params.start_at}&end_at=${params.end_at}`
+										`/stock/stock-brought-products?category_name=${item.name}&category=${item.category_id}&start_at=${start_at}&end_at=${end_at}`
 									)
 								}>
 								<span>{item.name}</span>

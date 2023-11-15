@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
 const IncomesCard = ({ params, setTotalIncome }) => {
 	const dispatch = useDispatch();
@@ -13,6 +14,8 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 
 	const [incomesTransactions, setIncomesTransactions] = useState([]);
 	const [total, setTotal] = useState();
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
 
 	const loadTotalsByCategory = () => {
 		dispatch(
@@ -50,6 +53,22 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 		loadTotalsByCategory();
 	}, [params.start_at, params.end_at]);
 
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
 	return (
 		<div className="dashboard-card-st">
 			<div className="dashboard-card-st__head">
@@ -77,7 +96,11 @@ const IncomesCard = ({ params, setTotalIncome }) => {
 						<div
 							className="dashboard-line --purple cursor-pointer"
 							onClick={() =>
-								history.push(`/orders?${[filter_by]}=${el_id}`)
+								history.push(
+									`/orders?${[
+										filter_by
+									]}=${el_id}&start_at=${start_at}&end_at=${end_at}`
+								)
 							}>
 							<span>{t(el.key)}</span>
 							<div>

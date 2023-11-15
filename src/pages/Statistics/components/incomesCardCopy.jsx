@@ -5,14 +5,17 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import config from "config";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import moment from "moment";
 
-const IncomesCardCopy = ({ params, setTotalIncome }) => {
+const IncomesCardCopy = ({ params, setTotalIncome, history }) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation("main");
 
 	const [categories, setCategories] = useState([]);
 	const [incomesTransactions, setIncomesTransactions] = useState([]);
 	const [totalIncomes, setTotalIncomes] = useState(0);
+	const [start_at, setStart_at] = useState();
+	const [end_at, setEnd_at] = useState();
 
 	const loadTotalsByCategory = () => {
 		dispatch(
@@ -58,6 +61,22 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 	};
 
 	useEffect(() => {
+		const intervalId = setInterval(() => {
+			const timestamp = Math.floor(Date.now() / 1000);
+			const start_at = params.start_at
+				? params.start_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			const end_at = params.end_at
+				? params.end_at
+				: moment(new Date(timestamp * 1000).toLocaleString()).unix();
+			setStart_at(start_at);
+			setEnd_at(end_at);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+	useEffect(() => {
 		loadCategories();
 	}, []);
 	useEffect(() => {
@@ -71,7 +90,7 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 					<img src={require("../icons/icon-2.svg")} alt="" />
 				</div>
 				<div className="--title">
-					<span>{t("Приход")}</span>
+					<span>{t("Приходы")}</span>
 					{!params.start_at && !params.end_at ? (
 						<span>{t("За день")}</span>
 					) : (
@@ -86,7 +105,13 @@ const IncomesCardCopy = ({ params, setTotalIncome }) => {
 							a => a.alias === item.alias
 						);
 						return (
-							<div className="dashboard-line --purple">
+							<div
+								className="dashboard-line --purple cursor-pointer"
+								onClick={() =>
+									history.push(
+										`/incomes?category=${item.id}&start_at=${start_at}&end_at=${end_at}`
+									)
+								}>
 								<span>{item.title}</span>
 								<div>
 									{hasSum

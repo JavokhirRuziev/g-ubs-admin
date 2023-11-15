@@ -87,7 +87,9 @@ const CrudBroughtProduct = lazy(() =>
 const CrudDistributedProduct = lazy(() =>
 	import("./pages/Stock/CrudDistributedProduct")
 );
-const Clients = lazy(() => import("./pages/Clients"));
+const ConfirmationOfRecalculation = lazy(() =>
+	import("./pages/ConfirmationOfRecalculation")
+);
 
 const routes = [
 	{
@@ -98,18 +100,18 @@ const routes = [
 		role: "stock"
 	},
 	{
-		path: "/clients",
-		exact: true,
-		component: Clients,
-		access: ["company"],
-		role: "clients"
-	},
-	{
 		path: "/stock/product-categories/",
 		exact: true,
 		component: ProductCategory,
 		access: ["company"],
 		role: "product_categories"
+	},
+	{
+		path: "/confirmation-of-recalculation",
+		exact: true,
+		component: ConfirmationOfRecalculation,
+		access: ["company"],
+		role: "products"
 	},
 	{
 		path: "/stock/products/",

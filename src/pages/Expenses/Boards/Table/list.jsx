@@ -118,8 +118,14 @@ const List = ({ selectedCategory }) => {
 						},
 						include: "category,customer",
 						extra: {
-							start_date: params.start_at ? params.start_at : "",
-							end_date: params.end_at ? params.end_at : "",
+							start_date:
+								params.start_at &&
+								params.start_at !== "undefined"
+									? params.start_at
+									: "",
+							end_date: params.end_at
+								? params.end_at !== "undefined"
+								: "",
 							name: searchQuery
 						}
 					}}>

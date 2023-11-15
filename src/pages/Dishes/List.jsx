@@ -23,6 +23,7 @@ import get from "lodash/get";
 import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
 import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
+import { Field, Formik } from "formik";
 
 const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();
@@ -199,13 +200,20 @@ const List = ({ history, location }) => {
 					className="d-flex justify-content-between align-items-center "
 					style={{ padding: "10px" }}>
 					<div>
-						<Input
-							component={Fields.AntInput}
-							type="text"
-							value={search}
-							onChange={handleChange}
-							placeholder={t("Поиск")}
-						/>
+						<Formik>
+							<Field
+								component={Fields.AntInput}
+								name="name"
+								type="text"
+								placeholder={t("Поиск")}
+								size="large"
+								onChange={handleChange}
+								value={search}
+								style={{
+									marginBottom: "0px"
+								}}
+							/>
+						</Formik>
 					</div>
 
 					<Button

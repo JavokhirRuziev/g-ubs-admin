@@ -81,11 +81,11 @@ const Statistics = ({ location, history }) => {
 					<DebitCard {...{ params, setTotalDebtor, location }} />
 				</div>
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
-					<IncomesCardCopy {...{ params, location }} />
+					<IncomesCardCopy {...{ params, location, history }} />
 				</div>
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>
 					<ExpensesCardCopy
-						{...{ params, setTotalExpense, location }}
+						{...{ params, setTotalExpense, location, history }}
 					/>
 				</div>
 				<div className={`${!mobile ? "col-6 mb-30" : "col-12 mb-30"}`}>

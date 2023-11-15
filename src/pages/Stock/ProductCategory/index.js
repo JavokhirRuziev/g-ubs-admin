@@ -23,6 +23,8 @@ import axios from "axios";
 import useMediaQueries from "../../../services/media-queries";
 import { get } from "lodash";
 import Card from "../../../components/Card/Card";
+import { Field, Formik } from "formik";
+import { Fields } from "components";
 const { Option } = Select;
 
 export default function index({ location, history }) {
@@ -35,23 +37,7 @@ export default function index({ location, history }) {
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
 	const [search, setSearch] = useState({ category: "", stock: "" });
-	const [stock, setStock] = useState();
 	const { mobile } = useMediaQueries();
-	const [filteredOptions, setFilteredOptions] = useState();
-
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock.translate && stock.translate.name,
-					value: stock.translate && stock.translate.stock_id
-				}));
-				setStock(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, []);
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
@@ -106,6 +92,9 @@ export default function index({ location, history }) {
 	};
 	return (
 		<>
+			<div className="d-flex justify-content-between align-items-center mb-20">
+				<div className="title-md">{t("Категория продуктов")}</div>
+			</div>
 			<Modal
 				visible={createModal}
 				onOk={() => showCreateModal(true)}
@@ -134,60 +123,59 @@ export default function index({ location, history }) {
 							columnGap: "10px",
 							flexWrap: "wrap"
 						}}>
-						<div>
-							<Select
-								placeholder={t("Склад")}
-								onChange={value =>
-									setSearch({ ...search, stock: value })
-								}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = stock.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions(filteredOptions);
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions
-									? stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))
-									: stock &&
-									  stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
+						<div style={{ width: "190px" }}>
+							<Formik>
+								<Field
+									component={Fields.AsyncSelect}
+									name="stock_id"
+									placeholder={t("Склад")}
+									isClearable
+									loadOptionsUrl={`/stocks`}
+									className="mb-0 w-190"
+									optionLabel={option =>
+										get(option, `translate.name`)
+									}
+									isSearchable={true}
+									onChange={option =>
+										setSearch({
+											...search,
+											stock:
+												option &&
+												option.translate.stock_id
+										})
+									}
+									loadOptionsParams={search => {
+										return {
+											include: "translate",
+											extra: {
+												_l: tabLang,
+												search
+											}
+										};
+									}}
+								/>
+							</Formik>
 						</div>
 						<div>
-							<Input
-								type="text"
-								value={search.category}
-								onChange={e =>
-									setSearch({
-										...search,
-										category: e.target.value
-									})
-								}
-								placeholder={t("Поиск")}
-							/>
+							<Formik>
+								<Field
+									component={Fields.AntInput}
+									name="name"
+									type="text"
+									placeholder={t("Поиск")}
+									size="large"
+									value={search.category}
+									onChange={e =>
+										setSearch({
+											...search,
+											category: e.target.value
+										})
+									}
+									style={{
+										marginBottom: "0px"
+									}}
+								/>
+							</Formik>
 						</div>
 					</div>
 					<Button

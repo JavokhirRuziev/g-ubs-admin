@@ -24,6 +24,7 @@ const CreateAntField = AntComponent => ({
 	onChange,
 	placeholder,
 	containerClass = "",
+	inputStyles,
 	...props
 }) => {
 	const touched = form.touched[field.name];
@@ -53,6 +54,7 @@ const CreateAntField = AntComponent => ({
 					{...{ type, defaultValue: field.value }}
 					placeholder={placeholder}
 					onBlur={onBlur}
+					style={inputStyles}
 					onChange={
 						onChange
 							? onChange

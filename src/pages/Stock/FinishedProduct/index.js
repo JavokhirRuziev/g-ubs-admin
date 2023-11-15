@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Table, Board, Panel } from "components";
-import { Pagination, Spin, Modal, Tabs, Input, Button } from "antd";
+import { Pagination, Spin, Modal, Tabs, Button } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/UpdateCreate";
@@ -13,23 +13,25 @@ import Card from "../../../components/Card/Card";
 import { get } from "lodash";
 import { Avatar } from "../../../components";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
+import { dateFormatter } from "../../../services/dateFormatter";
+import Filters from "./components/Filters";
+import moment from "moment";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
 	const [createModal, showCreateModal] = useState(false);
 	const [updateModal, showUpdateModal] = useState(false);
-	const [selected, setSelected] = useState(null);
 	const [page, setPage] = useState(1);
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
-	const [search, setSearch] = useState();
-	const [isDisabled, setIsDisabled] = useState();
 	const { mobile } = useMediaQueries();
-
-	const handleChange = e => {
-		setSearch(e.target.value);
-	};
+	const [search, setSearch] = useState({
+		kitchener: "",
+		dish: "",
+		start_date: "",
+		end_date: ""
+	});
 
 	const { t } = useTranslation("main");
 
@@ -39,6 +41,11 @@ export default function index({ location, history }) {
 
 	return (
 		<>
+			<div className="d-flex justify-content-between align-items-center mb-20">
+				<div className="title-md">
+					{t("Перерасчет готовых товаров")}
+				</div>
+			</div>
 			<Modal
 				visible={createModal}
 				onOk={() => showCreateModal(true)}
@@ -57,18 +64,19 @@ export default function index({ location, history }) {
 				centered
 				width={430}
 				destroyOnClose>
-				<Update {...{ selected, showUpdateModal, tabLang }} />
+				<Update {...{ showUpdateModal, tabLang }} />
 			</Modal>
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
-					<div>
-						{/* <Input
-							type="text"
-							value={search}
-							onChange={handleChange}
-							placeholder={t("Поиск")}
-						/> */}
-					</div>
+					<Filters
+						{...{
+							search,
+							setSearch,
+							tabLang,
+							t,
+							query
+						}}
+					/>
 					<div>
 						<Button
 							type="primary"
@@ -83,7 +91,6 @@ export default function index({ location, history }) {
 							size="large"
 							className="fs-14 fw-300 ml-10"
 							htmlType="button"
-							// disabled={!isDisabled}
 							onClick={() => showCreateModal(true)}>
 							{t("Добавить")}
 						</Button>
@@ -107,25 +114,58 @@ export default function index({ location, history }) {
 						))}
 					</Tabs>
 				</Panel>
-
 				<EntityContainer.All
-					entity="stocks"
+					entity="recalculation-finished-dishes"
 					name={`all`}
 					url="/recalculation-finished-dishes"
 					params={{
 						include: "finished_dish,kitchener",
 						extra: {
 							_l: tabLang,
-							search: search
+							kitchener_id: search.kitchener,
+							finished_dish_id: search.dish,
+							start_date: search.start_date
+								? moment(search.start_date).unix()
+								: "",
+							end_date: search.end_date
+								? moment(search.end_date).unix()
+								: ""
 						},
 						page
 					}}>
 					{({ items, isFetched, meta }) => {
-						const filteredItems = search
-							? items.filter(item =>
-									item.translate.name.includes(search)
-							  )
-							: items;
+						const filteredItems =
+							items &&
+							items.filter(item => {
+								if (
+									search.dish &&
+									item.finished_dish_id !== search.dish
+								) {
+									return false;
+								}
+								if (
+									search.kitchener &&
+									item.kitchener_id !== search.kitchener
+								) {
+									return false;
+								}
+								if (
+									search.start_date &&
+									dateFormatter(item.created_at) <
+										search.start_date
+								) {
+									return false;
+								}
+								if (
+									search.end_date &&
+									dateFormatter(item.created_at) >
+										search.end_date
+								) {
+									return false;
+								}
+								return true;
+							});
+
 						return (
 							<Spin spinning={!isFetched}>
 								{!mobile ? (
@@ -258,8 +298,8 @@ export default function index({ location, history }) {
 											alignItems: "center",
 											marginTop: "20px"
 										}}>
-										{filteredItems &&
-											filteredItems.map((item, index) => {
+										{items &&
+											items.map(item => {
 												return (
 													<Card
 														{...{

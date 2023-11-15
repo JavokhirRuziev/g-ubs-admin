@@ -31,12 +31,7 @@ export default function index({ location, history }) {
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
-	const [search, setSearch] = useState();
 	const { mobile } = useMediaQueries();
-
-	const handleChange = e => {
-		setSearch(e.target.value);
-	};
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
@@ -114,14 +109,7 @@ export default function index({ location, history }) {
 			</Modal>
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
-					<div>
-						{/* <Input
-							type="text"
-							value={search}
-							onChange={handleChange}
-							placeholder={t("Поиск")}
-						/> */}
-					</div>
+					<div />
 					<Button
 						type="primary"
 						size="large"
@@ -156,18 +144,11 @@ export default function index({ location, history }) {
 					url="/clients"
 					params={{
 						extra: {
-							_l: tabLang,
-							search: search
+							_l: tabLang
 						},
 						page
 					}}>
 					{({ items, isFetched, meta }) => {
-						const filteredItems = search
-							? items.filter(item =>
-									item.translate.name.includes(search)
-							  )
-							: items;
-
 						return (
 							<Spin spinning={!isFetched}>
 								{!mobile ? (
@@ -228,7 +209,7 @@ export default function index({ location, history }) {
 													)
 												}
 											]}
-											dataSource={filteredItems}
+											dataSource={items}
 										/>
 									</div>
 								) : (
@@ -242,8 +223,8 @@ export default function index({ location, history }) {
 											alignItems: "center",
 											marginTop: "20px"
 										}}>
-										{filteredItems &&
-											filteredItems.map((item, index) => {
+										{items &&
+											items.map(item => {
 												return (
 													<Card
 														{...{

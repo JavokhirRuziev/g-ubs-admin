@@ -1,15 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Table, Board, Panel } from "components";
-import {
-	Button,
-	Pagination,
-	Spin,
-	Modal,
-	notification,
-	Tabs,
-	Select,
-	Input
-} from "antd";
+import { Button, Pagination, Spin, Modal, notification, Tabs } from "antd";
 import EntityContainer from "modules/entity/containers";
 import Create from "./components/Create";
 import Update from "./components/Update";
@@ -19,12 +10,12 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
-import axios from "axios";
 import useMediaQueries from "../../../services/media-queries";
 import Card from "../../../components/Card/Card";
 import get from "lodash/get";
 import { dateFormatter } from "../../../services/dateFormatter";
-const { Option } = Select;
+import Filters from "./components/Filters";
+import moment from "moment";
 
 export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
@@ -59,9 +50,12 @@ export default function index({ location, history }) {
 		data: {
 			from:
 				query.start_at && query.start_at !== "undefined"
-					? start_at
+					? moment.unix(query.start_at)
 					: "",
-			to: query.end_at && query.end_at !== "undefined" ? end_at : ""
+			to:
+				query.end_at && query.end_at !== "undefined"
+					? moment.unix(query.end_at)
+					: ""
 		}
 	});
 	const [stock, setStock] = useState();
@@ -69,85 +63,8 @@ export default function index({ location, history }) {
 	const [product_category_id, setProduct_category_id] = useState();
 	const [product, setProduct] = useState();
 	const [category, setCategory] = useState();
-	const [unit, setUnit] = useState();
 	const { mobile } = useMediaQueries();
 	const [filteredOptions, setFilteredOptions] = useState();
-
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock.translate && stock.translate.name,
-					value: stock.translate && stock.translate.stock_id,
-					stock_id: stock.translate && stock.translate.stock_id
-				}));
-				setStock(newCategories);
-			})
-			.catch(err => console.log(err));
-
-		axios
-			.get(`${config.API_ROOT}/units?_l=${tabLang}`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock && stock[`title_${tabLang}`],
-					value: stock && stock.id
-				}));
-				setUnit(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, []);
-
-	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
-			)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData
-					.filter(item => {
-						if (item.stock.translate.stock_id === stock_id) {
-							return item;
-						}
-					})
-					.map(category => ({
-						name: category.translate && category.translate.name,
-						value:
-							category.translate &&
-							category.translate.product_category_id,
-						stock_id:
-							category.stock.translate &&
-							category.stock.translate.stock_id
-					}));
-				setCategory(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [stock_id]);
-
-	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category`
-			)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData
-					.filter(item => {
-						if (item.product_category_id === product_category_id) {
-							return item;
-						}
-					})
-					.map(category => ({
-						name: category.translate && category.translate.name,
-						value: category && category.id
-					}));
-				setProduct(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [product_category_id]);
 
 	const changeTab = value => {
 		history.push(`/stock/stock-distributed-products?lang=${value}`);
@@ -199,6 +116,9 @@ export default function index({ location, history }) {
 	};
 	return (
 		<>
+			<div className="d-flex justify-content-between align-items-center mb-20">
+				<div className="title-md">{t("Распределенный продукт")}</div>
+			</div>
 			<Modal
 				visible={createModal}
 				onOk={() => showCreateModal(true)}
@@ -221,193 +141,27 @@ export default function index({ location, history }) {
 			</Modal>
 			<Board className="mb-40 mt-20">
 				<div className="d-flex justify-content-between align-items-center pad-10">
-					<div
-						style={{
-							display: "flex",
-							columnGap: "10px",
-							rowGap: "10px",
-							flexWrap: "wrap"
-						}}>
-						<div>
-							<Select
-								placeholder={t("Склад")}
-								onChange={value => {
-									setSearch({ ...search, stock: value });
-								}}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = stock.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										stock: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.stock
-									? filteredOptions.stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}
-												onClick={() =>
-													setStock_id(option.stock_id)
-												}>
-												{option.name}
-											</Option>
-									  ))
-									: stock &&
-									  stock.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}
-												onClick={() =>
-													setStock_id(option.stock_id)
-												}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
-						<div>
-							<Select
-								placeholder={t("Категория")}
-								onChange={value =>
-									setSearch({ ...search, category: value })
-								}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = category.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										category: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.category
-									? filteredOptions.category.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))
-									: category &&
-									  category.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}
-												onClick={() =>
-													setProduct_category_id(
-														option.value
-													)
-												}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
-						<div>
-							<Select
-								placeholder={t("Продукт")}
-								onChange={value =>
-									setSearch({ ...search, product: value })
-								}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = product.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										product: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.product
-									? filteredOptions.product.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))
-									: product &&
-									  product.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
-						<div>
-							<Input
-								type="date"
-								value={search.data.from}
-								allowClear
-								onChange={e =>
-									setSearch({
-										...search,
-
-										data: {
-											from: e.target.value,
-											to: search.data.to
-										}
-									})
-								}
-							/>
-						</div>
-						<div>
-							<Input
-								type="date"
-								value={search.data.to}
-								allowClear
-								onChange={e =>
-									setSearch({
-										...search,
-										data: {
-											to: e.target.value,
-											from: search.data.from
-										}
-									})
-								}
-							/>
-						</div>
-					</div>
+					<Filters
+						{...{
+							search,
+							setSearch,
+							filteredOptions,
+							setFilteredOptions,
+							stock,
+							setStock,
+							category,
+							setCategory,
+							product,
+							setProduct,
+							stock_id,
+							setStock_id,
+							product_category_id,
+							setProduct_category_id,
+							tabLang,
+							t,
+							query
+						}}
+					/>
 					<Button
 						type="primary"
 						size="large"
@@ -435,7 +189,6 @@ export default function index({ location, history }) {
 						))}
 					</Tabs>
 				</Panel>
-
 				<EntityContainer.All
 					entity="stock-distributed-products"
 					name={`all`}
@@ -447,34 +200,16 @@ export default function index({ location, history }) {
 							stock_id: search.stock,
 							category_id: search.category,
 							product_id: search.product,
-							date_from: search.data.from,
+							date_from: search.data.from
+								? moment(search.data.from).unix()
+								: "",
 							date_to: search.data.to
+								? moment(search.data.to).unix()
+								: ""
 						},
 						page
 					}}>
 					{({ items, isFetched, meta }) => {
-						const filteredItems =
-							items &&
-							items.filter(item => {
-								const {
-									product,
-									stock,
-									category,
-									data: { from: fromDate, to: toDate }
-								} = search;
-
-								return (
-									(!product || product === item.product_id) &&
-									(!stock || item.stock_id === stock) &&
-									(!category ||
-										item.product.product_category_id ===
-											category) &&
-									(!fromDate ||
-										item.created_at >= fromDate) &&
-									(!toDate || item.created_at <= toDate)
-								);
-							});
-
 						return (
 							<Spin spinning={!isFetched}>
 								{!mobile ? (
@@ -571,7 +306,7 @@ export default function index({ location, history }) {
 													)
 												}
 											]}
-											dataSource={filteredItems}
+											dataSource={items}
 										/>
 									</div>
 								) : (
@@ -585,8 +320,8 @@ export default function index({ location, history }) {
 											alignItems: "center",
 											marginTop: "20px"
 										}}>
-										{filteredItems &&
-											filteredItems.map((item, index) => {
+										{items &&
+											items.map((item, index) => {
 												return (
 													<Card
 														{...{

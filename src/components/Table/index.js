@@ -11,11 +11,13 @@ import { ReactComponent as ConfirmIcon } from "./icons/confirm.svg";
 import { ReactComponent as TakeProductReady } from "./icons/ready-product.svg";
 import { ReactComponent as DebtIcon } from "./icons/debt.svg";
 import { ReactComponent as EyeIcon } from "./icons/eye.svg";
+import { ReactComponent as RejectIcon } from "./icons/reject.svg";
 
 import "./style.scss";
 
 const propTypes = {
 	hasConfirm: PropTypes.bool,
+	hasReject: PropTypes.bool,
 	hasEdit: PropTypes.bool,
 	hasDelete: PropTypes.bool,
 	hasDishesProduct: PropTypes.bool,
@@ -23,6 +25,7 @@ const propTypes = {
 	hasView: PropTypes.bool,
 
 	onConfirm: PropTypes.func,
+	onReject: PropTypes.func,
 	onEdit: PropTypes.func,
 	onDelete: PropTypes.func,
 	onReadyProd: PropTypes.func,
@@ -37,6 +40,7 @@ const propTypes = {
 };
 const defaultProps = {
 	hasConfirm: false,
+	hasReject: false,
 	hasEdit: false,
 	hasDelete: false,
 	hasDebt: false,
@@ -44,6 +48,7 @@ const defaultProps = {
 	hasDishesProduct: false,
 
 	onConfirm: () => {},
+	onReject: () => {},
 	onEdit: () => {},
 	onDelete: () => {},
 
@@ -57,6 +62,7 @@ function TableWithActions(props) {
 	const {
 		t,
 		hasConfirm,
+		hasReject,
 		hasEdit,
 		hasDelete,
 		hasDishesProduct,
@@ -64,6 +70,7 @@ function TableWithActions(props) {
 		hasView,
 
 		onConfirm,
+		onReject,
 		onEdit,
 		onDelete,
 		onReadyProd,
@@ -110,6 +117,12 @@ function TableWithActions(props) {
 								style={{ width: 10 }}
 							/>
 						)}
+						{hasReject && (
+							<th
+								className={props.children[0].className}
+								style={{ width: 10 }}
+							/>
+						)}
 						{hasEdit && (
 							<th
 								className={props.children[0].className}
@@ -134,7 +147,17 @@ function TableWithActions(props) {
 				return (
 					<tr {...row}>
 						{row.children}
-
+						{hasReject && (
+							<td style={{ width: 10 }}>
+								<Tooltip title={t("Отклонить")}>
+									<div
+										className="action-btn confirm-btn"
+										onClick={() => onReject(item)}>
+										<RejectIcon height={16} width={16} />
+									</div>
+								</Tooltip>
+							</td>
+						)}
 						{hasConfirm && (
 							<td style={{ width: 10 }}>
 								<Tooltip title={t("Подтвердить")}>
@@ -146,6 +169,7 @@ function TableWithActions(props) {
 								</Tooltip>
 							</td>
 						)}
+
 						{hasDebt && (
 							<td style={{ width: 10 }}>
 								<Tooltip title={t("Перейти")}>

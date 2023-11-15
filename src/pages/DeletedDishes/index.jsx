@@ -30,41 +30,6 @@ const Index = ({ location, history }) => {
 		});
 	};
 
-	const downloadReport = () => {
-		// setSubmitting(true);
-		axios({
-			url: queryBuilder(
-				config.API_ROOT + `/dashboard/report-waiter-monitoring`,
-				{
-					extra: {
-						percent: params.percent && params.percent,
-						status: params.status && params.status,
-						start_date: params.start_at && params.start_at,
-						end_date: params.end_at && params.end_at,
-						waiter_id:
-							params.waiter_id && params.waiter_id.split("/")[0]
-					}
-				}
-			), //your url
-			method: "GET",
-			responseType: "blob" // important
-		})
-			.then(response => {
-				const url = window.URL.createObjectURL(
-					new Blob([response.data])
-				);
-				const link = document.createElement("a");
-				link.href = url;
-				link.setAttribute("download", "report.xlsx"); //or any other extension
-				document.body.appendChild(link);
-				link.click();
-				// setSubmitting(false);
-			})
-			.catch(function(error) {
-				// setSubmitting(false);
-			});
-	};
-
 	return (
 		<>
 			<div className="d-flex justify-content-between align-items-center mb-20">
@@ -96,7 +61,7 @@ const Index = ({ location, history }) => {
 					primaryKey={"id"}
 					onSuccess={data => {
 						const sum = data.data.reduce(
-							(total, el) => el.price + total,
+							(total, el) => el.price * el.quantity + total,
 							0
 						);
 						setAmount(sum);
@@ -110,14 +75,19 @@ const Index = ({ location, history }) => {
 								params.kitchener.split("/")[0],
 							manager_id:
 								params.cashier && params.cashier.split("/")[0],
-							status: params.status && params.status,
 							start_date: params.start_at && params.start_at,
 							end_date: params.end_at && params.end_at,
 							waiter_id:
 								params.waiter_id &&
 								params.waiter_id.split("/")[0],
 							include:
-								"dish.kitchener,manager,order,order.booking.table"
+								"dish.kitchener,manager,order,order.booking.table",
+							table_number:
+								params.table_number && params.table_number,
+							search: params.order_number && params.order_number,
+							dish_id:
+								params.dish_id && params.dish_id.split("/")[0],
+							quantity: params.quantity && params.quantity
 						}
 					}}>
 					{({ items, isFetched, meta }) => {
@@ -198,7 +168,7 @@ const Index = ({ location, history }) => {
 												)
 											},
 											{
-												title: t("Повар"),
+												title: t("Повор"),
 												dataIndex: "dish.kitchener",
 												render: value => (
 													<div className="divider-wrapper">
@@ -208,7 +178,7 @@ const Index = ({ location, history }) => {
 											},
 
 											{
-												title: t("Менежер"),
+												title: t("Менеджер"),
 												dataIndex: "manager.name",
 												render: value => (
 													<div className="divider-wrapper">
@@ -216,15 +186,6 @@ const Index = ({ location, history }) => {
 													</div>
 												)
 											},
-											// {
-											// 	title: t("Order Id"),
-											// 	dataIndex: "order_id",
-											// 	render: value => (
-											// 		<div className="divider-wrapper">
-											// 			{value && value}
-											// 		</div>
-											// 	)
-											// },
 											{
 												title: t("Дата"),
 												dataIndex: "created_at",
@@ -243,14 +204,6 @@ const Index = ({ location, history }) => {
 								</div>
 								{meta && meta.perPage && (
 									<div className="pagination-foot-buttons">
-										{/* <div className="d-flex">
-											<div
-												className="download-excel-btn"
-												onClick={downloadReport}>
-												<img src={ExcelIcon} alt="" />
-												<button>{t("Отчёт")}</button>
-											</div>
-										</div> */}
 										<div
 											style={{
 												marginLeft: "auto"

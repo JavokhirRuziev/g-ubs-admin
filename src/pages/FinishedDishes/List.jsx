@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import { Table, Board, Avatar } from "components";
 import {
-	Input,
 	Button,
 	Pagination,
 	Spin,
@@ -16,6 +15,7 @@ import Actions from "modules/entity/actions";
 
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
+import { Field, Formik } from "formik";
 import { Fields } from "components";
 
 import config from "config";
@@ -25,7 +25,6 @@ import Card from "../../components/Card/Card";
 import useMediaQueries from "../../services/media-queries";
 import axios from "axios";
 import thousandsDivider from "../../services/thousandsDivider/thousandsDivider";
-const { Option } = Select;
 
 const List = ({ history, location }) => {
 	const { mobile } = useMediaQueries();
@@ -36,13 +35,11 @@ const List = ({ history, location }) => {
 		search: "",
 		kitchener_id: query.kitchener_id || ""
 	});
-	const [kitcheners, setKitcheners] = useState();
 	const [tabLang, setTabLang] = useState(lang ? lang : "ru");
 	const [page, setPage] = useState(1);
 
 	const { t } = useTranslation("main");
 	const dispatch = useDispatch();
-	const [filteredOptions, setFilteredOptions] = useState();
 
 	const handleChange = e => {
 		setSearch({ ...search, search: e.target.value });
@@ -162,22 +159,6 @@ const List = ({ history, location }) => {
 		);
 	};
 
-	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/user?_l=${tabLang}&filter[role.role]=kitchener&_f=json`
-			)
-			.then(res => {
-				const kitcheners = res.data.data;
-				const mutatedKitchener = kitcheners.map(kitchener => ({
-					name: kitchener.name,
-					value: kitchener.id
-				}));
-				setKitcheners(mutatedKitchener);
-			})
-			.catch(err => console.log(err));
-	}, [tabLang]);
-
 	const TabPane = Tabs.TabPane;
 	return (
 		<>
@@ -191,66 +172,64 @@ const List = ({ history, location }) => {
 							rowGap: "10px",
 							flexWrap: "wrap"
 						}}>
-						<div>
-							<Input
-								component={Fields.AntInput}
-								type="text"
-								value={search.search}
-								onChange={handleChange}
-								placeholder={t("Поиск")}
-							/>
-						</div>
-						<div>
-							<Select
-								placeholder={t("Повар")}
-								onChange={value => {
-									setSearch({
-										...search,
-										kitchener_id: value
-									});
-								}}
-								defaultValue={
-									query.kitchener_name && query.kitchener_name
-								}
-								allowClear
-								showSearch
-								optionFilterProp="children"
-								onSearch={value => {
-									const filteredOptions = kitcheners.filter(
-										option =>
-											option.name
-												.toLowerCase()
-												.includes(value.toLowerCase())
-									);
-									setFilteredOptions({
-										...filteredOptions,
-										kitcheners: filteredOptions
-									});
-								}}
-								filterOption={(input, option) =>
-									option.props.children
-										.toLowerCase()
-										.indexOf(input.toLowerCase()) >= 0
-								}
-								style={{ width: 200 }}>
-								{filteredOptions && filteredOptions.kitcheners
-									? filteredOptions.kitcheners.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))
-									: kitcheners &&
-									  kitcheners.map(option => (
-											<Option
-												key={option.value}
-												value={option.value}>
-												{option.name}
-											</Option>
-									  ))}
-							</Select>
-						</div>
+						<Formik
+							initialValues={{
+								kitchener: query.kitchener_name
+									? { name: query.kitchener_name }
+									: ""
+							}}>
+							{({ values }) => (
+								<>
+									<div>
+										<Field
+											component={Fields.AntInput}
+											name="name"
+											type="text"
+											placeholder={t("Поиск")}
+											size="large"
+											onChange={handleChange}
+											value={search.search}
+											style={{
+												marginBottom: "0px"
+											}}
+										/>
+									</div>
+									<div style={{ width: "190px" }}>
+										<Field
+											component={Fields.AsyncSelect}
+											name="kitchener"
+											placeholder={t("Повор")}
+											isClearable
+											loadOptionsUrl="/user"
+											optionLabel={option =>
+												get(option, `name`)
+											}
+											style={{
+												marginBottom: "0px"
+											}}
+											onChange={value => {
+												setSearch({
+													...search,
+													kitchener_id: get(
+														value,
+														"id"
+													)
+												});
+											}}
+											loadOptionsParams={search => {
+												return {
+													filter: {
+														["role.role"]:
+															"kitchener"
+													},
+													search
+												};
+											}}
+										/>
+									</div>
+								</>
+							)}
+						</Formik>
 					</div>
 					<div
 						style={{

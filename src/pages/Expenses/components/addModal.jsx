@@ -17,6 +17,8 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 				return 3;
 			case "work_fee":
 				return 2;
+			case "others":
+				return 2;
 		}
 	};
 
@@ -59,8 +61,7 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 					value: 1
 				},
 				{
-					name: "is_cash_register",
-					required: true
+					name: "is_cash_register"
 				},
 				{
 					name: "comment"
@@ -102,10 +103,16 @@ const AddModal = ({ showAddModal, selectedCategory }) => {
 								}}
 							/>
 
-							{(alias === "market" || alias === "work_fee") && (
+							{((alias === "others" &&
+								values.price_type === 10) ||
+								alias === "market" ||
+								alias === "work_fee") && (
 								<Field
 									component={Fields.AsyncSelect}
 									name="customer_id"
+									// alias === "others"
+									// 		? "Виберите контрагента"
+									// 		:
 									placeholder={t("Виберите клинта")}
 									isClearable
 									loadOptionsUrl={`/customers`}

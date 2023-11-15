@@ -1,167 +1,132 @@
-import React, { useEffect, useState } from "react";
-import { Table, Board, Panel, Avatar } from "components";
-import {
-	Button,
-	Pagination,
-	Spin,
-	Modal,
-	notification,
-	Tabs,
-	Select,
-	Input
-} from "antd";
+import React, { useState } from "react";
+import { Table, Board, Panel } from "components";
+import { Pagination, Spin, Tabs } from "antd";
 import EntityContainer from "modules/entity/containers";
-import Actions from "modules/entity/actions";
 
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import config from "config";
 import qs from "query-string";
-import axios from "axios";
 import useMediaQueries from "../../../../services/media-queries";
 import { get } from "lodash";
 import thousandsDivider from "../../../../services/thousandsDivider/thousandsDivider";
 import Card from "../../../../components/Card/Card";
-const { Option } = Select;
+import { dateFormatter } from "../../../../services/dateFormatter";
+import { Field, Formik } from "formik";
+import { Fields } from "components";
+import moment from "moment";
 
-export default function index({ location, history, match }) {
+export default function index({ location, history }) {
 	const TabPane = Tabs.TabPane;
-	const [createModal, showCreateModal] = useState(false);
-	const [updateModal, showUpdateModal] = useState(false);
-	const [selected, setSelected] = useState(null);
 	const [page, setPage] = useState(1);
 	const query = qs.parse(location.search);
 	const { lang } = query;
 	const [tabLang, setTabLang] = useState(lang || "ru");
-	const { id } = match.params;
 	const { mobile } = useMediaQueries();
-	const [stock, setStock] = useState();
-	const [stock_id, setStock_id] = useState();
-	const [category, setCategory] = useState();
-	const [unit, setUnit] = useState();
 	const { t } = useTranslation("main");
-	const dispatch = useDispatch();
-	const [total_amount, setTotal_amount] = useState();
-	const colors = [
-		{ name: "Критическое", value: "red" },
-		{ name: "Нормальное", value: "yellow" },
-		{ name: "Достаточное", value: "green" }
-	];
 	const [search, setSearch] = useState({
-		category: Number(query.category),
-		stock: "",
-		unit: "",
-		product: "",
-		color: ""
+		date_start: query.start_at ? moment.unix(query.start_at) : "",
+		date_end: query.end_at ? moment.unix(query.end_at) : ""
 	});
-
-	const [filteredOptions, setFilteredOptions] = useState();
-
-	useEffect(() => {
-		axios
-			.get(`${config.API_ROOT}/stocks?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock.translate && stock.translate.name,
-					value: stock.translate && stock.translate.stock_id,
-					stock_id: stock.translate && stock.translate.stock_id
-				}));
-				setStock(newCategories);
-			})
-			.catch(err => console.log(err));
-
-		axios
-			.get(`${config.API_ROOT}/units?_l=${tabLang}&include=translate`)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData.map(stock => ({
-					name: stock && stock[`title_${tabLang}`],
-					value: stock && stock.id
-				}));
-				setUnit(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [tabLang]);
-
-	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/product-categories?_l=${tabLang}&include=translate,stock`
-			)
-			.then(res => {
-				const categoryData = res.data.data;
-				const newCategories = categoryData
-					.filter(item => {
-						if (item.stock.translate.stock_id === stock_id) {
-							return item;
-						}
-					})
-					.map(category => ({
-						name: category.translate && category.translate.name,
-						value:
-							category.translate &&
-							category.translate.product_category_id,
-						stock_id:
-							category.stock.translate &&
-							category.stock.translate.stock_id
-					}));
-				setCategory(newCategories);
-			})
-			.catch(err => console.log(err));
-	}, [stock_id]);
 
 	const changeTab = value => {
 		history.push(`/recalculation-products?lang=${value}`);
 	};
-
-	const openEditModal = value => {
-		setSelected(value);
-		showUpdateModal(true);
-	};
-
-	const onDeleteHandler = id => {
-		Modal.confirm({
-			title: t("Вы действительно хотите удалить?"),
-			okText: t("да"),
-			okType: "danger",
-			cancelText: t("нет"),
-			confirmLoading: true,
-			onOk: () => deleteAction(id)
-		});
-	};
-
-	const deleteAction = id => {
-		dispatch(
-			Actions.Form.request({
-				method: "delete",
-				entity: "products",
-				name: `all`,
-				id: id,
-				url: `/products/${id}`,
-				deleteData: true,
-				cb: {
-					success: () => {
-						notification["success"]({
-							message: t("Успешно удалена"),
-							duration: 2
-						});
-						window.location.reload();
-					},
-					error: () => {
-						notification["error"]({
-							message: t("Что-то пошло не так"),
-							duration: 2
-						});
-					},
-					finally: () => {}
-				}
-			})
-		);
-	};
-
 	return (
 		<>
+			<div className="d-flex justify-content-between align-items-center mb-20">
+				<div className="title-md">{t("Перерасчет продуктов")}</div>
+			</div>
+			<Board className="border-none">
+				<div
+					style={{
+						padding: "10px",
+						display: "flex",
+						columnGap: "10px"
+					}}>
+					<Formik>
+						<>
+							<div>
+								<Field
+									component={Fields.AntDatePicker}
+									name="start_at"
+									size="large"
+									placeholder={t("Дата начало")}
+									style={{
+										marginBottom: "0px",
+										width: "190px"
+									}}
+									className={"mb-0"}
+									showTime={{ format: "HH:mm" }}
+									format="YYYY-MM-DD HH:mm"
+									value={search.date_start}
+									onChange={e => {
+										if (moment(e).date()) {
+											setSearch({
+												...search,
+												date_start: e
+											});
+											history.push(
+												`/recalculation-products?start_at=${moment(
+													e
+												).unix()}`
+											);
+										} else {
+											setSearch({
+												...search,
+												date_start: ""
+											});
+											history.push(
+												`/recalculation-products?end_at=${search.date_end}`
+											);
+										}
+									}}
+								/>
+							</div>
+							<div>
+								<Field
+									component={Fields.AntDatePicker}
+									name="end_at"
+									size="large"
+									placeholder={t("Дата окончание")}
+									style={{
+										marginBottom: "0px",
+										width: "190px"
+									}}
+									className={"mb-0"}
+									showTime={{ format: "HH:mm" }}
+									format="YYYY-MM-DD HH:mm"
+									value={search.date_end}
+									onChange={e => {
+										if (moment(e).date()) {
+											setSearch({
+												...search,
+												date_end: e
+											});
+											history.push(
+												`/recalculation-products?start_at=${moment(
+													search.date_start
+												).unix()}&end_at=${moment(
+													e
+												).unix()}`
+											);
+										} else {
+											setSearch({
+												...search,
+												date_end: ""
+											});
+											history.push(
+												`/recalculation-products?start_at=${moment(
+													search.date_start
+												).unix()}`
+											);
+										}
+									}}
+								/>
+							</div>
+						</>
+					</Formik>
+				</div>
+			</Board>
 			<Board className="border-none mt-90">
 				<div style={{ position: "relative" }}>
 					<Panel className="pad-0 mb-30">
@@ -180,43 +145,20 @@ export default function index({ location, history, match }) {
 						</Tabs>
 					</Panel>
 				</div>
-
 				<EntityContainer.All
 					entity="recalculation-products"
 					name={`all`}
 					url="/recalculation-products"
-					onSuccess={data => {
-						setTotal_amount(data.total_amount);
-					}}
 					params={{
 						include: "product.translate,product.unit,user",
 						extra: {
 							_l: tabLang,
-							search: search.product,
-							stock_id: search.stock,
-							category_id: search.category,
-							color: search.color
+							start_date: query.start_at ? query.start_at : "",
+							end_date: query.end_at ? query.end_at : ""
 						},
 						page
 					}}>
 					{({ items, isFetched, meta }) => {
-						const filteredItems = items.filter(item => {
-							const productCondition =
-								!search.product ||
-								item.translate.name.includes(search.product);
-							const stockCondition =
-								!search.stock || item.stock_id === search.stock;
-							const categoryCondition =
-								!search.category ||
-								item.product_category_id === search.category;
-
-							return (
-								productCondition &&
-								stockCondition &&
-								categoryCondition
-							);
-						});
-
 						return (
 							<Spin spinning={!isFetched}>
 								{!mobile ? (
@@ -315,9 +257,22 @@ export default function index({ location, history, match }) {
 															</div>
 														);
 													}
+												},
+												{
+													title: t("Дата"),
+													dataIndex: "created_at",
+													render: value => {
+														return (
+															<div className="divider-wrapper">
+																{dateFormatter(
+																	value
+																)}
+															</div>
+														);
+													}
 												}
 											]}
-											dataSource={filteredItems}
+											dataSource={items}
 										/>
 									</div>
 								) : (
@@ -331,8 +286,8 @@ export default function index({ location, history, match }) {
 											alignItems: "center",
 											marginTop: "20px"
 										}}>
-										{filteredItems &&
-											filteredItems.map((item, index) => {
+										{items &&
+											items.map((item, index) => {
 												return (
 													<Card
 														{...{
