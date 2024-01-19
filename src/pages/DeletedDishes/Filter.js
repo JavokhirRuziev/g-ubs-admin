@@ -29,7 +29,7 @@ class Filter extends Component {
 									<Field
 										component={Fields.AsyncSelect}
 										name="waiter_id"
-										placeholder={t("Официант")}
+										placeholder={t("Агент")}
 										isClearable={true}
 										isSearchable={true}
 										loadOptionsUrl="/user"
@@ -51,7 +51,7 @@ class Filter extends Component {
 									<Field
 										component={Fields.AsyncSelect}
 										name="kitchener"
-										placeholder={t("Повар")}
+										placeholder={t("Инструктор")}
 										isClearable={true}
 										isSearchable={true}
 										loadOptionsUrl="/user"
@@ -133,7 +133,7 @@ class Filter extends Component {
 									<Field
 										component={Fields.AntInput}
 										name="table_number"
-										placeholder={t("Филтр по столам")}
+										placeholder={t("Филтр по районам")}
 										size={"large"}
 										allowClear
 										className={"mb-0"}
@@ -155,7 +155,7 @@ class Filter extends Component {
 									<Field
 										component={Fields.AsyncSelect}
 										name="dish_id"
-										placeholder={t("Еды")}
+										placeholder={t("Продукт")}
 										isClearable={true}
 										isSearchable={true}
 										loadOptionsUrl="/dishes"

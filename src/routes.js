@@ -90,14 +90,52 @@ const CrudDistributedProduct = lazy(() =>
 const ConfirmationOfRecalculation = lazy(() =>
 	import("./pages/ConfirmationOfRecalculation")
 );
+const ConfirmRecipe = lazy(() => import("./pages/ConfirmRecipe"));
+const Creditor = lazy(() => import("./pages/Creditor"));
+const Debtor = lazy(() => import("./pages/Debtor"));
+const Clients = lazy(() => import("./pages/Clients/index"));
+const Agreement = lazy(() => import("./pages/Agreements/Agreement/index"));
+const Template = lazy(() => import("./pages/Agreements/Template/index"));
 
 const routes = [
+	{
+		path: "/clients",
+		exact: true,
+		component: Clients,
+		access: ["company"]
+	},
+	{
+		path: "/agreement",
+		exact: true,
+		component: Agreement,
+		access: ["company"]
+	},
+	{
+		path: "/template",
+		exact: true,
+		component: Template,
+		access: ["company"]
+	},
+	{
+		path: "/creditor",
+		exact: true,
+		component: Creditor,
+		access: ["company"]
+	},
+	{ path: "/debtor", exact: true, component: Debtor, access: ["company"] },
 	{
 		path: "/stock/stock/",
 		exact: true,
 		component: Stock,
 		access: ["company"],
 		role: "stock"
+	},
+	{
+		path: "/confirmation-of-recalculation-recipe",
+		exact: true,
+		component: ConfirmRecipe,
+		access: ["company"],
+		role: "products"
 	},
 	{
 		path: "/stock/product-categories/",
@@ -179,7 +217,8 @@ const routes = [
 		path: "/statistics",
 		exact: true,
 		component: Statistics,
-		access: ["company"]
+		access: ["company"],
+		role: "dashboard"
 	},
 	{ path: "/", exact: true, component: Dashboard, access: ["admin"] },
 	{

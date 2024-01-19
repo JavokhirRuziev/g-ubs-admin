@@ -110,7 +110,7 @@ const Recipe = ({ location }) => {
 			</Modal>
 
 			<div className="d-flex align-items-center justify-content-between mb-20">
-				<div className="ant-label">{t("Рецепт")}</div>
+				<div className="ant-label">{t("Детали")}</div>
 				<Button
 					type="primary"
 					size="large"

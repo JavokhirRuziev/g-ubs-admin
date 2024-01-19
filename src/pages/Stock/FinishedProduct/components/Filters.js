@@ -20,7 +20,7 @@ export default function Filters({ search, setSearch, t, tabLang }) {
 							<Field
 								component={Fields.AsyncSelect}
 								name="dishes"
-								placeholder={t("Еды")}
+								placeholder={t("Продукт")}
 								isClearable
 								loadOptionsUrl={`/finished-dishes`}
 								optionValue="id"
@@ -55,7 +55,7 @@ export default function Filters({ search, setSearch, t, tabLang }) {
 							<Field
 								component={Fields.AsyncSelect}
 								name="kitchener"
-								placeholder={t("Повор")}
+								placeholder={t("Инструктор")}
 								isClearable
 								loadOptionsUrl="/user"
 								optionValue="id"

@@ -6,20 +6,12 @@ import Form from "./Form";
 
 const Create = ({ showCreateModal }) => {
 	const [send_roles, setSend_roles] = useState([
-		{ role: "stocks", permissions: ["read", "create", "update", "delete"] },
-		{
-			role: "product_categories",
-			permissions: ["read", "create", "update", "delete"]
-		},
-		{
-			role: "products",
-			permissions: ["read", "create", "update", "delete"]
-		},
-		{
-			role: "brought_products",
-			permissions: ["read", "create", "update", "delete"]
-		}
+		{ role: "dishes", permissions: ["read"] },
+		{ role: "menus", permissions: ["read"] },
+		{ role: "places", permissions: ["read"] },
+		{ role: "tables", permissions: ["read"] }
 	]);
+
 	return (
 		<EntityForm.Main
 			method="post"
@@ -32,6 +24,7 @@ const Create = ({ showCreateModal }) => {
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showCreateModal(false);
+				console.log(data);
 			}}
 			fields={[
 				{ name: "role", required: true, value: "provider" },
@@ -40,8 +33,18 @@ const Create = ({ showCreateModal }) => {
 				{ name: "password", required: true },
 				{ name: "company_id", value: null },
 				{
+					name: "payment_type"
+				},
+				{
+					name: "percent"
+				},
+				{
+					name: "guarantee"
+				},
+				{
 					name: "roles",
-					onSubmitValue: () => send_roles
+					onSubmitValue: () => send_roles,
+					value: send_roles
 				},
 				{
 					name: "status",

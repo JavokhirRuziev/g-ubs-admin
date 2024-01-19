@@ -52,7 +52,7 @@ const Form = ({ selected, count, setCount, getCreated, step }) => {
 											onChange={e =>
 												handleChange(e, item.id)
 											}
-											readOnly={step.create || step.put}
+											readOnly={step.post || step.put}
 										/>
 									</div>
 								</>
@@ -93,13 +93,12 @@ const Form = ({ selected, count, setCount, getCreated, step }) => {
 													item.product.translate.id
 												)
 											}
-											readOnly={step.create || step.put}
+											readOnly={step.post || step.put}
 										/>
 									</div>
 								</>
 							</div>
 					  ))}
-				{console.log(!Boolean(step.calc_put && count && count.id))}
 
 				<Button
 					type="primary"

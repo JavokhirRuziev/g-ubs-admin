@@ -5,6 +5,7 @@
 	"description": "OKS admin panel",
 	"author": "Xasan Mirsharipov (xasanmirsharipov@gmail.com)",
 	"dependencies": {
+		"@ant-design/icons": "^5.2.6",
 		"@ckeditor/ckeditor5-react": "^1.1.3",
 		"@emotion/react": "^11.11.1",
 		"@emotion/styled": "^11.11.0",

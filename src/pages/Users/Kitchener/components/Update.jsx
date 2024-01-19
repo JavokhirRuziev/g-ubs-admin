@@ -44,6 +44,18 @@ const Update = ({ selected, showUpdateModal }) => {
 					value: null
 				},
 				{
+					name: "payment_type",
+					value: get(selected, "payment_type")
+				},
+				{
+					name: "percent",
+					value: get(selected, "percent")
+				},
+				{
+					name: "guarantee",
+					value: get(selected, "guarantee")
+				},
+				{
 					name: "status",
 					value: get(selected, "status") === 1,
 					onSubmitValue: value => (value ? 1 : 0)

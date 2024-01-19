@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { helpers } from "../../../services";
-import { useTranslation } from "react-i18next";
-import Actions from "../../../modules/entity/actions";
+import { helpers } from "services";
+import Actions from "modules/entity/actions";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-import config from "config";
+import { useTranslation } from "react-i18next";
+import config from "../../../config";
 import thousandsDivider from "../../../services/thousandsDivider/thousandsDivider";
 
-const CashboxCard = ({ params, totalExpense }) => {
-	const { t } = useTranslation("main");
+const ExpensesCardCopy = ({
+	params,
+	setTotalCreditor,
+	setTotalDebtor,
+	history
+}) => {
 	const dispatch = useDispatch();
+	const { t } = useTranslation("main");
 
-	const [solves, setSolves] = useState([]);
-	const [residual, setResidual] = useState([]);
-	const [expenses, setExpenses] = useState();
-	const [totalIncome, setTotalIncome] = useState();
+	const [categories, setCategories] = useState([]);
+	const [creditorTransactions, setCreditorTransactions] = useState([]);
+	const [totalCreditor, setTotalCreditors] = useState(0);
 
-	const loadIncome = () => {
+	const [categoriesDebit, setCategoriesDebit] = useState([]);
+	const [debitorTransactions, setDebitorTransactions] = useState([]);
+	const [totalDebtor, setTotalDebtors] = useState(0);
+
+	const loadExpensesByCategory = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/dashboard/cash-register-income`,
+				url: `/transactions/borrowed-by-category`,
 				params: {
 					extra: {
 						start_date: params.start_at && params.start_at,
@@ -28,8 +35,31 @@ const CashboxCard = ({ params, totalExpense }) => {
 				},
 				cb: {
 					success: data => {
-						setTotalIncome(data.value);
-						console.log();
+						const total = data.reduce(
+							(prev, curr) =>
+								prev +
+								(Number(curr.sum) > 0 ? Number(curr.sum) : 0),
+							0
+						);
+						setCreditorTransactions(data);
+						setTotalCreditors(total);
+						setTotalCreditor(total);
+					},
+					error: data => {}
+				}
+			})
+		);
+	};
+	const loadExpenseCategories = () => {
+		dispatch(
+			Actions.LoadDefault.request({
+				url: `/expense-categories`,
+				params: {
+					filter: { type: config.EXPENSE_CATEGORY_TYPE }
+				},
+				cb: {
+					success: data => {
+						setCategories(data.data);
 					},
 					error: data => {}
 				}
@@ -37,10 +67,10 @@ const CashboxCard = ({ params, totalExpense }) => {
 		);
 	};
 
-	const loadSolves = () => {
+	const loadeDebitByCateg = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/transactions/solves`,
+				url: `/transactions/borrowed-by-category`,
 				params: {
 					extra: {
 						start_date: params.start_at && params.start_at,
@@ -49,27 +79,33 @@ const CashboxCard = ({ params, totalExpense }) => {
 				},
 				cb: {
 					success: data => {
-						setSolves(data);
+						const total = data.reduce(
+							(prev, curr) =>
+								prev +
+								(Number(curr.sum) < 0
+									? Number(curr.sum) * -1
+									: 0),
+							0
+						);
+						setDebitorTransactions(data);
+						setTotalDebtors(total * -1);
+						setTotalDebtor(total * -1);
 					},
 					error: data => {}
 				}
 			})
 		);
 	};
-
-	const loadResidualByPaymentType = () => {
+	const loadDebitCategories = () => {
 		dispatch(
 			Actions.LoadDefault.request({
-				url: `/transactions/residual-by-payment-type`,
+				url: `/expense-categories`,
 				params: {
-					extra: {
-						start_date: params.start_at && params.start_at,
-						end_date: params.end_at && params.end_at
-					}
+					filter: { type: config.EXPENSE_CATEGORY_TYPE }
 				},
 				cb: {
 					success: data => {
-						setResidual(data);
+						setCategoriesDebit(data.data);
 					},
 					error: data => {}
 				}
@@ -78,113 +114,159 @@ const CashboxCard = ({ params, totalExpense }) => {
 	};
 
 	useEffect(() => {
-		axios
-			.get(
-				`${config.API_ROOT}/transactions/expenses-by-category-cash-register`
-			)
-			.then(res => {
-				const expensesTotal = res.data.reduce(
-					(total, el) => Number(el.sum) + total,
-					0
-				);
-				setExpenses(expensesTotal);
-			})
-			.catch(err => console.log(err));
+		loadExpenseCategories();
+		loadDebitCategories();
 	}, []);
-
 	useEffect(() => {
-		loadSolves();
-		loadResidualByPaymentType();
-		loadIncome();
+		loadExpensesByCategory();
+		loadeDebitByCateg();
 	}, [params.start_at, params.end_at]);
 
 	return (
 		<div className="dashboard-card-st">
-			<div className="dashboard-card-st__head">
-				<div className="--icon --icon-purple">
-					<img src={require("../icons/icon-4.svg")} alt="" />
-				</div>
-				<div className="--title">
-					<span>{t("Касса")}</span>
-					{!params.start_at && !params.end_at ? (
-						<span>{t("За день")}</span>
-					) : (
-						<span>{t("За выбранный период")}</span>
-					)}
-				</div>
-			</div>
-			<div className="dashboard-card-st__body">
-				<div className="dashboard-line --purple">
-					<span>{t("Приход")}</span>
-					<div>
-						{totalIncome
-							? helpers.convertToReadable(
-									thousandsDivider(totalIncome)
-							  )
-							: 0}{" "}
-						{t("сум")}
+			<div
+				style={{
+					display: "flex",
+					height: "100%",
+					justifyContent: "space-between",
+					columnGap: "20px"
+				}}>
+				<div style={{ width: "100%" }}>
+					<div className="dashboard-card-st__head">
+						<div className="--icon --icon-orange">
+							<img src={require("../icons/icon-3.svg")} alt="" />
+						</div>
+						<div className="--title">
+							<span>{t("Дебиторка")}</span>
+							{!params.start_at && !params.end_at ? (
+								<span>{t("За день")}</span>
+							) : (
+								<span>{t("За выбранный период")}</span>
+							)}
+						</div>
 					</div>
-				</div>
-				<div className="dashboard-line --purple">
-					<span>{t("Расход")}</span>
-					<div>
-						{totalExpense
-							? helpers.convertToReadable(
-									thousandsDivider(expenses)
-							  )
-							: 0}{" "}
-						{t("сум")}
-					</div>
-				</div>
-				<div className="dashboard-line --purple">
-					<span>{t("Снять денги")}</span>
-					<div>
-						{helpers.convertToReadable(thousandsDivider(solves))}{" "}
-						{t("сум")}
+					<div className="dashboard-card-st__body">
+						{categories.length > 0 ? (
+							categories.map(item => {
+								const itemsByCategory = debitorTransactions.filter(
+									a => a.alias === item.alias
+								);
+								const totalSum = itemsByCategory.reduce(
+									(prev, curr) =>
+										prev +
+										(Number(curr.sum) > 0
+											? Number(curr.sum)
+											: 0),
+									0
+								);
+
+								return item.alias !== "vip" ? (
+									<div
+										className="dashboard-line --purple cursor-pointer"
+										key={item.id}
+										onClick={() =>
+											history.push(
+												`/debtor?alias=${item.alias}`
+											)
+										}>
+										<span>
+											{item.title === t("Сотувдан")
+												? t("Клиент")
+												: item.title}
+										</span>
+										<div>
+											{helpers.convertToReadable(
+												thousandsDivider(totalSum)
+											)}{" "}
+											{/* {t("сум")} */}
+										</div>
+									</div>
+								) : (
+									<></>
+								);
+							})
+						) : (
+							<div>-</div>
+						)}
 					</div>
 				</div>
 
-				<div className="mt-20" />
+				<div style={{ width: "100%" }}>
+					<div className="dashboard-card-st__head">
+						<div className="--icon --icon-orange">
+							<img src={require("../icons/icon-3.svg")} alt="" />
+						</div>
+						<div className="--title">
+							<span>{t("Кредиторка")}</span>
+							{!params.start_at && !params.end_at ? (
+								<span>{t("За день")}</span>
+							) : (
+								<span>{t("За выбранный период")}</span>
+							)}
+						</div>
+					</div>
+					<div className="dashboard-card-st__body">
+						{categoriesDebit.length > 0 ? (
+							categoriesDebit.map(item => {
+								const itemsByCategory = creditorTransactions.filter(
+									a => a.alias === item.alias
+								);
+								const totalSum = itemsByCategory.reduce(
+									(prev, curr) =>
+										prev +
+										(Number(curr.sum) < 0
+											? Number(curr.sum)
+											: 0),
+									0
+								);
 
-				{residual && Object.keys(residual).length > 0 ? (
-					Object.keys(residual).map(item => {
-						return (
-							<div className="dashboard-line --green">
-								{item === "cash" && (
-									<span>{t("Наличные")}</span>
-								)}
-								{item === "online" && (
-									<span>{t("Онлайн")}</span>
-								)}
-								{item === "terminal" && (
-									<span>{t("Терминал")}</span>
-								)}
-								<div>
-									{residual[item]
-										? helpers.convertToReadable(
-												thousandsDivider(residual[item])
-										  )
-										: 0}{" "}
-									{t("сум")}
-								</div>
-							</div>
-						);
-					})
-				) : (
-					<div />
-				)}
+								return item.alias !== "vip" ? (
+									<div
+										className="dashboard-line --red cursor-pointer"
+										key={item.id}
+										onClick={() =>
+											history.push(
+												`/creditor?alias=${item.alias}`
+											)
+										}>
+										<span>
+											{item.title === t("Сотувдан")
+												? t("Клиент")
+												: item.title}
+										</span>
+										<div>
+											{helpers.convertToReadable(
+												thousandsDivider(totalSum * -1)
+											)}{" "}
+											{/* {t("сум")} */}
+										</div>
+									</div>
+								) : (
+									<></>
+								);
+							})
+						) : (
+							<div>-</div>
+						)}
+					</div>
+				</div>
 			</div>
-			<div className="dashboard-card-st__footer">
-				<span>{t("Oбщая сумма")}:</span>
-				<span>
-					{helpers.convertToReadable(
-						thousandsDivider(totalIncome - expenses - solves)
-					)}{" "}
-					{t("сум")}
-				</span>
+			<div
+				className="dashboard-card-st__footer"
+				style={{ columnGap: "20px", justifyContent: "space-between" }}>
+				<div style={{ width: "100%" }}>
+					<span>{t("Oбщая сумма")}: </span>
+					<span>{helpers.convertToReadable(totalCreditor)}</span>
+				</div>
+				<div style={{ width: "100%" }}>
+					<span>{t("Oбщая сумма")}: </span>
+					<span style={{ color: "#ff0003" }}>
+						{helpers.convertToReadable(totalDebtor)}
+					</span>
+				</div>
 			</div>
 		</div>
 	);
 };
 
-export default CashboxCard;
+export default ExpensesCardCopy;

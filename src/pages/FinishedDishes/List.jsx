@@ -198,7 +198,7 @@ const List = ({ history, location }) => {
 										<Field
 											component={Fields.AsyncSelect}
 											name="kitchener"
-											placeholder={t("Повор")}
+											placeholder={t("Инструктор")}
 											isClearable
 											loadOptionsUrl="/user"
 											optionLabel={option =>

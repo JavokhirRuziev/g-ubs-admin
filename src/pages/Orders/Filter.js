@@ -110,7 +110,7 @@ class Filter extends Component {
 									<Field
 										component={Fields.AsyncSelect}
 										name="dish_id"
-										placeholder={t("Еда")}
+										placeholder={t("Продукт")}
 										isClearable={true}
 										loadOptionsUrl="/dishes"
 										className={"mb-0"}

@@ -16,6 +16,7 @@ const Form = ({ isUpdate, tabLang, setFieldValue, selected }) => {
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
+		setSearch(get(selected, "product.translate.name"));
 		axios
 			.get(
 				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category&search=${search}`
@@ -30,13 +31,15 @@ const Form = ({ isUpdate, tabLang, setFieldValue, selected }) => {
 					})
 					.map(category => ({
 						name: category.translate && category.translate.name,
-						value: category && category.id
+						value: category && category.translate.product_id
 					}));
 				setProduct(newCategories);
 				setFilteredOptions(newCategories);
 			})
 			.catch(err => console.log(err));
 	}, [stock_id, search]);
+
+	console.log(product);
 
 	return (
 		<div>

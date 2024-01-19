@@ -277,7 +277,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 								checked={values.table_order}
 							/>
 							<div className="ant-label mb-0 ml-10">
-								{t("На стол")}
+								{t("На район")}
 							</div>
 						</div>
 
@@ -327,7 +327,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 								checked={values.qr_on_table}
 							/>
 							<div className="ant-label mb-0 ml-10">
-								{t("QR (На стол)")}
+								{t("QR (На район)")}
 							</div>
 						</div>
 
@@ -345,7 +345,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 
 						<div style={{ height: "20px" }} />
 
-						<div className="d-flex align-items-center mb-24">
+						{/* <div className="d-flex align-items-center mb-24">
 							<Switch
 								onChange={value => {
 									setFieldValue("sahara", value);
@@ -367,7 +367,7 @@ const Form = ({ isUpdate, setFieldValue, values }) => {
 							<div className="ant-label mb-0 ml-10">
 								{t("Iftar")}
 							</div>
-						</div>
+						</div> */}
 
 						<div className="mb-24">
 							<div className="ant-label mb-10">

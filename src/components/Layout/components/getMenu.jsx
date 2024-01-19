@@ -173,7 +173,14 @@ const contentManagerRoutes = [
 		title: "Подтверждение перерасчета",
 		link: "/confirmation-of-recalculation",
 		icon: "menu-i-dashboard",
-		role: "dishes"
+		role: "recalculation_requests"
+	},
+	{
+		id: "confirmation-of-recalculation",
+		title: "Подтверждение ретсепта",
+		link: "/confirmation-of-recalculation-recipe",
+		icon: "menu-i-dashboard",
+		role: "recalculation_requests"
 	},
 	{
 		id: "menus",
@@ -276,6 +283,25 @@ const contentManagerRoutes = [
 		link: "/clients",
 		icon: "menu-i-user",
 		role: "clients"
+	},
+	{
+		id: "agreements",
+		title: "Договора",
+		icon: "menu-i-dashboard",
+		submenu: [
+			{
+				id: "agreement",
+				link: "/agreement",
+				title: "Договора",
+				role: "users"
+			},
+			{
+				id: "template",
+				link: "/template",
+				title: "Шаблоны",
+				role: "users"
+			}
+		]
 	},
 	{
 		id: "profile",

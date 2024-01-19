@@ -6,7 +6,6 @@ import Form from "./Form";
 import get from "lodash/get";
 
 const Update = ({ tabLang, selected, showUpdateModal }) => {
-	console.log(selected);
 	return (
 		<EntityForm.Main
 			method="put"
@@ -35,7 +34,7 @@ const Update = ({ tabLang, selected, showUpdateModal }) => {
 				{
 					name: "product_id",
 					required: true,
-					value: get(selected, "product.translate.id")
+					value: get(selected, "product.translate.product_id")
 				},
 				{
 					name: "count",

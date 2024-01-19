@@ -175,7 +175,7 @@ const EnhacedForm = withFormik({
 			cb: {
 				success: data => {
 					notification["success"]({
-						message: "Успешно",
+						message: data.message ? data.message : "Успешно",
 						duration: 2
 					});
 					onSuccess(data, resetForm);

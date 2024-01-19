@@ -218,7 +218,7 @@ export default function index({ location, history }) {
 													)
 												},
 												{
-													title: t("Повар"),
+													title: t("Инструктор"),
 													dataIndex: "kitchener.name",
 													render: value => (
 														<div className="divider-wrapper">
@@ -343,7 +343,7 @@ export default function index({ location, history }) {
 																},
 																{
 																	title: t(
-																		"Повар"
+																		"Инструктор"
 																	),
 																	name: (
 																		<div className="divider-wrapper">

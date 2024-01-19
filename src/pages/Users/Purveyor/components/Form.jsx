@@ -35,8 +35,8 @@ const Form = ({
 		<div>
 			<div className="title-md fs-16 mb-20">
 				{isUpdate
-					? t("Изменение поставщика")
-					: t("Добавление поставщика")}
+					? t("Изменение официанта")
+					: t("Добавление официанта")}
 			</div>
 
 			<div className="fake-inputs">
@@ -72,6 +72,34 @@ const Form = ({
 				label={t("Пароль")}
 				size="large"
 			/>
+			<Field
+				component={Fields.AntSelect}
+				name="payment_type"
+				placeholder={t("Введите тип оплаты")}
+				label={t("Тип оплаты")}
+				selectOptions={[
+					{ name: "Процент от заказа", value: "percent" },
+					{ name: "Гарантированная оплата", value: "guarantee" },
+					{ name: "Оба", value: "both" }
+				]}
+				size="large"
+			/>
+			<Field
+				component={Fields.AntInput}
+				name="percent"
+				type="number"
+				placeholder={t("Введите процент от заказа")}
+				label={t("Процент от заказа")}
+				size="large"
+			/>
+			<Field
+				component={Fields.AntInput}
+				name="guarantee"
+				type="number"
+				placeholder={t("Введите гарантированную оплату")}
+				label={t("Гарантированная оплата")}
+				size="large"
+			/>
 
 			<div className="d-flex align-items-center mb-20 mt-20">
 				<Switch
@@ -98,7 +126,8 @@ const Form = ({
 								<div
 									style={{
 										display: "flex",
-										marginBottom: "10px"
+										marginBottom: "10px",
+										columnGap: "10px"
 									}}>
 									<Switch
 										name="roles"

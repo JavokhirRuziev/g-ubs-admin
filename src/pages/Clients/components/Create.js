@@ -21,7 +21,10 @@ const Create = ({ tabLang, showCreateModal }) => {
 			params={{
 				extra: { _l: tabLang }
 			}}
-			fields={[{ name: "tin", required: true }, { name: "is_active" }]}>
+			fields={[
+				{ name: "tin", required: true },
+				{ name: "is_active", value: false }
+			]}>
 			{({ isSubmitting, values, setFieldValue }) => {
 				return (
 					<Spin spinning={isSubmitting}>

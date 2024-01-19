@@ -124,7 +124,7 @@ const Index = ({ location, history }) => {
 												)
 											},
 											{
-												title: t("Номер стола"),
+												title: t("Район"),
 												dataIndex:
 													"order.booking.table.number",
 												className: "w-82",
@@ -168,7 +168,7 @@ const Index = ({ location, history }) => {
 												)
 											},
 											{
-												title: t("Повор"),
+												title: t("Инструктор"),
 												dataIndex: "dish.kitchener",
 												render: value => (
 													<div className="divider-wrapper">

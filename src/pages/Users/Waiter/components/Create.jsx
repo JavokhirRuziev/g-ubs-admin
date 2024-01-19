@@ -16,7 +16,7 @@ const Create = ({ showCreateModal }) => {
 		<EntityForm.Main
 			method="post"
 			entity="user"
-			name="Agent"
+			name="waiter"
 			url="/user"
 			appendData
 			primaryKey="id"
@@ -32,6 +32,15 @@ const Create = ({ showCreateModal }) => {
 				{ name: "login", required: true },
 				{ name: "password", required: true },
 				{ name: "company_id", value: null },
+				{
+					name: "payment_type"
+				},
+				{
+					name: "percent"
+				},
+				{
+					name: "guarantee"
+				},
 				{
 					name: "roles",
 					onSubmitValue: () => send_roles,

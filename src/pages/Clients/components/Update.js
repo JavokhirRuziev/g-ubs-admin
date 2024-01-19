@@ -2,8 +2,9 @@ import React from "react";
 import { Spin } from "antd";
 import EntityForm from "modules/entity/forms";
 import Form from "./Form";
+import { get } from "lodash";
 
-const Update = ({ tabLang, showUpdateModal }) => {
+const Update = ({ tabLang, showUpdateModal, selected }) => {
 	return (
 		<EntityForm.Main
 			method="post"
@@ -21,7 +22,10 @@ const Update = ({ tabLang, showUpdateModal }) => {
 			params={{
 				extra: { _l: tabLang }
 			}}
-			fields={[{ name: "tin", required: true }, { name: "is_active" }]}>
+			fields={[
+				{ name: "tin", required: true, value: get(selected, "tin") },
+				{ name: "is_active", value: get(selected, "is_active") }
+			]}>
 			{({ isSubmitting, values, setFieldValue }) => {
 				return (
 					<Spin spinning={isSubmitting}>

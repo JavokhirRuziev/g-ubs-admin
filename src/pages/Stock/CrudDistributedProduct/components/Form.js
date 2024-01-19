@@ -16,6 +16,7 @@ const Form = ({ isUpdate, tabLang, setFieldValue, selected }) => {
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
+		setSearch(get(selected, "product.translate.name"));
 		axios
 			.get(
 				`${config.API_ROOT}/products?_l=${tabLang}&include=translate,stock,category&search=${search}`

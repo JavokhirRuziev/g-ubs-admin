@@ -7,10 +7,11 @@ import Form from "./Form";
 const Create = ({ showCreateModal }) => {
 	const [send_roles, setSend_roles] = useState([
 		{ role: "dishes", permissions: ["read"] },
-		{ role: "menus", permissions: ["read", "create", "update", "delete"] },
-		{ role: "places", permissions: ["read", "create", "update", "delete"] },
-		{ role: "tables", permissions: ["read", "create", "update", "delete"] }
+		{ role: "menus", permissions: ["read"] },
+		{ role: "places", permissions: ["read"] },
+		{ role: "tables", permissions: ["read"] }
 	]);
+
 	return (
 		<EntityForm.Main
 			method="post"
@@ -23,6 +24,7 @@ const Create = ({ showCreateModal }) => {
 			onSuccess={(data, resetForm) => {
 				resetForm();
 				showCreateModal(false);
+				console.log(data);
 			}}
 			fields={[
 				{ name: "role", required: true, value: "manager" },
@@ -31,13 +33,23 @@ const Create = ({ showCreateModal }) => {
 				{ name: "password", required: true },
 				{ name: "company_id", value: null },
 				{
-					name: "status",
-					value: true,
-					onSubmitValue: value => (value ? 1 : 0)
+					name: "payment_type"
+				},
+				{
+					name: "percent"
+				},
+				{
+					name: "guarantee"
 				},
 				{
 					name: "roles",
-					onSubmitValue: () => send_roles
+					onSubmitValue: () => send_roles,
+					value: send_roles
+				},
+				{
+					name: "status",
+					value: true,
+					onSubmitValue: value => (value ? 1 : 0)
 				}
 			]}>
 			{({ isSubmitting, values, setFieldValue }) => {

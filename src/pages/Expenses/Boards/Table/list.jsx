@@ -85,7 +85,10 @@ const List = ({ selectedCategory }) => {
 				<div className="d-flex">
 					<Filter {...{ filterModal, showFilterModal }} />
 					{/* alias === 'market' ||  */}
-					{(alias === "work_fee" || alias === "others") && (
+
+					{(alias === "work_fee" ||
+						alias === "others" ||
+						alias === "vip") && (
 						<Button
 							type="primary"
 							size="large"

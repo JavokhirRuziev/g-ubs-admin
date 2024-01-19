@@ -236,7 +236,7 @@ const Index = ({ location, history }) => {
 												)
 											},
 											{
-												title: t("Официант"),
+												title: t("Агент"),
 												dataIndex: "waiter",
 												className: "",
 												render: value => (
