@@ -331,6 +331,7 @@ const getMenu = (role, profile) => {
 				return profile && profile.some(p => p.role === el.role);
 			}
 		});
+
 		if (role !== "admin") {
 			return filteredArr;
 		}
